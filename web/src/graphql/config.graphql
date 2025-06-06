@@ -6,7 +6,6 @@ query Config {
         key
         paper
         treasury
-        laundromat
       }
     }
   }

@@ -1328,8 +1328,8 @@
   },
   "contracts": [
     {
-      "address": "0x123e523ff75e983f0173b9638fca9010e8baa8b7b958b71174c22d13205a421",
-      "class_hash": "0x2b5819ced8c9bf6ca75aa78d7f219bd97893bd4238519051d4f8826ddc95ec2",
+      "address": "0x75d50ae9f05e842cf265045123c9fa50b896bd283272584485eb68f8b1697bf",
+      "class_hash": "0x68da5fdd1b8a61a52f7671e6c5c39ac0774d51ad44c728724f808741595aa67",
       "abi": [
         {
           "type": "impl",
@@ -1874,8 +1874,8 @@
       ]
     },
     {
-      "address": "0x66c0e46e8bf13153c3bc20791481181dd6a9706b81b14fcc1ee211ecb1ca9ea",
-      "class_hash": "0x49091000ed9cd432fc1e13b163644f1a10c73f99e5d74734a1aa23feb09aac4",
+      "address": "0x651765f37f7fa079ee56bf027a57c6071c2f11bed774369c34b940e0ae3ecf2",
+      "class_hash": "0x672d4c376c74d1ee7ba36b95e9ebbd55217b0cd7f911027767c88a5cd6846d3",
       "abi": [
         {
           "type": "impl",
@@ -2095,8 +2095,8 @@
       ]
     },
     {
-      "address": "0x5f19f484c958d688787cf799fc9c9fce0b93b4981be3dac547d40bf157ff9ea",
-      "class_hash": "0x21ffe611ff613eb37d2ddb2afc337bb237274eba8f7cb93d3b6fc6ef9644d43",
+      "address": "0x30c3158606fe3a382de2a382e892ebe4590d56d680314cddf102b94216ab657",
+      "class_hash": "0x2afc3224e1fdf613c62c925c957afda84089838360d0d3783c9946e645148df",
       "abi": [
         {
           "type": "impl",
@@ -2308,8 +2308,8 @@
       ]
     },
     {
-      "address": "0x119951926e6b05e52a04e73754912943958ecb207a5f9deef983c06e418c8a5",
-      "class_hash": "0x2d70f15904aa44b86df4c87c0e791a5e380fd006de94691539b469a3b422188",
+      "address": "0x1b64e8712cb7279badbb62b4078ae25e26b6a0638d5e56a377a637dd681edeb",
+      "class_hash": "0x68e6f5eb546eee831ea121ca4c8fdd23f96d9eb586fd6ecb4b3a179de4e289f",
       "abi": [
         {
           "type": "impl",
@@ -2751,8 +2751,8 @@
       ]
     },
     {
-      "address": "0x22d465c4a2b4ca2d69694e4e0dc87b7cc81c1377aa5398bd19b914e0a572c0b",
-      "class_hash": "0x69fc40d2f013630277776aac11094134dfbe72bb30970d035d33f54a4090d43",
+      "address": "0x216216c38de84d6b6ab01374f62e65ef31e2be1c9c1bf6b9b47f95749b4a111",
+      "class_hash": "0x61f93a4d2c87aaad219e86ac4d811506ffd2b792112974272bb5c07d20089e6",
       "abi": [
         {
           "type": "impl",
@@ -3019,8 +3019,8 @@
       ]
     },
     {
-      "address": "0x6f2b2838cd8eb0902e52c73a66cca0cc5c2de641aa969eb9c93e4306906eb78",
-      "class_hash": "0x2e5fa64ff4273c952635dab0438012fb0388edfef730f49a8eff18551eeefd0",
+      "address": "0x3e640d0a271da07348aada4be0b6d8d1ee5cb2e701c188720d56e06477700b8",
+      "class_hash": "0x1bca8506f692c51e241cc318e79cfdfa4170edb1ddce29628b6c5e46e696447",
       "abi": [
         {
           "type": "impl",
@@ -3491,8 +3491,8 @@
       ]
     },
     {
-      "address": "0xce6531367afdefce5da6465e815bca98eb7b8d1763f306fef3e6a1dd1f596f",
-      "class_hash": "0x106e586cd671a1b10af1e8b2af62c9fc27f9a510424f3d050105b0912134421",
+      "address": "0x153431f2eca6469c8bac8f34e7271392edca854706fd2053b96010dca926bf2",
+      "class_hash": "0x77b398abe872cffcbfac1897b308f46c12bf35d7f433b1d4795745b92db9fed",
       "abi": [
         {
           "type": "impl",
@@ -4583,7 +4583,7 @@
     },
     {
       "members": [],
-      "class_hash": "0x67f6a672a7890c828278001d29d9b0724cddd55442b8216d333001a3bac305a",
+      "class_hash": "0x28b0b6273c46a875d1c4ffcc25db4a1c341e9464eba62a75ed700486ffabb13",
       "tag": "dopewars-RyoAddress",
       "selector": "0x261f89bf8e1c46576eed3931a59795015818056a6fc75f9b5a266b6187b73ec"
     },
@@ -4645,7 +4645,7 @@
     },
     {
       "members": [],
-      "class_hash": "0x1870f33d980a09bcf4a5f5d6bf8f46acbd50277d0199de6a0c4471eaa1fb591",
+      "class_hash": "0x7dd7bdd95f698d966b06dbdab62041db4bcc5243fb0ac5a46be10ad93fd7060",
       "tag": "dopewars-GameCreated",
       "selector": "0xb6cb757d1b16685bd607281240d13dc1c6d6ab51eec461848f216405223cd"
     },
@@ -4699,13 +4699,13 @@
     },
     {
       "members": [],
-      "class_hash": "0x6fede2561a93b4808a6a00e19457a94d616e7ee53fc952f75af58da9bae45f5",
+      "class_hash": "0x702d5440a155e0704b268f8d6dbf74cb8ae09b164064fe3b4f896cf725dcac7",
       "tag": "dopewars-TrophyCreation",
       "selector": "0x29c55bc91710776a7eefde54dd50f5622cc07ea1ec0f58f7d01ede9a963f61e"
     },
     {
       "members": [],
-      "class_hash": "0x3d60f68ff66df399a5efc60c6aacda487ced739897ddcea54270b7c147206d",
+      "class_hash": "0x113e43bc604068a5811205b126a3e318b21e5c72746138efa6fb40277067f00",
       "tag": "dopewars-TrophyProgression",
       "selector": "0x6da79ec4f8ef62f705b565aeb2b23d04a449fce4c32af8ad209eb20e310b08a"
     },

@@ -1328,8 +1328,8 @@
   },
   "contracts": [
     {
-      "address": "0x607c2fb13a52b504b52e9a0e2ac43ae191193355742aa48ade1a9d6c5912085",
-      "class_hash": "0x5857520d910a63674b239ab763ef902139af77bf09c89b270d3fade6c4ebba8",
+      "address": "0x4b65376b30a2193441943f23267e8dc4f7bcb7b24cfff9beffd984900de1fa3",
+      "class_hash": "0x12495fdef6c238bab35c0213728168fbc103eb286e416682ebf5d0eb301f24c",
       "abi": [
         {
           "type": "impl",
@@ -1534,86 +1534,6 @@
           "state_mutability": "external"
         },
         {
-          "type": "function",
-          "name": "set_renderer",
-          "inputs": [
-            {
-              "name": "renderer_class_hash",
-              "type": "core::starknet::class_hash::ClassHash"
-            }
-          ],
-          "outputs": [],
-          "state_mutability": "external"
-        },
-        {
-          "type": "enum",
-          "name": "core::option::Option::<core::felt252>",
-          "variants": [
-            {
-              "name": "Some",
-              "type": "core::felt252"
-            },
-            {
-              "name": "None",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "dope_contracts::dope_gear::dope_gear_ext::GearItem",
-          "members": [
-            {
-              "name": "item",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "slot",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "name_prefix",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "name_suffix",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "suffix",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "augmentation",
-              "type": "core::integer::u8"
-            }
-          ]
-        },
-        {
-          "type": "function",
-          "name": "random_gear_item_id",
-          "inputs": [
-            {
-              "name": "seed",
-              "type": "core::integer::u256"
-            },
-            {
-              "name": "slot_slug",
-              "type": "core::felt252"
-            },
-            {
-              "name": "dopeness",
-              "type": "core::option::Option::<core::felt252>"
-            }
-          ],
-          "outputs": [
-            {
-              "type": "dope_contracts::dope_gear::dope_gear_ext::GearItem"
-            }
-          ],
-          "state_mutability": "view"
-        },
-        {
           "type": "impl",
           "name": "ERC1155MetadataURIImpl",
           "interface_name": "openzeppelin_token::erc1155::interface::IERC1155MetadataURI"
@@ -1711,22 +1631,6 @@
               "inputs": [
                 {
                   "name": "palette",
-                  "type": "core::byte_array::ByteArray"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "emit_stats",
-              "inputs": [
-                {
-                  "name": "slots",
-                  "type": "core::array::Span::<core::felt252>"
-                },
-                {
-                  "name": "library",
                   "type": "core::byte_array::ByteArray"
                 }
               ],
@@ -2560,12 +2464,10 @@
         "mint_batch",
         "unsafe_transfer_from",
         "unequip",
-        "set_renderer",
         "add_component",
         "add_component_libraries",
         "set_component_list",
         "emit_palette",
-        "emit_stats",
         "upgrade",
         "safe_transfer_from",
         "safe_batch_transfer_from",
@@ -2579,8 +2481,8 @@
       ]
     },
     {
-      "address": "0xc093de2d5cdbcc368a9670733bc0ed6ad4adfc0a79b0d919acada8a14e96b0",
-      "class_hash": "0x4a6e22ead504551eed7f492fde19074772f296c644c619ec944a7690862681b",
+      "address": "0x404e870111abb298afd719baf7712abe564041ec6864270763d2a32f62c26c6",
+      "class_hash": "0x31fba66521de6cfc1b6d049080fe80c2b1f2ef41f278802551d9ecc0fd17250",
       "abi": [
         {
           "type": "impl",
@@ -2701,18 +2603,6 @@
           "state_mutability": "external"
         },
         {
-          "type": "function",
-          "name": "set_renderer",
-          "inputs": [
-            {
-              "name": "renderer_class_hash",
-              "type": "core::starknet::class_hash::ClassHash"
-            }
-          ],
-          "outputs": [],
-          "state_mutability": "external"
-        },
-        {
           "type": "impl",
           "name": "ERC721MetadataImpl",
           "interface_name": "openzeppelin_token::erc721::interface::IERC721Metadata"
@@ -2808,61 +2698,11 @@
         },
         {
           "type": "struct",
-          "name": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBodyParts",
+          "name": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBodyPartsList",
           "members": [
             {
               "name": "inner",
               "type": "core::array::Array::<dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBodyPart>"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "core::option::Option::<core::integer::u256>",
-          "variants": [
-            {
-              "name": "Some",
-              "type": "core::integer::u256"
-            },
-            {
-              "name": "None",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerSlotOption",
-          "members": [
-            {
-              "name": "token_id",
-              "type": "core::felt252"
-            },
-            {
-              "name": "slot",
-              "type": "core::felt252"
-            },
-            {
-              "name": "gear_item_id",
-              "type": "core::option::Option::<core::integer::u256>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBody",
-          "members": [
-            {
-              "name": "token_id",
-              "type": "core::felt252"
-            },
-            {
-              "name": "slot",
-              "type": "core::felt252"
-            },
-            {
-              "name": "value",
-              "type": "core::integer::u8"
             }
           ]
         },
@@ -2908,7 +2748,7 @@
                 },
                 {
                   "name": "body_parts",
-                  "type": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBodyParts"
+                  "type": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBodyPartsList"
                 }
               ],
               "outputs": [],
@@ -2945,89 +2785,6 @@
               ],
               "outputs": [],
               "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "gear_item_id",
-              "inputs": [
-                {
-                  "name": "hustler_id",
-                  "type": "core::integer::u256"
-                },
-                {
-                  "name": "slot_slug",
-                  "type": "core::felt252"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::option::Option::<core::integer::u256>"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "body_slot",
-              "inputs": [
-                {
-                  "name": "hustler_id",
-                  "type": "core::integer::u256"
-                },
-                {
-                  "name": "slot_slug",
-                  "type": "core::felt252"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::integer::u8"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "hustler_equipment",
-              "inputs": [
-                {
-                  "name": "hustler_id",
-                  "type": "core::integer::u256"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::array::Array::<dope_contracts::dope_hustlers::dope_hustlers_models::HustlerSlotOption>"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "hustler_body",
-              "inputs": [
-                {
-                  "name": "hustler_id",
-                  "type": "core::integer::u256"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::array::Array::<dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBody>"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "get_slots",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::array::Array::<core::felt252>"
-                }
-              ],
-              "state_mutability": "view"
             }
           ]
         },
@@ -3035,16 +2792,6 @@
           "type": "impl",
           "name": "CollectionManagerImpl",
           "interface_name": "nft_tools::collection_manager::collection_manager::ICollectionManager"
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<core::felt252>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<core::felt252>"
-            }
-          ]
         },
         {
           "type": "interface",
@@ -3117,22 +2864,6 @@
               ],
               "outputs": [],
               "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "emit_stats",
-              "inputs": [
-                {
-                  "name": "slots",
-                  "type": "core::array::Span::<core::felt252>"
-                },
-                {
-                  "name": "library",
-                  "type": "core::byte_array::ByteArray"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
             }
           ]
         },
@@ -3195,6 +2926,16 @@
           "type": "impl",
           "name": "ERC721Impl",
           "interface_name": "openzeppelin_token::erc721::interface::IERC721"
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::felt252>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::felt252>"
+            }
+          ]
         },
         {
           "type": "enum",
@@ -4039,7 +3780,6 @@
         "unpause",
         "mint_og_to",
         "mint_hustler_to",
-        "set_renderer",
         "update_hustler",
         "update_hustler_body",
         "equip",
@@ -4048,7 +3788,6 @@
         "add_component_libraries",
         "set_component_list",
         "emit_palette",
-        "emit_stats",
         "upgrade",
         "safe_transfer_from",
         "transfer_from",
@@ -4063,8 +3802,8 @@
       ]
     },
     {
-      "address": "0x5316a64437c10470f4f4a9c89bf926f923f846cdbfb97370669632668ab46fd",
-      "class_hash": "0x69d2f4ecb034cf99a6bad19ac82732b3db3f7ca4c9648ed1757eae5124b14e3",
+      "address": "0x2d0bfe2c1c85487b37980f031b618ac8a577ada7c9e1c717b69cedf8f632b25",
+      "class_hash": "0x467446393a8d1998413f199d77df7c1e164e1cfdc89b4a32370b456eeb89cb4",
       "abi": [
         {
           "type": "impl",
@@ -4181,11 +3920,11 @@
         },
         {
           "type": "function",
-          "name": "set_renderer",
+          "name": "trigger_metadata_update",
           "inputs": [
             {
-              "name": "renderer_class_hash",
-              "type": "core::starknet::class_hash::ClassHash"
+              "name": "token_id",
+              "type": "core::integer::u256"
             }
           ],
           "outputs": [],
@@ -4237,123 +3976,6 @@
                 }
               ],
               "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "TraitsValuesImpl",
-          "interface_name": "dope_contracts::dope_loot::dope_loot::ITraitsValues"
-        },
-        {
-          "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
-          "members": [
-            {
-              "name": "id",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "value",
-              "type": "core::byte_array::ByteArray"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "core::option::Option::<nft_tools::collection::types::CollectionComponentValue>",
-          "variants": [
-            {
-              "name": "Some",
-              "type": "nft_tools::collection::types::CollectionComponentValue"
-            },
-            {
-              "name": "None",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "dope_contracts::dope_loot::dope_loot_ext::TraitValues",
-          "members": [
-            {
-              "name": "item",
-              "type": "nft_tools::collection::types::CollectionComponentValue"
-            },
-            {
-              "name": "slot",
-              "type": "nft_tools::collection::types::CollectionComponentValue"
-            },
-            {
-              "name": "suffix",
-              "type": "core::option::Option::<nft_tools::collection::types::CollectionComponentValue>"
-            },
-            {
-              "name": "name_prefix",
-              "type": "core::option::Option::<nft_tools::collection::types::CollectionComponentValue>"
-            },
-            {
-              "name": "name_suffix",
-              "type": "core::option::Option::<nft_tools::collection::types::CollectionComponentValue>"
-            },
-            {
-              "name": "augmentation",
-              "type": "core::option::Option::<nft_tools::collection::types::CollectionComponentValue>"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "dope_contracts::dope_loot::dope_loot::ITraitsValues",
-          "items": [
-            {
-              "type": "function",
-              "name": "traits_values",
-              "inputs": [
-                {
-                  "name": "token_id",
-                  "type": "core::integer::u256"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::array::Array::<dope_contracts::dope_loot::dope_loot_ext::TraitValues>"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "gear_item_id",
-              "inputs": [
-                {
-                  "name": "token_id",
-                  "type": "core::integer::u256"
-                },
-                {
-                  "name": "slot_slug",
-                  "type": "core::felt252"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::integer::u256"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "trigger_metadata_update",
-              "inputs": [
-                {
-                  "name": "token_id",
-                  "type": "core::integer::u256"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
             }
           ]
         },
@@ -5493,7 +5115,6 @@
         "unpause",
         "toggle_restrict_transfer",
         "mint",
-        "set_renderer",
         "trigger_metadata_update",
         "upgrade",
         "safe_transfer_from",
@@ -5511,8 +5132,8 @@
       ]
     },
     {
-      "address": "0x2167197f60fe3f7bec00c9dc3a0752c591002fc592e61027f36d28c4c701785",
-      "class_hash": "0x6a29290c7b33f3ebb2909c1facc9f3cd2158c1532cd70adb985223378681a8f",
+      "address": "0x2687eb1eaf541bc49d7c11232a0fd3ff7d02dd5324c13d144b9930edd389cb6",
+      "class_hash": "0x6ebdc6f77652ee811fe9791f91f1d8a7643f6498b72fabe15fb36925c6211da",
       "abi": [
         {
           "type": "impl",
@@ -5959,7 +5580,7 @@
   ],
   "libraries": [
     {
-      "class_hash": "0x309c415bdb8268ef64b583853e1f84a292bb73cd5e5d3aac0627669699d1c67",
+      "class_hash": "0x765eab0767f941b04b225a93f5e7ba061a2787a5f58521c34bbb1e7bb37f6d8",
       "abi": [
         {
           "type": "impl",
@@ -12025,7 +11646,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x7ddd24e50d07714a45a6875bbe640071063ca27b7b2ab561f454afba4338752",
+      "class_hash": "0x2fecce890e7cc59521f27d09e13621b4a9a7bcd63117ef36bfbe4e265bb7e57",
       "abi": [
         {
           "type": "impl",

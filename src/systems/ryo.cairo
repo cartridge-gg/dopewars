@@ -103,8 +103,8 @@ mod ryo {
         let mut season_manager = SeasonManagerTrait::new(store);
         season_manager.new_season(ref randomizer, ryo_config.season_version);
         //
-    //
-    //
+        //
+        //
 
         // self.update_quests();
     }

@@ -40,7 +40,7 @@ pub impl RyoConfigImpl of RyoConfigTrait {
             initialized: true,
             paused: false,
             season_version: 1,
-            season_duration: TEMP_VALUE, // HALF_DAY, //ONE_DAY, 
+            season_duration: HALF_DAY, // TEMP_VALUE, //ONE_DAY, 
             season_time_limit: TWO_MIN, // HALF_HOUR, 
             paper_fee: 1000, // in ether
             paper_reward_launderer: 100, // in ether  

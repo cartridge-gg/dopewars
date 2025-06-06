@@ -26,6 +26,7 @@ pub enum GameMode {
     Warrior,
 }
 
+// IntrospectPacked : doesnt supports array
 #[derive(Introspect, Copy, Drop, Serde)]
 #[dojo::model]
 pub struct Game {

@@ -125,12 +125,12 @@ pub impl SeasonSettingsImpl of SeasonSettingsTrait {
     }
 
     fn get_max_turns(self: SeasonSettings) -> u8 {
-        4
-        // match self.turns_mode {
-    //     TurnsMode::OnSpeed => { 15 },
-    //     TurnsMode::OnWeed => { 18 },
-    //     TurnsMode::OnMush => { 21 },
-    // }
+        // 4
+        match self.turns_mode {
+        TurnsMode::OnSpeed => { 15 },
+        TurnsMode::OnWeed => { 18 },
+        TurnsMode::OnMush => { 21 },
+    }
     }
 
     //

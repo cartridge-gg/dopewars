@@ -13,11 +13,11 @@ polling_interval = 1000
 
 # max_concurrent_tasks = 2
 contracts = [
-    "ERC20:0x06f2b2838cd8eb0902e52c73a66cca0cc5c2de641aa969eb9c93e4306906eb78", # paper
+    "ERC20:0x03e640d0a271da07348aada4be0b6d8d1ee5cb2e701c188720d56e06477700b8", # paper
     #
-    "ERC721:0x05316a64437c10470f4f4a9c89bf926f923f846cdbfb97370669632668ab46fd", # dope_loot
-    "ERC721:0x00c093de2d5cdbcc368a9670733bc0ed6ad4adfc0a79b0d919acada8a14e96b0", # dope_hustlers
-    "ERC1155:0x0607c2fb13a52b504b52e9a0e2ac43ae191193355742aa48ade1a9d6c5912085", # dope_gear
+    "ERC721:0x02d0bfe2c1c85487b37980f031b618ac8a577ada7c9e1c717b69cedf8f632b25", # dope_loot
+    "ERC721:0x0404e870111abb298afd719baf7712abe564041ec6864270763d2a32f62c26c6", # dope_hustlers
+    "ERC1155:0x04b65376b30a2193441943f23267e8dc4f7bcb7b24cfff9beffd984900de1fa3", # dope_gear
 ]
 
 [erc]
