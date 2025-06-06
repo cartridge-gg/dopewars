@@ -113,8 +113,8 @@ const End = () => {
           await gameStore.init(gameInfos?.game_id!);
           setTimeout(() => {
             refetchRegisteredGame();
-          }, 500);
-        }, 1_000);
+          }, 1_000);
+        }, 1_500);
       }
     } catch (e: any) {
       console.log(e);

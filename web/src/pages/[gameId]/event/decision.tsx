@@ -19,6 +19,7 @@ import { HustlerPreviewFromLoot } from "@/dope/components";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { num, shortString } from "starknet";
+import { HustlerAvatarIcon } from "@/components/pages/profile/HustlerAvatarIcon";
 
 const Decision = observer(() => {
   const { router, gameId } = useRouterContext();
@@ -246,34 +247,7 @@ const Encounter = observer(
           gap={[2, 12]}
         >
           <HStack position="relative">
-            <Box w="170px" h="160px" maxH={["30vh", "calc(100dvh - 300px)"]} transform={["", "scale(2)"]}>
-              {/* @ts-ignore */}
-              {gameInfos && (gameInfos.token_id_type === "LootId" || gameInfos.token_id_type === "GuestLootId") && (
-                <HustlerPreviewFromLoot tokenId={Number(gameInfos.token_id)} renderMode={0} />
-              )}
-              {/* @ts-ignore */}
-              {gameInfos && gameInfos.token_id_type === "HustlerId" && (
-                <HustlerPreviewFromGame
-                  gameId={gameInfos?.game_id}
-                  tokenId={Number(gameInfos.token_id)}
-                  renderMode={0}
-                />
-              )}
-            </Box>
-            <Box
-              w="170px"
-              h="160px"
-              maxH={["30vh", "calc(100dvh - 300px)"]}
-              transform={["rotateY(180deg)", "scale(2) rotateY(170deg)"]}
-            >
-              <EncounterPreview
-                playerStatus={playerStatus}
-                level={encounterEvent.level}
-                gameId={gameInfos?.game_id}
-                turn={encounterEvent.turn}
-              />
-            </Box>
-            {/* <Image src={imgUrl} alt="adverse event" maxH={["30vh", "calc(100dvh - 300px)"]} w="auto" h={[150, 300]} /> */}
+            <Image src={imgUrl} alt="adverse event" maxH={["30vh", "calc(100dvh - 300px)"]} w="auto" h={[150, 300]} />
           </HStack>
 
           <VStack w="320px" gap={[0, 3]}>
@@ -310,6 +284,13 @@ const Encounter = observer(
               <VStack w="full" gap={0}>
                 <HStack w="full" px="10px" py="6px" justifyContent="space-between">
                   <HStack w="full" justifyContent="center">
+                    <HustlerAvatarIcon
+                      gameId={gameInfos?.game_id}
+                      // @ts-ignore
+                      tokenId={gameInfos?.token_id}
+                      // @ts-ignore
+                      tokenIdType={gameInfos.token_id_type}
+                    />
                     <Text>
                       {shortString.decodeShortString(num.toHexString(BigInt(game.gameInfos.player_name?.value)))}
                     </Text>
@@ -365,3 +346,32 @@ export const EncounterStats = observer(({ encounterEvent }: { encounterEvent: Tr
     </HStack>
   );
 });
+
+// HUSTLERS ENCOUNTERS VERSION
+// <Box w="170px" h="160px" maxH={["30vh", "calc(100dvh - 300px)"]} transform={["", "scale(2)"]}>
+//           {/* @ts-ignore */}
+//           {gameInfos && (gameInfos.token_id_type === "LootId" || gameInfos.token_id_type === "GuestLootId") && (
+//             <HustlerPreviewFromLoot tokenId={Number(gameInfos.token_id)} renderMode={0} />
+//           )}
+//           {/* @ts-ignore */}
+//           {gameInfos && gameInfos.token_id_type === "HustlerId" && (
+//             <HustlerPreviewFromGame
+//               gameId={gameInfos?.game_id}
+//               tokenId={Number(gameInfos.token_id)}
+//               renderMode={0}
+//             />
+//           )}
+//         </Box>
+//         <Box
+//           w="170px"
+//           h="160px"
+//           maxH={["30vh", "calc(100dvh - 300px)"]}
+//           transform={["rotateY(180deg)", "scale(2) rotateY(170deg)"]}
+//         >
+//           <EncounterPreview
+//             playerStatus={playerStatus}
+//             level={encounterEvent.level}
+//             gameId={gameInfos?.game_id}
+//             turn={encounterEvent.turn}
+//           />
+//         </Box>
