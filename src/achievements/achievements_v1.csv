@@ -10,7 +10,7 @@ BLSH_2;Discipline;1;Skill;30;fa-cards;0;"BUY_LOW:100:Buy drugs at the lowest pri
 SELL_HIGH:100:Sell drugs at the highest price (100)";Buy when it's dirt cheap, sell when it's sky-high.
 BLSH_3;Discipline;2;Habit;80;fa-pool-8-ball;0;"BUY_LOW:250:Buy drugs at the lowest price (250)
 SELL_HIGH:250:Sell drugs at the highest price( 250)";The market is a device for transferring money from the impatient to the patient.
-VOLUME_1;Dealer;0;Operator;10;fa-bong;0;VOLUME:69000000:Sell drugs for 69 Millions;Grind small, stack big.
+VOLUME_1;Dealer;0;Operator;10;fa-tablets;0;VOLUME:69000000:Sell drugs for 69 Millions;Grind small, stack big.
 VOLUME_2;Dealer;1;Broker;30;fa-capsules;0;VOLUME:420000000:Sell drugs for 420 Millions;Diversify your hustle. 
 VOLUME_3;Dealer;2;Cartel;75;fa-bong;0;VOLUME:69000000000:Sell drugs for 69 Billions;Slow money beats no money. 
 HIGHSTAKES_1;Gambler;0;Roller;10;fa-dice-d6;0;HIGH_STAKES:5:Play 5 games with max stake multiplier;Vet every deal like it's a setup.

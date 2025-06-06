@@ -276,7 +276,7 @@ pub impl AchievementImpl of AchievementTrait {
             index: 0,
             points: 10,
             group: 'Dealer',
-            icon: 'fa-bong',
+            icon: 'fa-tablets',
             title: 'Operator',
             description: "Grind small, stack big.",
             tasks: tasks.span(),
