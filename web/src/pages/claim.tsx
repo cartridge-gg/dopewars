@@ -5,6 +5,7 @@ import { useRouterContext } from "@/dojo/hooks";
 import { Heading, VStack, Text } from "@chakra-ui/react";
 
 import ClaimComponent from "@/components/pages/claim/ClaimComponent";
+import { DesktopOnly } from "@/components/wallet/DesktopOnly";
 
 export default function Claim() {
   const { router } = useRouterContext();
@@ -26,16 +27,18 @@ export default function Claim() {
           </Footer>
         }
       >
-        <VStack boxSize="full" gap="10px">
-          <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
-            Dope
-          </Text>
-          <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
-            Migration
-          </Heading>
+        <DesktopOnly>
+          <VStack boxSize="full" gap="10px">
+            <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
+              Dope
+            </Text>
+            <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
+              Migration
+            </Heading>
 
-          <ClaimComponent />
-        </VStack>
+            <ClaimComponent />
+          </VStack>
+        </DesktopOnly>
       </Layout>
     </EthProvider>
   );
