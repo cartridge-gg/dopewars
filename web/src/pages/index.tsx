@@ -123,7 +123,7 @@ export default function Home() {
 
                 <VStack h="full">
                   <Text fontSize={["12px", "14px"]}>
-                    Last seasons results need to be washed. Confirm a transaction and earn{" "}
+                    Last season results need to be washed. Confirm a transaction and earn{" "}
                     <PaperIcon color="yellow.400" mr={1} />
                     <span style={{ color: colors.yellow["400"].toString() }}>
                       {config?.ryo.paper_reward_launderer} PAPER
@@ -132,7 +132,6 @@ export default function Home() {
                   </Text>
                   <Button w="full" isLoading={isPending} onClick={onLaunder}>
                     <HStack w="full" justifyContent="center">
-                      {/* <LaundromatIcon w="24px" h="24px" isWashing={isPending} /> */}
                       <Text>Launder results</Text>
                     </HStack>
                   </Button>

@@ -110,15 +110,15 @@ const New = observer(() => {
   const [multiplier, setMultipler] = useState(1);
   const isMobile = IsMobile();
 
-  // useEffect(() => {
-  //   const initAsync = async () => {
-  //     const username = await (connector as unknown as ControllerConnector).controller.username();
-  //     setName(username?.substring(0,16) || "");
-  //   };
-  //   if (connector) {
-  //     initAsync();
-  //   }
-  // }, [connector]);
+  useEffect(() => {
+    const initAsync = async () => {
+      const username = await (connector as unknown as ControllerConnector).controller.username();
+      setName(username?.substring(0,16) || "");
+    };
+    if (connector) {
+      initAsync();
+    }
+  }, [connector, account?.address]);
 
   const selectedToken = useMemo(() => {
     return selectableTokens[selectedTokenIndex];
