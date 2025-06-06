@@ -100,7 +100,7 @@ export default function Home() {
             )} */}
             {!isPaused && isSeasonOpen && canCreateGame && (
               <Button flex="1" onClick={() => onHustle(GameMode.Ranked)}>
-                <Glock /> Play Ranked
+                <Glock /> Hustle
               </Button>
             )}
 
@@ -110,9 +110,9 @@ export default function Home() {
                   <Flipflop /> Play guest
                 </Button> */}
 
-                <HStack flex="1" h="full">
+                <HStack flex="1" h="full" alignItems="center"justifyContent="center">
                   <Warning color="yellow.400" />
-                  <Text>Waiting for season end</Text>
+                  <Text >Waiting for season end</Text>
                 </HStack>
               </HStack>
             )}
@@ -122,7 +122,7 @@ export default function Home() {
                 <LaundromatIcon isWashing={isPending} />
 
                 <VStack h="full">
-                  <Text>
+                  <Text fontSize={["12px", "14px"]}>
                     Last seasons results need to be washed. Confirm a transaction and earn{" "}
                     <PaperIcon color="yellow.400" mr={1} />
                     <span style={{ color: colors.yellow["400"].toString() }}>
@@ -131,10 +131,13 @@ export default function Home() {
                     !
                   </Text>
                   <Button w="full" isLoading={isPending} onClick={onLaunder}>
-                    Launder results
+                    <HStack w="full" justifyContent="center">
+                      {/* <LaundromatIcon w="24px" h="24px" isWashing={isPending} /> */}
+                      <Text>Launder results</Text>
+                    </HStack>
                   </Button>
 
-                  <VStack w="full" position="relative">
+                  {/* <VStack w="full" position="relative">
                     <Progress
                       w="full"
                       colorScheme="neon"
@@ -146,7 +149,7 @@ export default function Home() {
                     <Text position="absolute" w="full" textAlign="center">
                       {progressPercent}%
                     </Text>
-                  </VStack>
+                  </VStack> */}
                 </VStack>
               </HStack>
             )}

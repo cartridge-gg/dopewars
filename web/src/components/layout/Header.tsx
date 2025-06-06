@@ -1,4 +1,4 @@
-import { MediaPlayer } from "@/components/layout";
+import { HeaderButton, MediaPlayer } from "@/components/layout";
 import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { initSoundStore } from "@/hooks/sound";
 import { headerStyles } from "@/theme/styles";
@@ -45,9 +45,20 @@ export const Header = observer(() => {
       <HStack gap={3} flex="1">
         {!gameId && <ClaimReward />}
         {!gameId && !router.route.includes("/claim") && (
-          <Button variant="pixelated" h={"48px"} fontSize="14px" onClick={() => router.push("/claim")} mr={6}>
-           <Cigarette/> Migration
-          </Button>
+          <HeaderButton
+            variant="pixelated"
+            h={["40px", "48px"]}
+            fontSize="14px"
+            onClick={() => router.push("/claim")}
+            mr={6}
+            display="flex"
+            flexDirection={"row"}
+            alignItems="center"
+            justifyContent="center"
+            py={2}
+          >
+            <Cigarette mr="2"/> MIGRATION
+          </HeaderButton>
         )}
       </HStack>
 
@@ -62,7 +73,7 @@ export const Header = observer(() => {
           }}
         >
           <HStack
-            h="48px"
+            h={["40px", "48px"]}
             width={["100%", "auto"]}
             px="20px"
             spacing={["10px", "30px"]}

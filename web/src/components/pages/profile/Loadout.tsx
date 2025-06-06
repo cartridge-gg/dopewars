@@ -32,7 +32,7 @@ const GearItemInfos = observer(({ slot, item, level }: { slot: ItemSlot; item: I
       borderBottom="solid 1px"
       borderColor="neon.800"
       paddingBottom="20px"
-      marginLeft="-20px"
+      // marginLeft="-20px"
       _last={{
         borderBottom: "none",
       }}

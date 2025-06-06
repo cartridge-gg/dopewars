@@ -1,5 +1,5 @@
 import { Gem } from "@/components/icons";
-import { MakeItRain } from "@/components/layout";
+import { HeaderButton, MakeItRain } from "@/components/layout";
 import { useClaimable } from "@/dojo/hooks";
 import { IsMobile } from "@/utils/ui";
 import { Button } from "@chakra-ui/react";
@@ -58,7 +58,7 @@ export const ClaimReward = () => {
       {claimable.totalClaimable > 0 && (
         <>
           <Button
-            h="48px"
+            h={["40px", "48px"]}
             variant="pixelated"
             bg="yellow.600"
             borderColor="yellow.600"
@@ -68,7 +68,7 @@ export const ClaimReward = () => {
             }}
             onClick={() => setIsClaimModalOpen(true)}
           >
-            <Gem /> {!isMobile ? "Claim" : ""}
+            <Gem /> {!isMobile ? "CLAIM" : ""}
           </Button>
           <ClaimModal claimable={claimable} claimableData={claimableData} isOpen={isClaimModalOpen} onClose={onClose} />
         </>

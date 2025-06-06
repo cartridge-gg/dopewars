@@ -441,6 +441,7 @@ export default function Editor() {
           })}
         </Flex>
       </Flex>
+      <Box display="block" minH="80px" h="80px" w="full" />
     </Layout>
   );
 }

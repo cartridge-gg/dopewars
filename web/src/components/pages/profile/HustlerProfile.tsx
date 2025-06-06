@@ -30,6 +30,7 @@ export const HustlerProfile = observer(() => {
           transform={"scale(2)"}
           zIndex={99}
           pointerEvents="none"
+          overflow="hidden"
         >
           {/* @ts-ignore */}
           {gameInfos && (gameInfos.token_id_type === "LootId" || gameInfos.token_id_type === "GuestLootId") && (

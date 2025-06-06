@@ -30,6 +30,7 @@ import { hash } from "starknet";
 import { getGearItem } from "@/dope/helpers";
 import { EditButton } from "@/components/pages/admin/tables";
 import { ControllerConnector } from "@cartridge/connector";
+import { useSwipeable } from "react-swipeable";
 
 export enum TokenIdType {
   GuestLootId,
@@ -260,6 +261,20 @@ const New = observer(() => {
     }
   };
 
+  const onClickPrev = () => {
+    playSound(Sounds.HoverClick, 0.3);
+    selectedTokenIndex > 0
+      ? setSelectedTokenIndex((selectedTokenIndex - 1) % selectableTokens.length)
+      : setSelectedTokenIndex(selectableTokens.length - 1);
+  };
+
+  const onClickNext = () => {
+    playSound(Sounds.HoverClick, 0.3);
+    setSelectedTokenIndex((selectedTokenIndex + 1) % selectableTokens.length);
+  };
+
+  const { ref: swipeableRef } = useSwipeable({ delta: 50, onSwipedLeft: onClickNext, onSwipedRight: onClickPrev });
+
   if (!configStore || !season) return null;
 
   return (
@@ -310,15 +325,26 @@ const New = observer(() => {
         </Footer>
       }
     >
-      <VStack w={["full", "540px"]} margin="auto">
-        <VStack w="full" gap={[3, 6]}>
+      <VStack w={["full", "700px"]} margin="auto">
+        <VStack w="full" gap={[3, 6]} overflowX="hidden">
           <VStack>
-            <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
-              Choose your
-            </Text>
+            {/* {!isMobile && (
+              <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
+                Choose your
+              </Text>
+            )}
             <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
-              Hustler...
-            </Heading>
+              {isMobile && <span>Choose your</span>} Hustler
+            </Heading> */}
+
+            <Text textStyle="subheading" fontSize={["11px", "11px"]} my={["10px", "0"]} letterSpacing="0.25em">
+              Choose your {isMobile && <span>Hustler...</span>}
+            </Text>
+            {!isMobile && (
+              <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
+                Hustler...
+              </Heading>
+            )}
           </VStack>
 
           <HStack gap={1}>
@@ -352,19 +378,14 @@ const New = observer(() => {
           </HStack>
 
           {selectableTokens && selectableTokens?.length > 0 && selectedToken ? (
-            <HStack align="center" justify="center" gap={[0, 9]} marginTop={"-30px"}>
+            <HStack ref={swipeableRef} align="center" justify="center" gap={[0, 9]} marginTop={"-30px"}>
               <Arrow
                 style="outline"
                 direction="left"
                 boxSize="48px"
                 userSelect="none"
                 cursor="pointer"
-                onClick={() => {
-                  playSound(Sounds.HoverClick, 0.3);
-                  selectedTokenIndex > 0
-                    ? setSelectedTokenIndex((selectedTokenIndex - 1) % selectableTokens.length)
-                    : setSelectedTokenIndex(selectableTokens.length - 1);
-                }}
+                onClick={onClickPrev}
               />
 
               <VStack gap={3}>
@@ -374,6 +395,7 @@ const New = observer(() => {
                   height={["220px", "280px"]}
                   transform={["scale(1.7)", "scale(1.5)"]}
                   pointerEvents={"none"}
+
                   // style={{ filter: "grayscale(50%) sepia(80%) hue-rotate(60deg)" }}
                 >
                   {selectedTokenIdType === TokenIdType.HustlerId ? (
@@ -499,10 +521,7 @@ const New = observer(() => {
                 boxSize="48px"
                 userSelect="none"
                 cursor="pointer"
-                onClick={() => {
-                  playSound(Sounds.HoverClick, 0.3);
-                  setSelectedTokenIndex((selectedTokenIndex + 1) % selectableTokens.length);
-                }}
+                onClick={onClickNext}
               />
             </HStack>
           ) : (
@@ -532,7 +551,7 @@ const New = observer(() => {
                     color="yellow.400"
                     title="Dope Migration"
                     text="Play a game with this Dope to release it!"
-                    // placement="top"
+                    placement="top"
                   >
                     <span>
                       <Warning color="yellow.400" ml={2} height={"16px"} width={"16px"} />

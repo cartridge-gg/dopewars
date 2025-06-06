@@ -12,6 +12,7 @@ import { IsMobile, formatCash, generatePixelBorderPath } from "@/utils/ui";
 import { Box, Card, Grid, GridItem, HStack, Text, VStack, useDisclosure, useEventListener } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSwipeable } from "react-swipeable";
 
 interface MarketPriceInfo {
   drug: string;
@@ -127,6 +128,8 @@ const Travel = observer(() => {
     }
   }, [targetLocation, gameId, travel, game, configStore]);
 
+  const { ref: swipeableRef } = useSwipeable({ delta: 50, onSwipedLeft: onNext, onSwipedRight: onBack });
+
   if (!game) return <></>;
 
   return (
@@ -166,7 +169,7 @@ const Travel = observer(() => {
       }
     >
       {/* Desktop  */}
-      <VStack w="full" my="auto" display={["none", "flex"]} gap="20px" overflow={"visible"}>
+      <VStack w="full" my="auto" display={["none", "flex"]} gap="20px" overflow={"visible"} >
         <VStack w="full" align="flex-start">
           <Inventory hidePawnshop />
           <HStack w="full" justify="space-between" pt={["0px", "20px"]}>
@@ -199,6 +202,7 @@ const Travel = observer(() => {
         background="linear-gradient(transparent, 10%, #172217, 25%, #172217)"
         gap="14px"
         overflow={"visible"}
+        ref={swipeableRef}
       >
         {isMobile && targetLocation && (
           <Box position="absolute" top="20px" left="16px">

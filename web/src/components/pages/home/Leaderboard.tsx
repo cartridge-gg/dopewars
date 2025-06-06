@@ -8,7 +8,7 @@ import {
 } from "@/dojo/hooks";
 import colors from "@/theme/colors";
 import { formatCash } from "@/utils/ui";
-import { Box, Heading, HStack, ListItem, Text, Tooltip, UnorderedList, VStack } from "@chakra-ui/react";
+import { Box, Heading, HStack, ListItem, Text, UnorderedList, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -21,6 +21,8 @@ import { HustlerAvatarIcon } from "../profile/HustlerAvatarIcon";
 import { ComponentValueEvent, useDopeStore } from "@/dope/store";
 import { hash, shortString, uint256 } from "starknet";
 import { Layer } from "@/dope/components";
+import { Tooltip } from "@/components/common";
+import { useSwipeable } from "react-swipeable";
 
 const renderer = ({
   days,
@@ -98,12 +100,14 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
     router.push(`/season/${version}`);
   };
 
+  const { ref: swipeableRef } = useSwipeable({ delta: 50, onSwipedLeft: onNext, onSwipedRight: onPrev });
+
   if (!config || !registeredGames || !season) {
     return <></>;
   }
 
   return (
-    <VStack w="full" h="100%">
+    <VStack w="full" h="100%" ref={swipeableRef}>
       <VStack my="15px" w="full">
         <HStack w="full" justifyContent="space-between">
           <Arrow
@@ -140,7 +144,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
       <VStack
         boxSize="full"
         gap="20px"
-        maxH={["calc(100dvh - 430px)", "calc(100dvh - 480px)"]}
+        maxH={["calc(100dvh - 350px)", "calc(100dvh - 380px)"]}
         sx={{
           overflowY: "scroll",
         }}
@@ -210,12 +214,16 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                         {"."}
                       </Text>
 
+                      <Text flexShrink={0} fontSize={["12px", "16px"]}>
+                        {formatCash(game.final_score)}
+                      </Text>
+
                       {game.claimable > 0 && (
                         <Text flexShrink={0} fontSize={["12px", "16px"]}>
                           <Tooltip
                             placement="left"
-                            maxW="300px"
-                            label={
+                            // maxW="300px"
+                            content={
                               <RewardDetails
                                 claimable={game.claimable}
                                 position={game.position}
@@ -235,9 +243,9 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                       {game.season_version === config.ryo.season_version && index + 1 <= payedCount && (
                         <Text flexShrink={0} fontSize={["12px", "16px"]}>
                           <Tooltip
-                            maxW="300px"
+                            // maxW="300px"
                             placement="left"
-                            label={<RewardDetails position={index + 1} seasonVersion={game.season_version} />}
+                            content={<RewardDetails position={index + 1} seasonVersion={game.season_version} />}
                             color="neon.400"
                           >
                             {/* getGearItemRewards(index + 1) */}
@@ -248,9 +256,6 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                         </Text>
                       )}
                       {/* <RewardDetails position={index + 1} seasonVersion={game.season_version} /> */}
-                      <Text flexShrink={0} fontSize={["12px", "16px"]}>
-                        {formatCash(game.final_score)}
-                      </Text>
                     </HStack>
                   </ListItem>
                 );
@@ -389,7 +394,7 @@ export const RewardDetails = observer(
                 textOverflow="clip"
                 whiteSpace="nowrap"
                 overflow="hidden"
-                w="250px"
+                w="100%"
               >
                 {item.value}
               </Text>

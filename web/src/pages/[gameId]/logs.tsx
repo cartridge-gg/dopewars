@@ -154,7 +154,11 @@ const Logs = () => {
       }
       isSinglePanel={true}
     >
-      <VStack w="full" h={["100%", "calc(100% - 120px)"]}>
+      <VStack
+        w="full"
+        h={["100%", "calc(100% - 120px)"]}
+        // overflowX="hidden"
+      >
         <Flex w="full" direction={["column", "row"]} gap={[0, "80px"]} h={["auto", "100%"]}>
           <CustomLeftPanel />
 
@@ -213,6 +217,7 @@ const CustomLeftPanel = () => {
       alignItems="center"
       marginBottom={["30px", "50px"]}
       gap={0}
+      overflowX={"hidden"}
     >
       <Heading
         fontSize={["30px", "48px"]}
