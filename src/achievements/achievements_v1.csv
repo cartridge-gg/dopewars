@@ -4,28 +4,28 @@ BRAWLER_G:1:Defeat a max level Gang";I am what I am. A fighter.
 FAMOUS;Notorious;0;Notorious;50;fa-joint;0;FAMOUS:1:End a game with max reputation;The game is the game. Always.
 KINGPIN;Domination;0;Kingpin;80;fa-crown;0;KINGPIN:1:Win a season of Dopewars;In the boss's domain, every decision is a command, every order, law.
 STUFFED;Fully Loaded;0;Fully Loaded;50;fa-user-ninja;1;STUFFED:1:Max out equipment;If they bring a knife to the fight, we bring a gun
-BLSH_1;Dealer;0;BLSH 1;10;;0;"BUY_LOW:20:Buy drugs at the lowest price 20 times
-SELL_HIGH:20:Sell drugs at the highest price 20 times";buy low, sell high, profit
-BLSH_2;Dealer;1;BLSH 2;30;;0;"BUY_LOW:100:Buy drugs at the lowest price 100 times
-SELL_HIGH:100:Sell drugs at the highest price 100 times";buy low, sell high, profit
-BLSH_3;Dealer;2;BLSH 3;80;;0;"BUY_LOW:500:Buy drugs at the lowest price 500 times
-SELL_HIGH:500:Sell drugs at the highest price 500 times";buy low, sell high, profit
-VOLUME_1;Dealer;0;Operator;10;fa-tablets;0;VOLUME:69000000:Sell drugs for 69 Millions;trading volume
-VOLUME_2;Dealer;1;Broker;30;fa-capsules;0;VOLUME:420000000:Sell drugs for 420 Millions;trading volume
-VOLUME_3;Dealer;2;Cartel;75;fa-bong;0;VOLUME:69000000000:Sell drugs for 69 Billions;trading volume
-HIGHSTAKES_1;Gambler;0;Gambler 1;10;;0;HIGH_STAKES:5:Play 5 games with max stake multiplier;play games with max stake multiplier
-HIGHSTAKES_2;Gambler;1;Gambler 2;30;;0;HIGH_STAKES:25:Play 25 games with max stake multiplier;play games with max stake multiplier
-HIGHSTAKES_3;Gambler;2;Gambler 3;80;;0;HIGH_STAKES:100:Play 100 games with max stake multiplier;play games with max stake multiplier
-PAPER_1;Launderer;0;paper1;10;;0;PAPER:100000:Claim 69.000 $PAPER;amount of paper claimed as reward
-PAPER_2;Launderer;1;paper2;30;;0;PAPER:420000:Claim 420.000 $PAPER;amount of paper claimed as reward
-PAPER_3;Launderer;2;paper3;80;;0;PAPER:1000000:Claim 1.000.000 $PAPER;amount of paper claimed as reward
-GEAR_FROM;Represents;0;gear from;25;;1;GEAR_FROM:1:Play a game with a set of items from XXX;Always remind where you come from.
-SURVIVOR;Survivor;0;Survivor;10;;1;SURVIVOR:1:End a game with 1hp;end a game with 1hp
-ENCOUNTERS_1;Encounters;0;encounters 1;10;;0;ENCOUNTER:100:Defeat 100 Cops or Gangs;description
-ENCOUNTERS_2;Encounters;1;encounters 2;30;;0;ENCOUNTER:500:Defeat 500 Cops or Gangs;description
-ENCOUNTERS_3;Encounters;2;encounters 3;80;;0;ENCOUNTER:1000:Defeat 1000 Cops or Gangs;description
-ELEGANT;Elegant;0;elegant;25;;1;ELEGANT:1:Start a game with an accessory;description
-FULL_EARLY;Strategist;0;full early;20;;1;FULL_EARLY:5:Play 5 games with full early items;description
-FULL_MID;Strategist;1;full mid;20;;1;FULL_MID:5:Play 5 games with full mid items;description
-FULL_LATE;Strategist;2;full late;20;;1;FULL_LATE:5:Play 5 games with full late items;description
-OG;OG;0;Original Gangsta;25;;1;OG:1:Play a game with an OG;description
+BLSH_1;Discipline;0;Luck;10;fa-slot-machine;0;"BUY_LOW:20:Buy drugs at the lowest price (20)
+SELL_HIGH:20:Sell drugs at the highest price (20)";Patience is profit.
+BLSH_2;Discipline;1;Skill;30;fa-cards;0;"BUY_LOW:100:Buy drugs at the lowest price (100)
+SELL_HIGH:100:Sell drugs at the highest price (100)";Buy when it's dirt cheap, sell when it's sky-high.
+BLSH_3;Discipline;2;Habit;80;fa-pool-8-ball;0;"BUY_LOW:250:Buy drugs at the lowest price (250)
+SELL_HIGH:250:Sell drugs at the highest price( 250)";The market is a device for transferring money from the impatient to the patient.
+VOLUME_1;Dealer;0;Operator;10;fa-bong;0;VOLUME:69000000:Sell drugs for 69 Millions;Grind small, stack big.
+VOLUME_2;Dealer;1;Broker;30;fa-capsules;0;VOLUME:420000000:Sell drugs for 420 Millions;Diversify your hustle. 
+VOLUME_3;Dealer;2;Cartel;75;fa-bong;0;VOLUME:69000000000:Sell drugs for 69 Billions;Slow money beats no money. 
+HIGHSTAKES_1;Gambler;0;Roller;10;fa-dice-d6;0;HIGH_STAKES:5:Play 5 games with max stake multiplier;Vet every deal like it's a setup.
+HIGHSTAKES_2;Gambler;1;Staker;30;fa-dice-d8;0;HIGH_STAKES:25:Play 25 games with max stake multiplier;Take what's yours fast.
+HIGHSTAKES_3;Gambler;2;Dicer;80;fa-dice-d20;0;HIGH_STAKES:100:Play 100 games with max stake multiplier;Sober up, read the room, then bet on what's steady.
+PAPER_1;Launderer;0;Receipts;10;fa-coin-vertical;0;PAPER:69000:Claim 69.000 $PAPER;Run numbers like it's a wiretap. 
+PAPER_2;Launderer;1;Funds;30;fa-money-bill-simple-wave;0;PAPER:420000:Claim 420.000 $PAPER;Stay liquid, stay free. 
+PAPER_3;Launderer;2;Nest Egg;80;fa-sack-dollar;0;PAPER:1000000:Claim 1.000.000 $PAPER;Follow the paper trail. Big players leave big clues.
+GEAR_FROM;Drip;0;Drip;25;fa-clothes-hanger;1;GEAR_FROM:1:Play a game with a set of items from XXX;Always remind where you come from.
+SURVIVOR;Survivor;0;Survivor;10;fa-shield-heart;1;SURVIVOR:1:End a game with 1hp;Gear up right before you step to the table. 
+ENCOUNTERS_1;Encounters;0;Tough;10;fa-scalpel;0;ENCOUNTER:100:Defeat 100 Cops or Gangs;Know your exit before you step in.
+ENCOUNTERS_2;Encounters;1;Dangerous;30;fa-knife-kitchen;0;ENCOUNTER:500:Defeat 500 Cops or Gangs;Solid cover's your best friend when bullets fly. 
+ENCOUNTERS_3;Encounters;2;Infamous;80;fa-gun;0;ENCOUNTER:1000:Defeat 1000 Cops or Gangs;Make your name a ghost story.  
+ELEGANT;Elegant;0;Elegant;25;fa-hockey-mask;1;ELEGANT:1:Start a game with an accessory;Charm's your blade, style's your shield.
+FULL_EARLY;Strategist;0;Quick;20;fa-shirt-tank-top;1;FULL_EARLY:5:Play 5 games with full early items;Dress sharp, move cold.
+FULL_MID;Strategist;1;Versatile;20;fa-shirt;1;FULL_MID:5:Play 5 games with full mid items;Drip don't shout, it whispers death.   
+FULL_LATE;Strategist;2;Sturdy;20;fa-shirt-long-sleeve;1;FULL_LATE:5:Play 5 games with full late items;Roll deep, look lethal.
+OG;OG;0;Original Gangsta;25;fa-luchador-mask;1;OG:1:Play a game with an OG;An OG owns the game forever. 

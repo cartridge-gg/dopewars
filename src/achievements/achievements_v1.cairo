@@ -189,14 +189,12 @@ pub impl AchievementImpl of AchievementTrait {
     fn blsh_1() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
-                id: Tasks::BUY_LOW,
-                total: 20,
-                description: "Buy drugs at the lowest price 20 times",
+                id: Tasks::BUY_LOW, total: 20, description: "Buy drugs at the lowest price (20)",
             ),
             AchievementTaskTrait::new(
                 id: Tasks::SELL_HIGH,
                 total: 20,
-                description: "Sell drugs at the highest price 20 times",
+                description: "Sell drugs at the highest price (20)",
             ),
         ];
         Achievement {
@@ -204,10 +202,10 @@ pub impl AchievementImpl of AchievementTrait {
             hidden: false,
             index: 0,
             points: 10,
-            group: 'Dealer',
-            icon: '',
-            title: 'BLSH 1',
-            description: "buy low, sell high, profit",
+            group: 'Discipline',
+            icon: 'fa-slot-machine',
+            title: 'Luck',
+            description: "Patience is profit.",
             tasks: tasks.span(),
         }
     }
@@ -217,14 +215,12 @@ pub impl AchievementImpl of AchievementTrait {
     fn blsh_2() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
-                id: Tasks::BUY_LOW,
-                total: 100,
-                description: "Buy drugs at the lowest price 100 times",
+                id: Tasks::BUY_LOW, total: 100, description: "Buy drugs at the lowest price (100)",
             ),
             AchievementTaskTrait::new(
                 id: Tasks::SELL_HIGH,
                 total: 100,
-                description: "Sell drugs at the highest price 100 times",
+                description: "Sell drugs at the highest price (100)",
             ),
         ];
         Achievement {
@@ -232,10 +228,10 @@ pub impl AchievementImpl of AchievementTrait {
             hidden: false,
             index: 1,
             points: 30,
-            group: 'Dealer',
-            icon: '',
-            title: 'BLSH 2',
-            description: "buy low, sell high, profit",
+            group: 'Discipline',
+            icon: 'fa-cards',
+            title: 'Skill',
+            description: "Buy when it's dirt cheap, sell when it's sky-high.",
             tasks: tasks.span(),
         }
     }
@@ -245,14 +241,12 @@ pub impl AchievementImpl of AchievementTrait {
     fn blsh_3() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
-                id: Tasks::BUY_LOW,
-                total: 500,
-                description: "Buy drugs at the lowest price 500 times",
+                id: Tasks::BUY_LOW, total: 250, description: "Buy drugs at the lowest price (250)",
             ),
             AchievementTaskTrait::new(
                 id: Tasks::SELL_HIGH,
-                total: 500,
-                description: "Sell drugs at the highest price 500 times",
+                total: 250,
+                description: "Sell drugs at the highest price( 250)",
             ),
         ];
         Achievement {
@@ -260,10 +254,10 @@ pub impl AchievementImpl of AchievementTrait {
             hidden: false,
             index: 2,
             points: 80,
-            group: 'Dealer',
-            icon: '',
-            title: 'BLSH 3',
-            description: "buy low, sell high, profit",
+            group: 'Discipline',
+            icon: 'fa-pool-8-ball',
+            title: 'Habit',
+            description: "The market is a device for transferring money from the impatient to the patient.",
             tasks: tasks.span(),
         }
     }
@@ -282,9 +276,9 @@ pub impl AchievementImpl of AchievementTrait {
             index: 0,
             points: 10,
             group: 'Dealer',
-            icon: 'fa-tablets',
+            icon: 'fa-bong',
             title: 'Operator',
-            description: "trading volume",
+            description: "Grind small, stack big.",
             tasks: tasks.span(),
         }
     }
@@ -305,7 +299,7 @@ pub impl AchievementImpl of AchievementTrait {
             group: 'Dealer',
             icon: 'fa-capsules',
             title: 'Broker',
-            description: "trading volume",
+            description: "Diversify your hustle. ",
             tasks: tasks.span(),
         }
     }
@@ -326,7 +320,7 @@ pub impl AchievementImpl of AchievementTrait {
             group: 'Dealer',
             icon: 'fa-bong',
             title: 'Cartel',
-            description: "trading volume",
+            description: "Slow money beats no money. ",
             tasks: tasks.span(),
         }
     }
@@ -347,9 +341,9 @@ pub impl AchievementImpl of AchievementTrait {
             index: 0,
             points: 10,
             group: 'Gambler',
-            icon: '',
-            title: 'Gambler 1',
-            description: "play games with max stake multiplier",
+            icon: 'fa-dice-d6',
+            title: 'Roller',
+            description: "Vet every deal like it's a setup.",
             tasks: tasks.span(),
         }
     }
@@ -370,9 +364,9 @@ pub impl AchievementImpl of AchievementTrait {
             index: 1,
             points: 30,
             group: 'Gambler',
-            icon: '',
-            title: 'Gambler 2',
-            description: "play games with max stake multiplier",
+            icon: 'fa-dice-d8',
+            title: 'Staker',
+            description: "Take what's yours fast.",
             tasks: tasks.span(),
         }
     }
@@ -393,9 +387,9 @@ pub impl AchievementImpl of AchievementTrait {
             index: 2,
             points: 80,
             group: 'Gambler',
-            icon: '',
-            title: 'Gambler 3',
-            description: "play games with max stake multiplier",
+            icon: 'fa-dice-d20',
+            title: 'Dicer',
+            description: "Sober up, read the room, then bet on what's steady.",
             tasks: tasks.span(),
         }
     }
@@ -405,7 +399,7 @@ pub impl AchievementImpl of AchievementTrait {
     fn paper_1() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
-                id: Tasks::PAPER, total: 100000, description: "Claim 69.000 $PAPER",
+                id: Tasks::PAPER, total: 69000, description: "Claim 69.000 $PAPER",
             ),
         ];
         Achievement {
@@ -414,9 +408,9 @@ pub impl AchievementImpl of AchievementTrait {
             index: 0,
             points: 10,
             group: 'Launderer',
-            icon: '',
-            title: 'paper1',
-            description: "amount of paper claimed as reward",
+            icon: 'fa-coin-vertical',
+            title: 'Receipts',
+            description: "Run numbers like it's a wiretap. ",
             tasks: tasks.span(),
         }
     }
@@ -435,9 +429,9 @@ pub impl AchievementImpl of AchievementTrait {
             index: 1,
             points: 30,
             group: 'Launderer',
-            icon: '',
-            title: 'paper2',
-            description: "amount of paper claimed as reward",
+            icon: 'fa-money-bill-simple-wave',
+            title: 'Funds',
+            description: "Stay liquid, stay free. ",
             tasks: tasks.span(),
         }
     }
@@ -456,9 +450,9 @@ pub impl AchievementImpl of AchievementTrait {
             index: 2,
             points: 80,
             group: 'Launderer',
-            icon: '',
-            title: 'paper3',
-            description: "amount of paper claimed as reward",
+            icon: 'fa-sack-dollar',
+            title: 'Nest Egg',
+            description: "Follow the paper trail. Big players leave big clues.",
             tasks: tasks.span(),
         }
     }
@@ -478,9 +472,9 @@ pub impl AchievementImpl of AchievementTrait {
             hidden: true,
             index: 0,
             points: 25,
-            group: 'Represents',
-            icon: '',
-            title: 'gear from',
+            group: 'Drip',
+            icon: 'fa-clothes-hanger',
+            title: 'Drip',
             description: "Always remind where you come from.",
             tasks: tasks.span(),
         }
@@ -500,9 +494,9 @@ pub impl AchievementImpl of AchievementTrait {
             index: 0,
             points: 10,
             group: 'Survivor',
-            icon: '',
+            icon: 'fa-shield-heart',
             title: 'Survivor',
-            description: "end a game with 1hp",
+            description: "Gear up right before you step to the table. ",
             tasks: tasks.span(),
         }
     }
@@ -521,9 +515,9 @@ pub impl AchievementImpl of AchievementTrait {
             index: 0,
             points: 10,
             group: 'Encounters',
-            icon: '',
-            title: 'encounters 1',
-            description: "description",
+            icon: 'fa-scalpel',
+            title: 'Tough',
+            description: "Know your exit before you step in.",
             tasks: tasks.span(),
         }
     }
@@ -542,9 +536,9 @@ pub impl AchievementImpl of AchievementTrait {
             index: 1,
             points: 30,
             group: 'Encounters',
-            icon: '',
-            title: 'encounters 2',
-            description: "description",
+            icon: 'fa-knife-kitchen',
+            title: 'Dangerous',
+            description: "Solid cover's your best friend when bullets fly. ",
             tasks: tasks.span(),
         }
     }
@@ -563,9 +557,9 @@ pub impl AchievementImpl of AchievementTrait {
             index: 2,
             points: 80,
             group: 'Encounters',
-            icon: '',
-            title: 'encounters 3',
-            description: "description",
+            icon: 'fa-gun',
+            title: 'Infamous',
+            description: "Make your name a ghost story.  ",
             tasks: tasks.span(),
         }
     }
@@ -584,9 +578,9 @@ pub impl AchievementImpl of AchievementTrait {
             index: 0,
             points: 25,
             group: 'Elegant',
-            icon: '',
-            title: 'elegant',
-            description: "description",
+            icon: 'fa-hockey-mask',
+            title: 'Elegant',
+            description: "Charm's your blade, style's your shield.",
             tasks: tasks.span(),
         }
     }
@@ -605,9 +599,9 @@ pub impl AchievementImpl of AchievementTrait {
             index: 0,
             points: 20,
             group: 'Strategist',
-            icon: '',
-            title: 'full early',
-            description: "description",
+            icon: 'fa-shirt-tank-top',
+            title: 'Quick',
+            description: "Dress sharp, move cold.",
             tasks: tasks.span(),
         }
     }
@@ -626,9 +620,9 @@ pub impl AchievementImpl of AchievementTrait {
             index: 1,
             points: 20,
             group: 'Strategist',
-            icon: '',
-            title: 'full mid',
-            description: "description",
+            icon: 'fa-shirt',
+            title: 'Versatile',
+            description: "Drip don't shout, it whispers death.   ",
             tasks: tasks.span(),
         }
     }
@@ -647,9 +641,9 @@ pub impl AchievementImpl of AchievementTrait {
             index: 2,
             points: 20,
             group: 'Strategist',
-            icon: '',
-            title: 'full late',
-            description: "description",
+            icon: 'fa-shirt-long-sleeve',
+            title: 'Sturdy',
+            description: "Roll deep, look lethal.",
             tasks: tasks.span(),
         }
     }
@@ -668,9 +662,9 @@ pub impl AchievementImpl of AchievementTrait {
             index: 0,
             points: 25,
             group: 'OG',
-            icon: '',
+            icon: 'fa-luchador-mask',
             title: 'Original Gangsta',
-            description: "description",
+            description: "An OG owns the game forever. ",
             tasks: tasks.span(),
         }
     }
