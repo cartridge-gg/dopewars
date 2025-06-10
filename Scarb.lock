@@ -94,36 +94,36 @@ dependencies = [
  "alexandria_encoding",
  "alexandria_merkle_tree",
  "dojo",
- "generated",
+ "dope_generated",
+ "dope_tools",
  "graffiti",
- "nft_tools",
  "openzeppelin",
 ]
 
 [[package]]
-name = "generated"
+name = "dope_generated"
 version = "0.1.0"
 dependencies = [
  "dojo",
- "nft_tools",
+ "dope_tools",
 ]
 
 [[package]]
-name = "graffiti"
-version = "0.1.0"
-
-[[package]]
-name = "nft_tools"
+name = "dope_tools"
 version = "0.1.0"
 dependencies = [
  "alexandria_bytes",
  "alexandria_encoding",
  "alexandria_merkle_tree",
  "dojo",
- "generated",
+ "dope_generated",
  "graffiti",
  "openzeppelin",
 ]
+
+[[package]]
+name = "graffiti"
+version = "0.1.0"
 
 [[package]]
 name = "openzeppelin"

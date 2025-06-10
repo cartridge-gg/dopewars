@@ -30,7 +30,7 @@ pub fn add_items_payout(
         for slot in slots {
             let mut gear_item = gear_store
                 .random_gear_item_id(
-                    seed.into(), *slot, Option::Some(21),
+                    seed.into(), slot, Option::Some(21),
                 ); // 21 = get all suffix/prefixes/augmented
 
             // force match set from XXX
@@ -41,7 +41,7 @@ pub fn add_items_payout(
             }
 
             // if accessory -> force crown
-            if *slot == HustlerSlots::Accessory {
+            if slot == HustlerSlots::Accessory {
                 gear_item.item = 0; // crown id
             }
 

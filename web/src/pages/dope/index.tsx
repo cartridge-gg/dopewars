@@ -39,7 +39,7 @@ export default function Dope() {
     account?.address,
   );
 
-  const { loot, hustlers, gear, gearAddress } = useMemo(() => {
+  const { loot, hustlers, gear, gearAddress, gearCount } = useMemo(() => {
     const gearAddress = getContractByName(selectedChain.manifest, "dope", "DopeGear")!.address;
     const loot = (accountTokens || []).filter(
       (i) => i.contract_address === getContractByName(selectedChain.manifest, "dope", "DopeLoot")!.address,
@@ -49,8 +49,14 @@ export default function Dope() {
     );
     const gear = (accountTokens || []).filter((i) => i.contract_address === gearAddress);
 
-    return { loot, hustlers, gear, gearAddress };
-  }, [accountTokens, addresses, account?.address]);
+    const gearCount = (tokensBalances || [])
+      .filter((i) => BigInt(i.contract_address) === BigInt(gearAddress))
+      .map((i) => i.balance)
+      .reduce((p, c) => p + c, 0n)
+      .toString();
+
+    return { loot, hustlers, gear, gearAddress, gearCount };
+  }, [accountTokens, tokensBalances, addresses, account?.address]);
 
   const [isRefetching, setIsRefetching] = useState(false);
   const onRefetch = async () => {
@@ -118,7 +124,7 @@ export default function Dope() {
             </Tab>
             <Tab fontSize={["10px", "14px"]} px={2}>
               <HStack w="full" justifyContent="space-between">
-                <Text>GEAR ({gear.length})</Text>
+                <Text>GEAR ({gearCount})</Text>
                 <Box
                   cursor="pointer"
                   onClick={(e) => {

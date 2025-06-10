@@ -56,24 +56,13 @@ type Action = {
   //
   getCollectionById: (collectionId: string) => Collection[];
   getCollectionComponentsById: (collectionId: string) => CollectionComponent[];
-  getCollectionComponentList: (
-    collectionId: string,
-    id: string
-  ) => CollectionComponentList;
-  getComponentValuesBySlug: (
-    collectionId: string,
-    componentSlug: string
-  ) => ComponentValueEvent[];
+  getCollectionComponentList: (collectionId: string, id: string) => CollectionComponentList;
+  getComponentValuesBySlug: (collectionId: string, componentSlug: string) => ComponentValueEvent[];
 };
 
 export type CollectionState = State & Action;
 
-export const createCollectionStore: StateCreator<
-  DopeState,
-  [],
-  [],
-  CollectionState
-> = (set, get) => ({
+export const createCollectionStore: StateCreator<DopeState, [], [], CollectionState> = (set, get) => ({
   collections: [],
   collectionComponents: [],
   collectionComponentLists: [],
@@ -99,27 +88,18 @@ export const createCollectionStore: StateCreator<
     return get().collections.filter((i) => i.id === collectionId);
   },
   getCollectionComponentsById: (collectionId: string) => {
-    return get().collectionComponents.filter(
-      (i) => i.collection_id === collectionId
-    );
+    return get().collectionComponents.filter((i) => i.collection_id === collectionId);
   },
   getComponentValuesBySlug: (collectionId: string, componentSlug: string) => {
-    return get().componentValues.filter(
-      (i) =>
-        i.collection_id === collectionId && i.component_slug === componentSlug
-    );
+    return get().componentValues.filter((i) => i.collection_id === collectionId && i.component_slug === componentSlug);
   },
   getCollectionComponentList: (collectionId: string, id: string) => {
-    return get().collectionComponentLists.find(
-      (i) => i.collection_id === collectionId && i.id === id
-    )!;
+    return get().collectionComponentLists.find((i) => i.collection_id === collectionId && i.id === id)!;
   },
 
   //
   initCollections: async () => {
-    const entities = await get().toriiClient!.getEntities(
-      queryAllModels(["dope-Collection"], 10)
-    );
+    const entities = await get().toriiClient!.getEntities(queryAllModels(["dope-Collection"], 10));
     const collections = parseModels(entities, "dope-Collection");
 
     const parsed = collections.map((i) => ({
@@ -134,9 +114,7 @@ export const createCollectionStore: StateCreator<
   },
   //
   initCollectionComponents: async () => {
-    const entities = await get().toriiClient!.getEntities(
-      queryAllModels(["dope-CollectionComponent"])
-    );
+    const entities = await get().toriiClient!.getEntities(queryAllModels(["dope-CollectionComponent"]));
 
     const components = parseModels(entities, "dope-CollectionComponent");
     const parsed = components
@@ -154,9 +132,7 @@ export const createCollectionStore: StateCreator<
   },
   //
   initCollectionComponentLists: async () => {
-    const entities = await get().toriiClient!.getEntities(
-      queryAllModels(["dope-CollectionComponentList"])
-    );
+    const entities = await get().toriiClient!.getEntities(queryAllModels(["dope-CollectionComponentList"]));
     const components = parseModels(entities, "dope-CollectionComponentList");
     const parsed = components.map((i) => ({
       ...i,
@@ -171,17 +147,10 @@ export const createCollectionStore: StateCreator<
   //
   initComponentValues: async () => {
     const entities = await get().toriiClient!.getEventMessages(
-      queryAllModels([
-        "dope-ComponentValueEvent",
-        "dope-ComponentValueResourceEvent",
-        "dope-StatEvent",
-      ])
+      queryAllModels(["dope-ComponentValueEvent", "dope-ComponentValueResourceEvent"]),
     );
 
-    const parsedComponentValues = parseModels(
-      entities,
-      "dope-ComponentValueEvent"
-    )
+    const parsedComponentValues = parseModels(entities, "dope-ComponentValueEvent")
       .map((i) => ({
         ...i,
         collection_id: feltToString(i.collection_id),
@@ -190,18 +159,13 @@ export const createCollectionStore: StateCreator<
       }))
       .sort((a, b) => a.id - b.id);
 
-    const parsedComponentValueResources = parseModels(
-      entities,
-      "dope-ComponentValueResourceEvent"
-    )
+    const parsedComponentValueResources = parseModels(entities, "dope-ComponentValueResourceEvent")
       .map((i) => ({
         ...i,
         collection_id: feltToString(i.collection_id),
         component_slug: feltToString(i.component_slug),
       }))
       .sort((a, b) => a.id - b.id);
-
-    const parsedStatsValues = parseModels(entities, "dope-StatEvent");
 
     for (const componentValue of parsedComponentValues) {
       const resource0 =
@@ -211,7 +175,7 @@ export const createCollectionStore: StateCreator<
               r.collection_id === componentValue.collection_id &&
               r.component_slug === componentValue.component_slug &&
               r.id === componentValue.id &&
-              r.index === 0
+              r.index === 0,
           )
           .sort((a, b) => a.group_order - b.group_order)
           .map((r) => r.resource)
@@ -223,23 +187,15 @@ export const createCollectionStore: StateCreator<
               r.collection_id === componentValue.collection_id &&
               r.component_slug === componentValue.component_slug &&
               r.id === componentValue.id &&
-              r.index === 1
+              r.index === 1,
           )
           .sort((a, b) => a.group_order - b.group_order)
           .map((r) => r.resource)
           .flat() || [];
       const palette = get().palettes[componentValue.palette];
       if (palette) {
-        componentValue.resources = [
-          decodeAsset(resource0, palette).rects,
-          decodeAsset(resource1, palette).rects,
-        ];
+        componentValue.resources = [decodeAsset(resource0, palette).rects, decodeAsset(resource1, palette).rects];
       }
-      componentValue.stats = parsedStatsValues.find(
-        (i) =>
-          i.slot_id === componentValue.component_id &&
-          i.item_id === componentValue.id
-      )?.stats;
     }
     set({
       componentValues: parsedComponentValues,
@@ -247,25 +203,20 @@ export const createCollectionStore: StateCreator<
   },
   //
   initPalettes: async () => {
-    const entities = await get().toriiClient!.getEventMessages(
-      queryAllModels(["dope-PaletteEvent"])
-    );
+    const entities = await get().toriiClient!.getEventMessages(queryAllModels(["dope-PaletteEvent"]));
     const parsedPaletteEvents = parseModels(entities, "dope-PaletteEvent");
 
     const uniquePaletteIds = new Set(parsedPaletteEvents.map((i) => i.id));
-    const parsed = Array.from(uniquePaletteIds.values()).reduce(
-      (o, id: string) => {
-        return {
-          ...o,
-          [id]: (parsedPaletteEvents
-            .filter((e) => e.id === id)
-            .sort((a, b) => a.group_order - b.group_order)
-            .map((r) => r.colors)
-            .flat() || []) as string[],
-        };
-      },
-      {}
-    );
+    const parsed = Array.from(uniquePaletteIds.values()).reduce((o, id: string) => {
+      return {
+        ...o,
+        [id]: (parsedPaletteEvents
+          .filter((e) => e.id === id)
+          .sort((a, b) => a.group_order - b.group_order)
+          .map((r) => r.colors)
+          .flat() || []) as string[],
+      };
+    }, {});
     set({ palettes: parsed });
   },
 });

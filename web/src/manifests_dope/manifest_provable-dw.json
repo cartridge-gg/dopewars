@@ -1563,11 +1563,11 @@
         {
           "type": "impl",
           "name": "CollectionManagerImpl",
-          "interface_name": "nft_tools::collection_manager::collection_manager::ICollectionManager"
+          "interface_name": "tools::collection_manager::collection_manager::ICollectionManager"
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection_manager::collection_manager::ICollectionManager",
+          "name": "tools::collection_manager::collection_manager::ICollectionManager",
           "items": [
             {
               "type": "function",
@@ -2375,13 +2375,13 @@
         },
         {
           "type": "event",
-          "name": "nft_tools::collection_manager::collection_manager::CollectionManagerComponent::Event",
+          "name": "tools::collection_manager::collection_manager::CollectionManagerComponent::Event",
           "kind": "enum",
           "variants": []
         },
         {
           "type": "event",
-          "name": "nft_tools::components::custom_renderer::CustomRendererComponent::RendererUpdated",
+          "name": "tools::components::custom_renderer::CustomRendererComponent::RendererUpdated",
           "kind": "struct",
           "members": [
             {
@@ -2393,12 +2393,12 @@
         },
         {
           "type": "event",
-          "name": "nft_tools::components::custom_renderer::CustomRendererComponent::Event",
+          "name": "tools::components::custom_renderer::CustomRendererComponent::Event",
           "kind": "enum",
           "variants": [
             {
               "name": "RendererUpdated",
-              "type": "nft_tools::components::custom_renderer::CustomRendererComponent::RendererUpdated",
+              "type": "tools::components::custom_renderer::CustomRendererComponent::RendererUpdated",
               "kind": "nested"
             }
           ]
@@ -2440,12 +2440,12 @@
             },
             {
               "name": "CollectionManagerEvent",
-              "type": "nft_tools::collection_manager::collection_manager::CollectionManagerComponent::Event",
+              "type": "tools::collection_manager::collection_manager::CollectionManagerComponent::Event",
               "kind": "flat"
             },
             {
               "name": "CustomRendererEvent",
-              "type": "nft_tools::components::custom_renderer::CustomRendererComponent::Event",
+              "type": "tools::components::custom_renderer::CustomRendererComponent::Event",
               "kind": "flat"
             }
           ]
@@ -2791,11 +2791,11 @@
         {
           "type": "impl",
           "name": "CollectionManagerImpl",
-          "interface_name": "nft_tools::collection_manager::collection_manager::ICollectionManager"
+          "interface_name": "tools::collection_manager::collection_manager::ICollectionManager"
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection_manager::collection_manager::ICollectionManager",
+          "name": "tools::collection_manager::collection_manager::ICollectionManager",
           "items": [
             {
               "type": "function",
@@ -3637,7 +3637,7 @@
         },
         {
           "type": "event",
-          "name": "nft_tools::components::custom_renderer::CustomRendererComponent::RendererUpdated",
+          "name": "tools::components::custom_renderer::CustomRendererComponent::RendererUpdated",
           "kind": "struct",
           "members": [
             {
@@ -3649,19 +3649,19 @@
         },
         {
           "type": "event",
-          "name": "nft_tools::components::custom_renderer::CustomRendererComponent::Event",
+          "name": "tools::components::custom_renderer::CustomRendererComponent::Event",
           "kind": "enum",
           "variants": [
             {
               "name": "RendererUpdated",
-              "type": "nft_tools::components::custom_renderer::CustomRendererComponent::RendererUpdated",
+              "type": "tools::components::custom_renderer::CustomRendererComponent::RendererUpdated",
               "kind": "nested"
             }
           ]
         },
         {
           "type": "event",
-          "name": "nft_tools::components::erc4906::ERC4906Component::MetadataUpdate",
+          "name": "tools::components::erc4906::ERC4906Component::MetadataUpdate",
           "kind": "struct",
           "members": [
             {
@@ -3673,7 +3673,7 @@
         },
         {
           "type": "event",
-          "name": "nft_tools::components::erc4906::ERC4906Component::BatchMetadataUpdate",
+          "name": "tools::components::erc4906::ERC4906Component::BatchMetadataUpdate",
           "kind": "struct",
           "members": [
             {
@@ -3690,24 +3690,24 @@
         },
         {
           "type": "event",
-          "name": "nft_tools::components::erc4906::ERC4906Component::Event",
+          "name": "tools::components::erc4906::ERC4906Component::Event",
           "kind": "enum",
           "variants": [
             {
               "name": "MetadataUpdate",
-              "type": "nft_tools::components::erc4906::ERC4906Component::MetadataUpdate",
+              "type": "tools::components::erc4906::ERC4906Component::MetadataUpdate",
               "kind": "nested"
             },
             {
               "name": "BatchMetadataUpdate",
-              "type": "nft_tools::components::erc4906::ERC4906Component::BatchMetadataUpdate",
+              "type": "tools::components::erc4906::ERC4906Component::BatchMetadataUpdate",
               "kind": "nested"
             }
           ]
         },
         {
           "type": "event",
-          "name": "nft_tools::collection_manager::collection_manager::CollectionManagerComponent::Event",
+          "name": "tools::collection_manager::collection_manager::CollectionManagerComponent::Event",
           "kind": "enum",
           "variants": []
         },
@@ -3753,17 +3753,17 @@
             },
             {
               "name": "CustomRendererEvent",
-              "type": "nft_tools::components::custom_renderer::CustomRendererComponent::Event",
+              "type": "tools::components::custom_renderer::CustomRendererComponent::Event",
               "kind": "flat"
             },
             {
               "name": "ERC4906Event",
-              "type": "nft_tools::components::erc4906::ERC4906Component::Event",
+              "type": "tools::components::erc4906::ERC4906Component::Event",
               "kind": "flat"
             },
             {
               "name": "CollectionManagerEvent",
-              "type": "nft_tools::collection_manager::collection_manager::CollectionManagerComponent::Event",
+              "type": "tools::collection_manager::collection_manager::CollectionManagerComponent::Event",
               "kind": "flat"
             }
           ]
@@ -4962,7 +4962,7 @@
         },
         {
           "type": "event",
-          "name": "nft_tools::components::custom_renderer::CustomRendererComponent::RendererUpdated",
+          "name": "tools::components::custom_renderer::CustomRendererComponent::RendererUpdated",
           "kind": "struct",
           "members": [
             {
@@ -4974,19 +4974,19 @@
         },
         {
           "type": "event",
-          "name": "nft_tools::components::custom_renderer::CustomRendererComponent::Event",
+          "name": "tools::components::custom_renderer::CustomRendererComponent::Event",
           "kind": "enum",
           "variants": [
             {
               "name": "RendererUpdated",
-              "type": "nft_tools::components::custom_renderer::CustomRendererComponent::RendererUpdated",
+              "type": "tools::components::custom_renderer::CustomRendererComponent::RendererUpdated",
               "kind": "nested"
             }
           ]
         },
         {
           "type": "event",
-          "name": "nft_tools::components::erc4906::ERC4906Component::MetadataUpdate",
+          "name": "tools::components::erc4906::ERC4906Component::MetadataUpdate",
           "kind": "struct",
           "members": [
             {
@@ -4998,7 +4998,7 @@
         },
         {
           "type": "event",
-          "name": "nft_tools::components::erc4906::ERC4906Component::BatchMetadataUpdate",
+          "name": "tools::components::erc4906::ERC4906Component::BatchMetadataUpdate",
           "kind": "struct",
           "members": [
             {
@@ -5015,24 +5015,24 @@
         },
         {
           "type": "event",
-          "name": "nft_tools::components::erc4906::ERC4906Component::Event",
+          "name": "tools::components::erc4906::ERC4906Component::Event",
           "kind": "enum",
           "variants": [
             {
               "name": "MetadataUpdate",
-              "type": "nft_tools::components::erc4906::ERC4906Component::MetadataUpdate",
+              "type": "tools::components::erc4906::ERC4906Component::MetadataUpdate",
               "kind": "nested"
             },
             {
               "name": "BatchMetadataUpdate",
-              "type": "nft_tools::components::erc4906::ERC4906Component::BatchMetadataUpdate",
+              "type": "tools::components::erc4906::ERC4906Component::BatchMetadataUpdate",
               "kind": "nested"
             }
           ]
         },
         {
           "type": "event",
-          "name": "nft_tools::collection_manager::collection_manager::CollectionManagerComponent::Event",
+          "name": "tools::collection_manager::collection_manager::CollectionManagerComponent::Event",
           "kind": "enum",
           "variants": []
         },
@@ -5088,17 +5088,17 @@
             },
             {
               "name": "CustomRendererEvent",
-              "type": "nft_tools::components::custom_renderer::CustomRendererComponent::Event",
+              "type": "tools::components::custom_renderer::CustomRendererComponent::Event",
               "kind": "flat"
             },
             {
               "name": "ERC4906Event",
-              "type": "nft_tools::components::erc4906::ERC4906Component::Event",
+              "type": "tools::components::erc4906::ERC4906Component::Event",
               "kind": "flat"
             },
             {
               "name": "CollectionManagerEvent",
-              "type": "nft_tools::collection_manager::collection_manager::CollectionManagerComponent::Event",
+              "type": "tools::collection_manager::collection_manager::CollectionManagerComponent::Event",
               "kind": "flat"
             }
           ]
@@ -5510,7 +5510,7 @@
         },
         {
           "type": "event",
-          "name": "nft_tools::components::merkle_drop::MerkleDropComponent::MerkleDropInitialized",
+          "name": "tools::components::merkle_drop::MerkleDropComponent::MerkleDropInitialized",
           "kind": "struct",
           "members": [
             {
@@ -5522,12 +5522,12 @@
         },
         {
           "type": "event",
-          "name": "nft_tools::components::merkle_drop::MerkleDropComponent::Event",
+          "name": "tools::components::merkle_drop::MerkleDropComponent::Event",
           "kind": "enum",
           "variants": [
             {
               "name": "MerkleDropInitialized",
-              "type": "nft_tools::components::merkle_drop::MerkleDropComponent::MerkleDropInitialized",
+              "type": "tools::components::merkle_drop::MerkleDropComponent::MerkleDropInitialized",
               "kind": "nested"
             }
           ]
@@ -5554,7 +5554,7 @@
             },
             {
               "name": "MerleDropEvent",
-              "type": "nft_tools::components::merkle_drop::MerkleDropComponent::Event",
+              "type": "tools::components::merkle_drop::MerkleDropComponent::Event",
               "kind": "flat"
             }
           ]
@@ -5635,7 +5635,7 @@
         {
           "type": "impl",
           "name": "RendererImpl",
-          "interface_name": "nft_tools::traits::Renderer"
+          "interface_name": "tools::traits::Renderer"
         },
         {
           "type": "struct",
@@ -5677,7 +5677,7 @@
         },
         {
           "type": "struct",
-          "name": "nft_tools::traits::RendererOptions",
+          "name": "tools::traits::RendererOptions",
           "members": [
             {
               "name": "base64",
@@ -5695,7 +5695,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::traits::Renderer",
+          "name": "tools::traits::Renderer",
           "items": [
             {
               "type": "function",
@@ -5711,7 +5711,7 @@
                 },
                 {
                   "name": "options",
-                  "type": "nft_tools::traits::RendererOptions"
+                  "type": "tools::traits::RendererOptions"
                 }
               ],
               "outputs": [
@@ -5835,11 +5835,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -5861,7 +5861,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -5869,7 +5869,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -5879,11 +5879,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -5897,11 +5897,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -5917,7 +5917,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -5947,7 +5947,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -5963,7 +5963,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -6102,11 +6102,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -6128,7 +6128,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -6136,7 +6136,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -6146,7 +6146,7 @@
         {
           "type": "impl",
           "name": "CollectionDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IPaletteDescriptor"
+          "interface_name": "tools::collection::interfaces::IPaletteDescriptor"
         },
         {
           "type": "struct",
@@ -6160,7 +6160,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IPaletteDescriptor",
+          "name": "tools::collection::interfaces::IPaletteDescriptor",
           "items": [
             {
               "type": "function",
@@ -6314,11 +6314,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -6340,7 +6340,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -6348,7 +6348,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -6358,11 +6358,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -6376,11 +6376,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -6396,7 +6396,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -6426,7 +6426,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -6442,7 +6442,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -6581,11 +6581,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -6607,7 +6607,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -6615,7 +6615,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -6625,7 +6625,7 @@
         {
           "type": "impl",
           "name": "CollectionDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IPaletteDescriptor"
+          "interface_name": "tools::collection::interfaces::IPaletteDescriptor"
         },
         {
           "type": "struct",
@@ -6639,7 +6639,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IPaletteDescriptor",
+          "name": "tools::collection::interfaces::IPaletteDescriptor",
           "items": [
             {
               "type": "function",
@@ -6793,11 +6793,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -6819,7 +6819,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -6827,7 +6827,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -6837,11 +6837,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -6855,11 +6855,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -6875,7 +6875,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -6905,7 +6905,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -6921,7 +6921,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -7060,11 +7060,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -7086,7 +7086,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -7094,7 +7094,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -7104,11 +7104,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -7122,11 +7122,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -7142,7 +7142,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -7172,7 +7172,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -7188,7 +7188,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -7327,11 +7327,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -7353,7 +7353,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -7361,7 +7361,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -7371,7 +7371,7 @@
         {
           "type": "impl",
           "name": "CollectionDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IPaletteDescriptor"
+          "interface_name": "tools::collection::interfaces::IPaletteDescriptor"
         },
         {
           "type": "struct",
@@ -7385,7 +7385,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IPaletteDescriptor",
+          "name": "tools::collection::interfaces::IPaletteDescriptor",
           "items": [
             {
               "type": "function",
@@ -7539,11 +7539,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -7565,7 +7565,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -7573,7 +7573,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -7583,11 +7583,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -7601,11 +7601,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -7621,7 +7621,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -7651,7 +7651,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -7667,7 +7667,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -7806,11 +7806,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -7832,7 +7832,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -7840,7 +7840,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -7850,11 +7850,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -7868,11 +7868,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -7888,7 +7888,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -7918,7 +7918,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -7934,7 +7934,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -8073,11 +8073,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -8099,7 +8099,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -8107,7 +8107,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -8117,11 +8117,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -8135,11 +8135,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -8155,7 +8155,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -8185,7 +8185,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -8201,7 +8201,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -8340,11 +8340,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -8366,7 +8366,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -8374,7 +8374,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -8384,11 +8384,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -8402,11 +8402,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -8422,7 +8422,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -8452,7 +8452,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -8468,7 +8468,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -8607,11 +8607,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -8633,7 +8633,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -8641,7 +8641,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -8651,11 +8651,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -8669,11 +8669,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -8689,7 +8689,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -8719,7 +8719,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -8735,7 +8735,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -8874,11 +8874,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -8900,7 +8900,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -8908,7 +8908,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -8918,11 +8918,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -8936,11 +8936,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -8956,7 +8956,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -8986,7 +8986,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -9002,7 +9002,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -9141,11 +9141,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -9167,7 +9167,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -9175,7 +9175,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -9185,11 +9185,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -9203,11 +9203,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -9223,7 +9223,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -9253,7 +9253,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -9269,7 +9269,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -9408,11 +9408,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -9434,7 +9434,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -9442,7 +9442,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -9452,11 +9452,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -9470,11 +9470,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -9490,7 +9490,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -9520,7 +9520,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -9536,7 +9536,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -9675,11 +9675,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -9701,7 +9701,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -9709,7 +9709,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -9719,11 +9719,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -9737,11 +9737,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -9757,7 +9757,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -9787,7 +9787,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -9803,7 +9803,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -9942,11 +9942,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -9968,7 +9968,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -9976,7 +9976,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -9986,11 +9986,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -10004,11 +10004,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -10024,7 +10024,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -10054,7 +10054,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -10070,7 +10070,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -10209,11 +10209,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -10235,7 +10235,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -10243,7 +10243,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -10253,11 +10253,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -10271,11 +10271,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -10291,7 +10291,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -10321,7 +10321,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -10337,7 +10337,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -10476,11 +10476,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -10502,7 +10502,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -10510,7 +10510,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -10520,11 +10520,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -10538,11 +10538,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -10558,7 +10558,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -10588,7 +10588,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -10604,7 +10604,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -10743,11 +10743,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -10769,7 +10769,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -10777,7 +10777,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -10787,11 +10787,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -10805,11 +10805,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -10825,7 +10825,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -10855,7 +10855,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -10871,7 +10871,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -11010,11 +11010,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -11036,7 +11036,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -11044,7 +11044,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -11054,11 +11054,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -11072,11 +11072,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -11092,7 +11092,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -11122,7 +11122,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -11138,7 +11138,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -11277,11 +11277,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -11303,7 +11303,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -11311,7 +11311,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -11321,7 +11321,7 @@
         {
           "type": "impl",
           "name": "CollectionDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IPaletteDescriptor"
+          "interface_name": "tools::collection::interfaces::IPaletteDescriptor"
         },
         {
           "type": "struct",
@@ -11335,7 +11335,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IPaletteDescriptor",
+          "name": "tools::collection::interfaces::IPaletteDescriptor",
           "items": [
             {
               "type": "function",
@@ -11489,11 +11489,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -11515,7 +11515,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -11523,7 +11523,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -11533,7 +11533,7 @@
         {
           "type": "impl",
           "name": "CollectionDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IPaletteDescriptor"
+          "interface_name": "tools::collection::interfaces::IPaletteDescriptor"
         },
         {
           "type": "struct",
@@ -11547,7 +11547,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IPaletteDescriptor",
+          "name": "tools::collection::interfaces::IPaletteDescriptor",
           "items": [
             {
               "type": "function",
@@ -11733,7 +11733,7 @@
         },
         {
           "type": "struct",
-          "name": "nft_tools::traits::RendererOptions",
+          "name": "tools::traits::RendererOptions",
           "members": [
             {
               "name": "base64",
@@ -11763,7 +11763,7 @@
                 },
                 {
                   "name": "options",
-                  "type": "nft_tools::traits::RendererOptions"
+                  "type": "tools::traits::RendererOptions"
                 }
               ],
               "outputs": [
@@ -11887,11 +11887,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -11913,7 +11913,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -11921,7 +11921,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -11931,11 +11931,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -11949,11 +11949,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -11969,7 +11969,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -11999,7 +11999,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -12015,7 +12015,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -12154,11 +12154,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -12180,7 +12180,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -12188,7 +12188,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -12198,11 +12198,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -12216,11 +12216,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -12236,7 +12236,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -12266,7 +12266,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -12282,7 +12282,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -12421,11 +12421,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -12447,7 +12447,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -12455,7 +12455,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -12465,7 +12465,7 @@
         {
           "type": "impl",
           "name": "CollectionDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IPaletteDescriptor"
+          "interface_name": "tools::collection::interfaces::IPaletteDescriptor"
         },
         {
           "type": "struct",
@@ -12479,7 +12479,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IPaletteDescriptor",
+          "name": "tools::collection::interfaces::IPaletteDescriptor",
           "items": [
             {
               "type": "function",
@@ -12633,11 +12633,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -12659,7 +12659,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -12667,7 +12667,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -12677,11 +12677,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -12695,11 +12695,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -12715,7 +12715,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -12745,7 +12745,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -12761,7 +12761,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -12900,11 +12900,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -12926,7 +12926,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -12934,7 +12934,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -12944,11 +12944,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -12962,11 +12962,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -12982,7 +12982,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -13012,7 +13012,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -13028,7 +13028,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -13167,11 +13167,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -13193,7 +13193,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -13201,7 +13201,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -13211,11 +13211,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -13229,11 +13229,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -13249,7 +13249,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -13279,7 +13279,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -13295,7 +13295,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -13434,11 +13434,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -13460,7 +13460,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -13468,7 +13468,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -13478,11 +13478,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -13496,11 +13496,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -13516,7 +13516,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -13546,7 +13546,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -13562,7 +13562,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -13701,11 +13701,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -13727,7 +13727,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -13735,7 +13735,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -13745,11 +13745,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -13763,11 +13763,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -13783,7 +13783,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -13813,7 +13813,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -13829,7 +13829,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -13968,11 +13968,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -13994,7 +13994,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -14002,7 +14002,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -14012,11 +14012,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -14030,11 +14030,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -14050,7 +14050,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -14080,7 +14080,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -14096,7 +14096,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -14235,11 +14235,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -14261,7 +14261,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -14269,7 +14269,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -14279,11 +14279,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -14297,11 +14297,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -14317,7 +14317,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -14347,7 +14347,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -14363,7 +14363,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -14502,11 +14502,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -14528,7 +14528,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -14536,7 +14536,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -14546,11 +14546,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -14564,11 +14564,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -14584,7 +14584,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -14614,7 +14614,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -14630,7 +14630,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -14769,11 +14769,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -14795,7 +14795,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -14803,7 +14803,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -14813,7 +14813,7 @@
         {
           "type": "impl",
           "name": "CollectionDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IPaletteDescriptor"
+          "interface_name": "tools::collection::interfaces::IPaletteDescriptor"
         },
         {
           "type": "struct",
@@ -14827,7 +14827,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IPaletteDescriptor",
+          "name": "tools::collection::interfaces::IPaletteDescriptor",
           "items": [
             {
               "type": "function",
@@ -14981,7 +14981,7 @@
         {
           "type": "impl",
           "name": "RendererImpl",
-          "interface_name": "nft_tools::traits::Renderer"
+          "interface_name": "tools::traits::Renderer"
         },
         {
           "type": "struct",
@@ -15023,7 +15023,7 @@
         },
         {
           "type": "struct",
-          "name": "nft_tools::traits::RendererOptions",
+          "name": "tools::traits::RendererOptions",
           "members": [
             {
               "name": "base64",
@@ -15041,7 +15041,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::traits::Renderer",
+          "name": "tools::traits::Renderer",
           "items": [
             {
               "type": "function",
@@ -15057,7 +15057,7 @@
                 },
                 {
                   "name": "options",
-                  "type": "nft_tools::traits::RendererOptions"
+                  "type": "tools::traits::RendererOptions"
                 }
               ],
               "outputs": [
@@ -15181,11 +15181,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -15207,7 +15207,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -15215,7 +15215,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -15225,11 +15225,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -15243,11 +15243,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -15263,7 +15263,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -15293,7 +15293,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -15309,7 +15309,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -15448,11 +15448,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -15474,7 +15474,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -15482,7 +15482,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -15492,11 +15492,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -15510,11 +15510,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -15530,7 +15530,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -15560,7 +15560,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -15576,7 +15576,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -15715,11 +15715,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -15741,7 +15741,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -15749,7 +15749,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -15759,11 +15759,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -15777,11 +15777,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -15797,7 +15797,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -15827,7 +15827,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -15843,7 +15843,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -15982,11 +15982,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -16008,7 +16008,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -16016,7 +16016,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -16026,11 +16026,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -16044,11 +16044,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -16064,7 +16064,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -16094,7 +16094,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -16110,7 +16110,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -16249,11 +16249,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -16275,7 +16275,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -16283,7 +16283,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -16293,11 +16293,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -16311,11 +16311,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -16331,7 +16331,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -16361,7 +16361,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -16377,7 +16377,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -16516,11 +16516,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -16542,7 +16542,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -16550,7 +16550,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -16560,11 +16560,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -16578,11 +16578,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -16598,7 +16598,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -16628,7 +16628,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -16644,7 +16644,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -16783,11 +16783,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -16809,7 +16809,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -16817,7 +16817,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -16827,11 +16827,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -16845,11 +16845,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -16865,7 +16865,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -16895,7 +16895,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -16911,7 +16911,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -17050,11 +17050,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -17076,7 +17076,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -17084,7 +17084,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -17094,11 +17094,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -17112,11 +17112,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -17132,7 +17132,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -17162,7 +17162,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -17178,7 +17178,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -17317,11 +17317,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -17343,7 +17343,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -17351,7 +17351,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -17361,11 +17361,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -17379,11 +17379,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -17399,7 +17399,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -17429,7 +17429,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -17445,7 +17445,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -17584,11 +17584,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -17610,7 +17610,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -17618,7 +17618,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -17628,11 +17628,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -17646,11 +17646,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -17666,7 +17666,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -17696,7 +17696,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -17712,7 +17712,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -17851,11 +17851,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -17877,7 +17877,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -17885,7 +17885,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -17895,11 +17895,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -17913,11 +17913,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -17933,7 +17933,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -17963,7 +17963,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -17979,7 +17979,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -18118,11 +18118,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -18144,7 +18144,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -18152,7 +18152,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -18162,11 +18162,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -18180,11 +18180,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -18200,7 +18200,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -18230,7 +18230,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -18246,7 +18246,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"
@@ -18385,11 +18385,11 @@
         {
           "type": "impl",
           "name": "DojoLibraryImpl",
-          "interface_name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor"
+          "interface_name": "tools::collection::interfaces::IDojoLibraryDescriptor"
         },
         {
           "type": "enum",
-          "name": "nft_tools::collection::types::LibraryKind",
+          "name": "tools::collection::types::LibraryKind",
           "variants": [
             {
               "name": "CollectionDescriptor",
@@ -18411,7 +18411,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IDojoLibraryDescriptor",
+          "name": "tools::collection::interfaces::IDojoLibraryDescriptor",
           "items": [
             {
               "type": "function",
@@ -18419,7 +18419,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::LibraryKind"
+                  "type": "tools::collection::types::LibraryKind"
                 }
               ],
               "state_mutability": "view"
@@ -18429,11 +18429,11 @@
         {
           "type": "impl",
           "name": "ComponentDescriptorImpl",
-          "interface_name": "nft_tools::collection::interfaces::IComponentDescriptor"
+          "interface_name": "tools::collection::interfaces::IComponentDescriptor"
         },
         {
           "type": "struct",
-          "name": "nft_tools::collection::types::CollectionComponentValue",
+          "name": "tools::collection::types::CollectionComponentValue",
           "members": [
             {
               "name": "id",
@@ -18447,11 +18447,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>",
+          "name": "core::array::Span::<tools::collection::types::CollectionComponentValue>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<nft_tools::collection::types::CollectionComponentValue>"
+              "type": "@core::array::Array::<tools::collection::types::CollectionComponentValue>"
             }
           ]
         },
@@ -18467,7 +18467,7 @@
         },
         {
           "type": "interface",
-          "name": "nft_tools::collection::interfaces::IComponentDescriptor",
+          "name": "tools::collection::interfaces::IComponentDescriptor",
           "items": [
             {
               "type": "function",
@@ -18497,7 +18497,7 @@
               "inputs": [],
               "outputs": [
                 {
-                  "type": "core::array::Span::<nft_tools::collection::types::CollectionComponentValue>"
+                  "type": "core::array::Span::<tools::collection::types::CollectionComponentValue>"
                 }
               ],
               "state_mutability": "view"
@@ -18513,7 +18513,7 @@
               ],
               "outputs": [
                 {
-                  "type": "nft_tools::collection::types::CollectionComponentValue"
+                  "type": "tools::collection::types::CollectionComponentValue"
                 }
               ],
               "state_mutability": "view"

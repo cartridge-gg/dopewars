@@ -1,6 +1,6 @@
 
 
-world_address = "0x05d133456420b786bca33391f7b472b4f7af4fdd9d507ef50d85cc5cc19f8e56"
+world_address = "0x07c199e52347fad3214ccdc9cb65e8b467d0773936a21a4d4080e462e4f271b5"
 
 [server]
 http_cors_origins = ["*"]
@@ -12,11 +12,11 @@ polling_interval = 1000
 
 # max_concurrent_tasks = 2
 contracts = [
-    "ERC20:0x06f2b2838cd8eb0902e52c73a66cca0cc5c2de641aa969eb9c93e4306906eb78", # paper
+    "ERC20:0x0381ebd1ff06f9379be332ffc2b3dc145bb0816f7f12cb8649490f2a88438b7f", # paper
     #
-    "ERC721:0x02d0bfe2c1c85487b37980f031b618ac8a577ada7c9e1c717b69cedf8f632b25", # dope_loot
-    "ERC721:0x0404e870111abb298afd719baf7712abe564041ec6864270763d2a32f62c26c6", # dope_hustlers
-    "ERC1155:0x04b65376b30a2193441943f23267e8dc4f7bcb7b24cfff9beffd984900de1fa3", # dope_gear
+    "ERC721:0x07a7784225ed52b73d8ba439bc0e675a5cc2d4eca891a98f95cef008b2b5be41", # dope_loot
+    "ERC721:0x0093c54bd6f3370d527749c0655d8bf67051661238364756ebfdf2c9a07c8341", # dope_hustlers
+    "ERC1155:0x01fc27c28756995a6641a0b3e8cdc463c51642815f1bae74e583930f4318283d", # dope_gear
 ]
 
 [erc]

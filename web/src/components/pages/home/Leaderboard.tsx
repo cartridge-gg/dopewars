@@ -286,7 +286,8 @@ export const RewardDetails = observer(
       const items: ComponentValueEvent[] = [];
 
       if (position == 1) {
-        const slots = ["Weapon", "Clothe", "Vehicle", "Foot", "Accessory", "Drug", "Waist", "Hand", "Neck", "Ring"];
+        // MUST match component list order
+        const slots = ["Clothe", "Vehicle", "Drug", "Waist", "Foot", "Weapon", "Hand", "Neck", "Ring", "Accessory"];
         let suffix = undefined;
 
         for (let slot of slots) {
