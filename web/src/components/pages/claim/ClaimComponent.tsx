@@ -1,22 +1,20 @@
 import { Button } from "@/components/common";
-import { Footer, Layout } from "@/components/layout";
-import EthProvider from "@/components/wallet/EthProvider";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
-import { Grid, Heading, HStack, Input, Text, VStack } from "@chakra-ui/react";
+import { HStack, Input, Text, VStack } from "@chakra-ui/react";
 import { useAccount, useConnect } from "@starknet-react/core";
 import { ConnectButton as ConnectButtonRainbow } from "@rainbow-me/rainbowkit";
 import { useAccount as useEthAccount, useSignMessage as useEthSignMesage } from "wagmi";
 import { parseSignature, Signature } from "viem";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { merkle, hash, uint256 } from "starknet";
-// import { checkTxReceipt, errorMessage } from "@/dope/helpers";
-import { ChildrenOrConnect, ConnectButton } from "@/components/wallet";
+import { ChildrenOrConnect } from "@/components/wallet";
 import { useToast } from "@/hooks/toast";
-
-import owners from "./snapshot-dopeLoot-22075548-owners.json";
 import { checkTxReceipt, errorMessage } from "@/dope/helpers";
 import { Glock } from "@/components/icons/items";
-import { Hustler, HustlerIcon, Hustlers } from "@/components/hustlers";
+import { HustlerIcon, Hustlers } from "@/components/hustlers";
+
+import ownersDev from "./snapshot-dopeLoot-22075548-owners.json";
+import ownersMainnet from "./snapshot-dopeLoot-22728943-owners.json";
 
 export default function ClaimComponent() {
   const { router, isLocalhost } = useRouterContext();
@@ -26,6 +24,7 @@ export default function ClaimComponent() {
   const { signMessageAsync } = useEthSignMesage();
 
   const {
+    chains: { selectedChain },
     clients: { toriiClient },
     contracts: { getDojoContract },
   } = useDojoContext();
@@ -43,6 +42,10 @@ export default function ClaimComponent() {
   const [hasClaimed, setHasClaimed] = useState(false);
   const { toast } = useToast();
 
+  const owners = useMemo(() => {
+    return selectedChain.name === "MAINNET" ? ownersMainnet : ownersDev;
+  }, [selectedChain]);
+
   useEffect(() => {
     if (ethAccount.isConnected) {
       const res = owners.find((i) => BigInt(i[0].toString()) === BigInt(ethAccount.address?.toString() || 0));
@@ -54,7 +57,7 @@ export default function ClaimComponent() {
     } else {
       setEntry(undefined);
     }
-  }, [ethAccount.isConnected, ethAccount.address]);
+  }, [ethAccount.isConnected, ethAccount.address, owners]);
 
   useEffect(() => {
     if (manualAddress !== "") {

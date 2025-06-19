@@ -65,7 +65,8 @@ slot_dopewars_torii = "slot d create -t insane --team cartridge dopewars torii  
 slot_ryosepolia_torii = "slot d create ryosepolia2 torii -v v1.0.0-rc.2 --config-file ./torii_ryosepolia2.toml"
 
 # slot ryomainnet
-slot_ryomainnet_torii = "slot d create --tier rare ryomainnet torii -v v1.0.5 --config ./torii_mainnet.toml"
+# slot_ryomainnet_torii = "slot d create --tier rare ryomainnet torii -v v1.0.5 --config ./torii_mainnet.toml" 
+slot_ryomainnet_torii = "slot d create --tier legendary ryomainnet torii -v v1.0.5 --config ./torii_mainnet.toml" # with slot v0.34.0
 
 [profile.dopewars]
 [profile.ryosepolia]
