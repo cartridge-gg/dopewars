@@ -2308,8 +2308,8 @@
       ]
     },
     {
-      "address": "0x1524271df0f106bb44fb430d7ece3b8da44bbe5be15a67c3ad25f1ffc2e6af7",
-      "class_hash": "0x39d038bfe7494136c972865fdd7bb9154198e33ff9d06f4fd97e5d0bbe71cd7",
+      "address": "0x7fb6ece72de6cf0d8d9deffe7d6417fc7e6b408ee8124bb853a3cd9ebc6f34b",
+      "class_hash": "0x201e6bf4f138c75abf2c638879e08e9ee78f1f9ecffced97c69ac265e85bce0",
       "abi": [
         {
           "type": "impl",

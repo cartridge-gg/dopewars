@@ -1,7 +1,8 @@
 import { useCallback, useState } from "react";
 import { useAccount } from "@starknet-react/core";
 import { Contract, uint256 } from "starknet";
-import { checkTxReceipt, errorMessage } from "../helpers";
+import { checkTxReceipt } from "../helpers";
+import { tryBetterErrorMsg } from "@/dojo/hooks";
 
 export const useERC721 = ({
   toast,
@@ -64,7 +65,7 @@ export const useERC721 = ({
         setIsLoading(false);
         return toast({
           title: "Error",
-          description: errorMessage(e.message),
+          description: tryBetterErrorMsg(e.message),
           variant: "destructive",
         });
       }

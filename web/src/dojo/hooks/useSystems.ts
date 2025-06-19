@@ -58,7 +58,7 @@ interface SystemExecuteResult {
 
 interface ExecuteAndReceiptResult extends SystemExecuteResult {}
 
-const tryBetterErrorMsg = (msg: string): string => {
+export const tryBetterErrorMsg = (msg: string): string => {
   const failureReasonIndex = msg.indexOf("Failure reason");
   if (failureReasonIndex > 0) {
     let betterMsg = msg.substring(failureReasonIndex);

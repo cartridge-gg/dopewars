@@ -4,7 +4,6 @@ export * from "./is-og";
 export * from "./sleep";
 export * from "./felt";
 export * from "./receipt";
-export * from "./error";
 export * from "./address";
 export * from "./json";
 export * from "./manifest";

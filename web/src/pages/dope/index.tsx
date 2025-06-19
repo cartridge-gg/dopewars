@@ -10,10 +10,10 @@ import GearItem from "@/dope/collections/GearItem";
 import HustlerItem from "@/dope/collections/HustlerItem";
 import LootItem from "@/dope/collections/LootItem";
 import { Refresh } from "@/components/icons";
-import { Tooltip } from "@/components/common";
-import { Loader, SmallLoader } from "@/components/layout/Loader";
+import { SmallLoader } from "@/components/layout/Loader";
 import { ControllerConnector } from "@cartridge/connector";
 import { Cartridge } from "@/components/icons/branding/Cartridge";
+import { useDopeStore } from "@/dope/store";
 
 export default function Dope() {
   const { router } = useRouterContext();
@@ -24,6 +24,12 @@ export default function Dope() {
     chains: { selectedChain },
     clients: { toriiClient },
   } = useDojoContext();
+
+  const initDopeLootClaimState = useDopeStore((state) => state.initDopeLootClaimState);
+
+  useEffect(() => {
+    initDopeLootClaimState();
+  }, []);
 
   const addresses = useMemo(() => {
     return [

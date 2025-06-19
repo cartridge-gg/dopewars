@@ -1,9 +1,7 @@
 import { ParsedToken, useDopeLootClaim, useERC721 } from "@/dope/hooks";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { HustlerPreviewFromLoot } from "@/dope/components";
-
 import { useDopeStore } from "@/dope/store";
-import { useToast } from "@/hooks/toast";
 import { useDojoContext } from "@/dojo/hooks";
 import CardAnim from "./CardAnim";
 import { Box, GridItem } from "@chakra-ui/react";
@@ -32,10 +30,12 @@ export default function LootItem({ token }: { token: ParsedToken }) {
 
   const dopeLootClaimState = useDopeStore((state) => state.dopeLootClaimState);
 
+
   const { isOpened, isReleased } = useMemo(() => {
     const tokenState = dopeLootClaimState[Number(token.token_id)];
     const isOpened = tokenState ? tokenState.isOpened : false;
     const isReleased = tokenState ? tokenState.isReleased : false;
+
     return { isOpened, isReleased };
   }, [dopeLootClaimState, dopeLootClaimState[Number(token.token_id)]]);
 
@@ -50,7 +50,12 @@ export default function LootItem({ token }: { token: ParsedToken }) {
   return (
     // @ts-ignore
     <CardAnim onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-      <GridItem onClick={() => setIsFlipped(!isFlipped)} className="cursor-pointer">
+      <GridItem
+        onClick={() => setIsFlipped(!isFlipped)}
+        className="cursor-pointer"
+        border="solid 1px"
+        borderColor="neon.700"
+      >
         {isFlipped ? (
           <img
             className="aspect-square w-full pointer-events-none select-none"
@@ -85,7 +90,7 @@ export default function LootItem({ token }: { token: ParsedToken }) {
               await onOpen(Number(token.token_id));
               // await initDopeLootClaimState();
             }}
-            disabled={isOpening}
+            isDisabled={isOpening || !isReleased}
             isLoading={isOpening}
           >
             Open
@@ -94,7 +99,7 @@ export default function LootItem({ token }: { token: ParsedToken }) {
       )}
 
       {isHovered && (
-        <Box position="absolute" right={1} top={1} cursor="pointer" onClick={onOpenController}  bg="#33333366">
+        <Box position="absolute" right={1} top={1} cursor="pointer" onClick={onOpenController} bg="#33333366">
           <Cartridge />
         </Box>
       )}

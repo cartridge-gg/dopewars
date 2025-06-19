@@ -2,8 +2,9 @@ import { toast } from "react-hot-toast";
 import { useCallback, useState } from "react";
 import { useAccount } from "@starknet-react/core";
 import { Contract, uint256 } from "starknet";
-import { checkTxReceipt, errorMessage } from "../helpers";
+import { checkTxReceipt } from "../helpers";
 import { useToast } from "@/hooks/toast";
+import { tryBetterErrorMsg } from "@/dojo/hooks";
 
 export const useDopeLootClaim = ({ getDojoContract }: { getDojoContract: (tag: string) => Contract }) => {
   const { account } = useAccount();
@@ -49,10 +50,10 @@ export const useDopeLootClaim = ({ getDojoContract }: { getDojoContract: (tag: s
           message: `You opened #${id}!`,
         });
       } catch (e: any) {
-        // console.log(e);
+        console.log(e);
         setIsLoading(false);
         return toast({
-          message: errorMessage(e.message),
+          message: tryBetterErrorMsg(e.message),
           isError: true,
         });
       }
@@ -98,7 +99,7 @@ export const useDopeLootClaim = ({ getDojoContract }: { getDojoContract: (tag: s
         // console.log(e);
         setIsLoading(false);
         return toast({
-          message: errorMessage(e.message),
+          message: tryBetterErrorMsg(e.message),
           isError: true,
         });
       }

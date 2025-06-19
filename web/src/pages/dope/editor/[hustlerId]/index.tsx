@@ -1,5 +1,5 @@
 import { Footer, Layout } from "@/components/layout";
-import { useDojoContext, useRouterContext } from "@/dojo/hooks";
+import { tryBetterErrorMsg, useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { useToast } from "@/hooks/toast";
 import { IsMobile } from "@/utils/ui";
 import { Button, HStack, Box, Text, Flex } from "@chakra-ui/react";
@@ -11,7 +11,7 @@ import {
   HustlerEquipment,
   HustlerPreview,
 } from "@/dope/components";
-import { checkTxReceipt, errorMessage, isOg } from "@/dope/helpers";
+import { checkTxReceipt, isOg } from "@/dope/helpers";
 import { useDojoTokens, useEquipment, useHustler } from "@/dope/hooks";
 import { ComponentValueEvent, useDopeStore } from "@/dope/store";
 
@@ -24,41 +24,6 @@ import { RenderModeSelector } from "@/components/editor/RenderModeSelector";
 import { ColorPicker } from "@/components/editor/ColorPicker";
 import { ItemPicker } from "@/components/editor/ItemPicker";
 import { SmallLoader } from "@/components/layout/Loader";
-
-// function Dope() {
-//   const { router } = useRouterContext();
-//   const { account } = useAccount();
-
-//   const {
-//     chains: { selectedChain },
-//     clients: { toriiClient },
-//   } = useDojoContext();
-
-//   return (
-//     <Layout
-//       isSinglePanel
-//       footer={
-//         <Footer>
-//           <Button
-//             w={["full", "auto"]}
-//             px={["auto", "20px"]}
-//             onClick={() => {
-//               router.back();
-//             }}
-//           >
-//             Back
-//           </Button>
-//         </Footer>
-//       }
-//     >
-//       <HStack w="full" gap={9} flexWrap="wrap" alignItems="flex-start" justifyContent="center">
-//         <Text>EDITOR</Text>
-//       </HStack>
-
-//       <Box minH="80px"></Box>
-//     </Layout>
-//   );
-// }
 
 export default function Editor() {
   const { router, hustlerId } = useRouterContext();
@@ -226,7 +191,7 @@ export default function Editor() {
       setIsLoading(false);
 
       return toast({
-        message: errorMessage(e.message),
+        message: tryBetterErrorMsg(e.message),
         isError: true,
       });
     }

@@ -1,5 +1,5 @@
 import { Button } from "@/components/common";
-import { useDojoContext, useRouterContext } from "@/dojo/hooks";
+import { tryBetterErrorMsg, useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { HStack, Input, Text, VStack } from "@chakra-ui/react";
 import { useAccount, useConnect } from "@starknet-react/core";
 import { ConnectButton as ConnectButtonRainbow } from "@rainbow-me/rainbowkit";
@@ -9,7 +9,7 @@ import { useEffect, useMemo, useState } from "react";
 import { merkle, hash, uint256 } from "starknet";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { useToast } from "@/hooks/toast";
-import { checkTxReceipt, errorMessage } from "@/dope/helpers";
+import { checkTxReceipt } from "@/dope/helpers";
 import { Glock } from "@/components/icons/items";
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
 
@@ -157,7 +157,7 @@ export default function ClaimComponent() {
       setIsLoading(false);
 
       return toast({
-        message: errorMessage(e?.message),
+        message: tryBetterErrorMsg(e?.message),
         isError: true,
       });
     }
