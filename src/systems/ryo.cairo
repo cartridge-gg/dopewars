@@ -20,6 +20,9 @@ trait IRyo<T> {
     fn paused(self: @T) -> bool;
     fn paper_fee(self: @T) -> u16;
     fn season_duration(self: @T) -> u32;
+
+    fn toggle_f2p_hustlers(ref self: T);
+    fn f2p_hustlers(ref self: T) -> bool;
 }
 
 #[dojo::contract]
@@ -103,8 +106,8 @@ mod ryo {
         let mut season_manager = SeasonManagerTrait::new(store);
         season_manager.new_season(ref randomizer, ryo_config.season_version);
         //
-        //
-        //
+    //
+    //
 
         // self.update_quests();
     }
@@ -172,6 +175,17 @@ mod ryo {
             store.save_ryo_addresses(@ryo_addresses);
         }
 
+        fn toggle_f2p_hustlers(ref self: ContractState) {
+            self.assert_caller_is_owner();
+
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut new_ryo_config = store.ryo_config();
+
+            new_ryo_config.f2p_hustlers = !new_ryo_config.f2p_hustlers;
+            store.save_ryo_config(@new_ryo_config);
+        }
+
+
         //
         // getters
         //
@@ -209,6 +223,11 @@ mod ryo {
         fn season_duration(self: @ContractState) -> u32 {
             let mut store = StoreImpl::new(self.world(@"dopewars"));
             store.ryo_config().season_duration
+        }
+
+        fn f2p_hustlers(ref self: ContractState) -> bool {
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            store.ryo_config().f2p_hustlers
         }
     }
 

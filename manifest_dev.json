@@ -1328,8 +1328,8 @@
   },
   "contracts": [
     {
-      "address": "0x2f5971eeefdc3cd840bf03753fb8e5ddb4845a5772c10afcf7a7f7567009688",
-      "class_hash": "0x68da5fdd1b8a61a52f7671e6c5c39ac0774d51ad44c728724f808741595aa67",
+      "address": "0x481f9968157a76f8f67cf2e4982f1e043d71dbb36d9a003822b55ee4cb925da",
+      "class_hash": "0x4074d94146f3db71cfbe756e307e19feb700acc6f40915b29862fb4bef7943c",
       "abi": [
         {
           "type": "impl",
@@ -1482,6 +1482,10 @@
             {
               "name": "treasury_balance",
               "type": "core::integer::u32"
+            },
+            {
+              "name": "f2p_hustlers",
+              "type": "core::bool"
             }
           ]
         },
@@ -2095,8 +2099,8 @@
       ]
     },
     {
-      "address": "0x3149d2aab2c2b673adf93b5456744f922478ec8756dfd5786b0fa6a7f09602e",
-      "class_hash": "0x3210ac00348dcd9dcaeede03a0288c0404735ca742ca9f8e5d04661ea1ac5d5",
+      "address": "0x72ed3e417ed913ad24c70e18a8bf818a13481b0e3814fd2db93091d92515c72",
+      "class_hash": "0x54068b3e3cf0b2f544a7d27edc10f4958dec34ab411e684872c1e25fa54a906",
       "abi": [
         {
           "type": "impl",
@@ -2308,8 +2312,8 @@
       ]
     },
     {
-      "address": "0x7fb6ece72de6cf0d8d9deffe7d6417fc7e6b408ee8124bb853a3cd9ebc6f34b",
-      "class_hash": "0x201e6bf4f138c75abf2c638879e08e9ee78f1f9ecffced97c69ac265e85bce0",
+      "address": "0x451c6fa3ffbad840a9acce89ba4832c14409dd4ba73ba532fec6cf1d0a6010c",
+      "class_hash": "0x39fc766ea646445c3b10d8400c0b7a285e113dc719648ccf035cd4c5323f1b9",
       "abi": [
         {
           "type": "impl",
@@ -2751,8 +2755,8 @@
       ]
     },
     {
-      "address": "0x212f08ed280ab4348b8b7765b339dbac1c3acf9fc86f85b3d30e6c4534f6337",
-      "class_hash": "0x110c35521f08409559bf7b96d5d3b0a6fc8d612d718291dc3891cf7f9873dfe",
+      "address": "0xd3855935f471f9fb15a62748b6be8e64328df33f9673bd8c3d3ac664c4e7b1",
+      "class_hash": "0x15c3fcebbaabe8b3723bec3a6d447c6dd43fa6bd936929177db400bc73c96ee",
       "abi": [
         {
           "type": "impl",
@@ -3491,8 +3495,8 @@
       ]
     },
     {
-      "address": "0x27353e1b8cc64ec53329b4bc17c9b6840a6f0cbfb2ade807f60b3f706baec05",
-      "class_hash": "0x67258d0371fc8c843005ac9e8ded8b263f765875081fdad45ec68604099aa76",
+      "address": "0x6f1b8ebe2ad93cbae6f7acbddc44d5e03d543577847454098ee3112a66c94be",
+      "class_hash": "0x78267619bb0e94e3ed619066db3716f45fef3cdaf38965d1a419dff5089a618",
       "abi": [
         {
           "type": "impl",
@@ -3626,6 +3630,10 @@
             {
               "name": "treasury_balance",
               "type": "core::integer::u32"
+            },
+            {
+              "name": "f2p_hustlers",
+              "type": "core::bool"
             }
           ]
         },
@@ -3776,6 +3784,24 @@
                 }
               ],
               "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "toggle_f2p_hustlers",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "f2p_hustlers",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::bool"
+                }
+              ],
+              "state_mutability": "external"
             }
           ]
         },
@@ -3906,6 +3932,8 @@
       "tag": "dopewars-ryo",
       "selector": "0x32b65ba76433a3384da18dba9d4a63d3a7de35be8bf53a61d71928482a6d75e",
       "systems": [
+        "toggle_f2p_hustlers",
+        "f2p_hustlers",
         "upgrade"
       ]
     },
@@ -4589,7 +4617,7 @@
     },
     {
       "members": [],
-      "class_hash": "0x348550ffd798f43a06c84877217883dd33eaeb375334d36036f90acd542662d",
+      "class_hash": "0x2a61080d82b68592d65e22044fa8badd94b52f9cf24ed0e28308465cf35b332",
       "tag": "dopewars-RyoConfig",
       "selector": "0x7d8eb0bce0a49d2d3d2f16b5958bb2445cfe364f9b2a8f71c009ebbe602ccfd"
     },

@@ -97,6 +97,9 @@ mod game {
 
             match token_id {
                 TokenId::GuestLootId(guest_loot_id) => {
+                    // check if enabled
+                    assert!(store.ryo_config().f2p_hustlers, "f2p hustlers are disabled");
+
                     // check one of the availble guest_loot_id for season
                     let mut i: u32 = 0;
                     let mut is_valid = false;

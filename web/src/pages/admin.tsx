@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout";
 import { ChildrenOrConnect, PaperFaucet, TokenBalance } from "@/components/wallet";
-import { useDojoContext, useRouterContext, useSeasonByVersion, useSystems } from "@/dojo/hooks";
+import { DW_NS, useDojoContext, useRouterContext, useSeasonByVersion, useSystems } from "@/dojo/hooks";
 import {
   Button,
   Card,
@@ -20,19 +20,14 @@ import {
 } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
-
 import { Wallet } from "@/components/icons/archive";
 import { DrugTable } from "@/components/pages/admin/DrugTable";
 import { EncounterTable } from "@/components/pages/admin/EncounterTable";
 import { GameConfigTable } from "@/components/pages/admin/GameConfigTable";
-import { GameLayoutTable } from "@/components/pages/admin/GameLayoutTable";
-import { PlayerLayoutTable } from "@/components/pages/admin/PlayerLayoutTable";
 import { useEffect, useState } from "react";
-import { Dropdown } from "@/components/common";
 // import { RyoConfigTable } from "@/components/pages/admin/RyoConfigTable";
 import { Bag, Clock, CopsIcon, DollarBag, Flipflop, PaperIcon } from "@/components/icons";
 import { formatCash } from "@/utils/ui";
-import { Ludes } from "@/components/icons/drugs";
 import { Dopewars_Game as Game, Dopewars_GameEdge as GameEdge, useGetAllGamesQuery } from "@/generated/graphql";
 import { shortString } from "starknet";
 
@@ -49,7 +44,7 @@ const Admin = () => {
           <Tab>SEASON</Tab>
           <Tab>GAME</Tab>
           <Tab>DRUGS</Tab>
-    
+
           <Tab>ENCOUNTERS</Tab>
           {/* <Tab>LAYOUTS</Tab> */}
 
@@ -140,7 +135,10 @@ export default observer(Admin);
 const RyoAddressCard = observer(() => {
   const {
     configStore: { config },
+    chains: { selectedChain },
   } = useDojoContext();
+
+  const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
 
   return (
     <Card p={1}>
@@ -161,8 +159,8 @@ const RyoAddressCard = observer(() => {
           </HStack>
           <HStack>
             <Text w="100px">LAUNDROMAT</Text>
-            <Text fontFamily="monospace">{config?.ryoAddress.laundromat}</Text>
-            <TokenBalance address={config?.ryoAddress.laundromat} token={config?.ryoAddress.paper} icon={PaperIcon} />
+            <Text fontFamily="monospace">{laundromatAddress}</Text>
+            <TokenBalance address={laundromatAddress} token={config?.ryoAddress.paper} icon={PaperIcon} />
           </HStack>
         </VStack>
       </CardBody>
@@ -247,6 +245,7 @@ const RyoPauseCard = observer(() => {
 });
 
 import jsonToCsvExport from "json-to-csv-export";
+import { getContractByName } from "@dojoengine/core";
 
 const ExportAllGamesCard = observer(() => {
   const { configStore } = useDojoContext();

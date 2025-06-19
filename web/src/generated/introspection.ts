@@ -28,7 +28,6 @@
       "dope_HustlerMetadata",
       "dope_HustlerSlot",
       "dope_PaletteEvent",
-      "dope_StatEvent",
       "dopewars_Claimed",
       "dopewars_DopewarsItemTier",
       "dopewars_DopewarsItemTierConfig",

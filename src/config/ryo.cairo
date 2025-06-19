@@ -29,6 +29,8 @@ pub struct RyoConfig {
     pub paper_reward_launderer: u16,
     pub treasury_fee_pct: u8,
     pub treasury_balance: u32,
+    //
+    pub f2p_hustlers: bool
 }
 
 
@@ -46,6 +48,7 @@ pub impl RyoConfigImpl of RyoConfigTrait {
             paper_reward_launderer: 100, // in ether  
             treasury_fee_pct: 10,
             treasury_balance: 0,
+            f2p_hustlers: true,
         }
     }
 

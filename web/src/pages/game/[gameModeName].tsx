@@ -28,7 +28,6 @@ import { getContractByName } from "@dojoengine/core";
 import { useDopeStore } from "@/dope/store";
 import { hash } from "starknet";
 import { getGearItem } from "@/dope/helpers";
-import { EditButton } from "@/components/pages/admin/tables";
 import { ControllerConnector } from "@cartridge/connector";
 import { useSwipeable } from "react-swipeable";
 
@@ -57,7 +56,7 @@ const New = observer(() => {
 
   // const [selectedTokenIdType, setSelectedTokenIdType] = useState(TokenIdType.GuestLootId);
   const [selectedTokenIdType, setSelectedTokenIdType] = useState(
-    (Number(router.query.tokenIdType) as TokenIdType) || TokenIdType.GuestLootId,
+    (Number(router.query.tokenIdType) as TokenIdType) || TokenIdType.LootId as TokenIdType,
   );
 
   const addresses = useMemo(() => {
@@ -113,7 +112,7 @@ const New = observer(() => {
   useEffect(() => {
     const initAsync = async () => {
       const username = await (connector as unknown as ControllerConnector).controller.username();
-      setName(username?.substring(0,16) || "");
+      setName(username?.substring(0, 16) || "");
     };
     if (connector) {
       initAsync();
@@ -348,15 +347,17 @@ const New = observer(() => {
           </VStack>
 
           <HStack gap={1}>
-            <Button
-              fontSize="11px"
-              h="30px"
-              variant="selectable"
-              isActive={selectedTokenIdType === TokenIdType.GuestLootId}
-              onClick={() => setSelectedTokenIdType(TokenIdType.GuestLootId)}
-            >
-              S{season.version} HUSTLERS
-            </Button>
+            {config?.ryo.f2p_hustlers && (
+              <Button
+                fontSize="11px"
+                h="30px"
+                variant="selectable"
+                isActive={selectedTokenIdType === TokenIdType.GuestLootId}
+                onClick={() => setSelectedTokenIdType(TokenIdType.GuestLootId)}
+              >
+                S{season.version} HUSTLERS
+              </Button>
+            )}
             <Button
               fontSize="11px"
               h="30px"

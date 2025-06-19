@@ -150,6 +150,10 @@ export const ABI = [
       {
         "name": "treasury_balance",
         "type": "core::integer::u32"
+      },
+      {
+        "name": "f2p_hustlers",
+        "type": "core::bool"
       }
     ]
   },
