@@ -32,8 +32,11 @@ mod game {
     use dojo::event::EventStorage;
     use dojo::world::IWorldDispatcherTrait;
     use dojo::world::WorldStorageTrait;
-    use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerSlots};
-    use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl, HustlerStoreTrait};
+    use rollyourown::dope_contracts::dope_hustlers::dope_hustlers_models::{
+        HustlerSlotOption, HustlerSlots, HustlerBody, HustlerBodyParts,
+    };
+    // use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl,
+    // HustlerStoreTrait};
     use rollyourown::achievements::achievements_v1::Tasks;
     use rollyourown::{
         config::{locations::{Locations}}, events::{GameCreated},
@@ -136,27 +139,79 @@ mod game {
                         'caller is not hustler owner',
                     );
 
-                    let mut hustler_store = HustlerStoreImpl::new(dope_world);
+                    // let mut hustler_store = HustlerStoreImpl::new(dope_world);
+
+                    // game_created
+                    //     .hustler_equipment = hustler_store
+                    //     .hustler_slot_full(hustler_id.into());
+
+                    // game_created.hustler_body =
+                    // hustler_store.hustler_body_full(hustler_id.into());
 
                     game_created
-                        .hustler_equipment = hustler_store
-                        .hustler_slot_full(hustler_id.into());
+                        .hustler_equipment =
+                            array![
+                                HustlerSlotOption {
+                                    token_id: hustler_id.into(),
+                                    slot: HustlerSlots::Clothe,
+                                    gear_item_id: Option::Some(256),
+                                },
+                                HustlerSlotOption {
+                                    token_id: hustler_id.into(),
+                                    slot: HustlerSlots::Vehicle,
+                                    gear_item_id: Option::Some(512),
+                                },
+                                HustlerSlotOption {
+                                    token_id: hustler_id.into(),
+                                    slot: HustlerSlots::Foot,
+                                    gear_item_id: Option::Some(1280),
+                                },
+                                HustlerSlotOption {
+                                    token_id: hustler_id.into(),
+                                    slot: HustlerSlots::Weapon,
+                                    gear_item_id: Option::Some(0),
+                                },
+                            ]
+                        .span();
 
-                    game_created.hustler_body = hustler_store.hustler_body_full(hustler_id.into());
+                    game_created
+                        .hustler_body =
+                            array![
+                                HustlerBody {
+                                    token_id: hustler_id.into(),
+                                    slot: HustlerBodyParts::Gender,
+                                    value: 0,
+                                },
+                                HustlerBody {
+                                    token_id: hustler_id.into(),
+                                    slot: HustlerBodyParts::Body,
+                                    value: 0,
+                                },
+                                HustlerBody {
+                                    token_id: hustler_id.into(),
+                                    slot: HustlerBodyParts::Hair,
+                                    value: 0,
+                                },
+                                HustlerBody {
+                                    token_id: hustler_id.into(),
+                                    slot: HustlerBodyParts::Beard,
+                                    value: 0,
+                                },
+                            ]
+                        .span();
+                    // let accessory = hustler_store
+                //     .hustler_slot(hustler_id.into(), HustlerSlots::Accessory);
 
-                    let accessory = hustler_store
-                        .hustler_slot(hustler_id.into(), HustlerSlots::Accessory);
-
-                    let bushido_store = BushidoStoreTrait::new(world);
-                    if accessory.gear_item_id.is_some() {
-                        bushido_store
-                            .progress(
-                                player_id.into(),
-                                Tasks::ELEGANT,
-                                1,
-                                starknet::get_block_timestamp(),
-                            );
-                    };
+                    // let bushido_store = BushidoStoreTrait::new(world);
+                // if accessory.gear_item_id.is_some() {
+                //     bushido_store
+                //         .progress(
+                //             player_id.into(),
+                //             Tasks::ELEGANT,
+                //             1,
+                //             starknet::get_block_timestamp(),
+                //         );
+                // };
                 },
             };
 

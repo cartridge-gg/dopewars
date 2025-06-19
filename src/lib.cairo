@@ -12,6 +12,8 @@ pub mod achievements {
     pub mod achievements_v1;
 }
 
+pub mod dope_contracts;
+
 pub mod traits;
 pub mod config {
     pub mod config;
@@ -75,7 +77,7 @@ pub mod utils {
     pub mod bytes16;
     pub mod introspect;
     pub mod math;
-    pub mod payout_items;
+    // pub mod payout_items;
     pub mod payout_structure;
     pub mod random;
     pub mod sorted_list;

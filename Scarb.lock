@@ -9,61 +9,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "alexandria_bytes"
-version = "0.4.0"
-source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.4.0#ae3d960589a2f0c9af5fbd9236f6f3eb39fea8ed"
-dependencies = [
- "alexandria_data_structures",
- "alexandria_math",
-]
-
-[[package]]
-name = "alexandria_data_structures"
-version = "0.4.0"
-source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.4.0#ae3d960589a2f0c9af5fbd9236f6f3eb39fea8ed"
-
-[[package]]
-name = "alexandria_encoding"
-version = "0.4.0"
-source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.4.0#ae3d960589a2f0c9af5fbd9236f6f3eb39fea8ed"
-dependencies = [
- "alexandria_bytes",
- "alexandria_data_structures",
- "alexandria_math",
- "alexandria_numeric",
-]
-
-[[package]]
-name = "alexandria_math"
-version = "0.4.0"
-source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.4.0#ae3d960589a2f0c9af5fbd9236f6f3eb39fea8ed"
-
-[[package]]
-name = "alexandria_merkle_tree"
-version = "0.4.0"
-source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.4.0#ae3d960589a2f0c9af5fbd9236f6f3eb39fea8ed"
-dependencies = [
- "alexandria_math",
-]
-
-[[package]]
-name = "alexandria_numeric"
-version = "0.4.0"
-source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.4.0#ae3d960589a2f0c9af5fbd9236f6f3eb39fea8ed"
-dependencies = [
- "alexandria_math",
- "alexandria_searching",
-]
-
-[[package]]
-name = "alexandria_searching"
-version = "0.4.0"
-source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.4.0#ae3d960589a2f0c9af5fbd9236f6f3eb39fea8ed"
-dependencies = [
- "alexandria_data_structures",
-]
-
-[[package]]
 name = "cartridge_vrf"
 version = "0.1.0"
 dependencies = [
@@ -84,45 +29,6 @@ dependencies = [
 name = "dojo_plugin"
 version = "2.10.1"
 source = "git+https://github.com/dojoengine/dojo?tag=v1.5.1#986c3b0c6d647b23847c70ddceb1d33ddac86ead"
-
-[[package]]
-name = "dope_contracts"
-version = "0.1.0"
-dependencies = [
- "alexandria_bytes",
- "alexandria_encoding",
- "alexandria_merkle_tree",
- "dojo",
- "dope_generated",
- "dope_tools",
- "graffiti",
- "openzeppelin",
-]
-
-[[package]]
-name = "dope_generated"
-version = "0.1.0"
-dependencies = [
- "dojo",
- "dope_tools",
-]
-
-[[package]]
-name = "dope_tools"
-version = "0.1.0"
-dependencies = [
- "alexandria_bytes",
- "alexandria_encoding",
- "alexandria_merkle_tree",
- "dojo",
- "dope_generated",
- "graffiti",
- "openzeppelin",
-]
-
-[[package]]
-name = "graffiti"
-version = "0.1.0"
 
 [[package]]
 name = "openzeppelin"
@@ -250,7 +156,6 @@ dependencies = [
  "achievement",
  "cartridge_vrf",
  "dojo",
- "dope_contracts",
  "openzeppelin",
 ]
 

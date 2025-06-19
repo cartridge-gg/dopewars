@@ -5133,7 +5133,7 @@
     },
     {
       "address": "0x5abbeea6c448410a953b0a4f9deaef82ecc59c33d90302025cfdc06fd70e0a8",
-      "class_hash": "0x5a5e9230fc32e2ffcaa70982b41809e699d2ad498332af3832b76111bf4c13e",
+      "class_hash": "0x247ce3ed1c3df8235132d58c64bf512b2b643550ae48f68eb2ea5df2da3141a",
       "abi": [
         {
           "type": "impl",
@@ -5259,6 +5259,20 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
           "type": "interface",
           "name": "dope_contracts::dope_loot_claim::dope_loot_claim::IDopeLootClaim",
           "items": [
@@ -5334,10 +5348,21 @@
             },
             {
               "type": "function",
-              "name": "toggle_restrict_open",
+              "name": "toggle_open_restricted",
               "inputs": [],
               "outputs": [],
               "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "is_open_restricted",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::bool"
+                }
+              ],
+              "state_mutability": "view"
             }
           ]
         },
@@ -5400,20 +5425,6 @@
           "type": "impl",
           "name": "PausableImpl",
           "interface_name": "openzeppelin_security::interface::IPausable"
-        },
-        {
-          "type": "enum",
-          "name": "core::bool",
-          "variants": [
-            {
-              "name": "False",
-              "type": "()"
-            },
-            {
-              "name": "True",
-              "type": "()"
-            }
-          ]
         },
         {
           "type": "interface",
@@ -5573,7 +5584,7 @@
         "claim",
         "release",
         "open",
-        "toggle_restrict_open",
+        "toggle_open_restricted",
         "upgrade"
       ]
     }

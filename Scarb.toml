@@ -34,7 +34,7 @@ cartridge_vrf = { path = "../vrf" }
 # achievement = { git = "https://github.com/cartridge-gg/arcade" }
 achievement = { path = "../arcade/packages/achievement" }
 
-dope_contracts = { path = "../dope-migration/cairo/contracts"}
+# dope_contracts = { path = "../dope-migration/cairo/contracts"}
 
 openzeppelin = "1.0.0"
 
