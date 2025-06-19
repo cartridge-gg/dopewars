@@ -107,7 +107,6 @@ mod game {
                             .into();
                         let id: felt252 = ((hash % 8000) + 1).try_into().unwrap();
                         if guest_loot_id == id {
-                            println!("id: {} i {}", guest_loot_id, i);
                             is_valid = true;
                             break;
                         }

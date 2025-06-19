@@ -36,8 +36,7 @@ achievement = { path = "../arcade/packages/achievement" }
 
 dope_contracts = { path = "../dope-migration/cairo/contracts"}
 
-openzeppelin_access = "0.20.0" 
-openzeppelin_token = "0.20.0"
+openzeppelin = "1.0.0"
 
 [scripts]
 katana = "katana --config ./katana_dev.toml"
