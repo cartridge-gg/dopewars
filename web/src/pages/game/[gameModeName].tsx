@@ -341,29 +341,25 @@ const New = observer(() => {
       }
     >
       <VStack w={["full", "700px"]} marginX="auto">
-        <VStack w="full" gap={[3, 6]} overflowX="hidden">
+        <VStack w="full" gap={6} overflowX="hidden">
           {!selectedTokenId && (
             <VStack>
               <Text textStyle="subheading" fontSize={["11px", "11px"]} my={["10px", "0"]} letterSpacing="0.25em">
-                Choose your {isMobile && <span>Hustler...</span>}
+                Choose your
               </Text>
-              {!isMobile && (
-                <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
-                  Hustler...
-                </Heading>
-              )}
+              <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
+                Hustler...
+              </Heading>
             </VStack>
           )}
           {selectedTokenId && (
             <VStack>
               <Text textStyle="subheading" fontSize={["11px", "11px"]} my={["10px", "0"]} letterSpacing="0.25em">
-                Choose your {isMobile && <span>Stake...</span>}
+                Choose your
               </Text>
-              {!isMobile && (
-                <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
-                  Stake...
-                </Heading>
-              )}
+              <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
+                Stake...
+              </Heading>
             </VStack>
           )}
           {!selectedTokenId && (
@@ -657,6 +653,7 @@ const New = observer(() => {
                   </VStack>
                 </HStack>
               </Card>
+
               <VStack w="full" ref={inputRef}>
                 <Input
                   display="flex"

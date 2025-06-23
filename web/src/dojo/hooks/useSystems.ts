@@ -116,7 +116,7 @@ export const useSystems = (): SystemsInterface => {
       setError(undefined);
       setIsPending(true);
 
-      let tx, receipt;
+      let tx, receipt, isError;
 
       try {
         ///@ts-ignore
@@ -127,10 +127,11 @@ export const useSystems = (): SystemsInterface => {
         });
       } catch (e: any) {
         setIsPending(false);
-        //setError(e.toString());
+        setError(e.toString());
+        isError = true;
         toast({
           message: e ? tryBetterErrorMsg(e.toString()) : "unknown error",
-          duration: 10_000,
+          duration: 5_000,
           isError: true,
         });
         // throw Error(e.toString());
@@ -144,6 +145,7 @@ export const useSystems = (): SystemsInterface => {
             status: "REVERTED",
             message: receipt.revert_reason || "REVERTED",
           };
+          isError = true;
         }
 
         if (receipt_error) {
@@ -162,6 +164,7 @@ export const useSystems = (): SystemsInterface => {
       return {
         hash: tx?.transaction_hash || "",
         receipt,
+        isError,
       };
     },
     [rpcProvider, dojoProvider, account, selectedChain, toast],
@@ -204,10 +207,11 @@ export const useSystems = (): SystemsInterface => {
           : [approvalCall, ...createGameCalls];
       // console.log(calls);
 
-      const { hash } = await executeAndReceipt(calls);
+      const { hash, isError } = await executeAndReceipt(calls);
 
       return {
         hash,
+        isError,
       };
     },
     [executeAndReceipt, config?.ryoAddress.paper, selectedChain],
@@ -217,7 +221,7 @@ export const useSystems = (): SystemsInterface => {
     async (gameId: string, calls: Array<PendingCall>) => {
       const callsEnum = calls.map(pendingCallToCairoEnum);
 
-      const { hash } = await executeAndReceipt({
+      const { hash, isError } = await executeAndReceipt({
         contractAddress: gameAddress,
         entrypoint: "end_game",
         // @ts-ignore
@@ -226,6 +230,7 @@ export const useSystems = (): SystemsInterface => {
 
       return {
         hash,
+        isError,
       };
     },
     [executeAndReceipt],
@@ -249,10 +254,11 @@ export const useSystems = (): SystemsInterface => {
         vrfProviderSecret: selectedChain.vrfProviderSecret,
       });
 
-      const { hash } = await executeAndReceipt(calls);
+      const { hash, isError } = await executeAndReceipt(calls);
 
       return {
         hash,
+        isError,
       };
     },
     [executeAndReceipt, selectedChain],
@@ -273,10 +279,11 @@ export const useSystems = (): SystemsInterface => {
         vrfProviderSecret: selectedChain.vrfProviderSecret,
       });
 
-      const { hash } = await executeAndReceipt(calls);
+      const { hash, isError } = await executeAndReceipt(calls);
 
       return {
         hash,
+        isError,
       };
     },
     [executeAndReceipt, selectedChain],
@@ -346,10 +353,11 @@ export const useSystems = (): SystemsInterface => {
 
       // console.log(calls);
 
-      const { hash } = await executeAndReceipt(calls);
+      const { hash, isError } = await executeAndReceipt(calls);
 
       return {
         hash,
+        isError,
       };
     },
     [executeAndReceipt],
@@ -357,7 +365,7 @@ export const useSystems = (): SystemsInterface => {
 
   const claim = useCallback(
     async (playerId: string, gameIds: number[]) => {
-      const { hash, events, parsedEvents } = await executeAndReceipt({
+      const { hash, isError } = await executeAndReceipt({
         contractName: `laundromat`,
         entrypoint: "claim",
         calldata: [playerId, gameIds],
@@ -366,13 +374,14 @@ export const useSystems = (): SystemsInterface => {
 
       return {
         hash,
+        isError,
       };
     },
     [executeAndReceipt],
   );
 
   const claimTreasury = useCallback(async () => {
-    const { hash, events, parsedEvents } = await executeAndReceipt({
+    const { hash, isError } = await executeAndReceipt({
       contractName: `laundromat`,
       entrypoint: "claim_treasury",
       calldata: [],
@@ -380,6 +389,7 @@ export const useSystems = (): SystemsInterface => {
 
     return {
       hash,
+      isError,
     };
   }, [executeAndReceipt]);
 
@@ -401,10 +411,11 @@ export const useSystems = (): SystemsInterface => {
         calldata: CallData.compile([season, amountEth]),
       };
 
-      const { hash } = await executeAndReceipt([approvalCall, superchargeJackpotCall]);
+      const { hash, isError } = await executeAndReceipt([approvalCall, superchargeJackpotCall]);
 
       return {
         hash,
+        isError,
       };
     },
     [executeAndReceipt, config],
@@ -424,10 +435,11 @@ export const useSystems = (): SystemsInterface => {
         vrfProviderAddress: selectedChain.vrfProviderAddress,
         vrfProviderSecret: selectedChain.vrfProviderSecret,
       });
-      const { hash } = await executeAndReceipt(calls);
+      const { hash, isError } = await executeAndReceipt(calls);
 
       return {
         hash,
+        isError,
       };
     },
     [executeAndReceipt, selectedChain],
@@ -439,7 +451,7 @@ export const useSystems = (): SystemsInterface => {
 
   const setPaused = useCallback(
     async (paused: boolean) => {
-      const { hash } = await executeAndReceipt({
+      const { hash, isError } = await executeAndReceipt({
         contractName: `ryo`,
         entrypoint: "set_paused",
         calldata: [paused ? 1 : 0],
@@ -447,6 +459,7 @@ export const useSystems = (): SystemsInterface => {
 
       return {
         hash,
+        isError,
       };
     },
     [executeAndReceipt],
@@ -454,7 +467,7 @@ export const useSystems = (): SystemsInterface => {
 
   const updateRyoConfig = useCallback(
     async (ryoConfig: RyoConfig) => {
-      const { hash } = await executeAndReceipt({
+      const { hash, isError } = await executeAndReceipt({
         contractName: `ryo`,
         entrypoint: "update_ryo_config",
         calldata: CallData.compile({
@@ -473,6 +486,7 @@ export const useSystems = (): SystemsInterface => {
 
       return {
         hash,
+        isError,
       };
     },
     [executeAndReceipt],
@@ -480,7 +494,7 @@ export const useSystems = (): SystemsInterface => {
 
   const updateDrugConfig = useCallback(
     async (drugConfig: DrugConfig) => {
-      const { hash } = await executeAndReceipt({
+      const { hash, isError } = await executeAndReceipt({
         contractName: `config`,
         entrypoint: "update_drug_config",
         calldata: [drugConfig],
@@ -488,6 +502,7 @@ export const useSystems = (): SystemsInterface => {
 
       return {
         hash,
+        isError,
       };
     },
     [executeAndReceipt],

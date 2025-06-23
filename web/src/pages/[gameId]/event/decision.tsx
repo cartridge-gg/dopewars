@@ -43,6 +43,9 @@ const Decision = observer(() => {
       const encounterEvent = gameEvents?.lastEncounter?.event as TravelEncounter;
       setEncounterEvent(encounterEvent);
     }
+    if (game && game.player.health === 0) {
+      router.push(`/${gameId}/event/consequence`);
+    }
   }, [isPending, game, gameEvents, gameEvents?.lastEncounter]);
 
   useEffect(() => {

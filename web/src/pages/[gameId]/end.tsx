@@ -98,9 +98,9 @@ const End = () => {
       const prevGameId = prev ? prev.game_id : 0;
       const prevPlayerId = prev ? prev.player_id : 0;
 
-      const { hash } = await registerScore(gameInfos?.game_id!, prevGameId, prevPlayerId);
+      const { hash, isError } = await registerScore(gameInfos?.game_id!, prevGameId, prevPlayerId);
 
-      if (hash !== "") {
+      if (!isError) {
         toast({
           message: `Registered!`,
           duration: 5_000,

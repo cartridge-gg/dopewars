@@ -16,7 +16,7 @@ import { ReputationIndicator } from "@/components/player";
 import { GameClass } from "@/dojo/class/Game";
 import { useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { PlayerStats, useGamesByPlayer } from "@/dojo/hooks/useGamesByPlayer";
-import { Drugs } from "@/dojo/types";
+import { Drugs, GameMode } from "@/dojo/types";
 import { formatCashHeader } from "@/utils/ui";
 import {
   HStack,
@@ -83,8 +83,11 @@ const GameList = observer(({ games }: { games?: GameClass[] }) => {
   const { router } = useRouterContext();
 
   const onClick = (game: GameClass) => {
+    debugger;
     if (!game.gameInfos.game_over) {
       router.push(`/0x${game.gameInfos.game_id.toString(16)}`);
+    } else if (game.gameInfos.game_over && !game.gameInfos.registered) {
+      router.push(`/0x${game.gameInfos.game_id.toString(16)}/end`);
     } else {
       router.push(`/0x${game.gameInfos.game_id.toString(16)}/logs`);
     }
