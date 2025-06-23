@@ -2,7 +2,7 @@ import { Button, Input, Tooltip } from "@/components/common";
 import { Arrow, ExternalLink, Link, Warning } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { PowerMeter, TierIndicator } from "@/components/player";
-import { BuyPaper, ChildrenOrConnect, PaperFaucet, PaperFaucetButton, TokenBalance } from "@/components/wallet";
+import { BuyPaper, ChildrenOrConnect, PaperFaucetButton, TokenBalance } from "@/components/wallet";
 import { gameModeFromName, gameModeFromNameKeys, itemSlotToDopeLootSlotId, weaponIdToSound } from "@/dojo/helpers";
 import {
   ETHER,
@@ -16,7 +16,6 @@ import {
 import { GameMode, ItemSlot } from "@/dojo/types";
 import { play } from "@/hooks/media";
 import { Sounds, WeaponSounds, playSound } from "@/hooks/sound";
-import { useToast } from "@/hooks/toast";
 import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, Card, HStack, Heading, Text, VStack, Image, Flex } from "@chakra-ui/react";
 import { useAccount, useConnect } from "@starknet-react/core";
@@ -39,7 +38,6 @@ export enum TokenIdType {
 
 const New = observer(() => {
   const { router, isRyoDotGame, isLocalhost, gameModeName } = useRouterContext();
-  const gameMode = gameModeFromName[gameModeName as gameModeFromNameKeys] as GameMode;
   const {
     chains: { selectedChain },
     clients: { toriiClient },
@@ -51,13 +49,12 @@ const New = observer(() => {
   const configStore = useConfigStore();
   const { config } = configStore;
   const { season } = useSeasonByVersion(config?.ryo.season_version);
+  const gameMode = gameModeFromName[gameModeName as gameModeFromNameKeys] as GameMode;
 
-  const { toast } = useToast();
-
-  // const [selectedTokenIdType, setSelectedTokenIdType] = useState(TokenIdType.GuestLootId);
   const [selectedTokenIdType, setSelectedTokenIdType] = useState(
-    (Number(router.query.tokenIdType) as TokenIdType) || TokenIdType.LootId as TokenIdType,
+    (Number(router.query.tokenIdType) as TokenIdType) || (TokenIdType.LootId as TokenIdType),
   );
+  const [selectedTokenId, setSelectedTokenId] = useState<undefined | number>();
 
   const addresses = useMemo(() => {
     return [
@@ -99,14 +96,14 @@ const New = observer(() => {
   useEffect(() => {
     router.replace({
       pathname: location.pathname,
-      search: `tokenIdType=${selectedTokenIdType}`,
+      search: `tokenIdType=${selectedTokenIdType}`, //`&tokenId=${selectedTokenId}`,
     });
-  }, [selectedTokenIdType]);
+  }, [selectedTokenIdType, selectedTokenId]);
 
   const inputRef = useRef<null | HTMLDivElement>(null);
   const [error, setError] = useState("");
   const [name, setName] = useState("");
-  const [multiplier, setMultipler] = useState(1);
+  const [multiplier, setMultipler] = useState(3);
   const isMobile = IsMobile();
 
   useEffect(() => {
@@ -281,304 +278,322 @@ const New = observer(() => {
       isSinglePanel
       footer={
         <Footer>
-          <Button
-            w={["full", "auto"]}
-            px={["auto", "20px"]}
-            onClick={() => {
-              playSound(Sounds.Ooo, 0.3);
-              router.push("/");
-            }}
-          >
-            Im scared
-          </Button>
+          {!selectedTokenId && (
+            <Button
+              w={["full", "auto"]}
+              px={["auto", "20px"]}
+              onClick={() => {
+                playSound(Sounds.Ooo, 0.3);
+                router.push("/");
+              }}
+            >
+              Im scared
+            </Button>
+          )}
+
+          {selectedTokenId && (
+            <Button
+              w={["full", "auto"]}
+              px={["auto", "20px"]}
+              onClick={() => {
+                setSelectedTokenId(undefined);
+              }}
+            >
+              Back
+            </Button>
+          )}
 
           <ChildrenOrConnect variant="primary" h="35px">
-            {gameMode == GameMode.Ranked && (
+            {gameMode == GameMode.Ranked && !selectedTokenId && (
+              <>
+                <Button
+                  w={["full", "auto"]}
+                  px={["auto", "20px"]}
+                  isLoading={isPending}
+                  onClick={() => setSelectedTokenId(Number(selectedToken.token_id))}
+                >
+                  Select
+                </Button>
+              </>
+            )}
+
+            {gameMode == GameMode.Ranked && selectedTokenId && (
               <>
                 <Button
                   w={["full", "auto"]}
                   px={["auto", "20px"]}
                   isLoading={isPending}
                   onClick={() => create(gameMode)}
-                  isDisabled={balance < 1000n * ETHER}
+                  isDisabled={balance < 1000n * ETHER || !selectedTokenId}
                 >
                   Play
                 </Button>
                 {selectedChain.name !== "MAINNET" && balance < 10000n * ETHER && <PaperFaucetButton />}
               </>
             )}
-            {gameMode == GameMode.Noob && (
+            {/* {gameMode == GameMode.Noob && (
               <Button w={["full", "auto"]} px={["auto", "20px"]} isLoading={isPending} onClick={() => create(gameMode)}>
                 Play
               </Button>
-            )}
+            )} */}
           </ChildrenOrConnect>
-          {/* <Button
-              w={["full", "auto"]}
-              px={["auto", "20px"]}
-              isLoading={isPending}
-              onClick={() => create(GameMode.Warrior)}
-            >
-              Play Warrior
-            </Button> */}
         </Footer>
       }
     >
-      <VStack w={["full", "700px"]} margin="auto">
+      <VStack w={["full", "700px"]} marginX="auto">
         <VStack w="full" gap={[3, 6]} overflowX="hidden">
-          <VStack>
-            {/* {!isMobile && (
-              <Text textStyle="subheading" fontSize={["10px", "11px"]} letterSpacing="0.25em">
-                Choose your
+          {!selectedTokenId && (
+            <VStack>
+              <Text textStyle="subheading" fontSize={["11px", "11px"]} my={["10px", "0"]} letterSpacing="0.25em">
+                Choose your {isMobile && <span>Hustler...</span>}
               </Text>
-            )}
-            <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
-              {isMobile && <span>Choose your</span>} Hustler
-            </Heading> */}
-
-            <Text textStyle="subheading" fontSize={["11px", "11px"]} my={["10px", "0"]} letterSpacing="0.25em">
-              Choose your {isMobile && <span>Hustler...</span>}
-            </Text>
-            {!isMobile && (
-              <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
-                Hustler...
-              </Heading>
-            )}
-          </VStack>
-
-          <HStack gap={1}>
-            {config?.ryo.f2p_hustlers && (
-              <Button
-                fontSize="11px"
-                h="30px"
-                variant="selectable"
-                isActive={selectedTokenIdType === TokenIdType.GuestLootId}
-                onClick={() => setSelectedTokenIdType(TokenIdType.GuestLootId)}
-              >
-                S{season.version} HUSTLERS
-              </Button>
-            )}
-            <Button
-              fontSize="11px"
-              h="30px"
-              variant="selectable"
-              isActive={selectedTokenIdType === TokenIdType.LootId}
-              onClick={() => setSelectedTokenIdType(TokenIdType.LootId)}
-            >
-              MY DOPE
-            </Button>
-            <Button
-              fontSize="11px"
-              h="30px"
-              variant="selectable"
-              isActive={selectedTokenIdType === TokenIdType.HustlerId}
-              onClick={() => setSelectedTokenIdType(TokenIdType.HustlerId)}
-            >
-              MY HUSTLERS
-            </Button>
-          </HStack>
-
-          {selectableTokens && selectableTokens?.length > 0 && selectedToken ? (
-            <HStack ref={swipeableRef} align="center" justify="center" gap={[0, 9]} marginTop={"-30px"}>
-              <Arrow
-                style="outline"
-                direction="left"
-                boxSize="48px"
-                userSelect="none"
-                cursor="pointer"
-                onClick={onClickPrev}
-              />
-
-              <VStack gap={3}>
-                <Box
-                  position="relative"
-                  width={["220px", "280px"]}
-                  height={["220px", "280px"]}
-                  transform={["scale(1.7)", "scale(1.5)"]}
-                  pointerEvents={"none"}
-
-                  // style={{ filter: "grayscale(50%) sepia(80%) hue-rotate(60deg)" }}
-                >
-                  {selectedTokenIdType === TokenIdType.HustlerId ? (
-                    <HustlerPreviewFromHustler tokenId={Number(selectedToken.token_id)} renderMode={1} />
-                  ) : (
-                    <HustlerPreviewFromLoot tokenId={Number(selectedToken.token_id)} renderMode={1} />
-                  )}
-                  {/* {ownLoot && !dopeLootClaimState[Number(selectableTokens[selectedLootToken].token_id)]?.isReleased && (
-                    <Image
-                      src="/images/prisonbar.png"
-                      style={{ imageRendering: "pixelated" }}
-                      top={0}
-                      width="full"
-                      height="full"
-                      position="absolute"
-                    />
-                  )}
-                  {ownLoot && dopeLootClaimState[Number(selectableTokens[selectedLootToken].token_id)]?.isReleased && (
-                    <Image
-                      src="/images/prisonbar-released.png"
-                      style={{ imageRendering: "pixelated", zIndex: -1, margin: "auto" }}
-                      top={0}
-                      width="70%"
-                      height="70%"
-                      position="absolute"
-                    />
-                  )} */}
-                </Box>
-
-                {isMobile && equipmentStats && (
-                  <HStack gap={3}>
-                    <VStack gap={0}>
-                      <Text textStyle="subheading" fontSize="8px" color="neon.500">
-                        WEAPON
-                      </Text>
-                      <TierIndicator tier={equipmentStats![ItemSlot.Weapon]?.tier} />
-                    </VStack>
-                    <VStack gap={0}>
-                      <Text textStyle="subheading" fontSize="8px" color="neon.500">
-                        CLOTHES
-                      </Text>
-                      <TierIndicator tier={equipmentStats![ItemSlot.Clothes]?.tier} />
-                    </VStack>
-                    <VStack gap={0}>
-                      <Text textStyle="subheading" fontSize="8px" color="neon.500">
-                        FEET
-                      </Text>
-                      <TierIndicator tier={equipmentStats![ItemSlot.Feet]?.tier} />
-                    </VStack>
-                    <VStack gap={0}>
-                      <Text textStyle="subheading" fontSize="8px" color="neon.500">
-                        TRANSPORT
-                      </Text>
-                      <TierIndicator tier={equipmentStats![ItemSlot.Transport]?.tier} />
-                    </VStack>
-                  </HStack>
+              {!isMobile && (
+                <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
+                  Hustler...
+                </Heading>
+              )}
+            </VStack>
+          )}
+          {selectedTokenId && (
+            <VStack>
+              <Text textStyle="subheading" fontSize={["11px", "11px"]} my={["10px", "0"]} letterSpacing="0.25em">
+                Choose your {isMobile && <span>Stake...</span>}
+              </Text>
+              {!isMobile && (
+                <Heading fontSize={["30px", "48px"]} fontWeight="400" textAlign="center">
+                  Stake...
+                </Heading>
+              )}
+            </VStack>
+          )}
+          {!selectedTokenId && (
+            <>
+              <HStack gap={1}>
+                {config?.ryo.f2p_hustlers && (
+                  <Button
+                    fontSize="11px"
+                    h="30px"
+                    variant="selectable"
+                    isActive={selectedTokenIdType === TokenIdType.GuestLootId}
+                    onClick={() => setSelectedTokenIdType(TokenIdType.GuestLootId)}
+                  >
+                    S{season.version} HUSTLERS
+                  </Button>
                 )}
-              </VStack>
+                <Button
+                  fontSize="11px"
+                  h="30px"
+                  variant="selectable"
+                  isActive={selectedTokenIdType === TokenIdType.LootId}
+                  onClick={() => setSelectedTokenIdType(TokenIdType.LootId)}
+                >
+                  MY DOPE
+                </Button>
+                <Button
+                  fontSize="11px"
+                  h="30px"
+                  variant="selectable"
+                  isActive={selectedTokenIdType === TokenIdType.HustlerId}
+                  onClick={() => setSelectedTokenIdType(TokenIdType.HustlerId)}
+                >
+                  MY HUSTLERS
+                </Button>
+              </HStack>
 
-              {!isMobile && equipmentStats && (
-                <VStack w="full" gap={3} zIndex={1}>
-                  <HStack w="full">
-                    <VStack alignItems="flex-start" w="180px" gap={0}>
-                      <Text textStyle="subheading" fontSize="10px" color="neon.500">
-                        WEAPON
-                      </Text>
-                      {equipmentStats![ItemSlot.Weapon] ? (
-                        <Text>{equipmentStats![ItemSlot.Weapon].name}</Text>
-                      ) : (
-                        <Text color={"red"}>No Weapon Equipped!</Text>
-                      )}
-                    </VStack>
-                    <TierIndicator tier={equipmentStats![ItemSlot.Weapon]?.tier} />
-                  </HStack>
+              {selectableTokens && selectableTokens?.length > 0 && selectedToken ? (
+                <HStack ref={swipeableRef} align="center" justify="center" gap={[0, 9]} marginTop={"-30px"}>
+                  <Arrow
+                    style="outline"
+                    direction="left"
+                    boxSize="48px"
+                    userSelect="none"
+                    cursor="pointer"
+                    onClick={onClickPrev}
+                  />
 
-                  <HStack w="full">
-                    <VStack alignItems="flex-start" w="180px" gap={0}>
-                      <Text textStyle="subheading" fontSize="10px" color="neon.500">
-                        CLOTHES
-                      </Text>
-                      {equipmentStats![ItemSlot.Clothes] ? (
-                        <Text>{equipmentStats![ItemSlot.Clothes].name}</Text>
+                  <VStack gap={3}>
+                    <Box
+                      position="relative"
+                      width={["220px", "280px"]}
+                      height={["220px", "280px"]}
+                      transform={["scale(1.7)", "scale(1.5)"]}
+                      pointerEvents={"none"}
+                    >
+                      {selectedTokenIdType === TokenIdType.HustlerId ? (
+                        <HustlerPreviewFromHustler tokenId={Number(selectedToken.token_id)} renderMode={1} />
                       ) : (
-                        <Text color={"red"}>No Clothes Equipped!</Text>
+                        <HustlerPreviewFromLoot tokenId={Number(selectedToken.token_id)} renderMode={1} />
                       )}
-                    </VStack>
-                    <TierIndicator tier={equipmentStats![ItemSlot.Clothes]?.tier} />
-                  </HStack>
+                    </Box>
 
-                  <HStack w="full">
-                    <VStack alignItems="flex-start" w="180px" gap={0}>
-                      <Text textStyle="subheading" fontSize="10px" color="neon.500">
-                        FEET
-                      </Text>
-                      {equipmentStats![ItemSlot.Feet] ? (
-                        <Text>{equipmentStats![ItemSlot.Feet].name}</Text>
-                      ) : (
-                        <Text color={"red"}>No Shoe Equipped!</Text>
-                      )}
-                    </VStack>
-                    <TierIndicator tier={equipmentStats![ItemSlot.Feet]?.tier} />
-                  </HStack>
+                    {isMobile && equipmentStats && (
+                      <HStack gap={3}>
+                        <VStack gap={0}>
+                          <Text textStyle="subheading" fontSize="8px" color="neon.500">
+                            WEAPON
+                          </Text>
+                          <TierIndicator tier={equipmentStats![ItemSlot.Weapon]?.tier} />
+                        </VStack>
+                        <VStack gap={0}>
+                          <Text textStyle="subheading" fontSize="8px" color="neon.500">
+                            CLOTHES
+                          </Text>
+                          <TierIndicator tier={equipmentStats![ItemSlot.Clothes]?.tier} />
+                        </VStack>
+                        <VStack gap={0}>
+                          <Text textStyle="subheading" fontSize="8px" color="neon.500">
+                            FEET
+                          </Text>
+                          <TierIndicator tier={equipmentStats![ItemSlot.Feet]?.tier} />
+                        </VStack>
+                        <VStack gap={0}>
+                          <Text textStyle="subheading" fontSize="8px" color="neon.500">
+                            TRANSPORT
+                          </Text>
+                          <TierIndicator tier={equipmentStats![ItemSlot.Transport]?.tier} />
+                        </VStack>
+                      </HStack>
+                    )}
+                  </VStack>
 
-                  <HStack w="full">
-                    <VStack alignItems="flex-start" w="180px" gap={0}>
-                      <Text textStyle="subheading" fontSize="10px" color="neon.500">
-                        TRANSPORT
-                      </Text>
-                      {equipmentStats![ItemSlot.Transport] ? (
-                        <Text>{equipmentStats![ItemSlot.Transport].name}</Text>
-                      ) : (
-                        <Text color={"red"}>No Vehicle Equipped!</Text>
-                      )}
+                  {!isMobile && equipmentStats && (
+                    <VStack w="full" gap={3} zIndex={1}>
+                      <HStack w="full">
+                        <VStack alignItems="flex-start" w="180px" gap={0}>
+                          <Text textStyle="subheading" fontSize="10px" color="neon.500">
+                            WEAPON
+                          </Text>
+                          {equipmentStats![ItemSlot.Weapon] ? (
+                            <Text>{equipmentStats![ItemSlot.Weapon].name}</Text>
+                          ) : (
+                            <Text color={"red"}>No Weapon Equipped!</Text>
+                          )}
+                        </VStack>
+                        <TierIndicator tier={equipmentStats![ItemSlot.Weapon]?.tier} />
+                      </HStack>
+
+                      <HStack w="full">
+                        <VStack alignItems="flex-start" w="180px" gap={0}>
+                          <Text textStyle="subheading" fontSize="10px" color="neon.500">
+                            CLOTHES
+                          </Text>
+                          {equipmentStats![ItemSlot.Clothes] ? (
+                            <Text>{equipmentStats![ItemSlot.Clothes].name}</Text>
+                          ) : (
+                            <Text color={"red"}>No Clothes Equipped!</Text>
+                          )}
+                        </VStack>
+                        <TierIndicator tier={equipmentStats![ItemSlot.Clothes]?.tier} />
+                      </HStack>
+
+                      <HStack w="full">
+                        <VStack alignItems="flex-start" w="180px" gap={0}>
+                          <Text textStyle="subheading" fontSize="10px" color="neon.500">
+                            FEET
+                          </Text>
+                          {equipmentStats![ItemSlot.Feet] ? (
+                            <Text>{equipmentStats![ItemSlot.Feet].name}</Text>
+                          ) : (
+                            <Text color={"red"}>No Shoe Equipped!</Text>
+                          )}
+                        </VStack>
+                        <TierIndicator tier={equipmentStats![ItemSlot.Feet]?.tier} />
+                      </HStack>
+
+                      <HStack w="full">
+                        <VStack alignItems="flex-start" w="180px" gap={0}>
+                          <Text textStyle="subheading" fontSize="10px" color="neon.500">
+                            TRANSPORT
+                          </Text>
+                          {equipmentStats![ItemSlot.Transport] ? (
+                            <Text>{equipmentStats![ItemSlot.Transport].name}</Text>
+                          ) : (
+                            <Text color={"red"}>No Vehicle Equipped!</Text>
+                          )}
+                        </VStack>
+                        <TierIndicator tier={equipmentStats![ItemSlot.Transport]?.tier} />
+                      </HStack>
                     </VStack>
-                    <TierIndicator tier={equipmentStats![ItemSlot.Transport]?.tier} />
+                  )}
+
+                  <Arrow
+                    style="outline"
+                    direction="right"
+                    boxSize="48px"
+                    userSelect="none"
+                    cursor="pointer"
+                    onClick={onClickNext}
+                  />
+                </HStack>
+              ) : (
+                <VStack minH={"250px"} alignItems="center" justifyContent="center">
+                  <Text>ERROR 420: {selectedTokenIdType === TokenIdType.HustlerId ? "Hustler" : "Dope"} not found</Text>
+                  <HStack>
+                    <Button onClick={() => router.push("/claim")}>Migration</Button>
+                    <Button
+                      onClick={() => {
+                        (connector as unknown as ControllerConnector).controller.openPurchaseCredits();
+                      }}
+                    >
+                      Buy
+                    </Button>
                   </HStack>
                 </VStack>
               )}
 
-              <Arrow
-                style="outline"
-                direction="right"
-                boxSize="48px"
-                userSelect="none"
-                cursor="pointer"
-                onClick={onClickNext}
-              />
-            </HStack>
-          ) : (
-            <VStack minH={"250px"} alignItems="center" justifyContent="center">
-              <Text>ERROR 420: {selectedTokenIdType === TokenIdType.HustlerId ? "Hustler" : "Dope"} not found</Text>
-              <HStack>
-                <Button onClick={() => router.push("/claim")}>Migration</Button>
-                <Button
-                  onClick={() => {
-                    (connector as unknown as ControllerConnector).controller.openPurchaseCredits();
-                  }}
-                >
-                  Buy
-                </Button>
-              </HStack>
-            </VStack>
-          )}
-
-          <VStack alignItems="center" marginTop={["0px", "-40px"]} gap={0}>
-            <Text>
-              {selectedTokenIndex + 1}/{selectableTokens.length}{" "}
-            </Text>
-            {selectedToken ? (
-              <HStack position="relative">
-                {!isReleased && (
-                  <Tooltip
-                    color="yellow.400"
-                    title="Dope Migration"
-                    text="Play a game with this Dope to release it!"
-                    placement="top"
-                  >
-                    <span>
-                      <Warning color="yellow.400" ml={2} height={"16px"} width={"16px"} />
-                    </span>
-                  </Tooltip>
-                )}
+              <VStack alignItems="center" marginTop={["0px", "-40px"]} gap={0}>
                 <Text>
-                  {selectedTokenIdType === TokenIdType.HustlerId
-                    ? `${selectedToken.metadata.name}`
-                    : `DOPE #${Number(selectedToken?.token_id)}`}
-                  {selectedTokenIdType === TokenIdType.HustlerId && (
-                    <ExternalLink
-                      ml={2}
-                      cursor="pointer"
-                      onClick={() => router.push(`/dope/editor/${selectedToken.token_id}`)}
-                    />
-                  )}
+                  {selectedTokenIndex + 1}/{selectableTokens.length}{" "}
                 </Text>
-              </HStack>
-            ) : (
-              <Text>ERR #420</Text>
-            )}
-          </VStack>
+                {selectedToken ? (
+                  <HStack position="relative">
+                    {!isReleased && (
+                      <Tooltip
+                        color="yellow.400"
+                        title="Dope Migration"
+                        text="Play a game with this Dope to release it!"
+                        placement="top"
+                      >
+                        <span>
+                          <Warning color="yellow.400" ml={2} height={"16px"} width={"16px"} />
+                        </span>
+                      </Tooltip>
+                    )}
+                    <Text>
+                      {selectedTokenIdType === TokenIdType.HustlerId
+                        ? `${selectedToken.metadata.name}`
+                        : `DOPE #${Number(selectedToken?.token_id)}`}
+                      {selectedTokenIdType === TokenIdType.HustlerId && (
+                        <ExternalLink
+                          ml={2}
+                          cursor="pointer"
+                          onClick={() => router.push(`/dope/editor/${selectedToken.token_id}`)}
+                        />
+                      )}
+                    </Text>
+                  </HStack>
+                ) : (
+                  <Text>ERR #420</Text>
+                )}
+              </VStack>
+            </>
+          )}
+          {selectedTokenId && season.paper_fee > 0 && (
+            <>
+              <Box
+                position="relative"
+                width={["160px", "220px"]}
+                height={["160px", "220px"]}
+                transform={["scale(1.7)", "scale(1.5)"]}
+                pointerEvents={"none"}
+              >
+                {selectedTokenIdType === TokenIdType.HustlerId ? (
+                  <HustlerPreviewFromHustler tokenId={Number(selectedToken.token_id)} renderMode={1} />
+                ) : (
+                  <HustlerPreviewFromLoot tokenId={Number(selectedToken.token_id)} renderMode={1} />
+                )}
+              </Box>
 
-          {
-            /*!isRyoDotGame && !isMobile && */ season.paper_fee > 0 && (
               <Card p={3} w="300px">
                 <HStack gap={6} fontSize="14px">
                   <VStack gap={0} alignItems="center" minW="240px" w="full">
@@ -623,7 +638,14 @@ const New = observer(() => {
                     </HStack>
 
                     {account && (
-                      <HStack w="full" justifyContent="space-between">
+                      <HStack
+                        w="full"
+                        justifyContent="space-between"
+                        borderTop="solid 1px"
+                        mt={2}
+                        pt={2}
+                        borderColor="neon.700"
+                      >
                         <Text>YOU OWN </Text>
                         <HStack>
                           <TokenBalance address={account?.address} token={config?.ryoAddress.paper} />
@@ -635,33 +657,32 @@ const New = observer(() => {
                   </VStack>
                 </HStack>
               </Card>
-            )
-          }
+              <VStack w="full" ref={inputRef}>
+                <Input
+                  display="flex"
+                  mx="auto"
+                  maxW="260px"
+                  maxLength={16}
+                  placeholder="Enter your name"
+                  autoFocus
+                  value={name}
+                  onChange={(e) => {
+                    setError("");
+                    setName(e.target.value);
+                  }}
+                />
 
-          <VStack w="full" ref={inputRef}>
-            <Input
-              display="flex"
-              mx="auto"
-              maxW="260px"
-              maxLength={16}
-              placeholder="Enter your name"
-              autoFocus
-              value={name}
-              onChange={(e) => {
-                setError("");
-                setName(e.target.value);
-              }}
-            />
-
-            <VStack w="full" h="30px">
-              {/* <Text w="full" align="center" color="red" display={name.length === 20 ? "block" : "none"}>
+                <VStack w="full" h="30px">
+                  {/* <Text w="full" align="center" color="red" display={name.length === 20 ? "block" : "none"}>
                 Max 20 characters
               </Text> */}
-              <Text w="full" align="center" color="red" display={error !== "" ? "block" : "none"}>
-                {error}
-              </Text>
-            </VStack>
-          </VStack>
+                  <Text w="full" align="center" color="red" display={error !== "" ? "block" : "none"}>
+                    {error}
+                  </Text>
+                </VStack>
+              </VStack>
+            </>
+          )}
 
           <Box minH="80px" />
         </VStack>
