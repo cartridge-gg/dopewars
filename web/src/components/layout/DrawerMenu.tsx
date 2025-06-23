@@ -19,7 +19,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { ReactNode, useRef } from "react";
-import { Cigarette, Clock, Close, Dots, Home, PaperIcon, Refresh } from "../icons";
+import { Cigarette, Clock, Close, Dots, GangIcon, Home, PaperIcon, Refresh } from "../icons";
 import { Calendar } from "../icons/archive";
 import { HeaderButton, MediaPlayer } from ".";
 import { ChainSelector, ConnectButton, TokenBalance } from "../wallet";
@@ -52,7 +52,7 @@ const DrawerMenu = () => {
   const { uiStore } = useDojoContext();
   return (
     <>
-      <HeaderButton ref={btnRef} onClick={onOpen} h={["40px","48px"]}  w={["40px","48px"]}>
+      <HeaderButton ref={btnRef} onClick={onOpen} h={["40px", "48px"]} w={["40px", "48px"]}>
         <Dots />
       </HeaderButton>
       <Drawer isOpen={isOpen} placement="right" size="xs" onClose={onClose} trapFocus={false}>
@@ -176,6 +176,14 @@ const DrawerMenu = () => {
                     }}
                   >
                     <HustlerIcon hustler={Hustlers.Dragon} mr={2} /> MY DOPE
+                  </DrawerListItem>
+
+                  <DrawerListItem
+                    onClick={() => {
+                      router.push("/dope/votes");
+                    }}
+                  >
+                    <GangIcon mr={2} /> MY VOTES
                   </DrawerListItem>
 
                   {/* DEV */}

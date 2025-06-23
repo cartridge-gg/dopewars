@@ -48,6 +48,7 @@ interface SystemsInterface {
 
   isPending: boolean;
   error?: string;
+  executeAndReceipt: (calls: AllowArray<DojoCall | Call>) => Promise<ExecuteAndReceiptResult>;
 }
 
 interface SystemExecuteResult {
@@ -608,6 +609,7 @@ export const useSystems = (): SystemsInterface => {
     createFakeGame,
     createNewSeason,
     //
+    executeAndReceipt,
     error,
     isPending,
   };
