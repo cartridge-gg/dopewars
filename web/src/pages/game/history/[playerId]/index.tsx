@@ -83,7 +83,6 @@ const GameList = observer(({ games }: { games?: GameClass[] }) => {
   const { router } = useRouterContext();
 
   const onClick = (game: GameClass) => {
-    debugger;
     if (!game.gameInfos.game_over) {
       router.push(`/0x${game.gameInfos.game_id.toString(16)}`);
     } else if (game.gameInfos.game_over && !game.gameInfos.registered) {

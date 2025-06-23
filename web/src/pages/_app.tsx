@@ -4,7 +4,7 @@ import { DeployingModal } from "@/components/wallet/DeployingModal";
 import { DojoContextProvider } from "@/dojo/context/DojoContext";
 import { useAutoBurner } from "@/dojo/hooks/useAutoBurner";
 import { dojoContextConfig } from "@/dojo/setup/config";
-import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
+import useKonamiCode, { psySequence, starkpimpSequence } from "@/hooks/useKonamiCode";
 import Fonts from "@/theme/fonts";
 import GlobalStyles from "@/theme/global";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -22,9 +22,11 @@ enableStaticRendering(typeof window === "undefined");
 
 // import "@/dope/dist/style.css";
 import { Toaster } from "react-hot-toast";
+import { Psycadelic } from "@/components/common/Psycadelic";
 
 export default function App({ Component, pageProps }: AppProps) {
   const { setSequence, isRightSequence, setIsRightSequence } = useKonamiCode(starkpimpSequence);
+
 
   useEffect(() => {
     if (isRightSequence) {
@@ -52,6 +54,7 @@ export default function App({ Component, pageProps }: AppProps) {
             />
           </NextHead>
           {isRightSequence && <MakeItRain />}
+          <Psycadelic />
           <Component {...pageProps} />
           <SpeedInsights />
           {/* <Debug /> */}
