@@ -6,7 +6,6 @@ export const BuyPaper = () => {
     <Link
       href="https://app.ekubo.org/?outputCurrency=PAPER&amount=-5000&inputCurrency=ETH"
       target="_blank"
-      marginTop={1}
       display="flex"
       textDecoration="none"
       alignItems="center"

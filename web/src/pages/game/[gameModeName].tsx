@@ -17,7 +17,19 @@ import { GameMode, ItemSlot } from "@/dojo/types";
 import { play } from "@/hooks/media";
 import { Sounds, WeaponSounds, playSound } from "@/hooks/sound";
 import { IsMobile, formatCash } from "@/utils/ui";
-import { Box, Card, HStack, Heading, Text, VStack, Image, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  Card,
+  HStack,
+  Heading,
+  Text,
+  VStack,
+  Image,
+  Flex,
+  Slider,
+  SliderTrack,
+  SliderFilledTrack,
+} from "@chakra-ui/react";
 import { useAccount, useConnect } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -310,7 +322,7 @@ const New = observer(() => {
                   w={["full", "auto"]}
                   px={["auto", "20px"]}
                   isLoading={isPending}
-                  onClick={() => setSelectedTokenId(Number(selectedToken.token_id))}
+                  onClick={() => selectedToken && setSelectedTokenId(Number(selectedToken.token_id))}
                 >
                   Select
                 </Button>
@@ -341,7 +353,7 @@ const New = observer(() => {
       }
     >
       <VStack w={["full", "700px"]} marginX="auto">
-        <VStack w="full" gap={6} overflowX="hidden">
+        <VStack w="full" gap={[3, 6]} overflowX="hidden">
           {!selectedTokenId && (
             <VStack>
               <Text textStyle="subheading" fontSize={["11px", "11px"]} my={["10px", "0"]} letterSpacing="0.25em">
@@ -576,34 +588,86 @@ const New = observer(() => {
           )}
           {selectedTokenId && season.paper_fee > 0 && (
             <>
-              <Box
-                position="relative"
-                width={["160px", "220px"]}
-                height={["160px", "220px"]}
-                transform={["scale(1.7)", "scale(1.5)"]}
-                pointerEvents={"none"}
-              >
-                {selectedTokenIdType === TokenIdType.HustlerId ? (
-                  <HustlerPreviewFromHustler tokenId={Number(selectedToken.token_id)} renderMode={1} />
-                ) : (
-                  <HustlerPreviewFromLoot tokenId={Number(selectedToken.token_id)} renderMode={1} />
-                )}
-              </Box>
+              <VStack w="full">
+                <Box
+                  position="relative"
+                  width={["160px", "220px"]}
+                  height={["160px", "220px"]}
+                  transform={["scale(1.7)", "scale(1.5)"]}
+                  pointerEvents={"none"}
+                >
+                  {selectedTokenIdType === TokenIdType.HustlerId ? (
+                    <HustlerPreviewFromHustler tokenId={Number(selectedToken.token_id)} renderMode={1} />
+                  ) : (
+                    <HustlerPreviewFromLoot tokenId={Number(selectedToken.token_id)} renderMode={1} />
+                  )}
+                </Box>
+
+                <Text>
+                  {selectedTokenIdType === TokenIdType.HustlerId
+                    ? `${selectedToken.metadata.name}`
+                    : `DOPE #${Number(selectedToken?.token_id)}`}
+                  {selectedTokenIdType === TokenIdType.HustlerId && (
+                    <ExternalLink
+                      ml={2}
+                      cursor="pointer"
+                      onClick={() => router.push(`/dope/editor/${selectedToken.token_id}`)}
+                    />
+                  )}
+                </Text>
+              </VStack>
 
               <Card p={3} w="300px">
                 <HStack gap={6} fontSize="14px">
-                  <VStack gap={0} alignItems="center" minW="240px" w="full">
+                  <VStack alignItems="center" minW="240px" w="full" gap={1}>
+                    {account && (
+                      <HStack
+                        w="full"
+                        justifyContent="space-between"
+                        borderBottom="solid 1px"
+                        mb={2}
+                        pb={2}
+                        borderColor="neon.700"
+                      >
+                        <Text>YOU OWN </Text>
+                        <HStack>
+                          <TokenBalance address={account?.address} token={config?.ryoAddress.paper} />
+                          <Text>PAPER</Text>
+                        </HStack>
+                      </HStack>
+                    )}
                     {gameMode == GameMode.Ranked && (
                       <HStack w="full" justifyContent={"space-between"}>
                         <Text color="yellow.400">STAKE x{multiplier}</Text>
-                        <PowerMeter
-                          basePower={0}
-                          maxPower={10}
-                          power={multiplier}
-                          onSelect={(i: number) => {
-                            setMultipler(i + 1);
-                          }}
-                        />
+                        <Box position="relative">
+                          <PowerMeter
+                            basePower={0}
+                            maxPower={10}
+                            power={multiplier}
+                            // onSelect={(i: number) => {
+                            //   setMultipler(i + 1);
+                            // }}
+                          />
+                          <Slider
+                            // @ts-ignore
+                            position="absolute !important"
+                            w="auto"
+                            top="15px"
+                            left="6px"
+                            right="6px"
+                            min={1}
+                            max={10}
+                            step={1}
+                            defaultValue={multiplier}
+                            value={multiplier}
+                            onChange={(e) => setMultipler(e)}
+                            opacity={0}
+                          >
+                            <SliderTrack>
+                              <SliderFilledTrack />
+                            </SliderTrack>
+                          </Slider>
+                        </Box>
                         <Tooltip
                           color="yellow.400"
                           title="High stakes"
@@ -633,23 +697,18 @@ const New = observer(() => {
                       )}
                     </HStack>
 
-                    {account && (
+                    {selectedChain.name === "MAINNET" && (
                       <HStack
                         w="full"
-                        justifyContent="space-between"
-                        borderTop="solid 1px"
+                        justifyContent="center"
                         mt={2}
                         pt={2}
+                        borderTop="solid 1px"
                         borderColor="neon.700"
                       >
-                        <Text>YOU OWN </Text>
-                        <HStack>
-                          <TokenBalance address={account?.address} token={config?.ryoAddress.paper} />
-                          <Text>PAPER</Text>
-                        </HStack>
+                        <BuyPaper />
                       </HStack>
                     )}
-                    {selectedChain.name === "MAINNET" && <BuyPaper />}
                   </VStack>
                 </HStack>
               </Card>
@@ -658,7 +717,7 @@ const New = observer(() => {
                 <Input
                   display="flex"
                   mx="auto"
-                  maxW="260px"
+                  maxW="200px"
                   maxLength={16}
                   placeholder="Enter your name"
                   autoFocus
