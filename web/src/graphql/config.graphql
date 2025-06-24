@@ -25,6 +25,8 @@ query Config {
         treasury_fee_pct
         treasury_balance
         f2p_hustlers
+        play_with_loot
+        play_with_hustlers
       }
     }
   }

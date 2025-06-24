@@ -119,6 +119,9 @@ mod game {
                     assert!(is_valid, "invalid guest loot id");
                 },
                 TokenId::LootId(loot_id) => {
+                    // check if enabled
+                    assert!(store.ryo_config().play_with_loot, "play_with_loot is disabled");
+
                     // check if owner of loot_id
                     let loot_dispatcher = IERC721ABIDispatcher {
                         contract_address: dope_world.dns_address(@"DopeLoot").unwrap(),
@@ -129,6 +132,11 @@ mod game {
                     );
                 },
                 TokenId::HustlerId(hustler_id) => {
+                    // check if enabled
+                    assert!(
+                        store.ryo_config().play_with_hustlers, "play_with_hustlers is disabled",
+                    );
+
                     // check if owner of hustler_id
                     let erc721_dispatcher = IERC721ABIDispatcher {
                         contract_address: dope_world.dns_address(@"DopeHustlers").unwrap(),

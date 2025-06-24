@@ -3978,6 +3978,8 @@ export type Dopewars_RyoConfig = {
   paper_fee?: Maybe<Scalars['u16']>;
   paper_reward_launderer?: Maybe<Scalars['u16']>;
   paused?: Maybe<Scalars['bool']>;
+  play_with_hustlers?: Maybe<Scalars['bool']>;
+  play_with_loot?: Maybe<Scalars['bool']>;
   season_duration?: Maybe<Scalars['u32']>;
   season_time_limit?: Maybe<Scalars['u16']>;
   season_version?: Maybe<Scalars['u16']>;
@@ -4010,6 +4012,8 @@ export enum Dopewars_RyoConfigOrderField {
   PaperFee = 'PAPER_FEE',
   PaperRewardLaunderer = 'PAPER_REWARD_LAUNDERER',
   Paused = 'PAUSED',
+  PlayWithHustlers = 'PLAY_WITH_HUSTLERS',
+  PlayWithLoot = 'PLAY_WITH_LOOT',
   SeasonDuration = 'SEASON_DURATION',
   SeasonTimeLimit = 'SEASON_TIME_LIMIT',
   SeasonVersion = 'SEASON_VERSION',
@@ -4054,6 +4058,8 @@ export type Dopewars_RyoConfigWhereInput = {
   paper_reward_laundererNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u16']>>>;
   paper_reward_laundererNOTLIKE?: InputMaybe<Scalars['u16']>;
   paused?: InputMaybe<Scalars['bool']>;
+  play_with_hustlers?: InputMaybe<Scalars['bool']>;
+  play_with_loot?: InputMaybe<Scalars['bool']>;
   season_duration?: InputMaybe<Scalars['u32']>;
   season_durationEQ?: InputMaybe<Scalars['u32']>;
   season_durationGT?: InputMaybe<Scalars['u32']>;
@@ -5448,7 +5454,7 @@ export type Dopewars_U8u8 = {
 export type ConfigQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ConfigQuery = { __typename?: 'World__Query', dopewarsRyoAddressModels?: { __typename?: 'dopewars_RyoAddressConnection', edges?: Array<{ __typename?: 'dopewars_RyoAddressEdge', node?: { __typename?: 'dopewars_RyoAddress', key?: any | null, paper?: any | null, treasury?: any | null } | null } | null> | null } | null, dopewarsRyoConfigModels?: { __typename?: 'dopewars_RyoConfigConnection', edges?: Array<{ __typename?: 'dopewars_RyoConfigEdge', node?: { __typename?: 'dopewars_RyoConfig', key?: any | null, initialized?: any | null, paused?: any | null, season_version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, paper_reward_launderer?: any | null, treasury_fee_pct?: any | null, treasury_balance?: any | null, f2p_hustlers?: any | null } | null } | null> | null } | null, dopewarsDrugConfigModels?: { __typename?: 'dopewars_DrugConfigConnection', edges?: Array<{ __typename?: 'dopewars_DrugConfigEdge', node?: { __typename?: 'dopewars_DrugConfig', drugs_mode?: any | null, drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null } | null } | null> | null } | null, dopewarsLocationConfigModels?: { __typename?: 'dopewars_LocationConfigConnection', edges?: Array<{ __typename?: 'dopewars_LocationConfigEdge', node?: { __typename?: 'dopewars_LocationConfig', location?: any | null, location_id?: any | null, name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null } | null } | null> | null } | null, dopewarsEncounterStatsConfigModels?: { __typename?: 'dopewars_EncounterStatsConfigConnection', edges?: Array<{ __typename?: 'dopewars_EncounterStatsConfigEdge', node?: { __typename?: 'dopewars_EncounterStatsConfig', encounters_mode?: any | null, encounter?: any | null, health_base?: any | null, health_step?: any | null, attack_base?: any | null, attack_step?: any | null, defense_base?: any | null, defense_step?: any | null, speed_base?: any | null, speed_step?: any | null } | null } | null> | null } | null, dopewarsDopewarsItemTierModels?: { __typename?: 'dopewars_DopewarsItemTierConnection', edges?: Array<{ __typename?: 'dopewars_DopewarsItemTierEdge', node?: { __typename?: 'dopewars_DopewarsItemTier', slot_id?: any | null, item_id?: any | null, tier?: any | null } | null } | null> | null } | null, dopewarsDopewarsItemTierConfigModels?: { __typename?: 'dopewars_DopewarsItemTierConfigConnection', edges?: Array<{ __typename?: 'dopewars_DopewarsItemTierConfigEdge', node?: { __typename?: 'dopewars_DopewarsItemTierConfig', slot_id?: any | null, tier?: any | null, levels?: Array<{ __typename?: 'dopewars_ItemTierConfig', stat?: any | null, cost?: any | null } | null> | null } | null } | null> | null } | null, dopeComponentValueEventModels?: { __typename?: 'dope_ComponentValueEventConnection', edges?: Array<{ __typename?: 'dope_ComponentValueEventEdge', node?: { __typename?: 'dope_ComponentValueEvent', collection_id?: any | null, component_slug?: any | null, component_id?: any | null, id?: any | null, value?: any | null } | null } | null> | null } | null };
+export type ConfigQuery = { __typename?: 'World__Query', dopewarsRyoAddressModels?: { __typename?: 'dopewars_RyoAddressConnection', edges?: Array<{ __typename?: 'dopewars_RyoAddressEdge', node?: { __typename?: 'dopewars_RyoAddress', key?: any | null, paper?: any | null, treasury?: any | null } | null } | null> | null } | null, dopewarsRyoConfigModels?: { __typename?: 'dopewars_RyoConfigConnection', edges?: Array<{ __typename?: 'dopewars_RyoConfigEdge', node?: { __typename?: 'dopewars_RyoConfig', key?: any | null, initialized?: any | null, paused?: any | null, season_version?: any | null, season_duration?: any | null, season_time_limit?: any | null, paper_fee?: any | null, paper_reward_launderer?: any | null, treasury_fee_pct?: any | null, treasury_balance?: any | null, f2p_hustlers?: any | null, play_with_loot?: any | null, play_with_hustlers?: any | null } | null } | null> | null } | null, dopewarsDrugConfigModels?: { __typename?: 'dopewars_DrugConfigConnection', edges?: Array<{ __typename?: 'dopewars_DrugConfigEdge', node?: { __typename?: 'dopewars_DrugConfig', drugs_mode?: any | null, drug?: any | null, drug_id?: any | null, base?: any | null, step?: any | null, weight?: any | null, name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null } | null } | null> | null } | null, dopewarsLocationConfigModels?: { __typename?: 'dopewars_LocationConfigConnection', edges?: Array<{ __typename?: 'dopewars_LocationConfigEdge', node?: { __typename?: 'dopewars_LocationConfig', location?: any | null, location_id?: any | null, name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null } | null } | null> | null } | null, dopewarsEncounterStatsConfigModels?: { __typename?: 'dopewars_EncounterStatsConfigConnection', edges?: Array<{ __typename?: 'dopewars_EncounterStatsConfigEdge', node?: { __typename?: 'dopewars_EncounterStatsConfig', encounters_mode?: any | null, encounter?: any | null, health_base?: any | null, health_step?: any | null, attack_base?: any | null, attack_step?: any | null, defense_base?: any | null, defense_step?: any | null, speed_base?: any | null, speed_step?: any | null } | null } | null> | null } | null, dopewarsDopewarsItemTierModels?: { __typename?: 'dopewars_DopewarsItemTierConnection', edges?: Array<{ __typename?: 'dopewars_DopewarsItemTierEdge', node?: { __typename?: 'dopewars_DopewarsItemTier', slot_id?: any | null, item_id?: any | null, tier?: any | null } | null } | null> | null } | null, dopewarsDopewarsItemTierConfigModels?: { __typename?: 'dopewars_DopewarsItemTierConfigConnection', edges?: Array<{ __typename?: 'dopewars_DopewarsItemTierConfigEdge', node?: { __typename?: 'dopewars_DopewarsItemTierConfig', slot_id?: any | null, tier?: any | null, levels?: Array<{ __typename?: 'dopewars_ItemTierConfig', stat?: any | null, cost?: any | null } | null> | null } | null } | null> | null } | null, dopeComponentValueEventModels?: { __typename?: 'dope_ComponentValueEventConnection', edges?: Array<{ __typename?: 'dope_ComponentValueEventEdge', node?: { __typename?: 'dope_ComponentValueEvent', collection_id?: any | null, component_slug?: any | null, component_id?: any | null, id?: any | null, value?: any | null } | null } | null> | null } | null };
 
 export type GameConfigQueryVariables = Exact<{
   version?: InputMaybe<Scalars['u16']>;
@@ -5612,6 +5618,8 @@ export const ConfigDocument = `
         treasury_fee_pct
         treasury_balance
         f2p_hustlers
+        play_with_loot
+        play_with_hustlers
       }
     }
   }

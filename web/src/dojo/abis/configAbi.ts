@@ -154,6 +154,14 @@ export const ABI = [
       {
         "name": "f2p_hustlers",
         "type": "core::bool"
+      },
+      {
+        "name": "play_with_loot",
+        "type": "core::bool"
+      },
+      {
+        "name": "play_with_hustlers",
+        "type": "core::bool"
       }
     ]
   },

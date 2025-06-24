@@ -106,6 +106,7 @@ export const useSystems = (): SystemsInterface => {
           duration: 5_000,
           isError: true,
         });
+        return { hash: "0x0" };
       }
 
       // override wallet (ArgentX / Braavos) default providers..
@@ -128,7 +129,7 @@ export const useSystems = (): SystemsInterface => {
         });
       } catch (e: any) {
         setIsPending(false);
-        setError(e.toString());
+        // setError(e.toString());
         isError = true;
         toast({
           message: e ? tryBetterErrorMsg(e.toString()) : "unknown error",

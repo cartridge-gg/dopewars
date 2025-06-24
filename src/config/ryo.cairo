@@ -30,7 +30,9 @@ pub struct RyoConfig {
     pub treasury_fee_pct: u8,
     pub treasury_balance: u32,
     //
-    pub f2p_hustlers: bool
+    pub f2p_hustlers: bool,
+    pub play_with_loot: bool,
+    pub play_with_hustlers: bool,
 }
 
 
@@ -49,6 +51,8 @@ pub impl RyoConfigImpl of RyoConfigTrait {
             treasury_fee_pct: 10,
             treasury_balance: 0,
             f2p_hustlers: true,
+            play_with_loot: true,
+            play_with_hustlers: true,
         }
     }
 

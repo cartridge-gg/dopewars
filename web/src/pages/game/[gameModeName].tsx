@@ -377,32 +377,35 @@ const New = observer(() => {
           {!selectedTokenId && (
             <>
               <HStack gap={1}>
-                {config?.ryo.f2p_hustlers && (
-                  <Button
-                    fontSize="11px"
-                    h="30px"
-                    variant="selectable"
-                    isActive={selectedTokenIdType === TokenIdType.GuestLootId}
-                    onClick={() => setSelectedTokenIdType(TokenIdType.GuestLootId)}
-                  >
-                    S{season.version} HUSTLERS
-                  </Button>
-                )}
+                <Button
+                  fontSize="11px"
+                  h="30px"
+                  variant="selectable"
+                  isActive={selectedTokenIdType === TokenIdType.GuestLootId}
+                  onClick={() => setSelectedTokenIdType(TokenIdType.GuestLootId)}
+                  isDisabled={!config?.ryo.f2p_hustlers}
+                >
+                  S{season.version} HUSTLERS
+                </Button>
+
                 <Button
                   fontSize="11px"
                   h="30px"
                   variant="selectable"
                   isActive={selectedTokenIdType === TokenIdType.LootId}
                   onClick={() => setSelectedTokenIdType(TokenIdType.LootId)}
+                  isDisabled={!config?.ryo.play_with_loot}
                 >
                   MY DOPE
                 </Button>
+
                 <Button
                   fontSize="11px"
                   h="30px"
                   variant="selectable"
                   isActive={selectedTokenIdType === TokenIdType.HustlerId}
                   onClick={() => setSelectedTokenIdType(TokenIdType.HustlerId)}
+                  isDisabled={!config?.ryo.play_with_hustlers}
                 >
                   MY HUSTLERS
                 </Button>

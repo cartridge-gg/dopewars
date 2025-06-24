@@ -26,7 +26,7 @@ import { EncounterTable } from "@/components/pages/admin/EncounterTable";
 import { GameConfigTable } from "@/components/pages/admin/GameConfigTable";
 import { useEffect, useState } from "react";
 // import { RyoConfigTable } from "@/components/pages/admin/RyoConfigTable";
-import { Bag, Clock, CopsIcon, DollarBag, Flipflop, PaperIcon } from "@/components/icons";
+import { Bag, Clock, CopsIcon, DollarBag, Flipflop, GangIcon, PaperIcon } from "@/components/icons";
 import { formatCash } from "@/utils/ui";
 import { Dopewars_Game as Game, Dopewars_GameEdge as GameEdge, useGetAllGamesQuery } from "@/generated/graphql";
 import { shortString } from "starknet";
@@ -62,6 +62,7 @@ const Admin = () => {
               <RyoPauseCard />
               <TreasuryClaimCard />
               <ExportAllGamesCard />
+              <RyoTokenIdCard />
             </Flex>
           </TabPanel>
 
@@ -462,6 +463,87 @@ const RyoSuperchargeCard = observer(() => {
               <PaperFaucet />
             </HStack>
           </VStack>
+        </VStack>
+      </CardBody>
+      <CardFooter></CardFooter>
+    </Card>
+  );
+});
+
+const RyoTokenIdCard = observer(() => {
+  const {
+    chains: { selectedChain },
+  } = useDojoContext();
+  const { configStore } = useDojoContext();
+  const { config } = configStore;
+
+  const ryoAddress = getContractByName(selectedChain.manifest, DW_NS, "ryo").address;
+  const { setPaused, isPending, executeAndReceipt } = useSystems();
+
+  const onToggleSeasonHustlers = async () => {
+    const { hash, isError } = await executeAndReceipt({
+      contractAddress: ryoAddress,
+      entrypoint: "toggle_f2p_hustlers",
+      calldata: [],
+    });
+    setTimeout(() => {
+      configStore.init();
+    }, 1_000);
+  };
+  const onTogglePlayWithLoot = async () => {
+    const { hash, isError } = await executeAndReceipt({
+      contractAddress: ryoAddress,
+      entrypoint: "toggle_play_with_loot",
+      calldata: [],
+    });
+    setTimeout(() => {
+      configStore.init();
+    }, 1_000);
+  };
+  const onTogglePlayWithHustlers = async () => {
+    const { hash, isError } = await executeAndReceipt({
+      contractAddress: ryoAddress,
+      entrypoint: "toggle_play_with_hustlers",
+      calldata: [],
+    });
+    setTimeout(() => {
+      configStore.init();
+    }, 1_000);
+  };
+
+  return (
+    <Card p={1}>
+      <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
+        <GangIcon /> PLAYABLE TOKENS
+      </CardHeader>
+      <CardBody>
+        <VStack alignItems="flex-start">
+          <HStack justifyContent="space-between" w="full">
+            <Text>SEASON HUSTLERS: {config?.ryo.f2p_hustlers ? "ON" : "OFF"}</Text>
+            <ChildrenOrConnect>
+              <Button isLoading={isPending} onClick={onToggleSeasonHustlers}>
+                Toggle
+              </Button>
+            </ChildrenOrConnect>
+          </HStack>
+
+          <HStack justifyContent="space-between" w="full">
+            <Text>LOOT: {config?.ryo.play_with_loot ? "ON" : "OFF"}</Text>
+            <ChildrenOrConnect>
+              <Button isLoading={isPending} onClick={onTogglePlayWithLoot}>
+                Toggle
+              </Button>
+            </ChildrenOrConnect>
+          </HStack>
+
+          <HStack justifyContent="space-between" w="full">
+            <Text>HUSTLERS: {config?.ryo.play_with_hustlers ? "ON" : "OFF"}</Text>
+            <ChildrenOrConnect>
+              <Button isLoading={isPending} onClick={onTogglePlayWithHustlers}>
+                Toggle
+              </Button>
+            </ChildrenOrConnect>
+          </HStack>
         </VStack>
       </CardBody>
       <CardFooter></CardFooter>

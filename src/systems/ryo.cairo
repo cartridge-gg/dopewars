@@ -23,6 +23,12 @@ trait IRyo<T> {
 
     fn toggle_f2p_hustlers(ref self: T);
     fn f2p_hustlers(ref self: T) -> bool;
+
+    fn toggle_play_with_loot(ref self: T);
+    fn play_with_loot(ref self: T) -> bool;
+
+    fn toggle_play_with_hustlers(ref self: T);
+    fn play_with_hustlers(ref self: T) -> bool;
 }
 
 #[dojo::contract]
@@ -185,6 +191,26 @@ mod ryo {
             store.save_ryo_config(@new_ryo_config);
         }
 
+        fn toggle_play_with_loot(ref self: ContractState) {
+            self.assert_caller_is_owner();
+
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut new_ryo_config = store.ryo_config();
+
+            new_ryo_config.play_with_loot = !new_ryo_config.play_with_loot;
+            store.save_ryo_config(@new_ryo_config);
+        }
+
+        fn toggle_play_with_hustlers(ref self: ContractState) {
+            self.assert_caller_is_owner();
+
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut new_ryo_config = store.ryo_config();
+
+            new_ryo_config.play_with_hustlers = !new_ryo_config.play_with_hustlers;
+            store.save_ryo_config(@new_ryo_config);
+        }
+
 
         //
         // getters
@@ -228,6 +254,16 @@ mod ryo {
         fn f2p_hustlers(ref self: ContractState) -> bool {
             let mut store = StoreImpl::new(self.world(@"dopewars"));
             store.ryo_config().f2p_hustlers
+        }
+
+        fn play_with_loot(ref self: ContractState) -> bool {
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            store.ryo_config().play_with_loot
+        }
+
+        fn play_with_hustlers(ref self: ContractState) -> bool {
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            store.ryo_config().play_with_hustlers
         }
     }
 

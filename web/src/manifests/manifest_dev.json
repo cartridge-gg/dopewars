@@ -1328,8 +1328,8 @@
   },
   "contracts": [
     {
-      "address": "0x481f9968157a76f8f67cf2e4982f1e043d71dbb36d9a003822b55ee4cb925da",
-      "class_hash": "0x4074d94146f3db71cfbe756e307e19feb700acc6f40915b29862fb4bef7943c",
+      "address": "0x39ae76a8484ff2a1d4929e24fbf2cae3d5df9fcdbe907820ed5bc3b0f4f0f",
+      "class_hash": "0x353a1986937816dc8e4996a1f05570bb26cba3edf53c1b1ab542166ce461e23",
       "abi": [
         {
           "type": "impl",
@@ -1485,6 +1485,14 @@
             },
             {
               "name": "f2p_hustlers",
+              "type": "core::bool"
+            },
+            {
+              "name": "play_with_loot",
+              "type": "core::bool"
+            },
+            {
+              "name": "play_with_hustlers",
               "type": "core::bool"
             }
           ]
@@ -2099,8 +2107,8 @@
       ]
     },
     {
-      "address": "0x72ed3e417ed913ad24c70e18a8bf818a13481b0e3814fd2db93091d92515c72",
-      "class_hash": "0x54068b3e3cf0b2f544a7d27edc10f4958dec34ab411e684872c1e25fa54a906",
+      "address": "0x2160b2f13fc90a7218c2fe14cfea03e33661588364b49b6b0b8a2e4196c04aa",
+      "class_hash": "0x4ab6f65d976b7de19da89496797410be28c8c1198ab790bcab01befb7488554",
       "abi": [
         {
           "type": "impl",
@@ -2312,8 +2320,8 @@
       ]
     },
     {
-      "address": "0x451c6fa3ffbad840a9acce89ba4832c14409dd4ba73ba532fec6cf1d0a6010c",
-      "class_hash": "0x39fc766ea646445c3b10d8400c0b7a285e113dc719648ccf035cd4c5323f1b9",
+      "address": "0x1b88c14d08f34c681ea4b3ce1e7a9e71fb130d5079d8607898018c26ea89901",
+      "class_hash": "0x76cf3dc0232f6754980c94886a07d35f3efb1bd0bf342ab9ca4a9c74993a1cf",
       "abi": [
         {
           "type": "impl",
@@ -2755,8 +2763,8 @@
       ]
     },
     {
-      "address": "0xd3855935f471f9fb15a62748b6be8e64328df33f9673bd8c3d3ac664c4e7b1",
-      "class_hash": "0x15c3fcebbaabe8b3723bec3a6d447c6dd43fa6bd936929177db400bc73c96ee",
+      "address": "0x41839fa11947f80e7b0552052f00d493119c596c829874348ac8995886c27b8",
+      "class_hash": "0x51f9828bbe08c02b44aeef7c5607a421748138ae2ff9b08e368c7cb95a60324",
       "abi": [
         {
           "type": "impl",
@@ -3495,8 +3503,8 @@
       ]
     },
     {
-      "address": "0x6f1b8ebe2ad93cbae6f7acbddc44d5e03d543577847454098ee3112a66c94be",
-      "class_hash": "0x78267619bb0e94e3ed619066db3716f45fef3cdaf38965d1a419dff5089a618",
+      "address": "0x5e63284c69b6e7e8d30b0aa21f047f4f992ddce0f39ae23dc697bd04449d833",
+      "class_hash": "0x67dc119998916ee4f21cfa9880d014761b499592d948c45079937da9b493897",
       "abi": [
         {
           "type": "impl",
@@ -3633,6 +3641,14 @@
             },
             {
               "name": "f2p_hustlers",
+              "type": "core::bool"
+            },
+            {
+              "name": "play_with_loot",
+              "type": "core::bool"
+            },
+            {
+              "name": "play_with_hustlers",
               "type": "core::bool"
             }
           ]
@@ -3802,6 +3818,42 @@
                 }
               ],
               "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "toggle_play_with_loot",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "play_with_loot",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::bool"
+                }
+              ],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "toggle_play_with_hustlers",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "play_with_hustlers",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::bool"
+                }
+              ],
+              "state_mutability": "external"
             }
           ]
         },
@@ -3934,6 +3986,10 @@
       "systems": [
         "toggle_f2p_hustlers",
         "f2p_hustlers",
+        "toggle_play_with_loot",
+        "play_with_loot",
+        "toggle_play_with_hustlers",
+        "play_with_hustlers",
         "upgrade"
       ]
     },
@@ -4617,7 +4673,7 @@
     },
     {
       "members": [],
-      "class_hash": "0x2a61080d82b68592d65e22044fa8badd94b52f9cf24ed0e28308465cf35b332",
+      "class_hash": "0x3f9b68eda0f70763b58d5e6dea5cca1dc6018075fb67080c6be967ea1484534",
       "tag": "dopewars-RyoConfig",
       "selector": "0x7d8eb0bce0a49d2d3d2f16b5958bb2445cfe364f9b2a8f71c009ebbe602ccfd"
     },
