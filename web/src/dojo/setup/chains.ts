@@ -21,6 +21,11 @@ export const katanaLocalChain = {
       http: ["https://localhost:5050"],
     },
   },
+  paymasterRpcUrls: {
+    avnu: {
+      http: ["http://localhost:5050"],
+    },
+  },
   explorers: {
     worlds: ["https://worlds.dev"],
   },
@@ -43,6 +48,11 @@ export const katanaSlotDopewarsChain = {
     },
     public: {
       http: ["https://api.cartridge.gg/x/dopewars/katana"],
+    },
+  },
+  paymasterRpcUrls: {
+    avnu: {
+      http: ["http://localhost:5050"],
     },
   },
   explorers: {

@@ -4,6 +4,7 @@ version = 1
 [[package]]
 name = "achievement"
 version = "0.0.0"
+source = "git+https://github.com/cartridge-gg/arcade#b67af779c377fb16f07cdf86cd3915801888a369"
 dependencies = [
  "dojo",
 ]
@@ -74,8 +75,8 @@ dependencies = [
 
 [[package]]
 name = "dojo"
-version = "1.5.1"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.5.1#986c3b0c6d647b23847c70ddceb1d33ddac86ead"
+version = "1.6.0"
+source = "git+https://github.com/dojoengine/dojo?tag=v1.6.0#c7d8b321abc711c14bddcf76f41587f6ef21c356"
 dependencies = [
  "dojo_plugin",
 ]
@@ -83,7 +84,7 @@ dependencies = [
 [[package]]
 name = "dojo_plugin"
 version = "2.10.1"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.5.1#986c3b0c6d647b23847c70ddceb1d33ddac86ead"
+source = "git+https://github.com/dojoengine/dojo?tag=v1.6.0#c7d8b321abc711c14bddcf76f41587f6ef21c356"
 
 [[package]]
 name = "dope_contracts"

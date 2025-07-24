@@ -1,7 +1,7 @@
 {
   "world": {
-    "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-    "address": "0x7c199e52347fad3214ccdc9cb65e8b467d0773936a21a4d4080e462e4f271b5",
+    "class_hash": "0x685ed02eefa98fe7e208aa295042e9bbad8029b0d3d6f0ba2b32546efe0a1f9",
+    "address": "0x745ce531c48c0bdac80e6ae04abf0396668dab648127353939563defb6fa85a",
     "seed": "dope",
     "name": "Dope",
     "entrypoints": [
@@ -1328,7 +1328,7 @@
   },
   "contracts": [
     {
-      "address": "0x1fc27c28756995a6641a0b3e8cdc463c51642815f1bae74e583930f4318283d",
+      "address": "0x779df1c9b3a2241e45c937640e1bbb95963673bece4606127f8d755e5471779",
       "class_hash": "0x61ca04d7239a3dac0462eccad369c0c80c4377e43c39f38b54b0c183fd66565",
       "abi": [
         {
@@ -2481,7 +2481,7 @@
       ]
     },
     {
-      "address": "0x58a861b41208e6fe5e7e3fbf3b831557c1d9eb469e28c58a7f206ea400521a4",
+      "address": "0x8e1a1f2982c71d98b7c28ef0c3779548b37ee2236468c6fcc249143eaa912e",
       "class_hash": "0x6ebfa97d7e1accc077d14eb2fa75cffd7d338357d0197d527e41946a7af6bc4",
       "abi": [
         {
@@ -3802,7 +3802,7 @@
       ]
     },
     {
-      "address": "0x2ef6f3a7706826e1e136502b040ec4a27080b9299e237a1bc68f8043b25a121",
+      "address": "0x2d908ef861d4168348665217a168713c491b75b7490e6bd53dababcaf6175fe",
       "class_hash": "0x668d0209996b22748a66dd30fc298f1977e26ea72e44258f66d2a9816e38c02",
       "abi": [
         {
@@ -5132,7 +5132,7 @@
       ]
     },
     {
-      "address": "0x330df84cdc1f5d1c7fa8d1ec8c030f2cc051a1d6f430cc24f76a842f89901ee",
+      "address": "0x13572337d5237ef839db7a6dd902f2920050b303ab1c10acb42e0857314280c",
       "class_hash": "0x247ce3ed1c3df8235132d58c64bf512b2b643550ae48f68eb2ea5df2da3141a",
       "abi": [
         {
@@ -5791,7 +5791,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x2b4e8eae7b87229855fc2f7cd30dcac7a1cbdef8cc71aef83a72e0624dd850c",
+      "class_hash": "0x25aec69925745c75ea4877560ee36408560fa335d9c34b5d774f446946785a1",
       "abi": [
         {
           "type": "impl",
@@ -6014,7 +6014,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x7acc31f41cfe1f48653467d0c3ef5b492c71517660b81a13b7f3f681b8953e",
+      "class_hash": "0x7a14f4424a77d6bf9f58a43070290a4ebdefe17f8a3b12f5a9f152f26d8e52f",
       "abi": [
         {
           "type": "impl",

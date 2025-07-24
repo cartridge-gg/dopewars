@@ -1,18 +1,19 @@
 import { Button } from "@/components/common";
-import { tryBetterErrorMsg, useDojoContext, useRouterContext } from "@/dojo/hooks";
-import { HStack, Input, Text, VStack } from "@chakra-ui/react";
-import { useAccount, useConnect } from "@starknet-react/core";
-import { ConnectButton as ConnectButtonRainbow } from "@rainbow-me/rainbowkit";
-import { useAccount as useEthAccount, useSignMessage as useEthSignMesage } from "wagmi";
-import { parseSignature, Signature } from "viem";
-import { useEffect, useMemo, useState } from "react";
-import { merkle, hash, uint256 } from "starknet";
-import { ChildrenOrConnect } from "@/components/wallet";
-import { useToast } from "@/hooks/toast";
-import { checkTxReceipt } from "@/dope/helpers";
-import { Glock } from "@/components/icons/items";
 import { HustlerIcon, Hustlers } from "@/components/hustlers";
+import { Glock } from "@/components/icons/items";
+import { ChildrenOrConnect } from "@/components/wallet";
+import { tryBetterErrorMsg, useDojoContext, useRouterContext } from "@/dojo/hooks";
+import { checkTxReceipt } from "@/dope/helpers";
+import { useToast } from "@/hooks/toast";
+import { HStack, Input, Text, VStack } from "@chakra-ui/react";
+import { ConnectButton as ConnectButtonRainbow } from "@rainbow-me/rainbowkit";
+import { useAccount, useConnect } from "@starknet-react/core";
+import { useEffect, useMemo, useState } from "react";
+import { hash, merkle, uint256 } from "starknet";
+import { parseSignature, Signature } from "viem";
+import { useAccount as useEthAccount, useSignMessage as useEthSignMesage } from "wagmi";
 
+import { GangIcon } from "@/components/icons";
 import ownersDev from "./snapshot-dopeLoot-22075548-owners.json";
 import ownersMainnet from "./snapshot-dopeLoot-22728943-owners.json";
 
@@ -249,8 +250,11 @@ export default function ClaimComponent() {
               <HustlerIcon hustler={Hustlers.Dragon} mr={2} />
               My Dope
             </Button>
+            <Button onClick={() => router.push("/dope/votes")}>
+              <GangIcon mr={2} />
+              My Votes
+            </Button>
             <Button onClick={() => router.push("/game/Ranked?tokenIdType=1")}>
-              {" "}
               <Glock /> Play
             </Button>
           </HStack>

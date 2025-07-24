@@ -4,16 +4,14 @@ import { katanaLocalChain, katanaSlotDopewarsChain } from "./chains";
 
 import manifestDev from "../../manifests/manifest_dev.json";
 import manifestDopewars from "../../manifests/manifest_dopewars.json";
-import manifestRyoSepolia from "../../manifests/manifest_ryosepolia.json";
 import manifestMainnet from "../../manifests/manifest_mainnet.json";
+import manifestRyoSepolia from "../../manifests/manifest_ryosepolia.json";
 
 
 import manifestDopeDev from "../../manifests_dope/manifest_dev.json";
 // import manifestDopeDope from "../../manifests_dope/manifest_dope.json";
 
-import manifestDopeDopewars from "../../manifests_dope/manifest_dopewars.json";
-import manifestDopeSepolia from "../../manifests_dope/manifest_dopewars.json";
-import manifestDopeMainnet from "../../manifests_dope/manifest_dopewars.json";
+import { default as manifestDopeDopewars, default as manifestDopeMainnet, default as manifestDopeSepolia } from "../../manifests_dope/manifest_dopewars.json";
 // import {
 //   manifestDev as manifestDopeDev,
 //   manifestDope as manifestDopeDope,
@@ -22,8 +20,8 @@ import manifestDopeMainnet from "../../manifests_dope/manifest_dopewars.json";
 //   manifestMainnet as manifestDopeMainnet,
 // } from "@/dope/manifests";
 
-import { DW_NS } from "../hooks";
 import { mergeManifests } from "@/dope/helpers";
+import { DW_NS } from "../hooks";
 
 const VRF_PROVIDER_SEPOLIA = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f";
 const VRF_PROVIDER_MAINNET = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f";
@@ -57,8 +55,8 @@ const katanaLocal: DojoChainConfig = {
   name: "KATANA",
   chainConfig: katanaLocalChain,
   rpcUrl: process.env.NEXT_PUBLIC_RPC_ENDPOINT || "http://localhost:5050",
-  toriiUrl: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || "http://localhost:8080/graphql",
-  toriiWsUrl: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT_WS || "ws://localhost:8080/graphql/ws",
+  toriiUrl: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || "https://localhost:8080/graphql",
+  toriiWsUrl: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT_WS || "wss://localhost:8080/graphql/ws",
   masterAddress:
     process.env.NEXT_PUBLIC_ADMIN_ADDRESS || "0x2af9427c5a277474c079a1283c880ee8a6f0f8fbf73ce969c08d88befec1bba",
   masterPrivateKey:

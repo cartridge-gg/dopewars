@@ -1,22 +1,22 @@
 import { GraphQLClient } from "graphql-request";
 
+import { GameCreated } from "@/components/layout/GlobalEvents";
+import { parseModels } from "@/dope/toriiUtils";
 import {
   Dopewars_Game as Game,
   Dopewars_GameConfig as GameConfig,
   Dopewars_GameStorePacked as GameStorePacked,
   Dopewars_SeasonSettings as SeasonSettings,
 } from "@/generated/graphql";
+import { Entities, Entity, Subscription, ToriiClient } from "@dojoengine/torii-client";
 import { action, flow, makeObservable, observable } from "mobx";
+import { NextRouter } from "next/router";
+import { num } from "starknet";
 import { EventClass } from "../class/Events";
 import { GameClass } from "../class/Game";
-import { ConfigStoreClass } from "./config";
-import { Entities, Entity, Subscription, ToriiClient, Ty } from "@dojoengine/torii-client";
-import { parseStruct } from "../utils";
-import { num } from "starknet";
-import { NextRouter } from "next/router";
 import { PlayerStatus } from "../types";
-import { parseModels } from "@/dope/toriiUtils";
-import { GameCreated } from "@/components/layout/GlobalEvents";
+import { parseStruct } from "../utils";
+import { ConfigStoreClass } from "./config";
 
 type GameStoreProps = {
   toriiClient: ToriiClient;
@@ -113,30 +113,28 @@ export class GameStoreClass {
     yield this.cleanSubscriptions();
 
     const subEntities: Subscription = yield this.toriiClient.onEntityUpdated(
-      [
-        {
-          Keys: {
-            keys: [num.toHexString(this.gameInfos?.game_id), this.gameInfos?.player_id],
-            models: ["dopewars-GameStorePacked"],
-            pattern_matching: "VariableLen",
-          },
+      {
+        Keys: {
+          keys: [num.toHexString(this.gameInfos?.game_id), this.gameInfos?.player_id],
+          models: ["dopewars-GameStorePacked"],
+          pattern_matching: "VariableLen",
         },
-      ],
-      (entity: any, update: any) => this.onEntityUpdated(entity, update),
+      },
+
+      (entity: Entity) => this.onEntityUpdated(entity),
     );
     this.subscriptions.push(subEntities);
 
     const subEvent: Subscription = yield this.toriiClient.onEventMessageUpdated(
-      [
-        {
-          Keys: {
-            keys: [num.toHexString(this.gameInfos?.game_id), this.gameInfos?.player_id],
-            models: ["dopewars-*"],
-            pattern_matching: "VariableLen",
-          },
+      {
+        Keys: {
+          keys: [num.toHexString(this.gameInfos?.game_id), this.gameInfos?.player_id],
+          models: ["dopewars-*"],
+          pattern_matching: "VariableLen",
         },
-      ],
-      (entity: any, update: any) => this.onEventMessage(entity, update),
+      },
+
+      (entity: any) => this.onEventMessage(entity),
     );
     this.subscriptions.push(subEvent);
   }
@@ -209,8 +207,8 @@ export class GameStoreClass {
     const gameStorePacked = parseModels(entities, "dopewars-GameStorePacked")[0] as GameStorePacked;
 
     if (!gameInfos || !gameStorePacked) return;
-   
-     // @ts-ignore
+
+    // @ts-ignore
     gameInfos.game_mode = gameInfos.game_mode.activeVariant();
     gameInfos.equipment_by_slot = gameInfos.equipment_by_slot?.map((i: string) => Number(i));
     // @ts-ignore
@@ -221,7 +219,6 @@ export class GameStoreClass {
     this.gameInfos = gameInfos;
     this.gameStorePacked = gameStorePacked;
   }
-
 
   *loadSeasonSettings(season_version: string) {
     const entities: Entities = yield this.toriiClient.getEntities({
@@ -254,14 +251,14 @@ export class GameStoreClass {
     this.gameConfig = gameConfig;
   }
 
-  onEventMessage(key: string, entity: Entity) {
-    if (key === "0x0") return;
+  onEventMessage(entity: Entity) {
+    if (entity.hashed_keys === "0x0") return;
     // console.log("onEventMessage", entity, update);
     this.gameEvents!.addEvent(entity);
   }
 
-  onEntityUpdated(key: string, entity: Entity) {
-    // console.log("onEntityUpdated", key, entity);
+  async onEntityUpdated(entity: Entity) {
+    if (entity.hashed_keys === "0x0") return;
 
     const gameId = num.toHexString(this.gameInfos?.game_id);
 

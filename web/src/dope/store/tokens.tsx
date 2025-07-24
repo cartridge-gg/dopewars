@@ -1,4 +1,4 @@
-import { Subscription, Token, TokenBalance } from "@dojoengine/torii-client";
+import { Entity, Subscription, Token, TokenBalance } from "@dojoengine/torii-client";
 import { StateCreator } from "zustand";
 import { parseStruct } from "../toriiUtils";
 import { DopeState } from "./store";
@@ -55,10 +55,7 @@ type Action = {
 export type TokenState = State & Action;
 // export type TokenStore = StoreApi<TokenState>;
 
-export const createTokenStore: StateCreator<DopeState, [], [], TokenState> = (
-  set,
-  get
-) => ({
+export const createTokenStore: StateCreator<DopeState, [], [], TokenState> = (set, get) => ({
   tokens: {},
   tokensBalances: {},
   dopeLootClaimState: {},
@@ -112,19 +109,11 @@ export const createTokenStore: StateCreator<DopeState, [], [], TokenState> = (
       clause: {
         Keys: {
           keys: [undefined],
-          models: [
-            "dope-DopeLootClaimed",
-            "dope-DopeLootReleased",
-            "dope-DopeLootOpened",
-          ],
+          models: ["dope-DopeLootClaimed", "dope-DopeLootReleased", "dope-DopeLootOpened"],
           pattern_matching: "FixedLen",
         },
       },
-      models: [
-        "dope-DopeLootClaimed",
-        "dope-DopeLootReleased",
-        "dope-DopeLootOpened",
-      ],
+      models: ["dope-DopeLootClaimed", "dope-DopeLootReleased", "dope-DopeLootOpened"],
       historical: false,
       no_hashed_keys: false,
       pagination: {
@@ -139,15 +128,9 @@ export const createTokenStore: StateCreator<DopeState, [], [], TokenState> = (
 
     for (let entity of entities.items) {
       const models = entity.models;
-      const dopeLootClaimed =
-        models["dope-DopeLootClaimed"] &&
-        parseStruct(models["dope-DopeLootClaimed"]);
-      const dopeLootReleased =
-        models["dope-DopeLootReleased"] &&
-        parseStruct(models["dope-DopeLootReleased"]);
-      const dopeLootOpened =
-        models["dope-DopeLootOpened"] &&
-        parseStruct(models["dope-DopeLootOpened"]);
+      const dopeLootClaimed = models["dope-DopeLootClaimed"] && parseStruct(models["dope-DopeLootClaimed"]);
+      const dopeLootReleased = models["dope-DopeLootReleased"] && parseStruct(models["dope-DopeLootReleased"]);
+      const dopeLootOpened = models["dope-DopeLootOpened"] && parseStruct(models["dope-DopeLootOpened"]);
       let lootId = "";
       if (dopeLootClaimed) {
         lootId = Number(dopeLootClaimed.token_id).toString();
@@ -189,20 +172,15 @@ export const createTokenStore: StateCreator<DopeState, [], [], TokenState> = (
     // );
 
     const subscriptionEntities = await get().toriiClient!.onEntityUpdated(
-      [
-        {
-          Keys: {
-            keys: [undefined],
-            models: [
-              "dope-DopeLootClaimed",
-              "dope-DopeLootReleased",
-              "dope-DopeLootOpened",
-            ],
-            pattern_matching: "FixedLen",
-          },
+      {
+        Keys: {
+          keys: [undefined],
+          models: ["dope-DopeLootClaimed", "dope-DopeLootReleased", "dope-DopeLootOpened"],
+          pattern_matching: "FixedLen",
         },
-      ],
-      get().onEntityUpdated
+      },
+
+      get().onEntityUpdated,
     );
 
     const subscriptions = [
@@ -224,17 +202,12 @@ export const createTokenStore: StateCreator<DopeState, [], [], TokenState> = (
 
     const parsedToken = parseToken(token);
     tokens[token.contract_address] = tokens[token.contract_address].filter(
-      (i: ParsedToken) =>
-        i.token_id === parsedToken.token_id &&
-        i.contract_address === parsedToken.contract_address
+      (i: ParsedToken) => i.token_id === parsedToken.token_id && i.contract_address === parsedToken.contract_address,
     );
     set({
       tokens: {
         ...tokens,
-        [token.contract_address]: [
-          ...tokens[token.contract_address],
-          parsedToken,
-        ],
+        [token.contract_address]: [...tokens[token.contract_address], parsedToken],
       },
     });
   },
@@ -247,29 +220,23 @@ export const createTokenStore: StateCreator<DopeState, [], [], TokenState> = (
     }
 
     const parsedTokenBalance = parseTokenBalance(tokenBalance);
-    tokensBalances[tokenBalance.contract_address] = tokensBalances[
-      tokenBalance.contract_address
-    ].filter(
+    tokensBalances[tokenBalance.contract_address] = tokensBalances[tokenBalance.contract_address].filter(
       (i: ParsedTokenBalance) =>
-        i.token_id === parsedTokenBalance.token_id &&
-        i.contract_address === parsedTokenBalance.contract_address
+        i.token_id === parsedTokenBalance.token_id && i.contract_address === parsedTokenBalance.contract_address,
     );
     set({
       tokensBalances: {
         ...tokensBalances,
-        [tokenBalance.contract_address]: [
-          ...tokensBalances[tokenBalance.contract_address],
-          parsedTokenBalance,
-        ],
+        [tokenBalance.contract_address]: [...tokensBalances[tokenBalance.contract_address], parsedTokenBalance],
       },
     });
   },
-  onEntityUpdated: async (entity: string, update: any) => {
-    if (BigInt(entity) === 0n) return;
+  onEntityUpdated: async (entity: Entity) => {
+    if (BigInt(entity.hashed_keys) === 0n) return;
 
-    if (update["dope-DopeLootClaimed"]) {
+    if (entity.models["dope-DopeLootClaimed"]) {
       const dopeLootClaimState = get().dopeLootClaimState;
-      const parsed = parseStruct(update["dope-DopeLootClaimed"]);
+      const parsed = parseStruct(entity.models["dope-DopeLootClaimed"]);
       const tokenId = Number(parsed.token_id);
       const claimed = parsed.opened;
 
@@ -290,9 +257,9 @@ export const createTokenStore: StateCreator<DopeState, [], [], TokenState> = (
       });
     }
 
-    if (update["dope-DopeLootReleased"]) {
+    if (entity.models["dope-DopeLootReleased"]) {
       const dopeLootClaimState = get().dopeLootClaimState;
-      const parsed = parseStruct(update["dope-DopeLootReleased"]);
+      const parsed = parseStruct(entity.models["dope-DopeLootReleased"]);
       const tokenId = Number(parsed.token_id);
       const released = parsed.released;
 
@@ -313,9 +280,9 @@ export const createTokenStore: StateCreator<DopeState, [], [], TokenState> = (
       });
     }
 
-    if (update["dope-DopeLootOpened"]) {
+    if (entity.models["dope-DopeLootOpened"]) {
       const dopeLootClaimState = get().dopeLootClaimState;
-      const parsed = parseStruct(update["dope-DopeLootOpened"]);
+      const parsed = parseStruct(entity.models["dope-DopeLootOpened"]);
       const tokenId = Number(parsed.token_id);
       const opened = parsed.opened;
 

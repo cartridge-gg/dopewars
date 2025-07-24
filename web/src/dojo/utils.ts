@@ -3,7 +3,7 @@ export const sleep = (ms: number) => {
 };
 
 import { EnumValue, Ty } from "@dojoengine/torii-client";
-import { AccountInterface, BlockTag, CairoCustomEnum, CairoOption, CairoOptionVariant, Call, CallData, hash, selector } from "starknet";
+import { AccountInterface, BlockTag, Call, CallData, hash, selector } from "starknet";
 
 enum Source {
   Nonce = 0x0,

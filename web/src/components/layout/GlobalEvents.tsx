@@ -1,16 +1,16 @@
-import { Entity, Subscription } from "@dojoengine/torii-client";
-import { useEffect, useRef } from "react";
 import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
-import { useToast } from "@/hooks/toast";
-import { useAccount } from "@starknet-react/core";
-import { formatCashHeader } from "@/utils/ui";
-import { PaperIcon, Siren, Truck } from "../icons";
-import { playSound, Sounds } from "@/hooks/sound";
 import { parseStruct } from "@/dojo/utils";
-import { CairoOption, num, shortString } from "starknet";
-import { HustlerAvatarIcon } from "../pages/profile/HustlerAvatarIcon";
-import { Dopewars_Game as Game } from "@/generated/graphql";
 import { parseModels } from "@/dope/toriiUtils";
+import { Dopewars_Game as Game } from "@/generated/graphql";
+import { playSound, Sounds } from "@/hooks/sound";
+import { useToast } from "@/hooks/toast";
+import { formatCashHeader } from "@/utils/ui";
+import { Entity, Subscription } from "@dojoengine/torii-client";
+import { useAccount } from "@starknet-react/core";
+import { useEffect, useRef } from "react";
+import { CairoOption, num, shortString } from "starknet";
+import { PaperIcon, Siren, Truck } from "../icons";
+import { HustlerAvatarIcon } from "../pages/profile/HustlerAvatarIcon";
 
 export const GlobalEvents = () => {
   const { toast } = useToast();
@@ -54,22 +54,20 @@ export const GlobalEvents = () => {
     const init = async () => {
       if (!subscription.current) {
         subscription.current = await toriiClient.onEventMessageUpdated(
-          [
-            {
-              Keys: {
-                keys: [undefined],
-                models: [
-                  "dopewars-GameCreated",
-                  "dopewars-NewSeason",
-                  "dopewars-NewHighScore",
-                  "dopewars-GameOver",
-                  "dope-DopeLootReleasedEvent",
-                  "dopewars-TrophyProgression",
-                ],
-                pattern_matching: "VariableLen",
-              },
+          {
+            Keys: {
+              keys: [undefined],
+              models: [
+                "dopewars-GameCreated",
+                "dopewars-NewSeason",
+                "dopewars-NewHighScore",
+                "dopewars-GameOver",
+                "dope-DopeLootReleasedEvent",
+                "dopewars-TrophyProgression",
+              ],
+              pattern_matching: "VariableLen",
             },
-          ],
+          },
           onEventMessage,
         );
       }
@@ -85,9 +83,7 @@ export const GlobalEvents = () => {
     };
   }, [selectedChain, accountAddress.current]);
 
-  const onEventMessage = async (key: string, entity: Entity) => {
-    // console.log("globalEvents::onEventMessage", key, entity);
-
+  const onEventMessage = async (entity: Entity) => {
     if (entity.models["dopewars-GameCreated"]) {
       // const gameCreated = parseStruct(entity.models["dopewars-GameCreated"]) as GameCreated;
 

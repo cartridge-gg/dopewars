@@ -38,17 +38,38 @@ export const useDojoTokens = (
   const timeout = useRef<any>({});
 
   const refetch = async () => {
-    setTokens([])
-    setTokensBalances([])
+    setTokens([]);
+    setTokensBalances([]);
     try {
       setIsLoading(true);
-      const tokens = await toriiClient.getTokens(addresses, tokenIds || []);
+      // const tokens = await toriiClient.getTokens(addresses, tokenIds || []);
+      const tokens = await toriiClient.getTokens({
+        contract_addresses: addresses,
+        token_ids: tokenIds || [],
+        pagination: {
+          cursor: undefined,
+          direction: "Backward",
+          limit: 1_000,
+          order_by: [],
+        },
+      });
 
-      const tokensBalances = await toriiClient.getTokenBalances(
-        addresses,
-        accountAddress ? [accountAddress] : [],
-        tokenIds || [],
-      );
+      // const tokensBalances = await toriiClient.getTokenBalances(
+      //   addresses,
+      //   accountAddress ? [accountAddress] : [],
+      //   tokenIds || [],
+      // );
+      const tokensBalances = await toriiClient.getTokenBalances({
+        contract_addresses: addresses,
+        account_addresses: accountAddress ? [accountAddress] : [],
+        token_ids: tokenIds || [],
+        pagination: {
+          cursor: undefined,
+          direction: "Backward",
+          limit: 1_000,
+          order_by: [],
+        },
+      });
 
       const parsedTokens = tokens.items.map((t: Token) => {
         let metadata = {};
