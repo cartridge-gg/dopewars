@@ -68,17 +68,14 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
   const router = useRouter();
 
   // const chains = getStarknetProviderChains();
-  const chains = useMemo(() => {
-    return [selectedChain.chainConfig];
+  const {chains, provider, connectors } = useMemo(() => {
+    return {
+      chains: [selectedChain.chainConfig],
+      provider: customJsonRpcProvider(selectedChain),
+      connectors: getConnectorsForChain(selectedChain, router.asPath)
+    };
   }, [selectedChain]);
 
-  const provider = useMemo(() => {
-    return customJsonRpcProvider(selectedChain);
-  }, [selectedChain]);
-
-  const connectors = useMemo(() => {
-    return getConnectorsForChain(selectedChain, router.asPath);
-  }, [selectedChain]);
 
   const [explorer, setExplorer] = useState<ExplorerFactory>(() => starkscan);
 
@@ -190,7 +187,7 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
     tokens: {
       erc20: [
         // paperAddress
-        "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113",
+        // "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113",
       ],
     },
     preset: "dope-wars",

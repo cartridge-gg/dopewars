@@ -1,6 +1,6 @@
 import { Box, Container, Flex, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { Header } from "./Header";
 
 import { Pending } from "./Pending";

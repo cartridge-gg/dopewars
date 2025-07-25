@@ -1,7 +1,7 @@
 
 rpc = "https://api.cartridge.gg/x/dopewars/katana"
 
-world_address = "0x05d133456420b786bca33391f7b472b4f7af4fdd9d507ef50d85cc5cc19f8e56"
+world_address = "0x0745ce531c48c0bdac80e6ae04abf0396668dab648127353939563defb6fa85a"
 
 [server]
 http_cors_origins = ["*"]
@@ -13,11 +13,11 @@ polling_interval = 1000
 
 # max_concurrent_tasks = 2
 contracts = [
-    "ERC20:0x03e640d0a271da07348aada4be0b6d8d1ee5cb2e701c188720d56e06477700b8", # paper
+    "ERC20:0x07fb0c1725d6f295df1120cae5cf5715a0b36cc0c683fe95ba34747d1d296577", # paper
     #
-    "ERC721:0x02d0bfe2c1c85487b37980f031b618ac8a577ada7c9e1c717b69cedf8f632b25", # dope_loot
-    "ERC721:0x0404e870111abb298afd719baf7712abe564041ec6864270763d2a32f62c26c6", # dope_hustlers
-    "ERC1155:0x04b65376b30a2193441943f23267e8dc4f7bcb7b24cfff9beffd984900de1fa3", # dope_gear
+    "ERC721:0x02d908ef861d4168348665217a168713c491b75b7490e6bd53dababcaf6175fe", # dope_loot
+    "ERC721:0x008e1a1f2982c71d98b7c28ef0c3779548b37ee2236468c6fcc249143eaa912e", # dope_hustlers
+    "ERC1155:0x0779df1c9b3a2241e45c937640e1bbb95963673bece4606127f8d755e5471779", # dope_gear
 ]
 
 [erc]

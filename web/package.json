@@ -15,8 +15,8 @@
     "gen:dojo": "pnpm gen"
   },
   "dependencies": {
-    "@cartridge/connector": "0.9.1",
-    "@cartridge/controller": "0.9.1",
+    "@cartridge/connector": "0.9.0",
+    "@cartridge/controller": "0.9.0",
     "@cartridge/presets": "0.5.4",
     "@chakra-ui/anatomy": "^2.1.1",
     "@chakra-ui/react": "^2.8.1",
@@ -48,7 +48,7 @@
     "json-to-csv-export": "^2.1.1",
     "ka-table": "^8.11.0",
     "mobx": "^6.10.2",
-    "mobx-react-lite": "^4.0.5",
+    "mobx-react-lite": "^4.1.0",
     "next": "v15.3.1",
     "next-pwa": "^5.6.0",
     "open": "^10.1.0",
@@ -76,8 +76,8 @@
     "@graphql-codegen/typescript-react-query": "^3.5.9",
     "@types/howler": "^2.2.7",
     "@types/node": "18.15.3",
-    "@types/react": "^19.1.0",
-    "@types/react-dom": "^19.1.0",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
     "knip": "^4.5.0",
     "prettier": "^2.8.8",
     "typescript": "^5.4.5"

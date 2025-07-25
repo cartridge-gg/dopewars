@@ -1,7 +1,7 @@
 {
   "world": {
-    "class_hash": "0x4c60dc46a8ca8bb47675b7b914053cef769afbf0e340523187336b72bd71d1f",
-    "address": "0x5d133456420b786bca33391f7b472b4f7af4fdd9d507ef50d85cc5cc19f8e56",
+    "class_hash": "0x685ed02eefa98fe7e208aa295042e9bbad8029b0d3d6f0ba2b32546efe0a1f9",
+    "address": "0x745ce531c48c0bdac80e6ae04abf0396668dab648127353939563defb6fa85a",
     "seed": "dopeseed",
     "name": "Dope Wars",
     "entrypoints": [
@@ -1328,8 +1328,8 @@
   },
   "contracts": [
     {
-      "address": "0x75d50ae9f05e842cf265045123c9fa50b896bd283272584485eb68f8b1697bf",
-      "class_hash": "0x68da5fdd1b8a61a52f7671e6c5c39ac0774d51ad44c728724f808741595aa67",
+      "address": "0x86ee244b4c6543722cca982a1848e8c4ef7295af76e3b4a814b205660d0873",
+      "class_hash": "0x353a1986937816dc8e4996a1f05570bb26cba3edf53c1b1ab542166ce461e23",
       "abi": [
         {
           "type": "impl",
@@ -1482,6 +1482,18 @@
             {
               "name": "treasury_balance",
               "type": "core::integer::u32"
+            },
+            {
+              "name": "f2p_hustlers",
+              "type": "core::bool"
+            },
+            {
+              "name": "play_with_loot",
+              "type": "core::bool"
+            },
+            {
+              "name": "play_with_hustlers",
+              "type": "core::bool"
             }
           ]
         },
@@ -1874,7 +1886,7 @@
       ]
     },
     {
-      "address": "0x651765f37f7fa079ee56bf027a57c6071c2f11bed774369c34b940e0ae3ecf2",
+      "address": "0xb6853b040beb87161e2c8d0b5258c965a04f37578a854651766e8de04f451c",
       "class_hash": "0x672d4c376c74d1ee7ba36b95e9ebbd55217b0cd7f911027767c88a5cd6846d3",
       "abi": [
         {
@@ -2095,8 +2107,8 @@
       ]
     },
     {
-      "address": "0x30c3158606fe3a382de2a382e892ebe4590d56d680314cddf102b94216ab657",
-      "class_hash": "0x2afc3224e1fdf613c62c925c957afda84089838360d0d3783c9946e645148df",
+      "address": "0x6ac2e54f78bda98c19127891d9c118a71040d29efc4abf12e46ecad0e77363b",
+      "class_hash": "0x447d22f1729ac075fb539bc8104695013c1ef6e1e4d694ec6247e0c986e5858",
       "abi": [
         {
           "type": "impl",
@@ -2308,8 +2320,8 @@
       ]
     },
     {
-      "address": "0x1b64e8712cb7279badbb62b4078ae25e26b6a0638d5e56a377a637dd681edeb",
-      "class_hash": "0x68e6f5eb546eee831ea121ca4c8fdd23f96d9eb586fd6ecb4b3a179de4e289f",
+      "address": "0x1e0d1ef4cf79186bee77c9920af35e587ffda4cc10f20073d6fba36a84c474f",
+      "class_hash": "0x76cf3dc0232f6754980c94886a07d35f3efb1bd0bf342ab9ca4a9c74993a1cf",
       "abi": [
         {
           "type": "impl",
@@ -2751,8 +2763,8 @@
       ]
     },
     {
-      "address": "0x216216c38de84d6b6ab01374f62e65ef31e2be1c9c1bf6b9b47f95749b4a111",
-      "class_hash": "0x61f93a4d2c87aaad219e86ac4d811506ffd2b792112974272bb5c07d20089e6",
+      "address": "0x5d18f212194dfbcd21b555bc6aaf324f5b243c94d19864bf04b894b1fc8aeaa",
+      "class_hash": "0x10b1b8383fd26ab7e108b2025424f63bc049a1891746c0e7001be157f61a2f2",
       "abi": [
         {
           "type": "impl",
@@ -3019,7 +3031,7 @@
       ]
     },
     {
-      "address": "0x3e640d0a271da07348aada4be0b6d8d1ee5cb2e701c188720d56e06477700b8",
+      "address": "0x7fb0c1725d6f295df1120cae5cf5715a0b36cc0c683fe95ba34747d1d296577",
       "class_hash": "0x1bca8506f692c51e241cc318e79cfdfa4170edb1ddce29628b6c5e46e696447",
       "abi": [
         {
@@ -3491,8 +3503,8 @@
       ]
     },
     {
-      "address": "0x153431f2eca6469c8bac8f34e7271392edca854706fd2053b96010dca926bf2",
-      "class_hash": "0x77b398abe872cffcbfac1897b308f46c12bf35d7f433b1d4795745b92db9fed",
+      "address": "0x1e77bcb129a92964686ac8f9371adabe106293e74901499eeebfab5b87493b4",
+      "class_hash": "0x6d27826be42f7009449e89a2155f6947c3fedc403c8ff4e7370c80fea7c5e6",
       "abi": [
         {
           "type": "impl",
@@ -3626,6 +3638,18 @@
             {
               "name": "treasury_balance",
               "type": "core::integer::u32"
+            },
+            {
+              "name": "f2p_hustlers",
+              "type": "core::bool"
+            },
+            {
+              "name": "play_with_loot",
+              "type": "core::bool"
+            },
+            {
+              "name": "play_with_hustlers",
+              "type": "core::bool"
             }
           ]
         },
@@ -3776,6 +3800,60 @@
                 }
               ],
               "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "toggle_f2p_hustlers",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "f2p_hustlers",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::bool"
+                }
+              ],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "toggle_play_with_loot",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "play_with_loot",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::bool"
+                }
+              ],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "toggle_play_with_hustlers",
+              "inputs": [],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "play_with_hustlers",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::bool"
+                }
+              ],
+              "state_mutability": "external"
             }
           ]
         },
@@ -3906,11 +3984,17 @@
       "tag": "dopewars-ryo",
       "selector": "0x32b65ba76433a3384da18dba9d4a63d3a7de35be8bf53a61d71928482a6d75e",
       "systems": [
+        "toggle_f2p_hustlers",
+        "f2p_hustlers",
+        "toggle_play_with_loot",
+        "play_with_loot",
+        "toggle_play_with_hustlers",
+        "play_with_hustlers",
         "upgrade"
       ]
     },
     {
-      "address": "0x190df78993fd7f5598e5a2c38e49fa7444db59e28129a9ee03f8cace6763865",
+      "address": "0x17d0a0218d5f85d57628241a4625d6281ecdcf5e1dc87256d646c32037b649c",
       "class_hash": "0x33fa5f3e706557239153d124d70ae1108d0c62d91c8b1e829f85bf4fbf8512e",
       "abi": [
         {
@@ -4589,7 +4673,7 @@
     },
     {
       "members": [],
-      "class_hash": "0x348550ffd798f43a06c84877217883dd33eaeb375334d36036f90acd542662d",
+      "class_hash": "0x3f9b68eda0f70763b58d5e6dea5cca1dc6018075fb67080c6be967ea1484534",
       "tag": "dopewars-RyoConfig",
       "selector": "0x7d8eb0bce0a49d2d3d2f16b5958bb2445cfe364f9b2a8f71c009ebbe602ccfd"
     },

@@ -52,7 +52,7 @@ export const katanaSlotDopewarsChain = {
   },
   paymasterRpcUrls: {
     avnu: {
-      http: ["http://localhost:5050"],
+      http: ["https://api.cartridge.gg/x/dopewars/katana"],
     },
   },
   explorers: {

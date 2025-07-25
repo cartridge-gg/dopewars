@@ -127,15 +127,25 @@ export default function ClaimComponent() {
           contractAddress: dopeLootClaimContract.address,
           entrypoint: "claim",
           calldata: [
+            // @ts-ignore
             proof.length,
+            // @ts-ignore
             ...proof,
+            // @ts-ignore
             ethAccount.address,
+            // @ts-ignore
             entry[1].length,
+            // @ts-ignore
             ...entry[1],
+            // @ts-ignore
             entry[2].length,
+            // @ts-ignore
             ...entry[2],
+            // @ts-ignore
             signature.v || 0,
+            // @ts-ignore
             uint256.bnToUint256(BigInt(signature.r)),
+            // @ts-ignore
             uint256.bnToUint256(BigInt(signature.s)),
           ],
         },

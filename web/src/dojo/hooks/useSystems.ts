@@ -1,16 +1,16 @@
+import { useDopeStore } from "@/dope/store";
+import { parseModels } from "@/dope/toriiUtils";
 import { Dopewars_DrugConfig as DrugConfig, Dopewars_RyoConfig as RyoConfig } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
+import { DojoCall, getContractByName } from "@dojoengine/core";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useMemo, useState } from "react";
 import { AllowArray, Call, CallData, GetTransactionReceiptResponse, shortString, uint256 } from "starknet";
 import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
 import { EncountersAction, GameMode, Locations } from "../types";
+import { buildVrfCalls } from "../utils";
 import { useConfigStore } from "./useConfigStore";
 import { useDojoContext } from "./useDojoContext";
-import { DojoCall, getContractByName } from "@dojoengine/core";
-import { buildVrfCalls, sleep } from "../utils";
-import { useDopeStore } from "@/dope/store";
-import { parseModels } from "@/dope/toriiUtils";
 
 export const ETHER = 10n ** 18n;
 export const DW_NS = "dopewars";
@@ -145,7 +145,7 @@ export const useSystems = (): SystemsInterface => {
         if ("execution_status" in receipt && receipt.execution_status === "REVERTED") {
           receipt_error = {
             status: "REVERTED",
-            message: receipt.revert_reason || "REVERTED",
+            message: receipt.statusReceipt || "REVERTED",
           };
           isError = true;
         }
