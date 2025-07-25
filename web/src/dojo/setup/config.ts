@@ -138,7 +138,7 @@ export const dojoContextConfig = {
   // SN_MAIN: snMainnet,
   // SN_SEPOLIA: snSepolia,
   WP_DOPEWARS: katanaSlotDopewars,
-  // KATANA: katanaLocal,
+  KATANA: katanaLocal,
 };
 
 export const dojoChains = Object.values(dojoContextConfig);
