@@ -1,4 +1,8 @@
-import { DojoChainConfig, getStarknetProviderChains } from "@/dojo/setup/config";
+import { DW_NS } from "@/dojo/hooks";
+import { DojoChainConfig } from "@/dojo/setup/config";
+import { ControllerConnector } from "@cartridge/connector";
+import { SessionPolicies } from "@cartridge/presets";
+import { getContractByName } from "@dojoengine/core";
 import {
   ChainProviderFactory,
   ExplorerFactory,
@@ -8,13 +12,9 @@ import {
   injected,
   starkscan,
 } from "@starknet-react/core";
+import { useRouter } from "next/router";
 import { ReactNode, useMemo, useState } from "react";
 import { RpcProvider } from "starknet";
-import { getContractByName } from "@dojoengine/core";
-import { DW_NS } from "@/dojo/hooks";
-import { ControllerConnector } from "@cartridge/connector";
-import { useRouter } from "next/router";
-import { SessionPolicies } from "@cartridge/presets";
 
 export const walletInstallLinks = {
   argentX: "https://www.argent.xyz/argent-x/",
@@ -66,7 +66,11 @@ function getConnectorsForChain(selectedChain: DojoChainConfig, path: string) {
 
 export function StarknetProvider({ children, selectedChain }: { children: ReactNode; selectedChain: DojoChainConfig }) {
   const router = useRouter();
-  const chains = getStarknetProviderChains();
+
+  // const chains = getStarknetProviderChains();
+  const chains = useMemo(() => {
+    return [selectedChain.chainConfig];
+  }, [selectedChain]);
 
   const provider = useMemo(() => {
     return customJsonRpcProvider(selectedChain);

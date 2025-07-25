@@ -78,7 +78,7 @@ export const useDojoTokens = (
         } catch (e) {}
         return {
           ...t,
-          token_id: BigInt(t.token_id),
+          token_id: BigInt(t.token_id || 0),
           metadata: metadata,
         } as ParsedToken;
       });
@@ -88,7 +88,7 @@ export const useDojoTokens = (
       const parsedTokensBalances = tokensBalances.items.map((tb: TokenBalance) => {
         return {
           ...tb,
-          token_id: BigInt(tb.token_id),
+          token_id: BigInt(tb.token_id || 0),
           balance: BigInt(tb.balance),
         };
       });

@@ -252,13 +252,20 @@ export class GameStoreClass {
   }
 
   onEventMessage(entity: Entity) {
+    console.log("onEventMessage", entity);
     if (entity.hashed_keys === "0x0") return;
     // console.log("onEventMessage", entity, update);
     this.gameEvents!.addEvent(entity);
+
+    const gameId = num.toHexString(this.gameInfos?.game_id);
+    if (this.gameEvents?.isGameOver && this.game!.player!.health > 0 ) {
+      return this.router.push(`/${gameId}/end`);
+    }
   }
 
   async onEntityUpdated(entity: Entity) {
     if (entity.hashed_keys === "0x0") return;
+    console.log("onEntityUpdated", entity);
 
     const gameId = num.toHexString(this.gameInfos?.game_id);
 
@@ -267,11 +274,6 @@ export class GameStoreClass {
     if (entity.models["dopewars-GameStorePacked"]) {
       this.gameStorePacked = parseStruct(entity.models["dopewars-GameStorePacked"]);
       this.initGameStore();
-
-      // if dead, handled in /event/consequence
-      if (this.gameEvents?.isGameOver && this.game!.player!.health > 0) {
-        return this.router.push(`/${gameId}/end`);
-      }
 
       if (this.game?.player.status === PlayerStatus.Normal) {
         const location = this.configStore
