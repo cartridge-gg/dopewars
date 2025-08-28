@@ -5,3 +5,5 @@ abis
 
 checklist.md
 deployment.md
+
+*.pem
