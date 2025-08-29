@@ -4,6 +4,7 @@ version = 1
 [[package]]
 name = "achievement"
 version = "0.0.0"
+source = "git+https://github.com/cartridge-gg/arcade#053b33ec75bc3316413d0fab2855eef4fc17086f"
 dependencies = [
  "dojo",
 ]
@@ -12,15 +13,16 @@ dependencies = [
 name = "cartridge_vrf"
 version = "0.1.0"
 dependencies = [
- "openzeppelin",
+ "openzeppelin_access",
+ "openzeppelin_upgrades",
  "snforge_std",
  "stark_vrf",
 ]
 
 [[package]]
 name = "dojo"
-version = "1.5.1"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.5.1#986c3b0c6d647b23847c70ddceb1d33ddac86ead"
+version = "1.6.1"
+source = "git+https://github.com/dojoengine/dojo?tag=v1.6.1#a4f9445cf925e999d97038f596806ec307981a9b"
 dependencies = [
  "dojo_plugin",
 ]
@@ -28,7 +30,7 @@ dependencies = [
 [[package]]
 name = "dojo_plugin"
 version = "2.10.1"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.5.1#986c3b0c6d647b23847c70ddceb1d33ddac86ead"
+source = "git+https://github.com/dojoengine/dojo?tag=v1.6.1#a4f9445cf925e999d97038f596806ec307981a9b"
 
 [[package]]
 name = "openzeppelin"
