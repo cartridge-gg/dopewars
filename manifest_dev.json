@@ -2471,8 +2471,8 @@
       ]
     },
     {
-      "address": "0x265cad95218e08a697cc25986fe93f3d99d18994a0fbba5e9743c5cb1b9eb97",
-      "class_hash": "0x717b874d3b77a2715a514779eb6b7872804a40ec249b653ec19de08885dbac6",
+      "address": "0x1b970f0b7fc5ad0e1428101ae9106b4a6c4ee4436668a8f1a2d667edf7bfc31",
+      "class_hash": "0x55f375a7567a4f898ec220d1dfbdc5ad9f1389a17931e741ad17f8c11118790",
       "abi": [
         {
           "type": "impl",
@@ -3610,8 +3610,8 @@
       ]
     },
     {
-      "address": "0x8379d72d46b8df6d81255ec809d3832327025cd319a9f89b4e252f90c305ef",
-      "class_hash": "0x2c8f7bfc9b7c3aef45f24b015d1c9ec0a672e48de3f5a3519d4e86f8024bb10",
+      "address": "0x563446d2c985c4042415e5aa6008b7dd5faca5ed0a7deb650a9996bb4db5104",
+      "class_hash": "0x19c1a31e8860d2bfc77e6dd6461d8e25bbeaafd311896770479f15de9fc14bb",
       "abi": [
         {
           "type": "impl",
@@ -4836,7 +4836,7 @@
     },
     {
       "members": [],
-      "class_hash": "0x7bbd1df58e3428fc283d6fe0976d64430c30f5e05b380d800e3581899939fbe",
+      "class_hash": "0x5556614cc63016885f1a449a77b626ffb65e4dcd9e5032fcfaab1a40f32e065",
       "tag": "dopewars-GameCreated",
       "selector": "0xb6cb757d1b16685bd607281240d13dc1c6d6ab51eec461848f216405223cd"
     },

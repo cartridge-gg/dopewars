@@ -1479,8 +1479,8 @@
   },
   "contracts": [
     {
-      "address": "0x165a15fec164ea2e183f4d37770fd82a5cb467f07b06dc8d51192bbb5c87155",
-      "class_hash": "0x14a4679df9cefb0c24fa327824fe67fd901b6fd7d7859922536e8496380aa75",
+      "address": "0x6c6b927a731087377aa5d7caf57aa1dec7ed5d0c16b231ba0a6e216dec48f92",
+      "class_hash": "0x6fc80155627598fbca1f2f1705bae04810796603f68fc78621fc8ca809ffd7",
       "abi": [
         {
           "type": "impl",
@@ -2664,8 +2664,8 @@
       ]
     },
     {
-      "address": "0x1fb30a6baa133d7bc0ad072ace31b86447392877d190ce2bf8f3616733d8524",
-      "class_hash": "0x1c7c1ec44b1bea15167e87336c929a4e18f1e4ab0f418992be18c0869da720f",
+      "address": "0x1c14abe1d25b8c10b89958a6bc6f2441ece48312a35d29916d5d1bea592f1f0",
+      "class_hash": "0x75190b95202165d8c84bd16d35ed73c40298a79c60a82265f1920a818507478",
       "abi": [
         {
           "type": "impl",
@@ -10055,7 +10055,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x64b084994f57ecac4e84e0f986b8e8c9b4d1cf17a15180a813bb0b24735cd5c",
+      "class_hash": "0x180c3e5917e28267ef5ee4bbecb9790dafbccbd025a9671390763a4e08471cd",
       "abi": [
         {
           "type": "impl",
@@ -15963,7 +15963,7 @@
     },
     {
       "members": [],
-      "class_hash": "0x165b65ea10d6032673982bf7521108bc4c8fa3ce6409946fce8f9bc8699c163",
+      "class_hash": "0x3f3998f2ab3d4b8da0fa8e870ab68d93d244abd2fff1b01d639de938c6b4b19",
       "tag": "dope-HustlerSlot",
       "selector": "0x28bc2bd23c18c8d1ecb10ae934f9ef1ad21c18d45368731b1c7210aee787557"
     }

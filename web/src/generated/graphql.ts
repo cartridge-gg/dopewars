@@ -1623,12 +1623,6 @@ export type Dope_ComponentValueResEventWhereInput = {
   indexNOTLIKE?: InputMaybe<Scalars['u32']>;
 };
 
-export type Dope_DojoOption = {
-  __typename?: 'dope_DojoOption';
-  Some?: Maybe<Scalars['u256']>;
-  option?: Maybe<Scalars['Enum']>;
-};
-
 export type Dope_DopeLootClaimed = {
   __typename?: 'dope_DopeLootClaimed';
   claimed?: Maybe<Scalars['bool']>;
@@ -2105,7 +2099,7 @@ export type Dope_HustlerSlot = {
   __typename?: 'dope_HustlerSlot';
   entity?: Maybe<World__Entity>;
   eventMessage?: Maybe<World__EventMessage>;
-  gear_item_id?: Maybe<Dope_DojoOption>;
+  gear_item_id?: Maybe<Dope_Optionu256>;
   slot?: Maybe<Scalars['felt252']>;
   token_id?: Maybe<Scalars['felt252']>;
 };
@@ -2173,6 +2167,12 @@ export type Dope_HustlerSlot_Gear_Item_IdWhereInput = {
   SomeNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u256']>>>;
   SomeNOTLIKE?: InputMaybe<Scalars['u256']>;
   option?: InputMaybe<Scalars['Enum']>;
+};
+
+export type Dope_Optionu256 = {
+  __typename?: 'dope_Optionu256';
+  Some?: Maybe<Scalars['u256']>;
+  option?: Maybe<Scalars['Enum']>;
 };
 
 export type Dope_PaletteEvent = {
@@ -2981,7 +2981,7 @@ export type Dopewars_GameCreated = {
   game_id?: Maybe<Scalars['u32']>;
   game_mode?: Maybe<Scalars['Enum']>;
   hustler_body?: Maybe<Array<Maybe<Dopewars_HustlerBody>>>;
-  hustler_equipment?: Maybe<Array<Maybe<Dopewars_HustlerSlotOption>>>;
+  hustler_equipment?: Maybe<Array<Maybe<Dopewars_HustlerSlot>>>;
   multiplier?: Maybe<Scalars['u8']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
   player_name?: Maybe<Scalars['felt252']>;
@@ -3603,8 +3603,8 @@ export type Dopewars_HustlerBody = {
   value?: Maybe<Scalars['u8']>;
 };
 
-export type Dopewars_HustlerSlotOption = {
-  __typename?: 'dopewars_HustlerSlotOption';
+export type Dopewars_HustlerSlot = {
+  __typename?: 'dopewars_HustlerSlot';
   gear_item_id?: Maybe<Dopewars_Optionu256>;
   slot?: Maybe<Scalars['felt252']>;
   token_id?: Maybe<Scalars['felt252']>;

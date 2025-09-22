@@ -1,4 +1,4 @@
-use dope_types::dope_hustlers::{HustlerBody, HustlerSlotOption};
+use dope_types::dope_hustlers::{HustlerBody, HustlerSlot};
 use rollyourown::models::game::{GameMode, TokenId};
 use rollyourown::systems::game::{EncounterActions};
 use rollyourown::systems::helpers::traveling::{EncounterOutcomes};
@@ -15,7 +15,7 @@ pub struct GameCreated {
     pub player_name: felt252,
     pub multiplier: u8,
     pub token_id: TokenId,
-    pub hustler_equipment: Span<HustlerSlotOption>,
+    pub hustler_equipment: Span<HustlerSlot>,
     pub hustler_body: Span<HustlerBody>,
 }
 

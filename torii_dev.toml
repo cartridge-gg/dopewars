@@ -16,8 +16,8 @@ contracts = [
     "ERC20:0x020dfc24de987d7d11f70a7306ae39b6ac71b178eaf19bf12e831b3522c14ebf", # paper
     #
     "ERC721:0x001ee0fe152c71643aa7c6325c9e2d8278c2ed1da681733ec90f64be98ac6645", # dope_loot
-    "ERC721:0x01fb30a6baa133d7bc0ad072ace31b86447392877d190ce2bf8f3616733d8524", # dope_hustlers
-    "ERC1155:0x0165a15fec164ea2e183f4d37770fd82a5cb467f07b06dc8d51192bbb5c87155", # dope_gear
+    "ERC721:0x01c14abe1d25b8c10b89958a6bc6f2441ece48312a35d29916d5d1bea592f1f0", # dope_hustlers
+    "ERC1155:0x06c6b927a731087377aa5d7caf57aa1dec7ed5d0c16b231ba0a6e216dec48f92", # dope_gear
 ]
 
 [erc]
