@@ -17,7 +17,7 @@
       "dope_CollectionComponentList",
       "dope_CollectionComponentSlug",
       "dope_ComponentValueEvent",
-      "dope_ComponentValueResourceEvent",
+      "dope_ComponentValueResEvent",
       "dope_DopeLootClaimed",
       "dope_DopeLootClaimedEvent",
       "dope_DopeLootOpened",

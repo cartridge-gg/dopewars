@@ -4,8 +4,9 @@ use rollyourown::{
 };
 
 
-#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked, DojoStore, Default)]
 pub enum Drugs {
+    #[default]
     Ludes,
     Speed,
     Weed,

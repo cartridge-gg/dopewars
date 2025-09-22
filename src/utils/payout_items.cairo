@@ -1,8 +1,8 @@
 use dojo::world::WorldStorage;
 
-use dope_contracts::dope_gear::dope_gear_store::{GearStoreImpl, GearStoreTrait};
-use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerSlots};
-use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl, HustlerStoreTrait};
+use dope_types::dope_gear::{GearStoreImpl, GearStoreTrait};
+use dope_types::dope_hustlers::{HustlerSlots};
+use dope_types::dope_hustlers::{HustlerStoreImpl, HustlerStoreTrait};
 
 pub fn add_items_payout(
     ref dope_world: WorldStorage,

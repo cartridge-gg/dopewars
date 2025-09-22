@@ -189,7 +189,8 @@ export class ConfigStoreClass {
     });
 
     const locationConfigFull = locationConfig.flatMap((i) => {
-      if (i.location === "Home") return [];
+      // if (i.location === "Home") return [];
+      if (i.location_id === 0) return [];
 
       return [
         {
@@ -200,6 +201,7 @@ export class ConfigStoreClass {
       ] as LocationConfigFull[];
     });
 
+    console.log(locationConfigFull)
     /*************************************************** */
     const dopewarsItemsTiersEdges = data.dopewarsDopewarsItemTierModels?.edges as DopewarsItemTierEdge[];
     const dopewarsItemsTiers = dopewarsItemsTiersEdges.map((i) => i.node as DopewarsItemTier);

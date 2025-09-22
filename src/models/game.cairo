@@ -1,33 +1,34 @@
 use dojo::world::{WorldStorage};
-use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerSlots};
 
+use dope_types::dope_hustlers::{HustlerSlots};
+use dope_types::dope_hustlers::{HustlerStoreImpl, HustlerStoreTrait};
+use dope_types::dope_loot::{LootStoreImpl, LootStoreTrait};
 
-use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl, HustlerStoreTrait};
-use dope_contracts::dope_loot::dope_loot_store::{LootStoreImpl, LootStoreTrait};
 use rollyourown::store::StoreImpl;
-
 use rollyourown::{utils::{bytes16::{Bytes16, Bytes16Impl}}};
 use starknet::ContractAddress;
 
 pub type GearId = felt252;
 
-#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+#[derive(Copy, Drop, Serde, PartialEq, Introspect, DojoStore, Default)]
 pub enum TokenId {
+    #[default]
     GuestLootId: felt252,
     LootId: felt252,
     HustlerId: felt252,
 }
 
 
-#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked, DojoStore, Default)]
 pub enum GameMode {
+    #[default]
     Ranked,
     Noob,
     Warrior,
 }
 
 // IntrospectPacked : doesnt supports array
-#[derive(Introspect, Copy, Drop, Serde)]
+#[derive(Introspect, Copy, Drop, Serde, DojoStore)]
 #[dojo::model]
 pub struct Game {
     #[key]

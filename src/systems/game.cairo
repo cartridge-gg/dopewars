@@ -32,8 +32,8 @@ mod game {
     use dojo::event::EventStorage;
     use dojo::world::IWorldDispatcherTrait;
     use dojo::world::WorldStorageTrait;
-    use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerSlots};
-    use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl, HustlerStoreTrait};
+    use dope_types::dope_hustlers::{HustlerSlots};
+    use dope_types::dope_hustlers::{HustlerStoreImpl, HustlerStoreTrait};
     use rollyourown::achievements::achievements_v1::Tasks;
     use rollyourown::{
         config::{locations::{Locations}}, events::{GameCreated},

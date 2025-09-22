@@ -16,8 +16,9 @@ pub struct LocationConfig {
     pub name: Bytes16,
 }
 
-#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked, DojoStore, Default)]
 pub enum Locations {
+    #[default]
     Home,
     Queens,
     Bronx,
@@ -112,7 +113,8 @@ pub fn initialize_location_config(ref store: Store) {
         .write_model(
             @LocationConfig {
                 location: Locations::Home,
-                location_id: Locations::Home.into(),
+                // location_id: Locations::Home.into(),
+                location_id: LocationsIntoU8::into(Locations::Home),
                 name: Bytes16Impl::from('Home'),
             },
         );
@@ -122,7 +124,8 @@ pub fn initialize_location_config(ref store: Store) {
         .write_model(
             @LocationConfig {
                 location: Locations::Queens,
-                location_id: Locations::Queens.into(),
+                // location_id: Locations::Queens.into(),
+                location_id: LocationsIntoU8::into(Locations::Queens),
                 name: Bytes16Impl::from('Queens'),
             },
         );
@@ -132,7 +135,8 @@ pub fn initialize_location_config(ref store: Store) {
         .write_model(
             @LocationConfig {
                 location: Locations::Bronx,
-                location_id: Locations::Bronx.into(),
+                // location_id: Locations::Bronx.into(),
+                location_id: LocationsIntoU8::into(Locations::Bronx),
                 name: Bytes16Impl::from('The Bronx'),
             },
         );
@@ -142,7 +146,8 @@ pub fn initialize_location_config(ref store: Store) {
         .write_model(
             @LocationConfig {
                 location: Locations::Brooklyn,
-                location_id: Locations::Brooklyn.into(),
+                // location_id: Locations::Brooklyn.into(),
+                location_id: LocationsIntoU8::into(Locations::Brooklyn),
                 name: Bytes16Impl::from('Brooklyn'),
             },
         );
@@ -152,7 +157,8 @@ pub fn initialize_location_config(ref store: Store) {
         .write_model(
             @LocationConfig {
                 location: Locations::Jersey,
-                location_id: Locations::Jersey.into(),
+                // location_id: Locations::Jersey.into(),
+                location_id: LocationsIntoU8::into(Locations::Jersey),
                 name: Bytes16Impl::from('Jersey City'),
             },
         );
@@ -162,7 +168,8 @@ pub fn initialize_location_config(ref store: Store) {
         .write_model(
             @LocationConfig {
                 location: Locations::Central,
-                location_id: Locations::Central.into(),
+                // location_id: Locations::Central.into(),
+                location_id: LocationsIntoU8::into(Locations::Central),
                 name: Bytes16Impl::from('Central Park'),
             },
         );
@@ -172,7 +179,8 @@ pub fn initialize_location_config(ref store: Store) {
         .write_model(
             @LocationConfig {
                 location: Locations::Coney,
-                location_id: Locations::Coney.into(),
+                // location_id: Locations::Coney.into(),
+                location_id: LocationsIntoU8::into(Locations::Coney),
                 name: Bytes16Impl::from('Coney Island'),
             },
         );

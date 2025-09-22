@@ -3,12 +3,6 @@ import ConnectionError from "@/components/layout/ConnectionError";
 import { Loader } from "@/components/layout/Loader";
 import { StarknetProvider } from "@/components/wallet";
 import { Flex, VStack } from "@chakra-ui/react";
-import {
-  BurnerManager,
-  PredeployedManager,
-  useBurnerWindowObject,
-  usePredeployedWindowObject,
-} from "@dojoengine/create-burner";
 import { observer } from "mobx-react-lite";
 import { ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";
 import { QueryClientProvider } from "react-query";
@@ -28,10 +22,6 @@ export interface DojoContextType {
   chains: DojoChainsResult;
   clients: DojoClientsResult;
   contracts: DojoContractResult;
-  masterAccount?: AccountInterface;
-  burnerManager?: BurnerManager;
-  isPrefundingPaper: boolean;
-  predeployedManager?: PredeployedManager;
   configStore: ConfigStoreClass;
   gameStore: GameStoreClass;
   uiStore: UiStore;
@@ -53,8 +43,6 @@ export const DojoContextProvider = observer(
       isError: false,
       error: undefined,
     });
-
-    const [isPrefundingPaper, setIsPrefundingPaper] = useState(false);
 
     const defaultChain =
       process.env.NODE_ENV === "production"
@@ -78,62 +66,6 @@ export const DojoContextProvider = observer(
     const { dojoProvider, queryClient, graphqlClient, rpcProvider, toriiClient } = useDojoClients(selectedChain);
 
     const { getDojoContract, getDojoContractManifest, getContractTagByAddress } = useDojoContract(selectedChain);
-
-    const masterAccount = useMemo(() => {
-      if (selectedChain.masterAddress && selectedChain.masterPrivateKey) {
-        return new Account(rpcProvider, selectedChain.masterAddress, selectedChain.masterPrivateKey, "1");
-      }
-      return undefined;
-    }, [rpcProvider, selectedChain.masterAddress, selectedChain.masterPrivateKey]);
-
-    const burnerManager = useMemo(() => {
-      if (!masterAccount) return undefined;
-
-      const manager = new BurnerManager({
-        masterAccount: masterAccount!,
-        accountClassHash: selectedChain.accountClassHash!,
-        rpcProvider: rpcProvider,
-        feeTokenAddress: selectedChain.chainConfig.nativeCurrency.address,
-      });
-
-      const afterDeploy = async ({ account, deployTx }: { account: Account; deployTx: string }) => {
-        setIsPrefundingPaper(true);
-        try {
-          const receipt = await account!.waitForTransaction(deployTx, {
-            retryInterval: 500,
-          });
-          await paperFaucet({ account, paperAddress: configStore.config?.ryoAddress.paper });
-        } catch (e: any) {
-          console.log("fail afterDeploy");
-        }
-        setIsPrefundingPaper(false);
-      };
-
-      manager.setAfterDeployingCallback(afterDeploy);
-
-      return manager;
-    }, [masterAccount, selectedChain.accountClassHash, rpcProvider]);
-
-    const predeployedManager = useMemo(() => {
-      if (!selectedChain.predeployedAccounts || selectedChain.predeployedAccounts.length === 0) return undefined;
-
-      return new PredeployedManager({
-        rpcProvider: rpcProvider,
-        predeployedAccounts: selectedChain.predeployedAccounts,
-      });
-    }, [rpcProvider, selectedChain.predeployedAccounts]);
-
-    const {
-      isInitialized: burnerSWOIsInitialized,
-      isError: burnerSWOIsError,
-      error: burnerSWOError,
-    } = useBurnerWindowObject(burnerManager);
-
-    const {
-      isInitialized: predeployedSWOIsInitialized,
-      isError: predeployedSWOIsError,
-      error: predeployedSWOError,
-    } = usePredeployedWindowObject(predeployedManager);
 
     const configStore = useMemo(() => {
       return new ConfigStoreClass({
@@ -177,13 +109,9 @@ export const DojoContextProvider = observer(
 
     const uiStore = new UiStore();
 
-    const isInitialized =
-      burnerSWOIsInitialized &&
-      predeployedSWOIsInitialized &&
-      configStoreState.isInitialized &&
-      toriiClient !== undefined;
-    const hasError = burnerSWOIsError || predeployedSWOIsError || configStoreState.isError;
-    const errors = hasError ? [burnerSWOError, predeployedSWOError, configStoreState.error] : [];
+    const isInitialized = configStoreState.isInitialized && toriiClient !== undefined;
+    const hasError = configStoreState.isError;
+    const errors = hasError ? [configStoreState.error] : [];
 
     // console.log("isInitialized", isInitialized);
     // console.log("hasError", hasError);
@@ -215,12 +143,10 @@ export const DojoContextProvider = observer(
             toriiClient,
           },
           contracts: {
-            getDojoContract, getDojoContractManifest, getContractTagByAddress
+            getDojoContract,
+            getDojoContractManifest,
+            getContractTagByAddress,
           },
-          burnerManager,
-          isPrefundingPaper,
-          predeployedManager,
-          masterAccount,
           configStore,
           gameStore,
           uiStore,

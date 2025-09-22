@@ -20,7 +20,9 @@ export const ConnectButton = ({ variant = "pixelated", ...props }) => {
     if (connectors.length > 1) {
       uiStore.openConnectModal();
     } else {
+      console.log( connectors[0] )
       connect({ connector: connectors[0] });
+      // connectAsync({ connector: connectors[0] });
     }
   };
 

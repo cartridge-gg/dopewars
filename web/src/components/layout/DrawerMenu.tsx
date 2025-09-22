@@ -23,8 +23,6 @@ import { Cigarette, Clock, Close, Dots, GangIcon, Home, PaperIcon, Refresh } fro
 import { Calendar } from "../icons/archive";
 import { HeaderButton, MediaPlayer } from ".";
 import { ChainSelector, ConnectButton, TokenBalance } from "../wallet";
-import { Burners } from "../wallet/Burners";
-import { Predeployed } from "../wallet/Predeployed";
 
 import { ProfileLinkDrawer } from "../pages/profile/Profile";
 import { useAccount } from "@starknet-react/core";
@@ -94,8 +92,7 @@ const DrawerMenu = () => {
                       <ConnectButton />
                       {process.env.NODE_ENV !== "production" && (
                         <>
-                          <ChainSelector canChange={!gameId} /> <Burners />
-                          <Predeployed />
+                          <ChainSelector canChange={!gameId} />
                         </>
                       )}
                     </HStack>

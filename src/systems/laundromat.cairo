@@ -16,12 +16,12 @@ mod laundromat {
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
     use dojo::world::WorldStorageTrait;
-    use dope_contracts::dope_gear::dope_gear_ext::{GearItem};
-    use dope_contracts::dope_gear::interface::{IDopeGearABIDispatcher, IDopeGearABIDispatcherTrait};
-    use dope_contracts::dope_hustlers::interface::{
+    use dope_types::dope_gear::{GearItem};
+    use dope_types::dope_gear::{IDopeGearABIDispatcher, IDopeGearABIDispatcherTrait};
+    use dope_types::dope_hustlers::{
         IDopeHustlersABIDispatcher, IDopeHustlersABIDispatcherTrait,
     };
-    use dope_contracts::helpers::is_og;
+    use dope_types::helpers::is_og;
     use rollyourown::achievements::achievements_v1::Tasks;
     use rollyourown::{
         constants::{ETHER, MAX_MULTIPLIER}, events::{Claimed, NewSeason},

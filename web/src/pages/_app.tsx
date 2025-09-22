@@ -1,8 +1,6 @@
 import { LoadingModal, MakeItRain, QuitGameModal, RefreshGameModal } from "@/components/layout";
 import { AccountDetailsModal, ConnectModal } from "@/components/wallet";
-import { DeployingModal } from "@/components/wallet/DeployingModal";
 import { DojoContextProvider } from "@/dojo/context/DojoContext";
-import { useAutoBurner } from "@/dojo/hooks/useAutoBurner";
 import { dojoContextConfig } from "@/dojo/setup/config";
 import useKonamiCode, { psySequence, starkpimpSequence } from "@/hooks/useKonamiCode";
 import Fonts from "@/theme/fonts";
@@ -38,7 +36,6 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, [isRightSequence, setIsRightSequence, setSequence]);
 
-  useAutoBurner();
 
   return (
     <>
@@ -61,7 +58,6 @@ export default function App({ Component, pageProps }: AppProps) {
 
           {/* Common modales */}
           <LoadingModal />
-          <DeployingModal />
           <ConnectModal />
           <AccountDetailsModal />
           <QuitGameModal />

@@ -52,7 +52,7 @@ mod paper_mock {
     use dojo::event::EventStorage;
     use dojo::world::WorldStorageTrait;
     use openzeppelin::token::erc20::ERC20Component;
-    use openzeppelin::token::erc20::interface::IERC20Metadata;
+    // use openzeppelin::token::erc20::interface::IERC20Metadata;
     use rollyourown::store::StoreImpl;
     use starknet::{ContractAddress, get_caller_address};
 
@@ -94,20 +94,20 @@ mod paper_mock {
         self.faucetTo(laundromat_address);
     }
 
-    #[abi(embed_v0)]
-    impl ERC20MetadataImpl of IERC20Metadata<ContractState> {
-        fn name(self: @ContractState) -> ByteArray {
-            self.erc20.name()
-        }
+    // #[abi(embed_v0)]
+    // impl ERC20MetadataImpl of IERC20Metadata<ContractState> {
+    //     fn name(self: @ContractState) -> ByteArray {
+    //         self.erc20.name()
+    //     }
 
-        fn symbol(self: @ContractState) -> ByteArray {
-            self.erc20.symbol()
-        }
+    //     fn symbol(self: @ContractState) -> ByteArray {
+    //         self.erc20.symbol()
+    //     }
 
-        fn decimals(self: @ContractState) -> u8 {
-            18
-        }
-    }
+    //     fn decimals(self: @ContractState) -> u8 {
+    //         18
+    //     }
+    // }
 
     //
     // Faucet

@@ -4,7 +4,6 @@ export * from "./ChainSelector";
 export * from "./ChildrenOrConnect";
 export * from "./ConnectButton";
 export * from "./ConnectModal";
-export * from "./DeployingModal";
 export * from "./PaperFaucet";
 export * from "./StarknetProvider";
 export * from "./TokenBalance";

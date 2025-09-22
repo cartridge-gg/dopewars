@@ -1,7 +1,7 @@
 {
   "world": {
-    "class_hash": "0x685ed02eefa98fe7e208aa295042e9bbad8029b0d3d6f0ba2b32546efe0a1f9",
-    "address": "0x745ce531c48c0bdac80e6ae04abf0396668dab648127353939563defb6fa85a",
+    "class_hash": "0x57994b6a75fad550ca18b41ee82e2110e158c59028c4478109a67965a0e5b1e",
+    "address": "0x3b95b1b1d3d504d0b841294cec694e6d088192fc22c0ac2e083ff2df2e844b7",
     "seed": "dope",
     "name": "Dope",
     "entrypoints": [
@@ -11,11 +11,13 @@
       "register_event",
       "register_model",
       "register_contract",
+      "register_external_contract",
       "register_library",
       "init_contract",
       "upgrade_event",
       "upgrade_model",
       "upgrade_contract",
+      "upgrade_external_contract",
       "emit_event",
       "emit_events",
       "set_entity",
@@ -83,6 +85,10 @@
           {
             "name": "Library",
             "type": "(core::starknet::class_hash::ClassHash, core::felt252)"
+          },
+          {
+            "name": "ExternalContract",
+            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
           }
         ]
       },
@@ -213,6 +219,10 @@
           {
             "name": "Enum",
             "type": "core::array::Span::<dojo::meta::layout::FieldLayout>"
+          },
+          {
+            "name": "FixedArray",
+            "type": "(core::array::Span::<dojo::meta::layout::Layout>, core::integer::u32)"
           }
         ]
       },
@@ -369,6 +379,34 @@
           },
           {
             "type": "function",
+            "name": "register_external_contract",
+            "inputs": [
+              {
+                "name": "namespace",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "contract_name",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "instance_name",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "contract_address",
+                "type": "core::starknet::contract_address::ContractAddress"
+              },
+              {
+                "name": "block_number",
+                "type": "core::integer::u64"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
             "name": "register_library",
             "inputs": [
               {
@@ -461,6 +499,30 @@
                 "type": "core::starknet::class_hash::ClassHash"
               }
             ],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "upgrade_external_contract",
+            "inputs": [
+              {
+                "name": "namespace",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "instance_name",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "contract_address",
+                "type": "core::starknet::contract_address::ContractAddress"
+              },
+              {
+                "name": "block_number",
+                "type": "core::integer::u64"
+              }
+            ],
+            "outputs": [],
             "state_mutability": "external"
           },
           {
@@ -928,6 +990,85 @@
       },
       {
         "type": "event",
+        "name": "dojo::world::world_contract::world::ExternalContractRegistered",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "namespace",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "contract_name",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "instance_name",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "contract_selector",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
+            "kind": "data"
+          },
+          {
+            "name": "contract_address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          },
+          {
+            "name": "block_number",
+            "type": "core::integer::u64",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::ExternalContractUpgraded",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "namespace",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "instance_name",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "contract_selector",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
+            "kind": "data"
+          },
+          {
+            "name": "contract_address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          },
+          {
+            "name": "block_number",
+            "type": "core::integer::u64",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
         "name": "dojo::world::world_contract::world::ModelUpgraded",
         "kind": "struct",
         "members": [
@@ -1258,6 +1399,16 @@
             "kind": "nested"
           },
           {
+            "name": "ExternalContractRegistered",
+            "type": "dojo::world::world_contract::world::ExternalContractRegistered",
+            "kind": "nested"
+          },
+          {
+            "name": "ExternalContractUpgraded",
+            "type": "dojo::world::world_contract::world::ExternalContractUpgraded",
+            "kind": "nested"
+          },
+          {
             "name": "ModelUpgraded",
             "type": "dojo::world::world_contract::world::ModelUpgraded",
             "kind": "nested"
@@ -1328,8 +1479,8 @@
   },
   "contracts": [
     {
-      "address": "0x779df1c9b3a2241e45c937640e1bbb95963673bece4606127f8d755e5471779",
-      "class_hash": "0x61ca04d7239a3dac0462eccad369c0c80c4377e43c39f38b54b0c183fd66565",
+      "address": "0x165a15fec164ea2e183f4d37770fd82a5cb467f07b06dc8d51192bbb5c87155",
+      "class_hash": "0x14a4679df9cefb0c24fa327824fe67fd901b6fd7d7859922536e8496380aa75",
       "abi": [
         {
           "type": "impl",
@@ -1343,7 +1494,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear__DeployedContractImpl",
+          "name": "DojoDeployedContractImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -2309,6 +2460,33 @@
         },
         {
           "type": "event",
+          "name": "openzeppelin_access::accesscontrol::accesscontrol::AccessControlComponent::RoleGrantedWithDelay",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "role",
+              "type": "core::felt252",
+              "kind": "data"
+            },
+            {
+              "name": "account",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "data"
+            },
+            {
+              "name": "sender",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "data"
+            },
+            {
+              "name": "delay",
+              "type": "core::integer::u64",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
           "name": "openzeppelin_access::accesscontrol::accesscontrol::AccessControlComponent::RoleRevoked",
           "kind": "struct",
           "members": [
@@ -2362,6 +2540,11 @@
               "kind": "nested"
             },
             {
+              "name": "RoleGrantedWithDelay",
+              "type": "openzeppelin_access::accesscontrol::accesscontrol::AccessControlComponent::RoleGrantedWithDelay",
+              "kind": "nested"
+            },
+            {
               "name": "RoleRevoked",
               "type": "openzeppelin_access::accesscontrol::accesscontrol::AccessControlComponent::RoleRevoked",
               "kind": "nested"
@@ -2405,7 +2588,7 @@
         },
         {
           "type": "event",
-          "name": "dope_contracts::dope_gear::dope_gear::DopeGear::Event",
+          "name": "dope_world::dope_gear::dope_gear::DopeGear::Event",
           "kind": "enum",
           "variants": [
             {
@@ -2481,8 +2664,8 @@
       ]
     },
     {
-      "address": "0x8e1a1f2982c71d98b7c28ef0c3779548b37ee2236468c6fcc249143eaa912e",
-      "class_hash": "0x6ebfa97d7e1accc077d14eb2fa75cffd7d338357d0197d527e41946a7af6bc4",
+      "address": "0x1fb30a6baa133d7bc0ad072ace31b86447392877d190ce2bf8f3616733d8524",
+      "class_hash": "0x1c7c1ec44b1bea15167e87336c929a4e18f1e4ab0f418992be18c0869da720f",
       "abi": [
         {
           "type": "impl",
@@ -2496,7 +2679,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeHustlers__DeployedContractImpl",
+          "name": "DojoDeployedContractImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -2654,11 +2837,11 @@
         {
           "type": "impl",
           "name": "DopeHustlersImpl",
-          "interface_name": "dope_contracts::dope_hustlers::dope_hustlers::IDopeHustlers"
+          "interface_name": "dope_world::dope_hustlers::dope_hustlers::IDopeHustlers"
         },
         {
           "type": "struct",
-          "name": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerMetadata",
+          "name": "dope_types::dope_hustlers::models::HustlerMetadata",
           "members": [
             {
               "name": "token_id",
@@ -2684,7 +2867,7 @@
         },
         {
           "type": "struct",
-          "name": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBodyPart",
+          "name": "dope_types::dope_hustlers::types::HustlerBodyPart",
           "members": [
             {
               "name": "slot",
@@ -2698,17 +2881,17 @@
         },
         {
           "type": "struct",
-          "name": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBodyPartsList",
+          "name": "dope_types::dope_hustlers::types::HustlerBodyPartsList",
           "members": [
             {
               "name": "inner",
-              "type": "core::array::Array::<dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBodyPart>"
+              "type": "core::array::Array::<dope_types::dope_hustlers::types::HustlerBodyPart>"
             }
           ]
         },
         {
           "type": "interface",
-          "name": "dope_contracts::dope_hustlers::dope_hustlers::IDopeHustlers",
+          "name": "dope_world::dope_hustlers::dope_hustlers::IDopeHustlers",
           "items": [
             {
               "type": "function",
@@ -2732,7 +2915,7 @@
               "inputs": [
                 {
                   "name": "hustler_metadata",
-                  "type": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerMetadata"
+                  "type": "dope_types::dope_hustlers::models::HustlerMetadata"
                 }
               ],
               "outputs": [],
@@ -2748,7 +2931,7 @@
                 },
                 {
                   "name": "body_parts",
-                  "type": "dope_contracts::dope_hustlers::dope_hustlers_models::HustlerBodyPartsList"
+                  "type": "dope_types::dope_hustlers::types::HustlerBodyPartsList"
                 }
               ],
               "outputs": [],
@@ -3565,6 +3748,33 @@
         },
         {
           "type": "event",
+          "name": "openzeppelin_access::accesscontrol::accesscontrol::AccessControlComponent::RoleGrantedWithDelay",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "role",
+              "type": "core::felt252",
+              "kind": "data"
+            },
+            {
+              "name": "account",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "data"
+            },
+            {
+              "name": "sender",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "data"
+            },
+            {
+              "name": "delay",
+              "type": "core::integer::u64",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
           "name": "openzeppelin_access::accesscontrol::accesscontrol::AccessControlComponent::RoleRevoked",
           "kind": "struct",
           "members": [
@@ -3615,6 +3825,11 @@
             {
               "name": "RoleGranted",
               "type": "openzeppelin_access::accesscontrol::accesscontrol::AccessControlComponent::RoleGranted",
+              "kind": "nested"
+            },
+            {
+              "name": "RoleGrantedWithDelay",
+              "type": "openzeppelin_access::accesscontrol::accesscontrol::AccessControlComponent::RoleGrantedWithDelay",
               "kind": "nested"
             },
             {
@@ -3713,7 +3928,7 @@
         },
         {
           "type": "event",
-          "name": "dope_contracts::dope_hustlers::dope_hustlers::DopeHustlers::Event",
+          "name": "dope_world::dope_hustlers::dope_hustlers::DopeHustlers::Event",
           "kind": "enum",
           "variants": [
             {
@@ -3802,8 +4017,8 @@
       ]
     },
     {
-      "address": "0x2d908ef861d4168348665217a168713c491b75b7490e6bd53dababcaf6175fe",
-      "class_hash": "0x668d0209996b22748a66dd30fc298f1977e26ea72e44258f66d2a9816e38c02",
+      "address": "0x1ee0fe152c71643aa7c6325c9e2d8278c2ed1da681733ec90f64be98ac6645",
+      "class_hash": "0x40481a9fe4ed12a82ea66ac4d4833c6c08282f92d5c99beddefb0def030301b",
       "abi": [
         {
           "type": "impl",
@@ -3817,7 +4032,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeLoot__DeployedContractImpl",
+          "name": "DojoDeployedContractImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -4823,6 +5038,33 @@
         },
         {
           "type": "event",
+          "name": "openzeppelin_access::accesscontrol::accesscontrol::AccessControlComponent::RoleGrantedWithDelay",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "role",
+              "type": "core::felt252",
+              "kind": "data"
+            },
+            {
+              "name": "account",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "data"
+            },
+            {
+              "name": "sender",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "data"
+            },
+            {
+              "name": "delay",
+              "type": "core::integer::u64",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
           "name": "openzeppelin_access::accesscontrol::accesscontrol::AccessControlComponent::RoleRevoked",
           "kind": "struct",
           "members": [
@@ -4873,6 +5115,11 @@
             {
               "name": "RoleGranted",
               "type": "openzeppelin_access::accesscontrol::accesscontrol::AccessControlComponent::RoleGranted",
+              "kind": "nested"
+            },
+            {
+              "name": "RoleGrantedWithDelay",
+              "type": "openzeppelin_access::accesscontrol::accesscontrol::AccessControlComponent::RoleGrantedWithDelay",
               "kind": "nested"
             },
             {
@@ -5038,7 +5285,7 @@
         },
         {
           "type": "event",
-          "name": "dope_contracts::dope_loot::dope_loot::DopeLoot::Event",
+          "name": "dope_world::dope_loot::dope_loot::DopeLoot::Event",
           "kind": "enum",
           "variants": [
             {
@@ -5132,8 +5379,8 @@
       ]
     },
     {
-      "address": "0x13572337d5237ef839db7a6dd902f2920050b303ab1c10acb42e0857314280c",
-      "class_hash": "0x247ce3ed1c3df8235132d58c64bf512b2b643550ae48f68eb2ea5df2da3141a",
+      "address": "0x37e52dab569c7cbde97a555cbffe890011db5230c7a7e7268253e1de2d83b02",
+      "class_hash": "0x1f1e6a0d9135034ba65aa1619b0215342c18b187b3202168de951b8a67eec06",
       "abi": [
         {
           "type": "impl",
@@ -5147,7 +5394,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeLootClaim__DeployedContractImpl",
+          "name": "DojoDeployedContractImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -5204,7 +5451,7 @@
         {
           "type": "impl",
           "name": "DopeLootClaimImpl",
-          "interface_name": "dope_contracts::dope_loot_claim::dope_loot_claim::IDopeLootClaim"
+          "interface_name": "dope_types::dope_loot_claim::interface::IDopeLootClaim"
         },
         {
           "type": "struct",
@@ -5228,7 +5475,7 @@
         },
         {
           "type": "struct",
-          "name": "dope_contracts::dope_loot_claim::merkle::LeafData",
+          "name": "dope_types::dope_loot_claim::merkle::LeafData",
           "members": [
             {
               "name": "eth_address",
@@ -5274,7 +5521,7 @@
         },
         {
           "type": "interface",
-          "name": "dope_contracts::dope_loot_claim::dope_loot_claim::IDopeLootClaim",
+          "name": "dope_types::dope_loot_claim::interface::IDopeLootClaim",
           "items": [
             {
               "type": "function",
@@ -5300,7 +5547,7 @@
                 },
                 {
                   "name": "data",
-                  "type": "dope_contracts::dope_loot_claim::merkle::LeafData"
+                  "type": "dope_types::dope_loot_claim::merkle::LeafData"
                 },
                 {
                   "name": "v",
@@ -5545,7 +5792,7 @@
         },
         {
           "type": "event",
-          "name": "dope_contracts::dope_loot_claim::dope_loot_claim::DopeLootClaim::Event",
+          "name": "dope_world::dope_loot_claim::dope_loot_claim::DopeLootClaim::Event",
           "kind": "enum",
           "variants": [
             {
@@ -5591,7 +5838,7 @@
   ],
   "libraries": [
     {
-      "class_hash": "0x19f1ab81ff691203217da2dfbf1e9a177666e5cc054a9d722de3322e25666a2",
+      "class_hash": "0x3ef4a0accb4510e703374708fdd52fa416fbfa27e2cce4bd682298a8c5891c5",
       "abi": [
         {
           "type": "impl",
@@ -5605,7 +5852,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGearRendererDefault__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -5774,7 +6021,7 @@
         },
         {
           "type": "event",
-          "name": "dope_contracts::dope_gear::dope_gear_renderer_default::DopeGearRendererDefault::Event",
+          "name": "dope_world::dope_gear::dope_gear_renderer_default::DopeGearRendererDefault::Event",
           "kind": "enum",
           "variants": [
             {
@@ -5791,7 +6038,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x25aec69925745c75ea4877560ee36408560fa335d9c34b5d774f446946785a1",
+      "class_hash": "0x1b87584c012495ebd3a761aecd5a675a48b28cabc82fbda7dd33a7ee3d286e8",
       "abi": [
         {
           "type": "impl",
@@ -5805,7 +6052,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Accessories_Cmp_Accessory__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -6014,7 +6261,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x7a14f4424a77d6bf9f58a43070290a4ebdefe17f8a3b12f5a9f152f26d8e52f",
+      "class_hash": "0x13053ea616c27547daab9dc989d14bb01fcb5a171dca2121740ee0793c78ef7",
       "abi": [
         {
           "type": "impl",
@@ -6028,7 +6275,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Accessories_Pal_Common__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -6182,7 +6429,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x75a603867c8866a34e4f3677c022ff714fdc545ad99daff1706f4c06f8c0805",
+      "class_hash": "0x6ba00b6e5290cd80bcdcd9e385d0765379c9adb6dae8ff81fb747f7cf681b6c",
       "abi": [
         {
           "type": "impl",
@@ -6196,7 +6443,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_ExtBody_Cmp_Accesory__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -6405,7 +6652,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x6750093daa075bec8ffc83cd5c44bf1d3e7d5df76a9a00e9e65a347d2c07e74",
+      "class_hash": "0x1c07908de32b24d456c82581f5688d46eb8769da7a76be54a023f25f192aab0",
       "abi": [
         {
           "type": "impl",
@@ -6419,7 +6666,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_ExtBody_Pal_Common__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -6573,7 +6820,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x5de60ee0fc4fd7d5d82c71390d0dcb008b2d0ee1fd40e70e16e703b63d68426",
+      "class_hash": "0x754290dea190ef1db2c29b60395c45091b313824e807964cea7917be8507abe",
       "abi": [
         {
           "type": "impl",
@@ -6587,7 +6834,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Genesis_Cmp_Augmentation__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -6796,7 +7043,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0xebf7712773f21cedca00108b63d6220dedd9b2ba6c6cf72da84add42009c25",
+      "class_hash": "0x7bbf4dc623f8d5103846475b1f2ce39d0bae048e99404e481c1e6ad3de58991",
       "abi": [
         {
           "type": "impl",
@@ -6810,7 +7057,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Genesis_Cmp_Clothe__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -7019,7 +7266,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x56523e914d6dd8ec08e756fb32db83470e6fc3938564854cce91975ada4ef8d",
+      "class_hash": "0x6ea2f352b5a7a7615510300d5f3e5aa2d309d8e7a9198a495917f7a155ded07",
       "abi": [
         {
           "type": "impl",
@@ -7033,7 +7280,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Genesis_Cmp_Drug__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -7242,7 +7489,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x348416f1cb8c4dba36f06dc41697c1acf4f13e249c50dfb0aa798edaf6be4a7",
+      "class_hash": "0x4c8c70e660304cc34e4015ff5f0806655de24178ee3273e19bb5895df450c17",
       "abi": [
         {
           "type": "impl",
@@ -7256,7 +7503,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Genesis_Cmp_Foot__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -7465,7 +7712,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x690024339ecf5f7300adccbffe0bda3ae7804dfd894f2c996f4a723b45bf450",
+      "class_hash": "0x1785f2c8571e2a8e6e0cc5bb5855a3f0305e46b67ec7e6a07d9cfed0f9267cb",
       "abi": [
         {
           "type": "impl",
@@ -7479,7 +7726,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Genesis_Cmp_Hand__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -7688,7 +7935,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x6130765c0638730e5b5a7742781d2b7f129b7fe6d618d73fb31f06189402650",
+      "class_hash": "0x325a248dc9446e946b900a44c4ec90abf4c927a89e0af5a75a36f7d86725f79",
       "abi": [
         {
           "type": "impl",
@@ -7702,7 +7949,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Genesis_Cmp_Name_Prefixes__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -7911,7 +8158,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x7011c166c64817762ff5bdd4f4481baa9278928050feb1eaa0886f0f58d3479",
+      "class_hash": "0x62834713875127b607349df15d74267c2224ed126e0c23cd706f0c0afb49779",
       "abi": [
         {
           "type": "impl",
@@ -7925,7 +8172,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Genesis_Cmp_Name_Suffixes__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -8134,7 +8381,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x7d82b1e3e182155d4e969a9041332043f1c8264f49e9e1d32919402650aa579",
+      "class_hash": "0x78c2eeb8fe9b2e11f95548d9434cc4ed1a2fe9e817611f4ee53e969d94d95fb",
       "abi": [
         {
           "type": "impl",
@@ -8148,7 +8395,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Genesis_Cmp_Neck__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -8357,7 +8604,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x76856b50212d4ff413a54d57f6b02d3819d6465bd34545cdabe294162a9907c",
+      "class_hash": "0x77efd0aba1b3f1aa2b31e737e49a1ae0771fb63bfdfae022c52fe9e01bbe036",
       "abi": [
         {
           "type": "impl",
@@ -8371,7 +8618,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Genesis_Cmp_Ring__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -8580,7 +8827,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x29f3b8d21e49940b123bfb5e47448298eaa06e32976f1010cf0a6568251fd63",
+      "class_hash": "0x1a165c6b7e1acc0eefc619291c637e00c4c35ea6f1855d7297975ff7c45bb84",
       "abi": [
         {
           "type": "impl",
@@ -8594,7 +8841,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Genesis_Cmp_Suffixes__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -8803,7 +9050,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x194e1016104fda35a292b7ea07f7a09ad713ddc17380f1aabde740ff49b2a9",
+      "class_hash": "0x54bb09e387a05a426cbd6dbcdb5cbd8af226cd9d4385da45277436434973c71",
       "abi": [
         {
           "type": "impl",
@@ -8817,7 +9064,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Genesis_Cmp_Vehicle__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -9026,7 +9273,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x76d1fee9632e35f905ffb91e6be6ffbe987aeb719457db68e298e7c81692368",
+      "class_hash": "0x2fd45bdddcf9ee1ff9bdb7949ac7240c3d8f743c7608cce7d246685317eab46",
       "abi": [
         {
           "type": "impl",
@@ -9040,7 +9287,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Genesis_Cmp_Waist__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -9249,7 +9496,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x495a81c6f72698de713e4a3dd5d15b9fca617e3a24330012096a34b3a01edfd",
+      "class_hash": "0x6e21bc5db94d89d190920e6360aa44f09b018f54c6a0809acf48fa319218536",
       "abi": [
         {
           "type": "impl",
@@ -9263,7 +9510,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Genesis_Cmp_Weapon__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -9472,7 +9719,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x4a0eed5517b37d610d5d3af8b493c24244a3d0a1fd64cb7acca00fce92d5b49",
+      "class_hash": "0xf8c13f493c57503af7d87c62492dce6dae41dbf2571ebb1dd074e7a2a6519",
       "abi": [
         {
           "type": "impl",
@@ -9486,7 +9733,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Genesis_Pal_Common__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -9640,7 +9887,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x5351e85890995def51ba347a81ec42fb8f433cf868ea3aedd712959fe74110c",
+      "class_hash": "0x1130450c85dbde60ba46c610eea9cb6789f4428facf07ee93e9b6531edec174",
       "abi": [
         {
           "type": "impl",
@@ -9654,7 +9901,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeGear_Genesis_Pal_Vehicle__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -9808,7 +10055,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x69e8b99fcfc7b80555e4bccfbfdbff3b20dbf8df955bd271bd5da92142c21a0",
+      "class_hash": "0x64b084994f57ecac4e84e0f986b8e8c9b4d1cf17a15180a813bb0b24735cd5c",
       "abi": [
         {
           "type": "impl",
@@ -9822,7 +10069,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeHustlersRendererDefault__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -9863,7 +10110,7 @@
         {
           "type": "impl",
           "name": "RendererImpl",
-          "interface_name": "dope_contracts::dope_hustlers::dope_hustlers::IDopeHustlerRenderer"
+          "interface_name": "dope_world::dope_hustlers::dope_hustlers::IDopeHustlerRenderer"
         },
         {
           "type": "struct",
@@ -9913,7 +10160,7 @@
         },
         {
           "type": "interface",
-          "name": "dope_contracts::dope_hustlers::dope_hustlers::IDopeHustlerRenderer",
+          "name": "dope_world::dope_hustlers::dope_hustlers::IDopeHustlerRenderer",
           "items": [
             {
               "type": "function",
@@ -9977,7 +10224,7 @@
         },
         {
           "type": "event",
-          "name": "dope_contracts::dope_hustlers::dope_hustlers_renderer_default::DopeHustlersRendererDefault::Event",
+          "name": "dope_world::dope_hustlers::dope_hustlers_renderer_default::DopeHustlersRendererDefault::Event",
           "kind": "enum",
           "variants": [
             {
@@ -9994,7 +10241,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0xe4eb026e623e3eb480b6e5f054265e1dc4223882020e0b7489324d3fbfc98f",
+      "class_hash": "0x3d54780bac786f7abad4b62fd2418a7a854e501c5a475dc22ac0c2967fda760",
       "abi": [
         {
           "type": "impl",
@@ -10008,7 +10255,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeHustlers_ExtBody_Cmp_Eyes__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -10217,7 +10464,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x17c32354749516e1fab7a16c58f8589d22cae8c43c0aff461d4794a1ae6c83c",
+      "class_hash": "0x33c4d707d1bd84aeef759053527f5da6ae23be153eca99e0419aac5fe47e5e8",
       "abi": [
         {
           "type": "impl",
@@ -10231,7 +10478,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeHustlers_ExtBody_Cmp_Hair__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -10440,7 +10687,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x2657b6940b37e3cd8d84e30099af0589ad8516a065dbe8974e069cd90193f4b",
+      "class_hash": "0x5f172d4a8011c3cf75f6fc82e59e75c6a1ca50858dcd560b893115c7ac7f15e",
       "abi": [
         {
           "type": "impl",
@@ -10454,7 +10701,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeHustlers_ExtBody_Pal_Common__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -10608,7 +10855,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x647c2f9033fbb9d2ecfedd625408ff4e2bc3505b9f50ce59b60a8070c0e2ca7",
+      "class_hash": "0x740caa03ac49e6a9e94dfc583d1b1239f5cdd7e46e71499cb88a395a17e5fae",
       "abi": [
         {
           "type": "impl",
@@ -10622,7 +10869,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeHustlers_Genesis_Cmp_Beard__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -10831,7 +11078,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x4e12855f024a4f160aa98bb623b5d425612c94abea1f277b84603d7b834a137",
+      "class_hash": "0x73ce49762973f17d9503cd15e4893c4435d155ec81d777ae44dbdd70fa08f4e",
       "abi": [
         {
           "type": "impl",
@@ -10845,7 +11092,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeHustlers_Genesis_Cmp_Body__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -11054,7 +11301,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x4ace1c8419ebf5be368c5afecd66861538fc2c7919c3e884a47ea9aa01a0bd6",
+      "class_hash": "0xb3af10550e57bbb0b4fa09e62f77c6ec2f2a10c2e229833f5768a7d12927a4",
       "abi": [
         {
           "type": "impl",
@@ -11068,7 +11315,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeHustlers_Genesis_Cmp_Class__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -11277,7 +11524,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x4aa29cd6cbfbbc6664cd77cf6466ba721f063e541df271038a3279c1ee1ea31",
+      "class_hash": "0x6138e785c6dac4736dd1b8d3de3fb87cc9c6a679f0eea882bbeb356f7cf4cdc",
       "abi": [
         {
           "type": "impl",
@@ -11291,7 +11538,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeHustlers_Genesis_Cmp_Drug_Shadow__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -11500,7 +11747,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x36c34c441cc1cdfe99ad72002157c3ca24ce7b0d867959e87b7ef24e3da10b4",
+      "class_hash": "0x53136619dcc932e95b60629bbb59f17a8af227f2488041514b7181cdeb21912",
       "abi": [
         {
           "type": "impl",
@@ -11514,7 +11761,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeHustlers_Genesis_Cmp_Gender__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -11723,7 +11970,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x3e96c3af24d15a16cd2566c10f7c7a4ebd020dc93c45bb2136c142cc10bcc89",
+      "class_hash": "0x39bc3e42ffa657b8f7ed786e26fa86d93a52db4461d54cf54a226ec8a1780",
       "abi": [
         {
           "type": "impl",
@@ -11737,7 +11984,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeHustlers_Genesis_Cmp_Hair__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -11946,7 +12193,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x5a9c5beb41f0cf8f59712f7c3fa253cae16eed50e9f6eda45c100dce7b02d6f",
+      "class_hash": "0x764b62b261584fe93cbcc920eea2526b39ce91e599ce4f1abb38cb734e6e1bc",
       "abi": [
         {
           "type": "impl",
@@ -11960,7 +12207,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeHustlers_Genesis_Cmp_Shadow__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -12169,7 +12416,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x26f0d3bbf14065a518d803bc7eee708517c79c962dfaf442b91e45b0ba4e91b",
+      "class_hash": "0x78663777835f6099ec5cb50cf2e7aedbadfce9eac6303bafdf51e29ad014766",
       "abi": [
         {
           "type": "impl",
@@ -12183,7 +12430,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeHustlers_Genesis_Cmp_Silouhette__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -12392,7 +12639,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x2d4fcf9501718eff24a1abcbc1ececf2ff7aaaeae64c543777e0b0c1d2caba7",
+      "class_hash": "0x4937bf79ce08eefd8d26f8377531d19f8c159e4ca524ff0fa4a02d439b34250",
       "abi": [
         {
           "type": "impl",
@@ -12406,7 +12653,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeHustlers_Genesis_Pal_Common__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -12560,7 +12807,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x5bb46d9626a408a476cd63a87a7561943e631cfbee6df868aa7bd674d36e73e",
+      "class_hash": "0x237a1f60dc8a5086add73e77f7cb60e30e17902a56dbf9b71d8f6b579e93c81",
       "abi": [
         {
           "type": "impl",
@@ -12574,7 +12821,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeLootRendererDefault__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -12743,7 +12990,7 @@
         },
         {
           "type": "event",
-          "name": "dope_contracts::dope_loot::dope_loot_renderer_default::DopeLootRendererDefault::Event",
+          "name": "dope_world::dope_loot::dope_loot_renderer_default::DopeLootRendererDefault::Event",
           "kind": "enum",
           "variants": [
             {
@@ -12760,7 +13007,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x119fc8c95fa11d2ef4a04f7c3a8bc61d991fd36bd546f6ac984ae1aa6572fd8",
+      "class_hash": "0x200e16eda5314ea085262b5fd631233f43509c6fa0da78bd0ae3fa4061d1338",
       "abi": [
         {
           "type": "impl",
@@ -12774,7 +13021,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeLoot_Genesis_Cmp_Augmentation__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -12983,7 +13230,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x3400287436ce87ba5a2ca1a97be4d6249751f2c7ce07e49f87ce39263765dbe",
+      "class_hash": "0x7de14576d755c5f44752ccf50c45227ffce089ce17662ae47770f0007fef776",
       "abi": [
         {
           "type": "impl",
@@ -12997,7 +13244,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeLoot_Genesis_Cmp_Clothe__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -13206,7 +13453,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x4dafa7ce3970ed23d3d11cef1d49914a38391c3156920cb4c5e351f167e0bd2",
+      "class_hash": "0x5939df4e2102ee12d9645192763228e0d6466671df10af295aecf29ac7f1cbe",
       "abi": [
         {
           "type": "impl",
@@ -13220,7 +13467,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeLoot_Genesis_Cmp_Drug__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -13429,7 +13676,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x2d6204f4704b30c79c38005fe050d0f4741341ccbad6d852ead7250d7fb4472",
+      "class_hash": "0x4594ef4bab63bf19d2f5de2bc1bfddf25a7631a97a89bd92a4da3167bb977",
       "abi": [
         {
           "type": "impl",
@@ -13443,7 +13690,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeLoot_Genesis_Cmp_Foot__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -13652,7 +13899,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x1c1095378d9cec6a958796b524bb91b1dacce118e96df4c211c8ebd30ea9d00",
+      "class_hash": "0x2027d99a847c783144e5b2bc6c22a1c550919602fac7443bd6f4156714316db",
       "abi": [
         {
           "type": "impl",
@@ -13666,7 +13913,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeLoot_Genesis_Cmp_Hand__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -13875,7 +14122,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x1412bb585143cb36502c5d1079a32aaa83737ea0005cc789d718194f0af4c6a",
+      "class_hash": "0x210bed7859195674df6c7e5e460965c1b8e3407e1c3153890c6d4a9467c3382",
       "abi": [
         {
           "type": "impl",
@@ -13889,7 +14136,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeLoot_Genesis_Cmp_Name_Prefixes__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -14098,7 +14345,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x3be01f55b23be642cc7508e6bc6d166d70f93a69316361977f707fa3207a2b0",
+      "class_hash": "0x38b4c49321534648df6b49ec9c2d0b2302d8700674970bd12cc58c4e2dc263",
       "abi": [
         {
           "type": "impl",
@@ -14112,7 +14359,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeLoot_Genesis_Cmp_Name_Suffixes__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -14321,7 +14568,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x382787c7d5cd89bb78f3dc49d00099c8dac150b5fead33f9f56464aa481fe6a",
+      "class_hash": "0x6ab275250562523da9f14c89585b27c5e1a4a0e27cb28b23a265fca9a13e0b4",
       "abi": [
         {
           "type": "impl",
@@ -14335,7 +14582,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeLoot_Genesis_Cmp_Neck__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -14544,7 +14791,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x2065b2f12167dbf61f887da0830f0a1aca205b83b68982ad3dfbc785ad44e36",
+      "class_hash": "0x6cb8d3ec4ce5de5531ad72e9971f67243993f7972c36d85183d80786836445b",
       "abi": [
         {
           "type": "impl",
@@ -14558,7 +14805,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeLoot_Genesis_Cmp_Ring__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -14767,7 +15014,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x7d231cec586009d327cdac719a0e897b3642d2ddea1340a375b4735ef14b18f",
+      "class_hash": "0x432d1135b4bff444b463934b86eb963f87baddf53ce040737e6ad9489a7811e",
       "abi": [
         {
           "type": "impl",
@@ -14781,7 +15028,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeLoot_Genesis_Cmp_Suffixes__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -14990,7 +15237,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x5af7f6cf534975e6d041451e8c9bd5f099db69fa1d29acd2448ca45b6d3f3f3",
+      "class_hash": "0x6a22660839141cf2708a439b8f84c6494634a230f4e02477b8ffca1f159bbb7",
       "abi": [
         {
           "type": "impl",
@@ -15004,7 +15251,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeLoot_Genesis_Cmp_Vehicle__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -15213,7 +15460,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x4611242f2b1e4d7d6c551b31e2c73a025969b109dbffecfbd0cde236864db89",
+      "class_hash": "0x1d3c24c70580bb073668816c5548ac1550ad07593b27bc014533ad8f964f8cc",
       "abi": [
         {
           "type": "impl",
@@ -15227,7 +15474,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeLoot_Genesis_Cmp_Waist__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -15436,7 +15683,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x1ec377c970a37bed4255b4d94d4d8213b3623abc1d435622b649edc6c88157f",
+      "class_hash": "0x144db86436515207964388e920bb241159b41dd64d0fb46c5f945c6ed457eaa",
       "abi": [
         {
           "type": "impl",
@@ -15450,7 +15697,7 @@
         },
         {
           "type": "impl",
-          "name": "DopeLoot_Genesis_Cmp_Weapon__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -15662,61 +15909,61 @@
   "models": [
     {
       "members": [],
-      "class_hash": "0x17f5b108bf5907616294b5d5a97fd67cc387bbe48955c55bd6e6bd7af26709b",
+      "class_hash": "0x46738192140d14a8daba3561f9e7ec5aee2bf650c0cae2af27d895582445dae",
       "tag": "dope-Collection",
       "selector": "0xd5dfbaf302a105fdbb49d4aef3c61078836e68ccead9c7c296d4788affca98"
     },
     {
       "members": [],
-      "class_hash": "0x76068d2538d2063538b5f6e69c0a994c204ab72e133dabb662f5efb0782b7e2",
+      "class_hash": "0x5ac570b3f22898e1616e03f32eded5bde7a06ba44970e08bdba009afb813fe",
       "tag": "dope-CollectionComponent",
       "selector": "0x38c9335393e2c5673bab1bfc85d54f355ade46ea7b89817e028db78cc1e2bcf"
     },
     {
       "members": [],
-      "class_hash": "0x792f6a9115fc0abaddaaf3b5d54e09a77dfe600db4c405fae943085d552f23b",
+      "class_hash": "0x577159acd6b09cc641bef61d2723161fbf605b118495fa65e4e332f7ce801f2",
       "tag": "dope-CollectionComponentList",
       "selector": "0x7d5962f3f896b6902cdfc5da2f1003539a26a14a20355081951e1d284b086b5"
     },
     {
       "members": [],
-      "class_hash": "0x59bca6ffb6a174efd6a1050db0fdc01e49efbd350e09cc4eef5806862951aa7",
+      "class_hash": "0x7ad7aaa9f7f599c46e5b8ff7c833df257b7ce236c7bc0cef1f4bf5dbe0c4c1e",
       "tag": "dope-CollectionComponentSlug",
       "selector": "0x520d0d2869257b339dda35fd6ce8689b99619763ca087a71ac6a6cd1909dba2"
     },
     {
       "members": [],
-      "class_hash": "0x2443eee67f41c7856a970630651056fd30be5e4a50aff8a2fce68eaeff081c9",
+      "class_hash": "0x5b3dde21b274b90d78c7db0953b026e73e31c91c05d2268cf62ed8b0ffc69f9",
       "tag": "dope-DopeLootClaimed",
       "selector": "0x2365d20db67233cc112a2b1d9868c4454a75182c5f2d2613335db44f043b1ad"
     },
     {
       "members": [],
-      "class_hash": "0x72d4561f7c291fa5ce0b58d36fcdb1522f1608fc042b3011d075121acf4ef9b",
+      "class_hash": "0x7d875a963362785ffb738435c1e022197014b256f003f76729918b5652a588c",
       "tag": "dope-DopeLootOpened",
       "selector": "0x66181d53f51b0a7423c5652efddc0bc9e2489467cb5317264a201694f3e9a13"
     },
     {
       "members": [],
-      "class_hash": "0x30fbb2b9b0feeb2d1ab6153e3976f898d30b52426aa63ed615df9397b67c792",
+      "class_hash": "0x30b19f1925985d22b9dd92d3c5fa6d5ecf66c7a53c4d77e5f0bdfe266428d7",
       "tag": "dope-DopeLootReleased",
       "selector": "0x35b4d392e234a3b724c01d8188050be78e721ca680c07fc549666ae6be6c2b6"
     },
     {
       "members": [],
-      "class_hash": "0x2c072e41d110bbffbf6ba0275159d909e9b428951be46027fc869495162c393",
+      "class_hash": "0x3265ad53401f58af8a80a068614386ae915549a351ce1681c0714c2131319",
       "tag": "dope-HustlerBody",
       "selector": "0x5fe58cc5aeb6be55002d025d91f51449eb816c6bf7da98e9aedea43a11bbc56"
     },
     {
       "members": [],
-      "class_hash": "0x7c4597984362fb25b3ef8d098e3ffabcafb8d74067c360c58e554c042fd2f74",
+      "class_hash": "0x11d2e7fd2f437ceba4529f2060c113f27dcd62ec37099640dbbf456a4b3b996",
       "tag": "dope-HustlerMetadata",
       "selector": "0x7e34aa413be49332cb31763471d20764d21d7700802a117540fe9f247edb51e"
     },
     {
       "members": [],
-      "class_hash": "0x6be91bdcc06e29ce48f0ca5c42a76e18c80072a47dda68a7451469be339b9b4",
+      "class_hash": "0x165b65ea10d6032673982bf7521108bc4c8fa3ce6409946fce8f9bc8699c163",
       "tag": "dope-HustlerSlot",
       "selector": "0x28bc2bd23c18c8d1ecb10ae934f9ef1ad21c18d45368731b1c7210aee787557"
     }
@@ -15724,37 +15971,37 @@
   "events": [
     {
       "members": [],
-      "class_hash": "0x3efb93c8998d16cc0ef0e628b15c21c4930728bdfd31add3128138a509e6a7b",
+      "class_hash": "0x6413a184b410d92769d91af275c249151cdf46bdae9cea69467b29b45841696",
       "tag": "dope-ComponentValueEvent",
       "selector": "0x15368261fa8c763d68308e3e47d48c45fce656223e115fcce8a8365c07cced9"
     },
     {
       "members": [],
-      "class_hash": "0x4e20f856733d1699c513b9a62f37e51df9a0772cd3b06a81ff195870248b97b",
-      "tag": "dope-ComponentValueResourceEvent",
-      "selector": "0x7a6313868213911400f35cbb01b629b3dd16b665fc790d177d2b272ad689d70"
+      "class_hash": "0x3955ba3d0bbf82cfaf8acc2b3adbd44c3dba8e62adfe6489e76281c003249c",
+      "tag": "dope-ComponentValueResEvent",
+      "selector": "0x6cea84ebdf0bab61e517933663ec51f6e0e540eb41d706e8e1e547e87ede60c"
     },
     {
       "members": [],
-      "class_hash": "0x53a8b56a7f773c21cd2f900d6fab28f762cca13a39ce70e5014199c74e728ce",
+      "class_hash": "0x57a9a118513e3f8a8087669be8ec1e1dd5dfb554779f2beebaf7d2562461ce",
       "tag": "dope-DopeLootClaimedEvent",
       "selector": "0x6cd5806cf1ba8395f097762e7b718eb01508fc1d25856ad4e5de126345c846f"
     },
     {
       "members": [],
-      "class_hash": "0x168f9819b2a5c1e1196bb6150240b95fc014c20d869f93e94511d1f58b10b44",
+      "class_hash": "0x3e489a40016c247873255b0a984c438debf1b2b9ccfe42237b43a9d8fa96f57",
       "tag": "dope-DopeLootOpenedEvent",
       "selector": "0x50a3f36edbdab0a73ad28ae660d4467d592e35c3a4c63759567dfb59210609c"
     },
     {
       "members": [],
-      "class_hash": "0x150e04866be432ce4f2bb2dcbb7c67acec6f5d2fad65c3a1814a9009917d5c6",
+      "class_hash": "0x5e84e558f7fda08357698054faa33fc8f35fc3977172bceae25d766d2a5a610",
       "tag": "dope-DopeLootReleasedEvent",
       "selector": "0x7171afface7f31c954c3fdf48dcfe9fa1ddc87fbd2158237bf5d424be32a8d3"
     },
     {
       "members": [],
-      "class_hash": "0x63433131cd7f54f7b34a3604bcec33c3e1d947f3f166cda27a17ae500795b02",
+      "class_hash": "0x6cee49d67f705f9b2775d449bf6b4df91bc477dacde4e08871c57d3eb000fac",
       "tag": "dope-PaletteEvent",
       "selector": "0xc60984aa02940c91272f59c08bd9918132fba55ed0e6cbc4ee147d4390a2c4"
     }

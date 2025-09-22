@@ -147,7 +147,7 @@ export const createCollectionStore: StateCreator<DopeState, [], [], CollectionSt
   //
   initComponentValues: async () => {
     const entities = await get().toriiClient!.getEventMessages(
-      queryAllModels(["dope-ComponentValueEvent", "dope-ComponentValueResourceEvent"]),
+      queryAllModels(["dope-ComponentValueEvent", "dope-ComponentValueResEvent"]),
     );
 
     const parsedComponentValues = parseModels(entities, "dope-ComponentValueEvent")
@@ -159,7 +159,7 @@ export const createCollectionStore: StateCreator<DopeState, [], [], CollectionSt
       }))
       .sort((a, b) => a.id - b.id);
 
-    const parsedComponentValueResources = parseModels(entities, "dope-ComponentValueResourceEvent")
+    const parsedComponentValueResources = parseModels(entities, "dope-ComponentValueResEvent")
       .map((i) => ({
         ...i,
         collection_id: feltToString(i.collection_id),

@@ -27,7 +27,6 @@ export const ConnectModal = observer(() => {
 
   const {
     chains: { selectedChain },
-    burnerManager,
     uiStore,
   } = useDojoContext();
 
@@ -58,8 +57,6 @@ export const ConnectModal = observer(() => {
         <ModalBody p={3}>
           <VStack w="full">
             {connectors.map((connector) => {
-              const isBurner = connector.id === "dojoburner";
-              const isPredeployed = connector.id === "dojopredeployed";
               // const isController = connector.id === "cartridge";
               const isController = connector.id === "controller";
               const isArgent = connector.id === "argentX";
@@ -67,20 +64,20 @@ export const ConnectModal = observer(() => {
               if (!router.asPath.startsWith("/admin") && isArgent) {
                 return null;
               }
-              // console.log(connector)
-              if (!(isKatana || isSlot) && (isBurner || isPredeployed)) {
-                // burner or predeployed not on katana
-                return null;
-              }
+              // // console.log(connector)
+              // if (!(isKatana || isSlot) && (isBurner || isPredeployed)) {
+              //   // burner or predeployed not on katana
+              //   return null;
+              // }
 
               // if (isKatana && !(isBurner || isPredeployed || isController)) {
               //   // not burner or predeployed on katana
               //   return null;
               // }
 
-              if (!isAdmin && isPredeployed) {
-                return null;
-              }
+              // if (!isAdmin && isPredeployed) {
+              //   return null;
+              // }
 
               return (
                 <HStack w="full" key={connector.id}>
@@ -99,14 +96,15 @@ export const ConnectModal = observer(() => {
                   >
                     <HStack w="full" alignItems="center" justifyContent="center" gap={3}>
                       <HStack>
-                        {isBurner || isPredeployed ? (
+                        {/* {isBurner || isPredeployed ? (
                           <KatanaIcon />
                         ) : isController ? (
                           <Cartridge />
                         ) : (
                           /// @ts-ignore
                           <Image src={connector.icon} width="24px" height="24px" alt={connector.name} />
-                        )}
+                        )} */}
+                        <Cartridge />
 
                         <Text>{connector.available() ? `${connector.name}` : `Install ${connector.name}`}</Text>
                         {!connector.available() && <ExternalLink ml="auto" />}

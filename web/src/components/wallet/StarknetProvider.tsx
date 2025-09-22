@@ -1,15 +1,19 @@
 import { DW_NS } from "@/dojo/hooks";
-import { DojoChainConfig } from "@/dojo/setup/config";
+import { katanaLocalChain } from "@/dojo/setup/chains";
+import { DojoChainConfig, dojoContextConfig } from "@/dojo/setup/config";
 import { ControllerConnector } from "@cartridge/connector";
 import { SessionPolicies } from "@cartridge/presets";
 import { getContractByName } from "@dojoengine/core";
+import { Chain } from "@starknet-react/chains";
 import {
   ChainProviderFactory,
+  Connector,
   ExplorerFactory,
   InjectedConnector,
   StarknetConfig,
   argent,
   injected,
+  jsonRpcProvider,
   starkscan,
 } from "@starknet-react/core";
 import { useRouter } from "next/router";
@@ -36,12 +40,16 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
   };
 }
 
+
 function getConnectorsForChain(selectedChain: DojoChainConfig, path: string) {
   const controller = cartridgeConnector({ selectedChain });
 
   switch (selectedChain.name) {
     case "KATANA":
-      return [controller, /*injected({ id: "dojoburner" }), */ injected({ id: "dojopredeployed" })];
+      return [
+        controller /*injected({ id: "dojoburner" }), */,
+        // injected({ id: "dojopredeployed" })
+      ];
 
     // case "SN_SEPOLIA":
     //   return [cartridgeConnector({ selectedChain })];
@@ -62,28 +70,6 @@ function getConnectorsForChain(selectedChain: DojoChainConfig, path: string) {
       }
       return [controller];
   }
-}
-
-export function StarknetProvider({ children, selectedChain }: { children: ReactNode; selectedChain: DojoChainConfig }) {
-  const router = useRouter();
-
-  // const chains = getStarknetProviderChains();
-  const {chains, provider, connectors } = useMemo(() => {
-    return {
-      chains: [selectedChain.chainConfig],
-      provider: customJsonRpcProvider(selectedChain),
-      connectors: getConnectorsForChain(selectedChain, router.asPath)
-    };
-  }, [selectedChain]);
-
-
-  const [explorer, setExplorer] = useState<ExplorerFactory>(() => starkscan);
-
-  return (
-    <StarknetConfig chains={chains} provider={provider} connectors={connectors} explorer={explorer} autoConnect={true}>
-      {children}
-    </StarknetConfig>
-  );
 }
 
 const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig }) => {
@@ -171,27 +157,49 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
       {
         rpcUrl: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
       },
-      {
-        rpcUrl: "https://api.cartridge.gg/x/starknet/sepolia",
-      },
-      {
-        rpcUrl: "https://api.cartridge.gg/x/starknet/mainnet",
-      },
+      // {
+      //   rpcUrl: "https://api.cartridge.gg/x/starknet/sepolia",
+      // },
+      // {
+      //   rpcUrl: "https://api.cartridge.gg/x/starknet/mainnet",
+      // },
     ],
     defaultChainId: `0x${selectedChain.chainConfig.id.toString(16)}`,
-    url: selectedChain.keychain ? selectedChain.keychain : "https://x.cartridge.gg",
+    // url: selectedChain.keychain ? selectedChain.keychain : "https://x.cartridge.gg",
     // rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
     // profileUrl: selectedChain.profileUrl ? selectedChain.profileUrl : undefined,
-    namespace: selectedChain.namespace ? selectedChain.namespace : "dopewars",
-    slot: selectedChain.slot ? selectedChain.slot : "ryo",
-    tokens: {
-      erc20: [
-        // paperAddress
-        // "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113",
-      ],
-    },
+    // namespace: selectedChain.namespace ? selectedChain.namespace : "dopewars",
+    // slot: selectedChain.slot ? selectedChain.slot : "ryo",
+    // tokens: {
+    //   erc20: [
+    //     // paperAddress
+    //     // "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113",
+    //   ],
+    // },
     preset: "dope-wars",
-    // colorMode: "dark",
     policies,
   }) as unknown as InjectedConnector;
 };
+
+// const controller = cartridgeConnector({ selectedChain: dojoContextConfig.KATANA });
+
+export function StarknetProvider({ children, selectedChain }: { children: ReactNode; selectedChain: DojoChainConfig }) {
+  const router = useRouter();
+
+  // const chains = getStarknetProviderChains();
+  const { chains, connectors, provider } = useMemo(() => {
+    return {
+      chains: [selectedChain.chainConfig],
+      provider: customJsonRpcProvider(selectedChain),
+      connectors: getConnectorsForChain(selectedChain, router.asPath),
+    };
+  }, [selectedChain]);
+
+  const [explorer, setExplorer] = useState<ExplorerFactory>(() => starkscan);
+
+  return (
+    <StarknetConfig chains={chains} provider={provider} connectors={connectors} explorer={explorer} autoConnect={true}>
+      {children}
+    </StarknetConfig>
+  );
+}

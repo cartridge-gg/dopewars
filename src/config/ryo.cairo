@@ -11,7 +11,7 @@ const HALF_DAY: u32 = 43_200;
 const ONE_DAY: u32 = 86_400;
 const ONE_WEEK: u32 = 604_800;
 
-const TEMP_VALUE: u32 = 3600;
+const TEMP_VALUE: u32 = 1200;
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]

@@ -15,10 +15,10 @@ export const katanaLocalChain = {
 
   rpcUrls: {
     default: {
-      http: ["https://localhost:5050"],
+      http: ["http://localhost:5050"],
     },
     public: {
-      http: ["https://localhost:5050"],
+      http: ["http://localhost:5050"],
     },
   },
   paymasterRpcUrls: {

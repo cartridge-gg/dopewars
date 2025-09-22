@@ -7,7 +7,7 @@ rpc_url = "http://localhost:5050"
 account_address = "0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"
 private_key = "0xc5b2fcab997346f3ea1c00b002ecf6f382c5f9c9659a3894eb783c5320f912"
 
-world_address = "0x0745ce531c48c0bdac80e6ae04abf0396668dab648127353939563defb6fa85a"
+world_address = "0x03b95b1b1d3d504d0b841294cec694e6d088192fc22c0ac2e083ff2df2e844b7"
 
 [world]
 name = "Dope Wars"

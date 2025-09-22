@@ -3,7 +3,7 @@ use rollyourown::{
     utils::random::{Random, RandomImpl},
 };
 
-#[derive(IntrospectPacked, Copy, Drop, Serde)]
+#[derive(IntrospectPacked, Copy, Drop, Serde, DojoStore)]
 #[dojo::model]
 pub struct SeasonSettings {
     #[key]
@@ -19,50 +19,57 @@ pub struct SeasonSettings {
 }
 
 
-#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked, DojoStore, Default)]
 pub enum CashMode {
+    #[default]
     Broke,
     Average,
     Rich,
 }
 
-#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked, DojoStore, Default)]
 pub enum HealthMode {
+    #[default]
     Junkie,
     Hustler,
     Streetboss,
 }
 
-#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked, DojoStore, Default)]
 pub enum TurnsMode {
+    #[default]
     OnSpeed,
     OnWeed,
     OnMush,
 }
 
-#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked, DojoStore, Default)]
 pub enum EncountersMode {
+    #[default]
     Chill,
     NoJokes,
     UltraViolence,
 }
 
-#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked, DojoStore, Default)]
 pub enum EncountersOddsMode {
+    #[default]
     Easy,
     Normal,
     Hard,
 }
 
-#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked, DojoStore, Default)]
 pub enum DrugsMode {
+    #[default]
     Cheap,
     Normal,
     Expensive,
 }
 
-#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked, DojoStore, Default)]
 pub enum WantedMode {
+    #[default]
     KoolAndTheGang,
     ThugLife,
     MostWanted,

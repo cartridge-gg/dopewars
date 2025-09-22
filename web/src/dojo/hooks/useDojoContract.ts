@@ -10,20 +10,20 @@ export const useDojoContract = (selectedChain: DojoChainConfig) => {
 
   const getDojoContract = (tag: string) => {
     const contractManifest = getDojoContractManifest(tag);
-    return new Contract(
-      contractManifest.abi,
-      contractManifest.address,
-      new Provider({ nodeUrl: selectedChain.rpcUrl })
-    );
+    return new Contract({
+      abi: contractManifest.abi,
+      address: contractManifest.address,
+      providerOrAccount: new Provider({ nodeUrl: selectedChain.rpcUrl }),
+    });
   };
 
   const getContractTagByAddress = (address: bigint) => {
     return selectedChain.manifest.contracts.find((i: any) => BigInt(i.address) === BigInt(address))!.tag;
-  }
+  };
 
   return {
     getDojoContract,
     getDojoContractManifest,
-    getContractTagByAddress
+    getContractTagByAddress,
   };
 };

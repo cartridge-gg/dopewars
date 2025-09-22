@@ -28,9 +28,11 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
 
     let tx, receipt;
     try {
-      const contract: TypedContractV2<typeof paperAbi> = new Contract(paperAbi, tokenAddress!, account!).typedv2(
-        paperAbi,
-      );
+      const contract: TypedContractV2<typeof paperAbi> = new Contract({
+        abi: paperAbi,
+        address: tokenAddress!,
+        providerOrAccount: account!,
+      }).typedv2(paperAbi);
 
       tx = await contract.invoke("faucet", [], { parseRequest: false });
       // tx = await contract.faucet();
@@ -72,7 +74,11 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
 };
 
 export const paperFaucet = async ({ account, paperAddress }: { account: Account; paperAddress: string }) => {
-  const contract: TypedContractV2<typeof paperAbi> = new Contract(paperAbi, paperAddress!, account!).typedv2(paperAbi);
+  const contract: TypedContractV2<typeof paperAbi> = new Contract({
+    abi: paperAbi,
+    address: paperAddress!,
+    providerOrAccount: account!,
+  }).typedv2(paperAbi);
 
   const tx = await contract.invoke("faucet", [], { parseRequest: false });
 

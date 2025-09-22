@@ -136,8 +136,9 @@ pub fn initialize_encounter_stats_config(ref store: Store) {
 //
 //
 
-#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked, DojoStore, Default)]
 pub enum Encounters {
+    #[default]
     Cops,
     Gang,
 }

@@ -11,7 +11,7 @@ export const ABI = [
   },
   {
     "type": "impl",
-    "name": "paper_mock__DeployedContractImpl",
+    "name": "DojoDeployedContractImpl",
     "interface_name": "dojo::meta::interface::IDeployedResource"
   },
   {
@@ -55,50 +55,6 @@ export const ABI = [
     "inputs": [],
     "outputs": [],
     "state_mutability": "external"
-  },
-  {
-    "type": "impl",
-    "name": "ERC20MetadataImpl",
-    "interface_name": "openzeppelin_token::erc20::interface::IERC20Metadata"
-  },
-  {
-    "type": "interface",
-    "name": "openzeppelin_token::erc20::interface::IERC20Metadata",
-    "items": [
-      {
-        "type": "function",
-        "name": "name",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::byte_array::ByteArray"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "symbol",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::byte_array::ByteArray"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "decimals",
-        "inputs": [],
-        "outputs": [
-          {
-            "type": "core::integer::u8"
-          }
-        ],
-        "state_mutability": "view"
-      }
-    ]
   },
   {
     "type": "impl",
