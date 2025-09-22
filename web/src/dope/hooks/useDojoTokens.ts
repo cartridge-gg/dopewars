@@ -1,5 +1,6 @@
 import { Token, TokenBalance, ToriiClient } from "@dojoengine/torii-client";
 import { useEffect, useRef, useState } from "react";
+import { num } from "starknet";
 
 export interface ParsedToken {
   token_id: bigint;
@@ -61,7 +62,7 @@ export const useDojoTokens = (
       // );
       const tokensBalances = await toriiClient.getTokenBalances({
         contract_addresses: addresses,
-        account_addresses: accountAddress ? [accountAddress] : [],
+        account_addresses: accountAddress ? [num.toHex64(accountAddress)] : [],
         token_ids: tokenIds || [],
         pagination: {
           cursor: undefined,

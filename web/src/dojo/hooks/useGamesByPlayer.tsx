@@ -15,6 +15,7 @@ import { Drugs } from "../types";
 import { Entities, ToriiClient } from "@dojoengine/torii-client";
 import { DojoEvent, EventClass } from "../class/Events";
 import { TradeDrug, TravelEncounter, TravelEncounterResult } from "@/components/layout/GlobalEvents";
+import { num } from "starknet";
 
 export type PlayerStats = {
   totalGamesPlayed: number;
@@ -64,7 +65,7 @@ export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId: string): 
       const entities = await toriiClient.getEventMessages({
         clause: {
           Keys: {
-            keys: [undefined, playerId],
+            keys: [undefined, num.toHex64(playerId)],
             models: ["dopewars-TradeDrug", "dopewars-TravelEncounter", "dopewars-TravelEncounterResult"],
             pattern_matching: "FixedLen",
           },
@@ -77,10 +78,10 @@ export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId: string): 
         },
         no_hashed_keys: true,
         models: ["dopewars-TradeDrug", "dopewars-TravelEncounter", "dopewars-TravelEncounterResult"],
-        historical: false,
+        historical: true,
       });
 
-      //  console.log(entities);
+      console.log(entities);
       const allEvents = EventClass.parseEntities(entities.items);
 
       setAllTradedDrug(allEvents.filter((i) => i.eventName === "TradeDrug").map((i) => i.event as TradeDrug));

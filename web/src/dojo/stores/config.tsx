@@ -201,7 +201,6 @@ export class ConfigStoreClass {
       ] as LocationConfigFull[];
     });
 
-    console.log(locationConfigFull)
     /*************************************************** */
     const dopewarsItemsTiersEdges = data.dopewarsDopewarsItemTierModels?.edges as DopewarsItemTierEdge[];
     const dopewarsItemsTiers = dopewarsItemsTiersEdges.map((i) => i.node as DopewarsItemTier);

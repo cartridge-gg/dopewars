@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/toast";
 import { DojoCall, getContractByName } from "@dojoengine/core";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useMemo, useState } from "react";
-import { AllowArray, Call, CallData, GetTransactionReceiptResponse, shortString, uint256 } from "starknet";
+import { AllowArray, Call, CallData, GetTransactionReceiptResponse, num, shortString, uint256 } from "starknet";
 import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
 import { EncountersAction, GameMode, Locations } from "../types";
 import { buildVrfCalls } from "../utils";
@@ -306,11 +306,11 @@ export const useSystems = (): SystemsInterface => {
         },
       ];
 
-      const playerId = account?.address;
+      const playerId = account!.address;
       const gameEntities = await toriiClient.getEntities({
         clause: {
           Keys: {
-            keys: [Number(gameId).toString(), playerId],
+            keys: [Number(gameId).toString(), num.toHex64(playerId)],
             models: ["dopewars-Game"],
             pattern_matching: "FixedLen",
           },
