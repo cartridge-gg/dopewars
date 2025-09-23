@@ -48,11 +48,10 @@ trait IPaperMockFaucet<TState> {
 
 #[dojo::contract]
 mod paper_mock {
-    // use openzeppelin::token::erc20::ERC20HooksEmptyImpl;
     use dojo::event::EventStorage;
     use dojo::world::WorldStorageTrait;
-    use openzeppelin::token::erc20::ERC20Component;
     use openzeppelin::token::erc20::interface::IERC20Metadata;
+    use openzeppelin::token::erc20::{ERC20Component};
     use rollyourown::store::StoreImpl;
     use starknet::{ContractAddress, get_caller_address};
 
@@ -97,11 +96,13 @@ mod paper_mock {
     #[abi(embed_v0)]
     impl ERC20MetadataImpl of IERC20Metadata<ContractState> {
         fn name(self: @ContractState) -> ByteArray {
-            self.erc20.name()
+            // self.erc20.name()
+            "fPaper"
         }
 
         fn symbol(self: @ContractState) -> ByteArray {
-            self.erc20.symbol()
+            // self.erc20.symbol()
+            "fPAPER"
         }
 
         fn decimals(self: @ContractState) -> u8 {

@@ -1,5 +1,5 @@
 [package]
-cairo-version = "=2.10.1"
+cairo-version = "=2.12.1"
 name = "rollyourown"
 version = "0.1.0"
 edition = "2024_07"
@@ -22,21 +22,23 @@ build-external-contracts = [
 ]
 
 [dev-dependencies]
-cairo_test = "2.10.1"
+cairo_test = "2.12.1"
 
 [dependencies]
-starknet = "2.10.1"
+starknet = "2.12.1"
 # dojo = { path = "../dojo/crates/dojo/core" }
-dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.6.1" }
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.7.0" }
+dojo_macros = { git = "https://github.com/dojoengine/dojo", tag = "v1.7.0" }
 # cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
 cartridge_vrf = { path = "../vrf" }
 
-achievement = { git = "https://github.com/cartridge-gg/arcade" }
+achievement = { path = "../arcade" }
 # achievement = { path = "../arcade/packages/achievement" }
 
 # dope_contracts = { path = "../dope-migration/cairo/contracts"}
 
-openzeppelin = "1.0.0"
+openzeppelin = "2.0.0"
+openzeppelin_token = "2.0.0"
 
 [scripts]
 katana = "katana --config ./katana_dev.toml"
@@ -70,4 +72,5 @@ slot_ryomainnet_torii = "slot d create --tier legendary ryomainnet torii -v v1.0
 [profile.dopewars]
 [profile.ryosepolia]
 [profile.mainnet]
+[profile.provable-dw]
 

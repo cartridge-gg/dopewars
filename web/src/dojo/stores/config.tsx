@@ -25,7 +25,7 @@ import { DojoProvider } from "@dojoengine/core";
 import { GraphQLClient } from "graphql-request";
 import { flow, makeObservable, observable } from "mobx";
 import React, { ReactNode } from "react";
-import { Contract, TypedContractV2, shortString } from "starknet";
+import { Contract, TypedContractV2, shortString, RpcProvider } from "starknet";
 import { ABI as configAbi } from "../abis/configAbi";
 import {
   drugIcons,
@@ -117,12 +117,14 @@ export type Config = {
 type ConfigStoreProps = {
   client: GraphQLClient;
   dojoProvider: DojoProvider;
+  rpcProvider: RpcProvider;
   manifest: any;
 };
 
 export class ConfigStoreClass {
   client: GraphQLClient;
   dojoProvider: DojoProvider;
+  rpcProvider: RpcProvider;
   manifest: any;
 
   config: Config | undefined = undefined;
@@ -131,11 +133,12 @@ export class ConfigStoreClass {
   isInitialized = false;
   error: any | undefined = undefined;
 
-  constructor({ client, dojoProvider, manifest }: ConfigStoreProps) {
+  constructor({ client, dojoProvider, rpcProvider, manifest }: ConfigStoreProps) {
     // console.log("new ConfigStoreClass");
 
     this.client = client;
     this.dojoProvider = dojoProvider;
+    this.rpcProvider = rpcProvider;
     this.manifest = manifest;
 
     makeObservable(this, {
@@ -223,12 +226,16 @@ export class ConfigStoreClass {
 
     /*************************************************** */
 
-    ///@ts-ignore
-    const getConfig = yield this.dojoProvider.call("dopewars", {
-      contractName: "config",
+    // Make direct RPC call to avoid "pending" block ID issue
+    const configContractAddress = this.manifest.contracts.find((c: any) => c.tag === "dopewars-config")?.address;
+    const getConfigResult = yield this.rpcProvider.callContract({
+      contractAddress: configContractAddress,
       entrypoint: "get_config",
-      calldata: [],
-    });
+      calldata: []
+    }, "latest");
+
+    /// @ts-ignore
+    const getConfig = getConfigResult as GetConfig;
 
     /*************************************************** */
 

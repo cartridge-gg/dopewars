@@ -139,9 +139,10 @@ export const DojoContextProvider = observer(
       return new ConfigStoreClass({
         client: graphqlClient,
         dojoProvider: dojoProvider,
+        rpcProvider: rpcProvider,
         manifest: selectedChain.manifest,
       });
-    }, [graphqlClient, dojoProvider, selectedChain.manifest]);
+    }, [graphqlClient, dojoProvider, rpcProvider, selectedChain.manifest]);
 
     const router = useRouter();
 

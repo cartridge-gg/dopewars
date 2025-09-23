@@ -1,4 +1,4 @@
-#[derive(Copy, Drop, Serde, IntrospectPacked)]
+#[derive(Copy, Drop, Serde, IntrospectPacked, DojoStore)]
 pub struct Bytes16 {
     pub value: u128,
 }

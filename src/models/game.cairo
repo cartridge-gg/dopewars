@@ -9,23 +9,25 @@ use starknet::ContractAddress;
 
 pub type GearId = felt252;
 
-#[derive(Copy, Drop, Serde, PartialEq, Introspect)]
+#[derive(Copy, Drop, Serde, PartialEq, Introspect, Default, DojoStore)]
 pub enum TokenId {
+    #[default]
     GuestLootId: felt252,
     LootId: felt252,
     HustlerId: felt252,
 }
 
 
-#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked, Default, DojoStore)]
 pub enum GameMode {
+    #[default]
     Ranked,
     Noob,
     Warrior,
 }
 
 // IntrospectPacked : doesnt supports array
-#[derive(Introspect, Copy, Drop, Serde)]
+#[derive(Introspect, Copy, Drop, Serde, DojoStore)]
 #[dojo::model]
 pub struct Game {
     #[key]

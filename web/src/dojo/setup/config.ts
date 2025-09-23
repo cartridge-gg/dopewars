@@ -1,11 +1,13 @@
 import { PredeployedAccount } from "@dojoengine/create-burner";
 import { Chain, mainnet, sepolia } from "@starknet-react/chains";
 import { katanaLocalChain, katanaSlotDopewarsChain } from "./chains";
+import { shortString } from "starknet";
 
 import manifestDev from "../../manifests/manifest_dev.json";
 import manifestDopewars from "../../manifests/manifest_dopewars.json";
 import manifestRyoSepolia from "../../manifests/manifest_ryosepolia.json";
 import manifestMainnet from "../../manifests/manifest_mainnet.json";
+import manifestProvableDw from "../../manifests/manifest_provable-dw.json";
 
 
 import manifestDopeDev from "../../manifests_dope/manifest_dev.json";
@@ -14,6 +16,7 @@ import manifestDopeDev from "../../manifests_dope/manifest_dev.json";
 import manifestDopeDopewars from "../../manifests_dope/manifest_dopewars.json";
 import manifestDopeSepolia from "../../manifests_dope/manifest_dopewars.json";
 import manifestDopeMainnet from "../../manifests_dope/manifest_dopewars.json";
+import manifestDopeProvableDw from "../../manifests_dope/manifest_provable-dw.json";
 // import {
 //   manifestDev as manifestDopeDev,
 //   manifestDope as manifestDopeDope,
@@ -28,6 +31,30 @@ import { mergeManifests } from "@/dope/helpers";
 const VRF_PROVIDER_SEPOLIA = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f";
 const VRF_PROVIDER_MAINNET = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f";
 const PAPER_MAINNET = "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113";
+
+const provableChain = {
+  id: BigInt(shortString.encodeShortString("PROVABLE_DW")),
+  network: "slot-provable-dw",
+  name: "Provable DW",
+  nativeCurrency: {
+    address: "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+    name: "Ether",
+    symbol: "ETH",
+    decimals: 18,
+  },
+  testnet: true,
+  rpcUrls: {
+    default: {
+      http: ["https://api.cartridge.gg/x/provable-dw/katana"],
+    },
+    public: {
+      http: ["https://api.cartridge.gg/x/provable-dw/katana"],
+    },
+  },
+  explorers: {
+    worlds: ["https://worlds.dev"],
+  },
+} as const satisfies Chain;
 
 export type SupportedChainIds = keyof typeof dojoContextConfig;
 export type DojoContextConfig = typeof dojoContextConfig;
@@ -121,6 +148,20 @@ const snSepolia: DojoChainConfig = {
   vrfProviderSecret: undefined,
 };
 
+const provableDW: DojoChainConfig = {
+  name: "PROVABLE-DW",
+  chainConfig: provableChain,
+  rpcUrl: "https://api.cartridge.gg/x/provable-dw/katana",
+  toriiUrl: "http://127.0.0.1:8080/graphql",
+  toriiWsUrl: "ws://127.0.0.1:8080/graphql/ws",
+  manifest: mergeManifests(manifestProvableDw, [manifestDopeProvableDw]),
+  slot: "provable-dw",
+  predeployedAccounts: [],
+  paperAddress: manifestProvableDw.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
+  vrfProviderAddress: "0x00",
+  vrfProviderSecret: undefined,
+};
+
 const snMainnet: DojoChainConfig = {
   name: "MAINNET",
   chainConfig: mainnet,
@@ -141,6 +182,7 @@ export const dojoContextConfig = {
   // SN_SEPOLIA: snSepolia,
   WP_DOPEWARS: katanaSlotDopewars,
   KATANA: katanaLocal,
+  PROVABLE_DW: provableDW,
 };
 
 export const dojoChains = Object.values(dojoContextConfig);

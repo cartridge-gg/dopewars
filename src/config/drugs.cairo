@@ -4,8 +4,9 @@ use rollyourown::{
 };
 
 
-#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked, Default, DojoStore)]
 pub enum Drugs {
+    #[default]
     Ludes,
     Speed,
     Weed,
@@ -16,7 +17,7 @@ pub enum Drugs {
     Cocaine,
 }
 
-#[derive(IntrospectPacked, Copy, Drop, Serde)]
+#[derive(IntrospectPacked, Copy, Drop, Serde, DojoStore)]
 #[dojo::model]
 pub struct DrugConfig {
     #[key]

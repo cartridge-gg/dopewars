@@ -34,7 +34,7 @@ pub mod dope_hustlers {
         }
 
 
-        #[derive(Debug, Drop, Serde, Introspect)]
+        #[derive(Debug, Drop, Serde, Introspect, DojoStore)]
         #[dojo::model]
         pub struct HustlerSlot {
             #[key]
@@ -44,7 +44,7 @@ pub mod dope_hustlers {
             pub gear_item_id: DojoOption,
         }
 
-        #[derive(Debug, Drop, Copy, Clone, Serde, Introspect)]
+        #[derive(Debug, Drop, Copy, Clone, Serde, Introspect, Default, DojoStore)]
         pub enum DojoOption {
             #[default]
             None,

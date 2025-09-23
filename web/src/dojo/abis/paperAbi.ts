@@ -11,7 +11,7 @@ export const ABI = [
   },
   {
     "type": "impl",
-    "name": "paper_mock__DeployedContractImpl",
+    "name": "DojoDeployedContractImpl",
     "interface_name": "dojo::meta::interface::IDeployedResource"
   },
   {
