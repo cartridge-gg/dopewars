@@ -24,17 +24,17 @@ importers:
         specifier: ^2.8.1
         version: 2.8.1(@emotion/react@11.11.3(@types/react@18.3.23)(react@19.1.0))(@emotion/styled@11.11.0(@emotion/react@11.11.3(@types/react@18.3.23)(react@19.1.0))(@types/react@18.3.23)(react@19.1.0))(@types/react@18.3.23)(framer-motion@10.18.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@dojoengine/core':
-        specifier: 1.7.0
-        version: 1.7.0(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: 1.7.1
+        version: 1.7.1(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@dojoengine/torii-client':
-        specifier: 1.7.0
-        version: 1.7.0
+        specifier: 1.7.1
+        version: 1.7.1
       '@dojoengine/torii-wasm':
-        specifier: 1.7.0
-        version: 1.7.0
+        specifier: 1.7.1
+        version: 1.7.1
       '@dojoengine/utils':
-        specifier: 1.7.0
-        version: 1.7.0(bufferutil@4.0.9)(starknet@8.5.3)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
+        specifier: 1.7.1
+        version: 1.7.1(bufferutil@4.0.9)(starknet@8.5.3)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@emotion/react':
         specifier: ^11.10.6
         version: 11.11.3(@types/react@18.3.23)(react@19.1.0)
@@ -1402,21 +1402,21 @@ packages:
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
     engines: {node: '>=10.0.0'}
 
-  '@dojoengine/core@1.7.0':
-    resolution: {integrity: sha512-VuyWNcz0RvV8XwJHICwfmtwz9CSe4UO9Wwe/TCO/YIa4n1PTXClfr/AgmKM2Mrz3sR3NQhgL2SczMEzNXd2cVQ==}
+  '@dojoengine/core@1.7.1':
+    resolution: {integrity: sha512-8yPgn1MhfX8Qicj+lt3BLf7SI1PK+2aggghmhuQYQt/JpTMJm2X8HGFY1ffEdpOLeO4qkae08EtKh1lp+UoSRg==}
     hasBin: true
 
   '@dojoengine/recs@2.0.13':
     resolution: {integrity: sha512-Cgz4Unlnk2FSDoFTYKrJexX/KiSYPMFMxftxQkC+9LUKS5yNGkgFQM7xu4/L1HvpDAenL7NjUmH6ynRAS7Iifw==}
 
-  '@dojoengine/torii-client@1.7.0':
-    resolution: {integrity: sha512-t4xNo526txfevLpD0r2C9KaKAoA9mAYVOcXAc6Dmkn4cDJgXeyTuo3ASjoKLzsM1m/2NFzadi9xm6KTwrRa1GQ==}
+  '@dojoengine/torii-client@1.7.1':
+    resolution: {integrity: sha512-GUlgdIa7u1bHTWSUHbho8s2TtI+dDEZwNZcQNiJZv6z6/Ssb3JEM3bYZxgGWk0slO65ZdxxR8wlhPf/dwglLAg==}
 
-  '@dojoengine/torii-wasm@1.7.0':
-    resolution: {integrity: sha512-Xq1ApXobt23suNkiR4cIm8ht8Xq3kLoWNrGOkEe9aFXtJ1TmWR44u0XU8JB0gPlDXEgHABn0MxQCCMUdBmZumg==}
+  '@dojoengine/torii-wasm@1.7.1':
+    resolution: {integrity: sha512-HtkiqE98Fd39rwwR7npxL7q6muN896D1HhpayASL4Ujllhwlv53BjiRegbG8eXoSayuylMGv7rd7pFQeT+0G2A==}
 
-  '@dojoengine/utils@1.7.0':
-    resolution: {integrity: sha512-mQh9quOi9m34H40pPoLHaO8G+JE10/ZKeBbQDmq7ZQ6pSYs1qGYtULs2WXKYiiihjX6lyjFm5zCXabsDg0QlrQ==}
+  '@dojoengine/utils@1.7.1':
+    resolution: {integrity: sha512-FEDBIg86CT3UJIcJzvGIwZ5zAgZ4F+kRIXsc3EPAE0wBr5px1xpEcRK35xxX2gjlrLth6Xiq0DX1Wp4t4h5wog==}
     peerDependencies:
       starknet: ^8.1.2
 
@@ -8721,7 +8721,7 @@ snapshots:
 
   '@discoveryjs/json-ext@0.5.7': {}
 
-  '@dojoengine/core@1.7.0(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@dojoengine/core@1.7.1(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@dojoengine/recs': 2.0.13(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       starknet: 8.5.3
@@ -8743,13 +8743,13 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@dojoengine/torii-client@1.7.0':
+  '@dojoengine/torii-client@1.7.1':
     dependencies:
-      '@dojoengine/torii-wasm': 1.7.0
+      '@dojoengine/torii-wasm': 1.7.1
 
-  '@dojoengine/torii-wasm@1.7.0': {}
+  '@dojoengine/torii-wasm@1.7.1': {}
 
-  '@dojoengine/utils@1.7.0(bufferutil@4.0.9)(starknet@8.5.3)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)':
+  '@dojoengine/utils@1.7.1(bufferutil@4.0.9)(starknet@8.5.3)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
       '@dojoengine/recs': 2.0.13(bufferutil@4.0.9)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@latticexyz/utils': 2.2.14

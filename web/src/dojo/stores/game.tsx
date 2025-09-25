@@ -252,7 +252,7 @@ export class GameStoreClass {
   }
 
   onEventMessage(entity: Entity) {
-    console.log("onEventMessage", entity);
+    // console.log("onEventMessage", entity);
     if (entity.hashed_keys === "0x0") return;
     // console.log("onEventMessage", entity, update);
     this.gameEvents!.addEvent(entity);
@@ -265,7 +265,7 @@ export class GameStoreClass {
 
   async onEntityUpdated(entity: Entity) {
     if (entity.hashed_keys === "0x0") return;
-    console.log("onEntityUpdated", entity);
+    // console.log("onEntityUpdated", entity);
 
     const gameId = num.toHexString(this.gameInfos?.game_id);
 

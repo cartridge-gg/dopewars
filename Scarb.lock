@@ -4,7 +4,7 @@ version = 1
 [[package]]
 name = "achievement"
 version = "0.0.0"
-source = "git+https://github.com/cartridge-gg/arcade?branch=dojo_1.7.0-alpha.4#8c3faaa9a62b3b27bd59f68cb0247c4a1b5e0844"
+source = "git+https://github.com/cartridge-gg/arcade?branch=dojo_1.7.0#eee983e11489e3d59beb023793c8f1627242f3f5"
 dependencies = [
  "dojo",
  "dojo_macros",
@@ -76,16 +76,16 @@ dependencies = [
 
 [[package]]
 name = "dojo"
-version = "1.7.0-alpha.4"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.7.0-alpha.4#7b78108ce7aea7753c0a9e34cb83465a76bbf2e4"
+version = "1.7.0"
+source = "git+https://github.com/dojoengine/dojo?tag=v1.7.0#503934a3882b245f104612af15b07475507614f7"
 dependencies = [
  "dojo_macros",
 ]
 
 [[package]]
 name = "dojo_macros"
-version = "1.7.0-alpha.4"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.7.0-alpha.4#7b78108ce7aea7753c0a9e34cb83465a76bbf2e4"
+version = "1.7.0"
+source = "git+https://github.com/dojoengine/dojo?tag=v1.7.0#503934a3882b245f104612af15b07475507614f7"
 
 [[package]]
 name = "dope_generated"
