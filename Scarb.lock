@@ -4,10 +4,9 @@ version = 1
 [[package]]
 name = "achievement"
 version = "0.0.0"
-source = "git+https://github.com/cartridge-gg/arcade?branch=dojo_1.7.0#eee983e11489e3d59beb023793c8f1627242f3f5"
+source = "git+https://github.com/cartridge-gg/arcade?branch=dojo_1.7.1#9c3958bfd2360f43784902375b3b42798e671e67"
 dependencies = [
  "dojo",
- "dojo_macros",
 ]
 
 [[package]]
@@ -68,31 +67,32 @@ dependencies = [
 [[package]]
 name = "cartridge_vrf"
 version = "0.1.0"
+source = "git+https://github.com/cartridge-gg/vrf#f748d4acab736464dcd96c5a4d047ed3aeb63801"
 dependencies = [
  "openzeppelin",
- "snforge_std",
  "stark_vrf",
 ]
 
 [[package]]
 name = "dojo"
-version = "1.7.0"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.7.0#503934a3882b245f104612af15b07475507614f7"
+version = "1.7.1"
+source = "registry+https://scarbs.xyz/"
+checksum = "sha256:b792d9c526269f5265dd89f063da5db8daebb461f2dec2cdb712f420187b39a8"
 dependencies = [
- "dojo_macros",
+ "dojo_cairo_macros",
 ]
 
 [[package]]
-name = "dojo_macros"
-version = "1.7.0"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.7.0#503934a3882b245f104612af15b07475507614f7"
+name = "dojo_cairo_macros"
+version = "1.7.1"
+source = "registry+https://scarbs.xyz/"
+checksum = "sha256:18059a9ac9ec2c0c708baad382728a99970b621b1eaab780fd9a8ec2dc975c98"
 
 [[package]]
 name = "dope_generated"
 version = "0.1.0"
 dependencies = [
  "dojo",
- "dojo_macros",
  "dope_tools",
 ]
 
@@ -104,7 +104,6 @@ dependencies = [
  "alexandria_encoding",
  "alexandria_merkle_tree",
  "dojo",
- "dojo_macros",
  "dope_generated",
  "graffiti",
  "openzeppelin",
@@ -118,7 +117,6 @@ dependencies = [
  "alexandria_encoding",
  "alexandria_merkle_tree",
  "dojo",
- "dojo_macros",
  "dope_tools",
  "graffiti",
 ]
@@ -252,27 +250,12 @@ dependencies = [
  "achievement",
  "cartridge_vrf",
  "dojo",
- "dojo_macros",
  "dope_types",
  "openzeppelin",
 ]
 
 [[package]]
-name = "snforge_scarb_plugin"
-version = "0.48.1"
-source = "registry+https://scarbs.xyz/"
-checksum = "sha256:2dd27e8215eea8785b3930e9f452e11b429ca262b1c1fbb071bfc173b9ebc125"
-
-[[package]]
-name = "snforge_std"
-version = "0.48.1"
-source = "registry+https://scarbs.xyz/"
-checksum = "sha256:89f759fa685d48ed0ba7152d2ac2eb168da08dfa8b84b2bee96e203dc5b2413e"
-dependencies = [
- "snforge_scarb_plugin",
-]
-
-[[package]]
 name = "stark_vrf"
-version = "0.1.0"
-source = "git+https://github.com/dojoengine/stark-vrf.git#96d6d2a88b1ef46c4a285d0ccc334237205edae3"
+version = "0.1.1"
+source = "registry+https://scarbs.xyz/"
+checksum = "sha256:5345a2ec33f50f7e372b74179b0421da022775b72b9de3c51cb15b7530482475"

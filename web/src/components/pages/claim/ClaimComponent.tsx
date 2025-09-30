@@ -3,7 +3,7 @@ import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { Glock } from "@/components/icons/items";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { tryBetterErrorMsg, useDojoContext, useRouterContext } from "@/dojo/hooks";
-import { checkTxReceipt } from "@/dope/helpers";
+import { checkTxReceipt, sleep } from "@/dope/helpers";
 import { useToast } from "@/hooks/toast";
 import { HStack, Input, Text, VStack } from "@chakra-ui/react";
 import { ConnectButton as ConnectButtonRainbow } from "@rainbow-me/rainbowkit";
@@ -113,6 +113,7 @@ export default function ClaimComponent() {
     setSignature(parsedSig);
 
     setProof(buildTree(owners).getProof(getLeafHash(entry[0] as string, entry[1] as number[], entry[2] as number[])));
+
   }
 
   async function onClaim() {
@@ -142,7 +143,7 @@ export default function ClaimComponent() {
             // @ts-ignore
             ...entry[2],
             // @ts-ignore
-            signature.v || 0,
+            Number(signature.v) || 0,
             // @ts-ignore
             uint256.bnToUint256(BigInt(signature.r)),
             // @ts-ignore
@@ -153,6 +154,7 @@ export default function ClaimComponent() {
 
       let txReceipt = await account.waitForTransaction(execution.transaction_hash, {
         retryInterval: 200,
+        successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
       });
 
       checkTxReceipt(txReceipt);

@@ -1479,8 +1479,8 @@
   },
   "contracts": [
     {
-      "address": "0x30afb6a615c37d66206a227f9637d9178e5aa27cd19ec4ed41bb99c2ffc6fc5",
-      "class_hash": "0x4b2b829c750c8b499fc6ff5ac2a739434f2b6066d51a1a1f31b20a858fdd761",
+      "address": "0x57f73057d38137fed00c73ff732e414a9d202965304521970abfee52d7af6e5",
+      "class_hash": "0x77516225ff32aa5f6cfb958d544aa899bdea045d1f95381d42a745ecd098b7",
       "abi": [
         {
           "type": "impl",
@@ -3610,8 +3610,8 @@
       ]
     },
     {
-      "address": "0x563446d2c985c4042415e5aa6008b7dd5faca5ed0a7deb650a9996bb4db5104",
-      "class_hash": "0x19c1a31e8860d2bfc77e6dd6461d8e25bbeaafd311896770479f15de9fc14bb",
+      "address": "0x7d76806c03cfadae90322a7a597ac3613dadc841bfc8646510c226f7b23d175",
+      "class_hash": "0x1a57767e84cd1276a04ad8d031dfe0d1ca55eeffc336cc71c72e31ea56880ea",
       "abi": [
         {
           "type": "impl",
@@ -4101,8 +4101,8 @@
       ]
     },
     {
-      "address": "0x7d254652a99fdb7146e39269ad05481505cb3c8183b77bdfc2376b2fc77b199",
-      "class_hash": "0x683e8432fa2e51be83f309084392ea6e122ac342c3cc95694ff86c081065b46",
+      "address": "0xa379c26ca504eedfe5508963b7150f7ca6a770b70c9eff5398c38d086158f8",
+      "class_hash": "0x3da3ba11ab50008af9900123f2773c95b279065b2c188b0d17673d3debf2a",
       "abi": [
         {
           "type": "impl",
@@ -4281,6 +4281,20 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
           "type": "struct",
           "name": "cartridge_vrf::vrf_provider::vrf_provider_component::PublicKey",
           "members": [
@@ -4357,6 +4371,28 @@
               ],
               "outputs": [],
               "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "get_consume_count",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "is_vrf_call",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::bool"
+                }
+              ],
+              "state_mutability": "view"
             },
             {
               "type": "function",

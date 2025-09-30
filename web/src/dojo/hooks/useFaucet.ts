@@ -45,7 +45,8 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
       });
 
       receipt = await account!.waitForTransaction(tx.transaction_hash, {
-        retryInterval: 500,
+        retryInterval: 200,
+        successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
       });
     } catch (e: any) {
       console.log(e);
@@ -83,6 +84,7 @@ export const paperFaucet = async ({ account, paperAddress }: { account: Account;
   const tx = await contract.invoke("faucet", [], { parseRequest: false });
 
   const receipt = await account!.waitForTransaction(tx.transaction_hash, {
-    retryInterval: 500,
+    retryInterval: 200,
+    successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
   });
 };

@@ -179,6 +179,7 @@ export default function Editor() {
 
       let txReceipt = await account.waitForTransaction(execution.transaction_hash, {
         retryInterval: 200,
+        successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
       });
 
       checkTxReceipt(txReceipt);

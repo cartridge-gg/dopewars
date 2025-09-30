@@ -27,6 +27,7 @@ export default function LeaderboardPage() {
     const { hash } = await createFakeGame(valueRef.current);
     await account?.waitForTransaction(hash, {
       retryInterval: 200,
+      successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
     });
 
     toast({ message: "created fake game Ser" });

@@ -1,7 +1,7 @@
 {
   "world": {
-    "class_hash": "0x685ed02eefa98fe7e208aa295042e9bbad8029b0d3d6f0ba2b32546efe0a1f9",
-    "address": "0x745ce531c48c0bdac80e6ae04abf0396668dab648127353939563defb6fa85a",
+    "class_hash": "0x57994b6a75fad550ca18b41ee82e2110e158c59028c4478109a67965a0e5b1e",
+    "address": "0x3b95b1b1d3d504d0b841294cec694e6d088192fc22c0ac2e083ff2df2e844b7",
     "seed": "dopeseed",
     "name": "Dope Wars",
     "entrypoints": [
@@ -11,11 +11,13 @@
       "register_event",
       "register_model",
       "register_contract",
+      "register_external_contract",
       "register_library",
       "init_contract",
       "upgrade_event",
       "upgrade_model",
       "upgrade_contract",
+      "upgrade_external_contract",
       "emit_event",
       "emit_events",
       "set_entity",
@@ -83,6 +85,10 @@
           {
             "name": "Library",
             "type": "(core::starknet::class_hash::ClassHash, core::felt252)"
+          },
+          {
+            "name": "ExternalContract",
+            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
           }
         ]
       },
@@ -213,6 +219,10 @@
           {
             "name": "Enum",
             "type": "core::array::Span::<dojo::meta::layout::FieldLayout>"
+          },
+          {
+            "name": "FixedArray",
+            "type": "(core::array::Span::<dojo::meta::layout::Layout>, core::integer::u32)"
           }
         ]
       },
@@ -369,6 +379,34 @@
           },
           {
             "type": "function",
+            "name": "register_external_contract",
+            "inputs": [
+              {
+                "name": "namespace",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "contract_name",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "instance_name",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "contract_address",
+                "type": "core::starknet::contract_address::ContractAddress"
+              },
+              {
+                "name": "block_number",
+                "type": "core::integer::u64"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
             "name": "register_library",
             "inputs": [
               {
@@ -461,6 +499,30 @@
                 "type": "core::starknet::class_hash::ClassHash"
               }
             ],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "upgrade_external_contract",
+            "inputs": [
+              {
+                "name": "namespace",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "instance_name",
+                "type": "core::byte_array::ByteArray"
+              },
+              {
+                "name": "contract_address",
+                "type": "core::starknet::contract_address::ContractAddress"
+              },
+              {
+                "name": "block_number",
+                "type": "core::integer::u64"
+              }
+            ],
+            "outputs": [],
             "state_mutability": "external"
           },
           {
@@ -928,6 +990,85 @@
       },
       {
         "type": "event",
+        "name": "dojo::world::world_contract::world::ExternalContractRegistered",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "namespace",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "contract_name",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "instance_name",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "contract_selector",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
+            "kind": "data"
+          },
+          {
+            "name": "contract_address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          },
+          {
+            "name": "block_number",
+            "type": "core::integer::u64",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
+        "name": "dojo::world::world_contract::world::ExternalContractUpgraded",
+        "kind": "struct",
+        "members": [
+          {
+            "name": "namespace",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "instance_name",
+            "type": "core::byte_array::ByteArray",
+            "kind": "key"
+          },
+          {
+            "name": "contract_selector",
+            "type": "core::felt252",
+            "kind": "key"
+          },
+          {
+            "name": "class_hash",
+            "type": "core::starknet::class_hash::ClassHash",
+            "kind": "data"
+          },
+          {
+            "name": "contract_address",
+            "type": "core::starknet::contract_address::ContractAddress",
+            "kind": "data"
+          },
+          {
+            "name": "block_number",
+            "type": "core::integer::u64",
+            "kind": "data"
+          }
+        ]
+      },
+      {
+        "type": "event",
         "name": "dojo::world::world_contract::world::ModelUpgraded",
         "kind": "struct",
         "members": [
@@ -1258,6 +1399,16 @@
             "kind": "nested"
           },
           {
+            "name": "ExternalContractRegistered",
+            "type": "dojo::world::world_contract::world::ExternalContractRegistered",
+            "kind": "nested"
+          },
+          {
+            "name": "ExternalContractUpgraded",
+            "type": "dojo::world::world_contract::world::ExternalContractUpgraded",
+            "kind": "nested"
+          },
+          {
             "name": "ModelUpgraded",
             "type": "dojo::world::world_contract::world::ModelUpgraded",
             "kind": "nested"
@@ -1328,8 +1479,8 @@
   },
   "contracts": [
     {
-      "address": "0x86ee244b4c6543722cca982a1848e8c4ef7295af76e3b4a814b205660d0873",
-      "class_hash": "0x353a1986937816dc8e4996a1f05570bb26cba3edf53c1b1ab542166ce461e23",
+      "address": "0x57f73057d38137fed00c73ff732e414a9d202965304521970abfee52d7af6e5",
+      "class_hash": "0x77516225ff32aa5f6cfb958d544aa899bdea045d1f95381d42a745ecd098b7",
       "abi": [
         {
           "type": "impl",
@@ -1343,7 +1494,7 @@
         },
         {
           "type": "impl",
-          "name": "config__DeployedContractImpl",
+          "name": "DojoDeployedContractImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -1886,8 +2037,8 @@
       ]
     },
     {
-      "address": "0xb6853b040beb87161e2c8d0b5258c965a04f37578a854651766e8de04f451c",
-      "class_hash": "0x672d4c376c74d1ee7ba36b95e9ebbd55217b0cd7f911027767c88a5cd6846d3",
+      "address": "0xda09d5cad625f60398eac078b32ccbbf9b95793fa34ab556ecc78122133dd2",
+      "class_hash": "0x41ec9895680595f4acba382832de3b8a24b312a2898084666b9635447ae2794",
       "abi": [
         {
           "type": "impl",
@@ -1901,7 +2052,7 @@
         },
         {
           "type": "impl",
-          "name": "decide__DeployedContractImpl",
+          "name": "DojoDeployedContractImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -2107,8 +2258,8 @@
       ]
     },
     {
-      "address": "0x6ac2e54f78bda98c19127891d9c118a71040d29efc4abf12e46ecad0e77363b",
-      "class_hash": "0x447d22f1729ac075fb539bc8104695013c1ef6e1e4d694ec6247e0c986e5858",
+      "address": "0x1a7f9be78ecd7314c93e2873519c50d5dc81adff85b525fa2cd436bf5a94b14",
+      "class_hash": "0x31be2b542b94e46d173c32ab64fee0348a163a420695ab5d33e2bf23252bb88",
       "abi": [
         {
           "type": "impl",
@@ -2122,7 +2273,7 @@
         },
         {
           "type": "impl",
-          "name": "devtools__DeployedContractImpl",
+          "name": "DojoDeployedContractImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -2320,8 +2471,8 @@
       ]
     },
     {
-      "address": "0x1e0d1ef4cf79186bee77c9920af35e587ffda4cc10f20073d6fba36a84c474f",
-      "class_hash": "0x76cf3dc0232f6754980c94886a07d35f3efb1bd0bf342ab9ca4a9c74993a1cf",
+      "address": "0x1b970f0b7fc5ad0e1428101ae9106b4a6c4ee4436668a8f1a2d667edf7bfc31",
+      "class_hash": "0x55f375a7567a4f898ec220d1dfbdc5ad9f1389a17931e741ad17f8c11118790",
       "abi": [
         {
           "type": "impl",
@@ -2335,7 +2486,7 @@
         },
         {
           "type": "impl",
-          "name": "game__DeployedContractImpl",
+          "name": "DojoDeployedContractImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -2763,8 +2914,8 @@
       ]
     },
     {
-      "address": "0x5d18f212194dfbcd21b555bc6aaf324f5b243c94d19864bf04b894b1fc8aeaa",
-      "class_hash": "0x10b1b8383fd26ab7e108b2025424f63bc049a1891746c0e7001be157f61a2f2",
+      "address": "0x72108fbd8716f674f250880cd28950c5a1e61913bf20994ecd119f950e18b0d",
+      "class_hash": "0x7a80eff1bfdd5a2493849e243e4abbf68b40a77798f4af8ef487cb9ec22aeb0",
       "abi": [
         {
           "type": "impl",
@@ -2778,7 +2929,7 @@
         },
         {
           "type": "impl",
-          "name": "laundromat__DeployedContractImpl",
+          "name": "DojoDeployedContractImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -3031,8 +3182,8 @@
       ]
     },
     {
-      "address": "0x7fb0c1725d6f295df1120cae5cf5715a0b36cc0c683fe95ba34747d1d296577",
-      "class_hash": "0x1bca8506f692c51e241cc318e79cfdfa4170edb1ddce29628b6c5e46e696447",
+      "address": "0x20dfc24de987d7d11f70a7306ae39b6ac71b178eaf19bf12e831b3522c14ebf",
+      "class_hash": "0x3f6b36f2bab028f1309b2ae581b9e498caeb809b901865ca8276a136f97baac",
       "abi": [
         {
           "type": "impl",
@@ -3046,7 +3197,7 @@
         },
         {
           "type": "impl",
-          "name": "paper_mock__DeployedContractImpl",
+          "name": "DojoDeployedContractImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -3090,50 +3241,6 @@
           "inputs": [],
           "outputs": [],
           "state_mutability": "external"
-        },
-        {
-          "type": "impl",
-          "name": "ERC20MetadataImpl",
-          "interface_name": "openzeppelin_token::erc20::interface::IERC20Metadata"
-        },
-        {
-          "type": "interface",
-          "name": "openzeppelin_token::erc20::interface::IERC20Metadata",
-          "items": [
-            {
-              "type": "function",
-              "name": "name",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::byte_array::ByteArray"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "symbol",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::byte_array::ByteArray"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "decimals",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::integer::u8"
-                }
-              ],
-              "state_mutability": "view"
-            }
-          ]
         },
         {
           "type": "impl",
@@ -3503,8 +3610,8 @@
       ]
     },
     {
-      "address": "0x1e77bcb129a92964686ac8f9371adabe106293e74901499eeebfab5b87493b4",
-      "class_hash": "0x6d27826be42f7009449e89a2155f6947c3fedc403c8ff4e7370c80fea7c5e6",
+      "address": "0x7d76806c03cfadae90322a7a597ac3613dadc841bfc8646510c226f7b23d175",
+      "class_hash": "0x1a57767e84cd1276a04ad8d031dfe0d1ca55eeffc336cc71c72e31ea56880ea",
       "abi": [
         {
           "type": "impl",
@@ -3518,7 +3625,7 @@
         },
         {
           "type": "impl",
-          "name": "ryo__DeployedContractImpl",
+          "name": "DojoDeployedContractImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -3994,8 +4101,8 @@
       ]
     },
     {
-      "address": "0x17d0a0218d5f85d57628241a4625d6281ecdcf5e1dc87256d646c32037b649c",
-      "class_hash": "0x33fa5f3e706557239153d124d70ae1108d0c62d91c8b1e829f85bf4fbf8512e",
+      "address": "0xa379c26ca504eedfe5508963b7150f7ca6a770b70c9eff5398c38d086158f8",
+      "class_hash": "0x3da3ba11ab50008af9900123f2773c95b279065b2c188b0d17673d3debf2a",
       "abi": [
         {
           "type": "impl",
@@ -4009,7 +4116,7 @@
         },
         {
           "type": "impl",
-          "name": "vrf_provider_mock__DeployedContractImpl",
+          "name": "DojoDeployedContractImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -4174,6 +4281,20 @@
           ]
         },
         {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
           "type": "struct",
           "name": "cartridge_vrf::vrf_provider::vrf_provider_component::PublicKey",
           "members": [
@@ -4250,6 +4371,28 @@
               ],
               "outputs": [],
               "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "get_consume_count",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "is_vrf_call",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::bool"
+                }
+              ],
+              "state_mutability": "view"
             },
             {
               "type": "function",
@@ -4454,7 +4597,7 @@
   ],
   "libraries": [
     {
-      "class_hash": "0x7a74263ca474046753dbb6680fd25fc41e5bf489458ae5b6354e8b1506ffc2b",
+      "class_hash": "0x36161b04c4d8fe13389bfa65853e3616bb6f6ddfc309acb1fadbcfebcf1cd49",
       "abi": [
         {
           "type": "impl",
@@ -4468,7 +4611,7 @@
         },
         {
           "type": "impl",
-          "name": "DopewarsItems__DeployedLibraryImpl",
+          "name": "DojoDeployedLibraryImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -4631,73 +4774,73 @@
   "models": [
     {
       "members": [],
-      "class_hash": "0x783e7d95aade259e0e758443a9ed77f2a9b9102cf01ab418fbb254c9dc050e2",
+      "class_hash": "0x88a065fae98906843c9872b1cb80178c77fd10ab9b63267380ae21b8cf4fa1",
       "tag": "dopewars-DrugConfig",
       "selector": "0x7c904f95d43f718ea4f14aebf57e392ba8d041e92f78dbdd3f32a9d0db4106e"
     },
     {
       "members": [],
-      "class_hash": "0x89d7df2e656c20756c0330eddb17c6846d0d296a50f84397d40c419c330572",
+      "class_hash": "0x3047a1022dfdf22a4cd4adc52a5de7585d8a0902fa12a8a0ea35b6179331b62",
       "tag": "dopewars-EncounterStatsConfig",
       "selector": "0x23b05ccbc653f2f0d8065593da26be2baa1b0e87dc5306d6e5a020f8ef1c3a4"
     },
     {
       "members": [],
-      "class_hash": "0x7c1e87e8c79335da16a3dab6b6cab1b785d228e032a0480675131a71cfcb2ae",
+      "class_hash": "0xba2eed7ba69416cf241ad1321830a3d3008f632a3dedf8fd1b32b895a40d3f",
       "tag": "dopewars-Game",
       "selector": "0x4462fb348c1b170b0ef251ec6bf8185d6dd6162541df7b01b777137fc4b7cb0"
     },
     {
       "members": [],
-      "class_hash": "0x29605aafbd1d62234b724a6c5f1180015aae711870c1dc55844e6ff1baf003b",
+      "class_hash": "0x415752e3602b89729c859993f251ee85ae1512e170f6948025571b6cf4f86e4",
       "tag": "dopewars-GameConfig",
       "selector": "0x7062ea11a6d8a386c5f2b96fa0aad97b3308d40628fd54b4da47bbff481cc9e"
     },
     {
       "members": [],
-      "class_hash": "0x6a2e6fbf33e31d3978273498097620a34840e488dbda67ae9055f25b1853d20",
+      "class_hash": "0x7e2773c1fe9be66a99eefc825ef48bee3b812083866c159585be5f1c9ce0873",
       "tag": "dopewars-GameStorePacked",
       "selector": "0x121912f143c6df44026c9949fd2c3ecd303fd602c1c5da61e206a79ce86e13f"
     },
     {
       "members": [],
-      "class_hash": "0x34650b3235e717e0f653098c6033d4129553d5e5d023a84f68fd0bd1da34584",
+      "class_hash": "0x4907d3a1c13d9c44b4e2c99f40a16a872c28fb7d8b3f2f3ea75a68d76cdf572",
       "tag": "dopewars-LocationConfig",
       "selector": "0x12f3e77b28ccb0a6f5762f5b523b11143caa519d7c2b27734a497d1f3a2e2c4"
     },
     {
       "members": [],
-      "class_hash": "0x28b0b6273c46a875d1c4ffcc25db4a1c341e9464eba62a75ed700486ffabb13",
+      "class_hash": "0x54d7578cb12eafadf9a0fb29bec0df17427eef95d361aafd27b14b6555dbb11",
       "tag": "dopewars-RyoAddress",
       "selector": "0x261f89bf8e1c46576eed3931a59795015818056a6fc75f9b5a266b6187b73ec"
     },
     {
       "members": [],
-      "class_hash": "0x3f9b68eda0f70763b58d5e6dea5cca1dc6018075fb67080c6be967ea1484534",
+      "class_hash": "0x2eb979d8e1033395e5abd5fcf1dbbb47557234ec35e2e873d42058961e9fc49",
       "tag": "dopewars-RyoConfig",
       "selector": "0x7d8eb0bce0a49d2d3d2f16b5958bb2445cfe364f9b2a8f71c009ebbe602ccfd"
     },
     {
       "members": [],
-      "class_hash": "0x63cbe475e45b78a21eebe853bdb49d6dcc67bf603ecf87d880fe78c9e11e2a",
+      "class_hash": "0xa79772fb5fccda76fca3218b67b55f2c2decdfaa6855425c8f2ad2a8fe81b5",
       "tag": "dopewars-Season",
       "selector": "0x57a4b7adcd7d8362c0cef59cbdbd45264a73517c25dabee19063c58fb5a910c"
     },
     {
       "members": [],
-      "class_hash": "0x9a18c02dbebe115ec39d302b84b715fb30611fbba09baf14886c05cccf8f07",
+      "class_hash": "0x4d040821982bca7346b115d34ce93b294aa0212fbe9c02c3fcc8d5ebfe21bc",
       "tag": "dopewars-SeasonSettings",
       "selector": "0x3ff184e436869b03a532acfde58e4bc6709c0748b57881950208eb1b4d3765"
     },
     {
       "members": [],
-      "class_hash": "0x6645d640849d4471c4e5e78e6a566442b916b58b115186c240dc5be0fb44285",
+      "class_hash": "0x4b265eeb9195b02f92c688fa57a4dbf2d5668adb5d7e9a56bb02bb7f97cef2d",
       "tag": "dopewars-SortedList",
       "selector": "0x4a8a13cf06864a002ed3bc945cedecd99e330377b8991433f5f82ac30e9b96b"
     },
     {
       "members": [],
-      "class_hash": "0xd4d0d6727cdb05d2eadbd9d630d5591c6547d445b0be9c502de55767bbb225",
+      "class_hash": "0x1a8f6bd851e57fcc44205b69e87f4e21100639bce1286b70ca2e08482e2d4fa",
       "tag": "dopewars-SortedListItem",
       "selector": "0x438212373ce223a2bc90f0706b973a565a3c3965da1da61a81ef380bf09b833"
     }
@@ -4705,97 +4848,97 @@
   "events": [
     {
       "members": [],
-      "class_hash": "0x3e4b42871df61c3f5969898e4bd5606d77f1a91819b426c9acd3f0653bbd399",
+      "class_hash": "0x41d4549c10f05d9fc76e83574abd5df083ea4640be7e08bf781ac9c9cc00522",
       "tag": "dopewars-Claimed",
       "selector": "0x16329f27f036bfbcf50431ef91f12547ed533a19f7959c49bf3794b811ca04f"
     },
     {
       "members": [],
-      "class_hash": "0x303425d377974ae2c593da3bf4f8a3bb6da9f9c43129f526cd46761b04e0f9f",
+      "class_hash": "0x589c02a9755622a11e8415651d35148806c0f59804e683821c14bcd1cc6adc7",
       "tag": "dopewars-DopewarsItemTier",
       "selector": "0x37ed07308c80da10bfd8290337a7d4b0125afc86a80818fa61cd2e73302e088"
     },
     {
       "members": [],
-      "class_hash": "0xb629746dba21e735a66f99a5266a81412e294d03f93544e5e6017a81e01371",
+      "class_hash": "0x58989fefa5298b9e2ae7efd7d0a4e71a907383931de37d94483e2bf6af1b416",
       "tag": "dopewars-DopewarsItemTierConfig",
       "selector": "0xc8501e77426e074d09f53dea849371ed304aa71b5b4b6440d1665bcec2c33f"
     },
     {
       "members": [],
-      "class_hash": "0x84f87ce7015b4564161c5bf9929c9fc788037dda63f11a72137111020937c9",
+      "class_hash": "0x2ee8bb4435d46fce45a7712205f2407bb48f761338c82da74db1caedb9d73c4",
       "tag": "dopewars-ERC20BalanceEvent",
       "selector": "0x4ced94cbf9afb761b2b382d1c6ae289a8b261b1aea0eb5714bf5c107e3e383f"
     },
     {
       "members": [],
-      "class_hash": "0x7dd7bdd95f698d966b06dbdab62041db4bcc5243fb0ac5a46be10ad93fd7060",
+      "class_hash": "0x5556614cc63016885f1a449a77b626ffb65e4dcd9e5032fcfaab1a40f32e065",
       "tag": "dopewars-GameCreated",
       "selector": "0xb6cb757d1b16685bd607281240d13dc1c6d6ab51eec461848f216405223cd"
     },
     {
       "members": [],
-      "class_hash": "0x1af5dbf510b03a4f7047f9cf10eb265a9d51cc5f072dc51c1495af052e69bdc",
+      "class_hash": "0x304b3daec5c3d74a49909c7ccc2c6cdc28a8d13ca2a3366f00fdaae33a86d0a",
       "tag": "dopewars-GameOver",
       "selector": "0x5fd2f3bf912e273d06f320b7b2a8ed907c2b47ea883e526ae7898bbd0834890"
     },
     {
       "members": [],
-      "class_hash": "0x56405ef24f8b56b45fb581df1ff7a1e9198d0b452f2cf35e24578254346436c",
+      "class_hash": "0x213fa1020ee9390957d4e0f15895b759c6b7729d93564793886e2fbe3642f4a",
       "tag": "dopewars-HighVolatility",
       "selector": "0xa24606e037cb6ce149d2d8154e5808398a0e145844d5bca99bae0abe58574b"
     },
     {
       "members": [],
-      "class_hash": "0x734af1466cd3df06c717de6cf3410908f6555eed2af2d813283d5ce80de7c52",
+      "class_hash": "0x3ae46b9e0dcbcaf204b31e49fc97b31a94e358f3851ca640100efac3f2f3c73",
       "tag": "dopewars-NewHighScore",
       "selector": "0x1d20cb0ed690db3102519b33e1c298a42209d0f2fe6bd0326f1452abcc8da93"
     },
     {
       "members": [],
-      "class_hash": "0x7d108097ea51f8b5c7e420f040399b505067f71ae64899007c130985c887a4b",
+      "class_hash": "0x68b538159179a9b6cefb55b5c50b97fffcad784bb773287bc3cc6806445c03f",
       "tag": "dopewars-NewSeason",
       "selector": "0x21799bc4deb3e8dd479ea71a1ce9767baa2f23aab577a24159276dbb834d59d"
     },
     {
       "members": [],
-      "class_hash": "0x2804c60753e7413d4863b506b1851757b04c750900944fea6ccc381b9a90e3d",
+      "class_hash": "0x74f88f8b8741e01c6d7f5ab8207c4430f28528d8c76378bcf5ebdb8302d1cc",
       "tag": "dopewars-TradeDrug",
       "selector": "0x27a65ca0a6709a51034f65c0e6600b78522f86dd2773a84a7b4783a40aecfd8"
     },
     {
       "members": [],
-      "class_hash": "0x2c531c219f04e2ad503f976676aeda44011f915d899fb9f3fc0d5efaddad3a9",
+      "class_hash": "0x3fb14c9ee659397f39dae24fe125976fe317aab10c525897ea5eb4ca1bf227e",
       "tag": "dopewars-TravelEncounter",
       "selector": "0xb2d02a933e380c38a24674e0d6e7688b4f91a8ed780b86fd2de77463b6fbd7"
     },
     {
       "members": [],
-      "class_hash": "0x448a7ca3389e3a164ee87021e364bcd49eece7b154c24f26073fa3c3699883",
+      "class_hash": "0x794b6c6a116fd4a2c63cd51e0bed70cc86250159a1e676ff24a7d17740eac78",
       "tag": "dopewars-TravelEncounterResult",
       "selector": "0x3d2f2bb06ae6987fc38f4696cdaa15139cb5867613ff48c795f2fd313c29e6a"
     },
     {
       "members": [],
-      "class_hash": "0x3810c7d370c3e15bcf66db74ac64d6bc6f6dc65860a5640073d05a61b832d17",
+      "class_hash": "0x794e28b5f89f7a2181ad57dfa92a9c9f3afcacd6dfbdd392872bdcf67e96b4d",
       "tag": "dopewars-Traveled",
       "selector": "0x232404b36ddc995f335251d5a6adfbe90141f7fd7833e2a61c73533e9b9f718"
     },
     {
       "members": [],
-      "class_hash": "0x702d5440a155e0704b268f8d6dbf74cb8ae09b164064fe3b4f896cf725dcac7",
+      "class_hash": "0x21c8f9729d91b7e385218f5d396e084137b13144227b2b53060ee7c3c72e24a",
       "tag": "dopewars-TrophyCreation",
       "selector": "0x29c55bc91710776a7eefde54dd50f5622cc07ea1ec0f58f7d01ede9a963f61e"
     },
     {
       "members": [],
-      "class_hash": "0x113e43bc604068a5811205b126a3e318b21e5c72746138efa6fb40277067f00",
+      "class_hash": "0x10a76e791a65a86a40e9b10d175104e370746e6ad2c57a658d17468a73f403d",
       "tag": "dopewars-TrophyProgression",
       "selector": "0x6da79ec4f8ef62f705b565aeb2b23d04a449fce4c32af8ad209eb20e310b08a"
     },
     {
       "members": [],
-      "class_hash": "0x5c91d9b185113265064ca44160e97a2fe731ec082598302f8ee9b04fcf658f5",
+      "class_hash": "0x5bba0e4557ebbe3269ad145e2baa22cbb555d071bc71659b21fef97d86c71e0",
       "tag": "dopewars-UpgradeItem",
       "selector": "0x924842ac9d09ef68393348756f0755516f070d04e4995d4c258108c1c4bc6d"
     }

@@ -25,13 +25,15 @@ build-external-contracts = [
 [dependencies]
 starknet = "2.12.2"
 # dojo = { path = "../dojo/crates/dojo/core" }
-dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.7.0" }
-dojo_macros = { git = "https://github.com/dojoengine/dojo", tag = "v1.7.0" }
+# dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.7.0" }
+# dojo_macros = { git = "https://github.com/dojoengine/dojo", tag = "v1.7.0" }
+dojo = "1.7.1" 
 
-# cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
-cartridge_vrf = { path = "../vrf" }
 
-achievement = { git = "https://github.com/cartridge-gg/arcade", branch="dojo_1.7.0" }
+cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
+# cartridge_vrf = { path = "../vrf" }
+
+achievement = { git = "https://github.com/cartridge-gg/arcade", branch="dojo_1.7.1" }
 # achievement = { git = "https://github.com/cartridge-gg/arcade" }
 
 dope_types = { path = "../dope-migration/cairo/types"}
@@ -57,8 +59,8 @@ migrate_ryosepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $P
 migrate_ryomainnet = "PROFILE=mainnet && sozo -P $PROFILE build && sozo -P $PROFILE migrate --fee eth --fee-estimate-multiplier 2 --keystore ../../../dopewars_key -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 
 # slot dopewars
-slot_dopewars_katana = "slot d create -t legendary --team cartridge dopewars katana --config ./katana_dopewars.toml"
-slot_dopewars_torii = "slot d create -t legendary --team cartridge dopewars torii --version v1.6.0-alpha.7 --config ./torii_dopewars.toml"
+slot_dopewars_katana = "slot d create -t pro --team cartridge dopewars katana --config ./katana_dopewars.toml"
+slot_dopewars_torii = "slot d create -t pro --team cartridge dopewars torii --version v1.7.2 --config ./torii_dopewars.toml"
 
 # slot ryosepolia 
 slot_ryosepolia_torii = "slot d create ryosepolia2 torii -v v1.0.0-rc.2 --config-file ./torii_ryosepolia2.toml"

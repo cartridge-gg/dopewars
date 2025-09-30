@@ -38,7 +38,6 @@ pub mod Tasks {
 
 #[generate_trait]
 pub impl AchievementImpl of AchievementTrait {
-    #[inline]
     fn declare(self: Achievement, mut world: WorldStorage) {
         let store: Store = StoreTrait::new(world);
         store
@@ -60,32 +59,12 @@ pub impl AchievementImpl of AchievementTrait {
 
     fn declare_all(mut world: WorldStorage) {
         let mut achievements: Array<Achievement> = array![
-            Self::brawler(),
-            Self::famous(),
-            Self::kingpin(),
-            Self::stuffed(),
-            Self::blsh_1(),
-            Self::blsh_2(),
-            Self::blsh_3(),
-            Self::volume_1(),
-            Self::volume_2(),
-            Self::volume_3(),
-            Self::highstakes_1(),
-            Self::highstakes_2(),
-            Self::highstakes_3(),
-            Self::paper_1(),
-            Self::paper_2(),
-            Self::paper_3(),
-            Self::gear_from(),
-            Self::survivor(),
-            Self::encounters_1(),
-            Self::encounters_2(),
-            Self::encounters_3(),
-            Self::elegant(),
-            Self::full_early(),
-            Self::full_mid(),
-            Self::full_late(),
-            Self::og(),
+            Self::brawler(), Self::famous(), Self::kingpin(), Self::stuffed(), Self::blsh_1(),
+            Self::blsh_2(), Self::blsh_3(), Self::volume_1(), Self::volume_2(), Self::volume_3(),
+            Self::highstakes_1(), Self::highstakes_2(), Self::highstakes_3(), Self::paper_1(),
+            Self::paper_2(), Self::paper_3(), Self::gear_from(), Self::survivor(),
+            Self::encounters_1(), Self::encounters_2(), Self::encounters_3(), Self::elegant(),
+            Self::full_early(), Self::full_mid(), Self::full_late(), Self::og(),
         ];
         while let Option::Some(achievement) = achievements.pop_front() {
             achievement.declare(world);
@@ -98,7 +77,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn brawler() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -122,7 +100,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn famous() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -143,7 +120,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn kingpin() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -164,7 +140,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn stuffed() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -185,7 +160,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn blsh_1() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -211,7 +185,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn blsh_2() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -237,7 +210,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn blsh_3() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -263,7 +235,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn volume_1() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -284,7 +255,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn volume_2() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -305,7 +275,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn volume_3() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -326,7 +295,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn highstakes_1() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -349,7 +317,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn highstakes_2() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -372,7 +339,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn highstakes_3() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -395,7 +361,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn paper_1() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -416,7 +381,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn paper_2() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -437,7 +401,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn paper_3() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -458,7 +421,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn gear_from() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -481,7 +443,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn survivor() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -502,7 +463,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn encounters_1() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -523,7 +483,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn encounters_2() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -544,7 +503,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn encounters_3() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -565,7 +523,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn elegant() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -586,7 +543,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn full_early() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -607,7 +563,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn full_mid() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -628,7 +583,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn full_late() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(
@@ -649,7 +603,6 @@ pub impl AchievementImpl of AchievementTrait {
     }
 
 
-    #[inline]
     fn og() -> Achievement {
         let tasks: Array<AchievementTask> = array![
             AchievementTaskTrait::new(

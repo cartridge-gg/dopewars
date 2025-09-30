@@ -45,7 +45,7 @@ export const useDojoTokens = (
       setIsLoading(true);
       // const tokens = await toriiClient.getTokens(addresses, tokenIds || []);
       const tokens = await toriiClient.getTokens({
-        contract_addresses: addresses,
+        contract_addresses: addresses.map((i) => num.toHex64(i)),
         token_ids: tokenIds || [],
         pagination: {
           cursor: undefined,
@@ -53,7 +53,10 @@ export const useDojoTokens = (
           limit: 1_000,
           order_by: [],
         },
+        attribute_filters:[]
       });
+
+      // console.log(tokens)
 
       // const tokensBalances = await toriiClient.getTokenBalances(
       //   addresses,
@@ -61,7 +64,7 @@ export const useDojoTokens = (
       //   tokenIds || [],
       // );
       const tokensBalances = await toriiClient.getTokenBalances({
-        contract_addresses: addresses,
+        contract_addresses: addresses.map((i) => num.toHex64(i)),
         account_addresses: accountAddress ? [num.toHex64(accountAddress)] : [],
         token_ids: tokenIds || [],
         pagination: {

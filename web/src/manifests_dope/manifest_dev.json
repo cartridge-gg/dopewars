@@ -5379,8 +5379,8 @@
       ]
     },
     {
-      "address": "0x37e52dab569c7cbde97a555cbffe890011db5230c7a7e7268253e1de2d83b02",
-      "class_hash": "0x1f1e6a0d9135034ba65aa1619b0215342c18b187b3202168de951b8a67eec06",
+      "address": "0x27136c722d5f3e3ff3deb54f220bec29b4dae84e6b4bdfbc9a58e83ca718b35",
+      "class_hash": "0x492ca285b753d7216b23a5a0c4b7d49c5a8f173e73b8fb87c0c5e3039ee0b5e",
       "abi": [
         {
           "type": "impl",
@@ -6038,7 +6038,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x1b87584c012495ebd3a761aecd5a675a48b28cabc82fbda7dd33a7ee3d286e8",
+      "class_hash": "0xd0b79c7326bda396d5b2c8f94bf28ff5c8341d2dc1cf038bb43004702de84d",
       "abi": [
         {
           "type": "impl",
@@ -6261,7 +6261,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x13053ea616c27547daab9dc989d14bb01fcb5a171dca2121740ee0793c78ef7",
+      "class_hash": "0x17e977d61629308f3139f2eeab251f459a745d813087b4648a2480d09c9d62f",
       "abi": [
         {
           "type": "impl",
@@ -10055,7 +10055,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x180c3e5917e28267ef5ee4bbecb9790dafbccbd025a9671390763a4e08471cd",
+      "class_hash": "0x13c47fb261909ad898afd4c80f5519a976cf8ac4728e185cb5d63815d771391",
       "abi": [
         {
           "type": "impl",

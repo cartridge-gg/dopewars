@@ -11,10 +11,8 @@ export const useERC721 = ({
 }: {
   toast: any;
   getDojoContract: (tag: string) => Contract;
-  contractTag: string
-
+  contractTag: string;
 }) => {
-
   const contract = getDojoContract(contractTag);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -42,16 +40,14 @@ export const useERC721 = ({
           {
             contractAddress: contract.address,
             entrypoint: "transfer_from",
-            calldata: [account.address, recipient, id_u256.low, id_u256.high, ],
+            calldata: [account.address, recipient, id_u256.low, id_u256.high],
           },
         ]);
 
-        let txReceipt = await account.waitForTransaction(
-          execution.transaction_hash,
-          {
-            retryInterval: 200,
-          }
-        );
+        let txReceipt = await account.waitForTransaction(execution.transaction_hash, {
+          retryInterval: 200,
+          successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
+        });
 
         checkTxReceipt(txReceipt);
         setIsLoading(false);
@@ -70,7 +66,7 @@ export const useERC721 = ({
         });
       }
     },
-    [account]
+    [account],
   );
 
   return { transfer, isLoading, isSuccess };

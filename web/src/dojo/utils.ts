@@ -41,7 +41,8 @@ export const buildVrfCalls = async ({
     );
 
     const nonce = await account.getStorageAt(vrfProviderAddress, nonceStorageSlot, BlockTag.PRE_CONFIRMED);
-    const seed = hash.computePoseidonHashOnElements([nonce, call.contractAddress, chainId]);
+  
+    const seed = hash.computePoseidonHashOnElements([nonce, account.address, call.contractAddress, chainId]);
 
     const vrf = (await import("../lib/stark-vrf/pkg")).StarkVRF.new(vrfProviderSecret);
     const proof = vrf.prove(vrfProviderSecret, seed);

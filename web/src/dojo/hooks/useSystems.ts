@@ -109,9 +109,9 @@ export const useSystems = (): SystemsInterface => {
         return { hash: "0x0" };
       }
 
-      // override wallet (ArgentX / Braavos) default providers..
-      // @ts-ignore
-      account.provider = rpcProvider;
+      // // override wallet (ArgentX / Braavos) default providers..
+      // // @ts-ignore
+      // account.provider = rpcProvider;
       // @ts-ignore
       account.chainId = await rpcProvider.getChainId();
 
@@ -126,10 +126,12 @@ export const useSystems = (): SystemsInterface => {
 
         receipt = await rpcProvider.waitForTransaction(tx.transaction_hash, {
           retryInterval: 200,
+          successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
         });
       } catch (e: any) {
         setIsPending(false);
         // setError(e.toString());
+
         isError = true;
         toast({
           message: e ? tryBetterErrorMsg(e.toString()) : "unknown error",
@@ -145,7 +147,7 @@ export const useSystems = (): SystemsInterface => {
         if ("execution_status" in receipt && receipt.execution_status === "REVERTED") {
           receipt_error = {
             status: "REVERTED",
-            message: receipt.statusReceipt || "REVERTED",
+            message: tryBetterErrorMsg(receipt.revert_reason) || "REVERTED",
           };
           isError = true;
         }
