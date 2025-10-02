@@ -1,5 +1,5 @@
 [package]
-cairo-version = "=2.12.1"
+cairo-version = "=2.12.2"
 name = "rollyourown"
 version = "0.1.0"
 edition = "2024_07"
@@ -22,10 +22,10 @@ build-external-contracts = [
 ]
 
 [dev-dependencies]
-cairo_test = "2.12.1"
+cairo_test = "2.12.2"
 
 [dependencies]
-starknet = "2.12.1"
+starknet = "2.12.2"
 # dojo = { path = "../dojo/crates/dojo/core" }
 dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.7.0" }
 dojo_macros = { git = "https://github.com/dojoengine/dojo", tag = "v1.7.0" }
@@ -57,6 +57,7 @@ migrate_dopewars = "PROFILE=dopewars && sozo -P $PROFILE build && sozo -P $PROFI
 migrate_ryosepolia_controller = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --slot.controller -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 migrate_ryosepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --fee eth --fee-estimate-multiplier 2 --keystore ../../../sozo_acc -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 migrate_ryomainnet = "PROFILE=mainnet && sozo -P $PROFILE build && sozo -P $PROFILE migrate --fee eth --fee-estimate-multiplier 2 --keystore ../../../dopewars_key -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
+migrate_provable = "PROFILE=provable-dw && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && sozo -P $PROFILE inspect"
 
 # slot dopewars
 slot_dopewars_katana = "slot d create -t insane --team cartridge dopewars katana -v v1.5.0 --config ./katana_dopewars.toml"

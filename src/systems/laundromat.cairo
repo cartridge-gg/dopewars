@@ -13,9 +13,8 @@ trait ILaundromat<T> {
 #[dojo::contract]
 mod laundromat {
     use achievement::store::{StoreTrait as BushidoStoreTrait};
-    use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
-    use dojo::world::WorldStorageTrait;
+    // use dojo::world::WorldStorageTrait;
     // use dope_contracts::dope_gear::dope_gear_ext::{GearItem};
     // use dope_contracts::dope_gear::interface::{IDopeGearABIDispatcher, IDopeGearABIDispatcherTrait};
     // use dope_contracts::dope_hustlers::interface::{
@@ -27,17 +26,19 @@ mod laundromat {
         constants::{ETHER, MAX_MULTIPLIER}, events::{Claimed, NewSeason},
         helpers::season_manager::{SeasonManagerImpl, SeasonManagerTrait},
         interfaces::{paper::{IPaperDispatcher, IPaperDispatcherTrait}},
-        libraries::dopewars_items::{IDopewarsItemsDispatcherTrait, IDopewarsItemsLibraryDispatcher},
-        models::{game::{Game, GameImpl, GameTrait, TokenId}, season::{SeasonImpl, SeasonTrait}},
+        // libraries::dopewars_items::{IDopewarsItemsDispatcherTrait, IDopewarsItemsLibraryDispatcher},
+        models::{game::{Game, GameImpl, GameTrait, 
+        // TokenId
+    }, season::{SeasonImpl, SeasonTrait}},
         packing::game_store::{GameStoreImpl}, store::{StoreImpl, StoreTrait},
         utils::{
             // payout_items::{add_items_payout}, 
             payout_structure::{get_payed_count},
-            random::{RandomImpl}, sorted_list::{SortedListImpl, SortedListTrait},
+            random::{RandomImpl}, randomness_helper::{RandomnessHelperTrait}, sorted_list::{SortedListImpl, SortedListTrait},
         },
     };
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
-
+    use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
 
     #[abi(embed_v0)]
     impl LaundromatImpl of super::ILaundromat<ContractState> {
@@ -158,10 +159,8 @@ mod laundromat {
             let world = self.world(@"dopewars");
             let mut store = StoreImpl::new(world);
 
-            let ryo_addresses = store.ryo_addresses();
+            let randomness_config = store.randomness_config();
             let player_id = get_caller_address();
-            let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
-                .consume_random(Source::Nonce(player_id));
 
             // around 276k steps / 10
             // almost free now, compute all in one
@@ -206,7 +205,8 @@ mod laundromat {
                     store.save_ryo_config(@ryo_config);
 
                     // create new season
-                    let mut randomizer = RandomImpl::new(random);
+                    let game_context = core::poseidon::poseidon_hash_span(array![season_version.into(), 'launder'].span());
+                    let mut randomizer = RandomnessHelperTrait::create_randomizer(randomness_config, game_context);
                     let mut season_manager = SeasonManagerTrait::new(store);
                     season_manager.new_season(ref randomizer, ryo_config.season_version);
 
@@ -235,7 +235,7 @@ mod laundromat {
 
         fn claim(self: @ContractState, player_id: ContractAddress, game_ids: Span<u32>) {
             let world = self.world(@"dopewars");
-            let mut dope_world = self.world(@"dope");
+            let mut _dope_world = self.world(@"dope");
 
             let mut store = StoreImpl::new(world);
 
@@ -244,9 +244,9 @@ mod laundromat {
             // // check max batch size
             // assert(game_ids.len() <= 10, 'too much game_ids');
 
-            let mut gear_ids: Array<u256> = array![];
-            let mut gear_ids_values: Array<u256> = array![];
-            let mut hustler_count = 0;
+            let mut _gear_ids: Array<u256> = array![];
+            let mut _gear_ids_values: Array<u256> = array![];
+            let mut _hustler_count = 0;
 
             // let hustler_dispatcher = IDopeHustlersABIDispatcher {
             //     contract_address: dope_world.dns_address(@"DopeHustlers").unwrap(),

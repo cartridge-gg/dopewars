@@ -27,7 +27,7 @@ trait IGameActions<T> {
 
 #[dojo::contract]
 mod game {
-    use achievement::store::{StoreTrait as BushidoStoreTrait};
+    // use achievement::store::{StoreTrait as BushidoStoreTrait};
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
     use dojo::world::IWorldDispatcherTrait;
@@ -37,7 +37,7 @@ mod game {
     };
     // use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl,
     // HustlerStoreTrait};
-    use rollyourown::achievements::achievements_v1::Tasks;
+    // use rollyourown::achievements::achievements_v1::Tasks;
     use rollyourown::{
         config::{locations::{Locations}}, events::{GameCreated},
         helpers::season_manager::{SeasonManagerTrait},
@@ -46,7 +46,7 @@ mod game {
         packing::{game_store::{GameStore, GameStoreImpl}, player::{PlayerImpl}},
         store::{StoreImpl, StoreTrait},
         systems::{helpers::{game_loop, shopping, trading, trading::{TradeDirection}}},
-        utils::{bytes16::{Bytes16Impl}, random::{RandomImpl}},
+        utils::{bytes16::{Bytes16Impl}, random::{RandomImpl}, randomness_helper::{RandomnessHelperTrait}},
     };
     use starknet::get_caller_address;
 
@@ -67,11 +67,10 @@ mod game {
             let mut world = self.world(@"dopewars");
             let mut store = StoreImpl::new(world);
 
-            let ryo_addresses = store.ryo_addresses();
+            let randomness_config = store.randomness_config();
             let player_id = get_caller_address();
-            let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
-                .consume_random(Source::Nonce(player_id));
-            let mut randomizer = RandomImpl::new(random);
+            let game_context = core::poseidon::poseidon_hash_span(array![player_id.into(), 'create_game'].span());
+            let mut randomizer = RandomnessHelperTrait::create_randomizer(randomness_config, game_context);
 
             let game_id = world.dispatcher.uuid();
 
@@ -262,10 +261,8 @@ mod game {
         ) {
             let mut store = StoreImpl::new(self.world(@"dopewars"));
 
-            let ryo_addresses = store.ryo_addresses();
+            let randomness_config = store.randomness_config();
             let player_id = get_caller_address();
-            let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
-                .consume_random(Source::Nonce(player_id));
 
             //
             let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
@@ -279,7 +276,8 @@ mod game {
             let mut actions = actions;
             self.execute_actions(ref game_store, ref actions);
 
-            let mut randomizer = RandomImpl::new(random);
+            let game_context = core::poseidon::poseidon_hash_span(array![player_id.into(), game_id.into(), 'travel'].span());
+            let mut randomizer = RandomnessHelperTrait::create_randomizer(randomness_config, game_context);
             let mut season_settings = store.season_settings(game_store.game.season_version);
             // save next_location
             game_store.player.next_location = next_location;

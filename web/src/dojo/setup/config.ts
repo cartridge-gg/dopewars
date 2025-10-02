@@ -33,7 +33,7 @@ const VRF_PROVIDER_MAINNET = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c6142
 const PAPER_MAINNET = "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113";
 
 const provableChain = {
-  id: BigInt(shortString.encodeShortString("PROVABLE_DW")),
+  id: BigInt(shortString.encodeShortString("WP_PROVABLE_DW")),
   network: "slot-provable-dw",
   name: "Provable DW",
   nativeCurrency: {
@@ -149,7 +149,7 @@ const snSepolia: DojoChainConfig = {
 };
 
 const provableDW: DojoChainConfig = {
-  name: "PROVABLE-DW",
+  name: "WP_PROVABLE_DW",
   chainConfig: provableChain,
   rpcUrl: "https://api.cartridge.gg/x/provable-dw/katana",
   toriiUrl: "http://127.0.0.1:8080/graphql",
@@ -158,7 +158,7 @@ const provableDW: DojoChainConfig = {
   slot: "provable-dw",
   predeployedAccounts: [],
   paperAddress: manifestProvableDw.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
-  vrfProviderAddress: "0x00",
+  vrfProviderAddress: "0x00", 
   vrfProviderSecret: undefined,
 };
 
@@ -181,8 +181,8 @@ export const dojoContextConfig = {
   // SN_MAIN: snMainnet,
   // SN_SEPOLIA: snSepolia,
   WP_DOPEWARS: katanaSlotDopewars,
+  WP_PROVABLE_DW: provableDW,
   KATANA: katanaLocal,
-  PROVABLE_DW: provableDW,
 };
 
 export const dojoChains = Object.values(dojoContextConfig);

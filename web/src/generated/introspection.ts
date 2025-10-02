@@ -45,6 +45,7 @@
       "dopewars_LocationConfig",
       "dopewars_NewHighScore",
       "dopewars_NewSeason",
+      "dopewars_RandomnessConfig",
       "dopewars_RyoAddress",
       "dopewars_RyoConfig",
       "dopewars_Season",

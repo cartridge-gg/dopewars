@@ -1,8 +1,8 @@
 {
   "world": {
-    "class_hash": "0x7bc7b264612d3ac261df0a6d72a6b73c84b9386ef0095dd340d42afc01bb53c",
+    "class_hash": "0x57994b6a75fad550ca18b41ee82e2110e158c59028c4478109a67965a0e5b1e",
     "address": "0x745ce531c48c0bdac80e6ae04abf0396668dab648127353939563defb6fa85a",
-    "seed": "dopeseed(",
+    "seed": "dopeseed",
     "name": "Dope Wars",
     "entrypoints": [
       "uuid",
@@ -1480,7 +1480,7 @@
   "contracts": [
     {
       "address": "0x7dd4eae5aa154e2bc58de7e36f2274d07fe4394c4c63f018f16ecc08c8e733e",
-      "class_hash": "0xeee66103ad59325f39a095f83463cbcb912078f920e05f02490f8ff67329bf",
+      "class_hash": "0x14884e5f050eac1013c034d6205c51fabd50385bd3fe4155f662de63fbfbc43",
       "abi": [
         {
           "type": "impl",
@@ -2026,7 +2026,7 @@
     },
     {
       "address": "0x41caa0fb71647cc3926e515ecfa56bb7bc96920d3d269f8d44305ca14f89f1d",
-      "class_hash": "0x6ae7177bc48ea149667a907c9f4e82e5ef827b4523b8397c2b734ed60f84bdc",
+      "class_hash": "0x18801b3b12eaccddf90d738723b37a82e00eec43254b6462a4bd8f9b58b9fb9",
       "abi": [
         {
           "type": "impl",
@@ -2247,7 +2247,7 @@
     },
     {
       "address": "0x30c3940de6df0de8636ac50c9f24233c6849b966b16d2e178315bdda1308ea",
-      "class_hash": "0x5b7cd7bda1ee954a1bd117d1a746c7214653caeb72a8eb73b5f78321667c989",
+      "class_hash": "0x6e3b68052483364ecf677bad2420d960d771c5d83744c5a54dc94aabd26e1a2",
       "abi": [
         {
           "type": "impl",
@@ -2460,7 +2460,7 @@
     },
     {
       "address": "0x51b986cd0c4abc33d28dab0d685edbdddda3537b5a2429199013477c0419d62",
-      "class_hash": "0x183f93918acbbda40bf0bb281aee50170c9a64cf8d557fe064cbdde2dcc158",
+      "class_hash": "0x3388aee31463c60c46e74c10c81e8334a020400e6eb853010c03a5c33824ee8",
       "abi": [
         {
           "type": "impl",
@@ -2903,7 +2903,7 @@
     },
     {
       "address": "0x5f229d8b024b0cf4a7c9f09f6e5cf0d51c2c5b84a1e6d0e2432932141df023c",
-      "class_hash": "0x6377eb71ca9c55a0216e055755cbdff858f30e740749410aaa0b479b7d710fc",
+      "class_hash": "0xd6d694c42f89fd109828fde0ac99cd20c3548be9747806434fea9b9d47a651",
       "abi": [
         {
           "type": "impl",
@@ -3171,7 +3171,7 @@
     },
     {
       "address": "0x4b096d7f9128e6e9d61f1f1cac7f9fbb80079245e7bae054fba70855e860b1f",
-      "class_hash": "0x3ea47e841e56827883d18a12cb76ad5210eb8a2eb9a76db8054456064df3d61",
+      "class_hash": "0x7621a62bb2f06bba935fca4ef2d6b62e4962f2f6ae48a31454ae1686d8c7eaf",
       "abi": [
         {
           "type": "impl",
@@ -3643,7 +3643,7 @@
     },
     {
       "address": "0x8346dd6a9f694dac7f1f1afc62b13b8ce3f162ec47de7f3a754d8a2bfc0d78",
-      "class_hash": "0x35b30cfe4fd32268ce54b18b8df3e85b1298fd130bbf0b36533d0faa4acbcfe",
+      "class_hash": "0x60ffcc203744803fe71bda05ba5bba9186b711c3b92f83641ef1f16eb8943f3",
       "abi": [
         {
           "type": "impl",
@@ -4050,7 +4050,7 @@
         }
       ],
       "init_calldata": [
-        "0x0",
+        "0x04b096d7f9128e6e9d61f1f1cac7f9fbb80079245e7bae054fba70855e860b1f",
         "0x0",
         "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a"
       ],
@@ -4062,7 +4062,7 @@
     },
     {
       "address": "0x3609868eaca459a42134b901510f9bf6262895fbf2aff7aab1a83d0f01ccb6",
-      "class_hash": "0x2970d2dc04a58bcb34c16fe4a2ecd6a686820d89accb6fd5f7eb534243c96fe",
+      "class_hash": "0x683e8432fa2e51be83f309084392ea6e122ac342c3cc95694ff86c081065b46",
       "abi": [
         {
           "type": "impl",
@@ -4521,7 +4521,7 @@
   ],
   "libraries": [
     {
-      "class_hash": "0x7d8b64eeb7ceaa7510ef7d4009a671df03238da96174a82be0186a5d5a16c3f",
+      "class_hash": "0x36161b04c4d8fe13389bfa65853e3616bb6f6ddfc309acb1fadbcfebcf1cd49",
       "abi": [
         {
           "type": "impl",
@@ -4689,94 +4689,100 @@
           ]
         }
       ],
-      "tag": "dopewars-DopewarsItems_v0",
+      "tag": "dopewars-DopewarsItems_v1",
       "selector": "0xb4eb1c2e9851b81b3ba0a025c453a55f9cb897c1fe5984084f76b48226ccf1",
       "systems": [],
-      "version": "0"
+      "version": "1"
     }
   ],
   "models": [
     {
       "members": [],
-      "class_hash": "0x237a935f67bf9ed733433be95cbbd817936a6f63a38a0eb1d009b83d150ef0f",
+      "class_hash": "0x88a065fae98906843c9872b1cb80178c77fd10ab9b63267380ae21b8cf4fa1",
       "tag": "dopewars-DrugConfig",
       "selector": "0x7c904f95d43f718ea4f14aebf57e392ba8d041e92f78dbdd3f32a9d0db4106e"
     },
     {
       "members": [],
-      "class_hash": "0x18e2277ee9f22292782a89e4bec5cf45556a57c7f1b03108ba9fa9cc35e2fc",
+      "class_hash": "0x3047a1022dfdf22a4cd4adc52a5de7585d8a0902fa12a8a0ea35b6179331b62",
       "tag": "dopewars-EncounterStatsConfig",
       "selector": "0x23b05ccbc653f2f0d8065593da26be2baa1b0e87dc5306d6e5a020f8ef1c3a4"
     },
     {
       "members": [],
-      "class_hash": "0x52aa142489a1240cef9e3be2f78932068d3afe65f3a28563218bd0dba90322f",
+      "class_hash": "0xba2eed7ba69416cf241ad1321830a3d3008f632a3dedf8fd1b32b895a40d3f",
       "tag": "dopewars-Game",
       "selector": "0x4462fb348c1b170b0ef251ec6bf8185d6dd6162541df7b01b777137fc4b7cb0"
     },
     {
       "members": [],
-      "class_hash": "0x10fe6aefc364f4667480b45879dde8f9744ef2aaaccfec85f1d5fc30d12af45",
+      "class_hash": "0x415752e3602b89729c859993f251ee85ae1512e170f6948025571b6cf4f86e4",
       "tag": "dopewars-GameConfig",
       "selector": "0x7062ea11a6d8a386c5f2b96fa0aad97b3308d40628fd54b4da47bbff481cc9e"
     },
     {
       "members": [],
-      "class_hash": "0x1b5ab3594cb4b0273aef3ff6954e66e4c565d77b919f8bafd6797f5ab263ae7",
+      "class_hash": "0x7e2773c1fe9be66a99eefc825ef48bee3b812083866c159585be5f1c9ce0873",
       "tag": "dopewars-GameStorePacked",
       "selector": "0x121912f143c6df44026c9949fd2c3ecd303fd602c1c5da61e206a79ce86e13f"
     },
     {
       "members": [],
-      "class_hash": "0x2cf29fcf21e5dfebe72ace3863c6ec3712fb7f03394d118ad9f206e0caadefc",
+      "class_hash": "0x2a69de37e05aa97e7ad0fd51eba65e464a77a522ff6c996a241afbd610d7b8c",
       "tag": "dopewars-HustlerBody",
       "selector": "0x73d9e0d7920ba659e6592bf5c4cbda32bb6212259f79f4aae793803c50fc296"
     },
     {
       "members": [],
-      "class_hash": "0x7a8150b18e7dd1c923367db13b2820a5258aca80622ddfcd2552d9fd3be4767",
+      "class_hash": "0x59fc64bf46c36fbf803db7c0e3abf9a328b4574f4888404afe2a2ea6fbca2df",
       "tag": "dopewars-HustlerSlot",
       "selector": "0x122aedf95b835cf7c21769eeac8b2bd793f19ca2305cf7931ba484e81535c0f"
     },
     {
       "members": [],
-      "class_hash": "0x3e58b03fb6e5441371b2694e93177ecaf27271eb8ddd55d2874bad426e5b7ef",
+      "class_hash": "0x4907d3a1c13d9c44b4e2c99f40a16a872c28fb7d8b3f2f3ea75a68d76cdf572",
       "tag": "dopewars-LocationConfig",
       "selector": "0x12f3e77b28ccb0a6f5762f5b523b11143caa519d7c2b27734a497d1f3a2e2c4"
     },
     {
       "members": [],
-      "class_hash": "0x4f5f6fe52546fe937289391194e30221eb07117e7b95550ef35d70e5a063404",
+      "class_hash": "0xcb96cfe0a360379f79d3e51ebdf4fbe4d6c83d5207a4eb2ee1a2158c03d178",
+      "tag": "dopewars-RandomnessConfig",
+      "selector": "0x3b00c557e107288a3077a7c58eef7e37ed8176b1631e06cf28b46fd4d233ad3"
+    },
+    {
+      "members": [],
+      "class_hash": "0x54d7578cb12eafadf9a0fb29bec0df17427eef95d361aafd27b14b6555dbb11",
       "tag": "dopewars-RyoAddress",
       "selector": "0x261f89bf8e1c46576eed3931a59795015818056a6fc75f9b5a266b6187b73ec"
     },
     {
       "members": [],
-      "class_hash": "0x3c427535a8d88c3f1c255077251118b4cfdfb366e45f5f086279a5bbf6ed656",
+      "class_hash": "0x6fa2a670001bd32ccf67947b8984bf8eeb7c714b72174f5a1d477c4fdcdbe03",
       "tag": "dopewars-RyoConfig",
       "selector": "0x7d8eb0bce0a49d2d3d2f16b5958bb2445cfe364f9b2a8f71c009ebbe602ccfd"
     },
     {
       "members": [],
-      "class_hash": "0xdfadf0926406e5588014c6f11946a72b49c17d469c5f8a5d2567c507cc275f",
+      "class_hash": "0xa79772fb5fccda76fca3218b67b55f2c2decdfaa6855425c8f2ad2a8fe81b5",
       "tag": "dopewars-Season",
       "selector": "0x57a4b7adcd7d8362c0cef59cbdbd45264a73517c25dabee19063c58fb5a910c"
     },
     {
       "members": [],
-      "class_hash": "0x7cddd8eb4927d6d2fc5ab6f2217a3c07f4ad6562a84ed0bc83e629d77b741f2",
+      "class_hash": "0x4d040821982bca7346b115d34ce93b294aa0212fbe9c02c3fcc8d5ebfe21bc",
       "tag": "dopewars-SeasonSettings",
       "selector": "0x3ff184e436869b03a532acfde58e4bc6709c0748b57881950208eb1b4d3765"
     },
     {
       "members": [],
-      "class_hash": "0xcc5675b7fae121d6a4e0f8f83c0e0555f37da5fdc38b39f4c2d5abb560e091",
+      "class_hash": "0x4b265eeb9195b02f92c688fa57a4dbf2d5668adb5d7e9a56bb02bb7f97cef2d",
       "tag": "dopewars-SortedList",
       "selector": "0x4a8a13cf06864a002ed3bc945cedecd99e330377b8991433f5f82ac30e9b96b"
     },
     {
       "members": [],
-      "class_hash": "0x4cc508fca71d3b379bfae4acfa103e3338c523be0629240096fe47436dac7f2",
+      "class_hash": "0x1a8f6bd851e57fcc44205b69e87f4e21100639bce1286b70ca2e08482e2d4fa",
       "tag": "dopewars-SortedListItem",
       "selector": "0x438212373ce223a2bc90f0706b973a565a3c3965da1da61a81ef380bf09b833"
     }
@@ -4784,97 +4790,97 @@
   "events": [
     {
       "members": [],
-      "class_hash": "0x23f5d440aaaea479ee03597e979ee80666908bb1263a2abc52715d3ebbf7e8c",
+      "class_hash": "0x41d4549c10f05d9fc76e83574abd5df083ea4640be7e08bf781ac9c9cc00522",
       "tag": "dopewars-Claimed",
       "selector": "0x16329f27f036bfbcf50431ef91f12547ed533a19f7959c49bf3794b811ca04f"
     },
     {
       "members": [],
-      "class_hash": "0x3d7e28c8a5255b1681c49186ae18827e8ff6ea3ef40a8e210a1246d0e38b1c4",
+      "class_hash": "0x589c02a9755622a11e8415651d35148806c0f59804e683821c14bcd1cc6adc7",
       "tag": "dopewars-DopewarsItemTier",
       "selector": "0x37ed07308c80da10bfd8290337a7d4b0125afc86a80818fa61cd2e73302e088"
     },
     {
       "members": [],
-      "class_hash": "0x7fa91b8a373f05f74a1436d9dfa13a74c1af075618049d5f26ff778df723f3a",
+      "class_hash": "0x58989fefa5298b9e2ae7efd7d0a4e71a907383931de37d94483e2bf6af1b416",
       "tag": "dopewars-DopewarsItemTierConfig",
       "selector": "0xc8501e77426e074d09f53dea849371ed304aa71b5b4b6440d1665bcec2c33f"
     },
     {
       "members": [],
-      "class_hash": "0x440451c09baa20b50b4f3ba1b2f6f06f47b0906223027dec3923cdc119af34",
+      "class_hash": "0x2ee8bb4435d46fce45a7712205f2407bb48f761338c82da74db1caedb9d73c4",
       "tag": "dopewars-ERC20BalanceEvent",
       "selector": "0x4ced94cbf9afb761b2b382d1c6ae289a8b261b1aea0eb5714bf5c107e3e383f"
     },
     {
       "members": [],
-      "class_hash": "0x7553c908518caa0db51b31ace6421f708dae371277ca95a272d59484d7cc059",
+      "class_hash": "0x84ca3d2fb6d8054325e22c185e7c3b1845a5dc05bac2642694f7a23dc74d1d",
       "tag": "dopewars-GameCreated",
       "selector": "0xb6cb757d1b16685bd607281240d13dc1c6d6ab51eec461848f216405223cd"
     },
     {
       "members": [],
-      "class_hash": "0x485c9aa5561788be3f972f7687906ec5afe863c03b0926b367209d023ea7f0",
+      "class_hash": "0x304b3daec5c3d74a49909c7ccc2c6cdc28a8d13ca2a3366f00fdaae33a86d0a",
       "tag": "dopewars-GameOver",
       "selector": "0x5fd2f3bf912e273d06f320b7b2a8ed907c2b47ea883e526ae7898bbd0834890"
     },
     {
       "members": [],
-      "class_hash": "0x189b9df81c2b67988190ab2766939697326297689185395e95d4ce4e02c3344",
+      "class_hash": "0x213fa1020ee9390957d4e0f15895b759c6b7729d93564793886e2fbe3642f4a",
       "tag": "dopewars-HighVolatility",
       "selector": "0xa24606e037cb6ce149d2d8154e5808398a0e145844d5bca99bae0abe58574b"
     },
     {
       "members": [],
-      "class_hash": "0x75cbc99718ff34eb4ef14c354a7058e9b55eca17ef0e85a7a34d97e3749acf8",
+      "class_hash": "0x3ae46b9e0dcbcaf204b31e49fc97b31a94e358f3851ca640100efac3f2f3c73",
       "tag": "dopewars-NewHighScore",
       "selector": "0x1d20cb0ed690db3102519b33e1c298a42209d0f2fe6bd0326f1452abcc8da93"
     },
     {
       "members": [],
-      "class_hash": "0x4950979ed05d9292fee8f276e670d05d56edb931e4a4a8a160da32e50ccf31b",
+      "class_hash": "0x68b538159179a9b6cefb55b5c50b97fffcad784bb773287bc3cc6806445c03f",
       "tag": "dopewars-NewSeason",
       "selector": "0x21799bc4deb3e8dd479ea71a1ce9767baa2f23aab577a24159276dbb834d59d"
     },
     {
       "members": [],
-      "class_hash": "0x4303f383b8f23a1390ea428d1d701479cd367970f30ca7e658dc0a184374b23",
+      "class_hash": "0x74f88f8b8741e01c6d7f5ab8207c4430f28528d8c76378bcf5ebdb8302d1cc",
       "tag": "dopewars-TradeDrug",
       "selector": "0x27a65ca0a6709a51034f65c0e6600b78522f86dd2773a84a7b4783a40aecfd8"
     },
     {
       "members": [],
-      "class_hash": "0x5b7f06c20b01d09962738ba5cbed77f203bb36c365e81df1eabaa453884ffce",
+      "class_hash": "0x3fb14c9ee659397f39dae24fe125976fe317aab10c525897ea5eb4ca1bf227e",
       "tag": "dopewars-TravelEncounter",
       "selector": "0xb2d02a933e380c38a24674e0d6e7688b4f91a8ed780b86fd2de77463b6fbd7"
     },
     {
       "members": [],
-      "class_hash": "0x22e183f6f520a418ee2df573b00f63aa6417c4f452f5f9f9b98ac0786ba40b3",
+      "class_hash": "0x794b6c6a116fd4a2c63cd51e0bed70cc86250159a1e676ff24a7d17740eac78",
       "tag": "dopewars-TravelEncounterResult",
       "selector": "0x3d2f2bb06ae6987fc38f4696cdaa15139cb5867613ff48c795f2fd313c29e6a"
     },
     {
       "members": [],
-      "class_hash": "0x34f20a386f98a92fe7317ea059a837aea992e1fe0884cf7da1442d44f999825",
+      "class_hash": "0x794e28b5f89f7a2181ad57dfa92a9c9f3afcacd6dfbdd392872bdcf67e96b4d",
       "tag": "dopewars-Traveled",
       "selector": "0x232404b36ddc995f335251d5a6adfbe90141f7fd7833e2a61c73533e9b9f718"
     },
     {
       "members": [],
-      "class_hash": "0x6a1e8656fb239499aac98fa6ae26f12b5bcb19beeb1c03c7f52da2ecdfa98db",
+      "class_hash": "0x21c8f9729d91b7e385218f5d396e084137b13144227b2b53060ee7c3c72e24a",
       "tag": "dopewars-TrophyCreation",
       "selector": "0x29c55bc91710776a7eefde54dd50f5622cc07ea1ec0f58f7d01ede9a963f61e"
     },
     {
       "members": [],
-      "class_hash": "0xc04ad52992b65d8404d629e17df64cdb425933dfa522c17ab63f9d757a3b9",
+      "class_hash": "0x10a76e791a65a86a40e9b10d175104e370746e6ad2c57a658d17468a73f403d",
       "tag": "dopewars-TrophyProgression",
       "selector": "0x6da79ec4f8ef62f705b565aeb2b23d04a449fce4c32af8ad209eb20e310b08a"
     },
     {
       "members": [],
-      "class_hash": "0xe84118c92f36fde55128fd755ee5c4584e8660e31edd288720cb7d4188640f",
+      "class_hash": "0x5bba0e4557ebbe3269ad145e2baa22cbb555d071bc71659b21fef97d86c71e0",
       "tag": "dopewars-UpgradeItem",
       "selector": "0x924842ac9d09ef68393348756f0755516f070d04e4995d4c258108c1c4bc6d"
     }

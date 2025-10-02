@@ -23,6 +23,7 @@ pub mod config {
     pub mod gear;
     pub mod hustlers;
     pub mod locations;
+    pub mod randomness;
     pub mod ryo;
     pub mod ryo_address;
     pub mod settings;
@@ -80,6 +81,7 @@ pub mod utils {
     // pub mod payout_items;
     pub mod payout_structure;
     pub mod random;
+    pub mod randomness_helper;
     pub mod sorted_list;
 }
 

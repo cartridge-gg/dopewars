@@ -7,11 +7,10 @@ trait IDecide<T> {
 
 #[dojo::contract]
 mod decide {
-    use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use rollyourown::{
         packing::{game_store::{GameStoreImpl}, player::{PlayerImpl}},
         store::{StoreImpl, StoreTrait}, systems::{helpers::{game_loop, traveling}},
-        utils::{bytes16::{Bytes16Impl}, random::{RandomImpl}},
+        utils::{bytes16::{Bytes16Impl}, random::{RandomImpl}, randomness_helper::{RandomnessHelperTrait}},
     };
     use starknet::get_caller_address;
 
@@ -20,10 +19,8 @@ mod decide {
         fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions) {
             let mut store = StoreImpl::new(self.world(@"dopewars"));
 
-            let ryo_addresses = store.ryo_addresses();
+            let randomness_config = store.randomness_config();
             let player_id = get_caller_address();
-            let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
-                .consume_random(Source::Nonce(player_id));
 
             //
             let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
@@ -31,7 +28,8 @@ mod decide {
             // check player status
             assert(game_store.player.can_decide(), 'player cannot decide');
 
-            let mut randomizer = RandomImpl::new(random);
+            let game_context = core::poseidon::poseidon_hash_span(array![player_id.into(), game_id.into(), 'decide'].span());
+            let mut randomizer = RandomnessHelperTrait::create_randomizer(randomness_config, game_context);
             let mut season_settings = store.season_settings(game_store.game.season_version);
 
             // // resolve decision

@@ -70,7 +70,7 @@ pub impl GameImpl of GameTrait {
             TokenId::LootId(loot_id) => {
                 // let mut loot_store = LootStoreImpl::new(dope_world);
 
-                let loot_id: u256 = loot_id.into();
+                let _loot_id: u256 = loot_id.into();
                 let mut equipment = array![0, 256, 1280, 512];
                 // let mut equipment = array![
                 // loot_store.gear_item_id(loot_id, HustlerSlots::Weapon).try_into().unwrap(),
@@ -81,7 +81,7 @@ pub impl GameImpl of GameTrait {
 
                 equipment.span()
             },
-            TokenId::HustlerId(hustler_id) => {
+            TokenId::HustlerId(_hustler_id) => {
                 // let mut hustler_store = HustlerStoreImpl::new(dope_world);
                 // let weapon = hustler_store.hustler_slot(hustler_id.into(), HustlerSlots::Weapon);
                 // let clothe = hustler_store.hustler_slot(hustler_id.into(), HustlerSlots::Clothe);

@@ -89,6 +89,12 @@ export class GameStoreClass {
   }
 
   *init(gameId: string) {
+    // Wait for config store to be initialized before proceeding
+    if (!this.configStore.isInitialized) {
+      console.log('Waiting for config store to initialize...');
+      throw new Error('Config store not initialized yet, will retry');
+    }
+
     yield this.loadGameInfos(gameId);
     yield this.loadSeasonSettings(this.gameInfos?.season_version);
     yield this.loadGameEvents();
@@ -180,13 +186,15 @@ export class GameStoreClass {
   }
 
   *loadGameInfos(gameId: string) {
+    // Convert gameId to decimal number, handling both hex (0x...) and decimal formats
+    const gameIdNumber = gameId.startsWith('0x') ? parseInt(gameId, 16) : parseInt(gameId, 10);
     const entities: Entities = yield this.toriiClient.getEntities({
       clause: {
         Member: {
           member: "game_id",
           model: "dopewars-Game",
           operator: "Eq",
-          value: { Primitive: { U32: Number(gameId) } },
+          value: { Primitive: { U32: gameIdNumber } },
         },
       },
       pagination: {
@@ -307,7 +315,7 @@ export class GameStoreClass {
           member: "game_id",
           model: "dopewars-GameCreated",
           operator: "Eq",
-          value: { Primitive: { U32: Number(gameId) } },
+          value: { Primitive: { U32: gameId } },
         },
       },
       pagination: {

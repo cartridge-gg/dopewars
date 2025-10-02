@@ -4,7 +4,7 @@ use dojo::world::WorldStorage;
 use rollyourown::{
     config::{
         drugs::{DrugConfig, Drugs}, encounters::{EncounterStatsConfig, Encounters},
-        game::{GameConfig}, ryo::{RyoConfig}, ryo_address::{RyoAddress},
+        game::{GameConfig}, randomness::{RandomnessConfig}, ryo::{RyoConfig}, ryo_address::{RyoAddress},
         settings::{DrugsMode, EncountersMode, SeasonSettings},
     },
     models::{game::{Game}, game_store_packed::GameStorePacked, season::Season},
@@ -30,6 +30,10 @@ pub impl StoreImpl of StoreTrait {
     }
 
     fn ryo_addresses(self: @Store) -> RyoAddress {
+        self.world.read_model(UNIVERSAL_ANSWER)
+    }
+
+    fn randomness_config(self: @Store) -> RandomnessConfig {
         self.world.read_model(UNIVERSAL_ANSWER)
     }
 
@@ -94,6 +98,10 @@ pub impl StoreImpl of StoreTrait {
 
     fn save_ryo_addresses(ref self: Store, ryo_addresses: @RyoAddress) { // check UNIVERSAL_ANSWER ?
         self.world.write_model(ryo_addresses)
+    }
+
+    fn save_randomness_config(ref self: Store, randomness_config: @RandomnessConfig) { // check UNIVERSAL_ANSWER ?
+        self.world.write_model(randomness_config)
     }
 
     fn save_game_config(ref self: Store, game_config: @GameConfig) { // check UNIVERSAL_ANSWER ?

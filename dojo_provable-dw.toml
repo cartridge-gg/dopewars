@@ -10,7 +10,7 @@ world_address = "0x745ce531c48c0bdac80e6ae04abf0396668dab648127353939563defb6fa8
 
 [world]
 name = "Dope Wars"
-seed = "dopeseed("
+seed = "dopeseed"
 description = "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO."
 # website = "https://rollyourown.preview.cartridge.gg/"
 # icon_uri = "file://assets/icon.png"
@@ -34,8 +34,8 @@ skip_contracts = [
     "0x55ca1905d9b3d72b5e710f723c3bbd8f03428fb243f44cd5faee2796b44b204",
 ]
 "dopewars-ryo" = [
-    "0x0",                                                              # paper address, 0x0 = use world.dns
-    "0x0",                                                              # vrf address, 0x0 = use world.dns
+    "0x04b096d7f9128e6e9d61f1f1cac7f9fbb80079245e7bae054fba70855e860b1f",      # paper address, 0x0 = use world.dns
+    "0x0",      # vrf address, 0x0 = use local randomness instead of VRF
     "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a", # treasury / multisig address
 ]
 
@@ -117,4 +117,4 @@ skip_contracts = [
 
 [lib_versions]
 
-"dopewars-DopewarsItems" = "0"
+"dopewars-DopewarsItems" = "1"

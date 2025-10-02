@@ -31,16 +31,15 @@ export const useTokenBalance = ({
     if (!contract || !address) return;
 
     try {
-      const bal = await contract.balance_of(address);
+      const bal = await contract.call("balance_of", [address], { blockIdentifier: "latest" });
       //@ts-ignore   returns a bigint
       setBalance(bal);
+      setIsInitializing(false);
     } catch (e) {
-      const bal = await contract.balanceOf(address);
-      //@ts-ignore   returns a bigint
-      setBalance(bal);
+      console.error("Failed to fetch token balance:", e);
+      setBalance(0n);
+      setIsInitializing(false);
     }
-
-    setIsInitializing(false);
   }, [contract, address]);
 
   useEffect(() => {

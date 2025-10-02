@@ -29,7 +29,7 @@ mod ryo {
     use dojo::world::{IWorldDispatcherTrait, WorldStorageTrait};
     use rollyourown::achievements::achievements_v1::AchievementImpl;
     use rollyourown::{
-        config::{ryo::{RyoConfig, RyoConfigImpl}}, helpers::season_manager::{SeasonManagerTrait},
+        config::{randomness::{RandomnessConfig, RandomnessConfigTrait}, ryo::{RyoConfig, RyoConfigImpl}}, helpers::season_manager::{SeasonManagerTrait},
         store::{StoreImpl, StoreTrait}, utils::random::{RandomImpl},
     };
     use starknet::get_caller_address;
@@ -97,6 +97,15 @@ mod ryo {
 
         // save
         store.save_ryo_addresses(@ryo_addresses);
+
+        // Initialize randomness config
+        // For provable-dw: use local randomness, for others: use VRF
+        let randomness_config = RandomnessConfig {
+            key: 0,
+            use_vrf: !vrf_address.is_zero(),
+            vrf_provider: vrf_address,
+        };
+        store.save_randomness_config(@randomness_config);
 
         // Create first season
         let mut randomizer = RandomImpl::new('ryo');

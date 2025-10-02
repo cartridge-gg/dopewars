@@ -8,7 +8,8 @@ import { EncountersAction, GameMode, Locations } from "../types";
 import { useConfigStore } from "./useConfigStore";
 import { useDojoContext } from "./useDojoContext";
 import { DojoCall, getContractByName } from "@dojoengine/core";
-import { buildVrfCalls, sleep } from "../utils";
+import { sleep } from "../utils";
+import { buildRandomnessCalls } from "../utils/randomness";
 import { useDopeStore } from "@/dope/store";
 import { parseModels } from "@/dope/toriiUtils";
 
@@ -191,11 +192,10 @@ export const useSystems = (): SystemsInterface => {
         ]),
       };
 
-      const createGameCalls = await buildVrfCalls({
+      const createGameCalls = await buildRandomnessCalls({
         account: account!,
         call: createGameCall,
-        vrfProviderAddress: selectedChain.vrfProviderAddress,
-        vrfProviderSecret: selectedChain.vrfProviderSecret,
+        chainConfig: selectedChain,
       });
 
       const calls =
@@ -242,11 +242,10 @@ export const useSystems = (): SystemsInterface => {
         calldata: CallData.compile({ gameId, location, callsEnum }),
       };
 
-      const calls = await buildVrfCalls({
+      const calls = await buildRandomnessCalls({
         account: account!,
         call,
-        vrfProviderAddress: selectedChain.vrfProviderAddress,
-        vrfProviderSecret: selectedChain.vrfProviderSecret,
+        chainConfig: selectedChain,
       });
 
       const { hash } = await executeAndReceipt(calls);
@@ -266,11 +265,10 @@ export const useSystems = (): SystemsInterface => {
         calldata: CallData.compile([gameId, action]),
       };
 
-      const calls = await buildVrfCalls({
+      const calls = await buildRandomnessCalls({
         account: account!,
         call,
-        vrfProviderAddress: selectedChain.vrfProviderAddress,
-        vrfProviderSecret: selectedChain.vrfProviderSecret,
+        chainConfig: selectedChain,
       });
 
       const { hash } = await executeAndReceipt(calls);
@@ -418,11 +416,10 @@ export const useSystems = (): SystemsInterface => {
         calldata: CallData.compile([season]),
       };
 
-      const calls = await buildVrfCalls({
+      const calls = await buildRandomnessCalls({
         account: account!,
         call,
-        vrfProviderAddress: selectedChain.vrfProviderAddress,
-        vrfProviderSecret: selectedChain.vrfProviderSecret,
+        chainConfig: selectedChain,
       });
       const { hash } = await executeAndReceipt(calls);
 
@@ -508,11 +505,10 @@ export const useSystems = (): SystemsInterface => {
         entrypoint: "roll",
         calldata: [gameId],
       };
-      const calls = await buildVrfCalls({
+      const calls = await buildRandomnessCalls({
         account: account!,
         call,
-        vrfProviderAddress: selectedChain.vrfProviderAddress,
-        vrfProviderSecret: selectedChain.vrfProviderSecret,
+        chainConfig: selectedChain,
       });
 
       const { hash } = await executeAndReceipt(calls);
