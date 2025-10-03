@@ -135,7 +135,11 @@ export class EventClass {
   }
 
   get isGameOver() {
-    return this.events.find((i: DojoEvent) => i?.eventName === "GameOver") !== undefined;
+    return this.events.find(
+      (i: DojoEvent) =>
+        i?.eventName === "GameOver" &&
+        i?.event?.game_id === this.gameInfos.game_id
+    ) !== undefined;
   }
 
   addEvent(entity: Entity) {

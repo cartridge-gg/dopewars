@@ -110,7 +110,7 @@ const End = () => {
           retryInterval: 200,
         });
         setTimeout(async () => {
-          await gameStore.init(gameInfos?.game_id!);
+          await gameStore.init(`0x${gameInfos?.game_id!.toString(16)}`);
           setTimeout(() => {
             refetchRegisteredGame();
           }, 1_000);
