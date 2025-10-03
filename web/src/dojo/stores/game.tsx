@@ -164,11 +164,10 @@ export class GameStoreClass {
       clause: {
         Keys: {
           keys: [num.toHexString(this.gameInfos?.game_id), this.gameInfos?.player_id],
-          models: [],
-          pattern_matching: "FixedLen",
+          models: ["dopewars-*"],
+          pattern_matching: "VariableLen",
         },
       },
-
       pagination: {
         limit: 10_000,
         cursor: undefined,
@@ -177,7 +176,7 @@ export class GameStoreClass {
       },
       no_hashed_keys: false,
       models: [],
-      historical: true,
+      historical: false,
     });
 
     if (entities.items.length === 0) return;

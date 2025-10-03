@@ -17,4 +17,19 @@ contracts = [
 
 
 [events]
-historical_events = []
+historical_events = [
+    "dopewars-GameCreated",
+    "dopewars-Traveled",
+    "dopewars-GameOver",
+    "dopewars-TradeDrug",
+    "dopewars-HighVolatility",
+    "dopewars-UpgradeItem",
+    "dopewars-TravelEncounter",
+    "dopewars-TravelEncounterResult",
+    "dopewars-NewSeason",
+    "dopewars-NewHighScore",
+    "dopewars-Claimed",
+    # bushido 
+    "dopewars-TrophyCreation",
+    "dopewars-TrophyProgression",
+]
