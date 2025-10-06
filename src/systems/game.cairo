@@ -30,8 +30,10 @@ mod game {
     // use achievement::store::{StoreTrait as BushidoStoreTrait};
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
+    use dojo::model::ModelStorage;
     use dojo::world::IWorldDispatcherTrait;
     use dojo::world::WorldStorageTrait;
+    use game_components_minigame::interface::{IMinigameDispatcher, IMinigameDispatcherTrait};
     use rollyourown::dope_contracts::dope_hustlers::dope_hustlers_models::{
         HustlerSlotOption, HustlerSlots, HustlerBody, HustlerBodyParts,
     };
@@ -42,7 +44,7 @@ mod game {
         config::{locations::{Locations}}, events::{GameCreated},
         helpers::season_manager::{SeasonManagerTrait},
         interfaces::{erc721::{IERC721ABIDispatcher, IERC721ABIDispatcherTrait}},
-        models::{game::{GameImpl, GameMode, TokenId}},
+        models::{game::{GameImpl, GameMode, TokenId}, game_token::{GameToken}},
         packing::{game_store::{GameStore, GameStoreImpl}, player::{PlayerImpl}},
         store::{StoreImpl, StoreTrait},
         systems::{helpers::{game_loop, shopping, trading, trading::{TradeDirection}}},
@@ -233,6 +235,27 @@ mod game {
             // create & save GameStorePacked
             let game_store = GameStoreImpl::new(store, ref game, ref game_config, ref randomizer);
             game_store.save();
+
+            // mint NFT and store mapping
+            let (game_token_contract, _) = world.dns(@"game_token_systems").unwrap();
+            let minigame_dispatcher = IMinigameDispatcher { contract_address: game_token_contract };
+
+            let nft_token_id = minigame_dispatcher
+                .mint_game(
+                    Option::Some(player_name), // player_name
+                    Option::None, // settings_id
+                    Option::None, // start
+                    Option::None, // end
+                    Option::None, // objective_ids
+                    Option::None, // context
+                    Option::None, // client_url
+                    Option::None, // renderer_address
+                    player_id, // to
+                    true // soulbound - NFT cannot be transferred
+                );
+
+            // store the GameToken mapping
+            world.write_model(@GameToken { token_id: nft_token_id, game_id, player_id });
 
             // emit GameCreated
             world.emit_event(@game_created);

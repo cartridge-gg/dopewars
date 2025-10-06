@@ -36,7 +36,7 @@ pub mod helpers {
 pub mod models {
     pub mod game;
     pub mod game_store_packed;
-
+    pub mod game_token;
     pub mod season;
 }
 
@@ -57,6 +57,10 @@ pub mod systems {
     pub mod game;
     pub mod laundromat;
     pub mod ryo;
+
+    pub mod game_token {
+        pub mod contracts;
+    }
 
     pub mod helpers {
         pub mod game_loop;

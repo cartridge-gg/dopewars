@@ -19,6 +19,8 @@ build-external-contracts = [
     "dojo::world::world_contract::world",
     "achievement::events::index::e_TrophyCreation",
     "achievement::events::index::e_TrophyProgression",
+    "game_components_token::examples::full_token_contract::FullTokenContract",
+    "game_components_token::examples::minigame_registry_contract::MinigameRegistryContract",
 ]
 
 [dev-dependencies]
@@ -26,19 +28,21 @@ cairo_test = "2.12.2"
 
 [dependencies]
 starknet = "2.12.2"
-# dojo = { path = "../dojo/crates/dojo/core" }
 dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.7.0" }
 dojo_macros = { git = "https://github.com/dojoengine/dojo", tag = "v1.7.0" }
-# cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
 cartridge_vrf = { path = "../vrf" }
-
 achievement = { path = "../arcade" }
+game_components_minigame = { path = "../game-components" }
+game_components_metagame = { path = "../game-components" }
+game_components_test_starknet = { path = "../game-components" }
+game_components_token = { path = "../game-components" }
+# dojo = { path = "../dojo/crates/dojo/core" }
+# cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
 # achievement = { path = "../arcade/packages/achievement" }
-
 # dope_contracts = { path = "../dope-migration/cairo/contracts"}
 
-openzeppelin = "2.0.0"
-openzeppelin_token = "2.0.0"
+openzeppelin = "1.0.0"
+openzeppelin_token = "1.0.0"
 
 [scripts]
 katana = "katana --config ./katana_dev.toml"

@@ -29,7 +29,7 @@ mod ryo {
     use dojo::world::{IWorldDispatcherTrait, WorldStorageTrait};
     use rollyourown::achievements::achievements_v1::AchievementImpl;
     use rollyourown::{
-        config::{randomness::{RandomnessConfig, RandomnessConfigTrait}, ryo::{RyoConfig, RyoConfigImpl}}, helpers::season_manager::{SeasonManagerTrait},
+        config::{randomness::{RandomnessConfig}, ryo::{RyoConfig, RyoConfigImpl}}, helpers::season_manager::{SeasonManagerTrait},
         store::{StoreImpl, StoreTrait}, utils::random::{RandomImpl},
     };
     use starknet::get_caller_address;
