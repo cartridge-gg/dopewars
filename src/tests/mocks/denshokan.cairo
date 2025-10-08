@@ -2,34 +2,34 @@
 // This demonstrates how to configure and use the modular components
 
 use core::num::traits::Zero;
-use starknet::{ContractAddress, syscalls::call_contract_syscall};
-use starknet::storage::{StoragePointerReadAccess};
-
-// Core imports
-use openzeppelin_token::erc721::{ERC721Component, interface::IERC721Metadata};
-use openzeppelin_introspection::src5::SRC5Component;
-use openzeppelin_token::common::erc2981::erc2981::{DefaultConfig, ERC2981Component};
-
-// Game components imports
-use game_components_token::core::core_token::CoreTokenComponent;
-use game_components_token::structs::TokenMetadata;
-use game_components_token::extensions::minter::minter::MinterComponent;
-use game_components_token::extensions::objectives::objectives::ObjectivesComponent;
-use game_components_token::extensions::context::context::ContextComponent;
-use game_components_token::extensions::renderer::renderer::RendererComponent;
-use game_components_token::extensions::settings::settings::SettingsComponent;
-
-use game_components_token::examples::minigame_registry_contract::{
-    IMinigameRegistryDispatcher, IMinigameRegistryDispatcherTrait,
-};
-
-use game_components_token::interface::{ITokenEventRelayerDispatcher, ITokenEventRelayerDispatcherTrait};
-
 use game_components_metagame::extensions::context::structs::GameContextDetails;
 use game_components_minigame::extensions::settings::structs::GameSettingDetails;
 use game_components_minigame::interface::{IMinigameDispatcher, IMinigameDispatcherTrait};
 use game_components_minigame::structs::GameDetail;
-use game_components_utils::renderer::{create_default_svg, create_custom_metadata};
+
+// Game components imports
+use game_components_token::core::core_token::CoreTokenComponent;
+use game_components_token::examples::minigame_registry_contract::{
+    IMinigameRegistryDispatcher, IMinigameRegistryDispatcherTrait,
+};
+use game_components_token::extensions::context::context::ContextComponent;
+use game_components_token::extensions::minter::minter::MinterComponent;
+use game_components_token::extensions::objectives::objectives::ObjectivesComponent;
+use game_components_token::extensions::renderer::renderer::RendererComponent;
+use game_components_token::extensions::settings::settings::SettingsComponent;
+use game_components_token::interface::{
+    ITokenEventRelayerDispatcher, ITokenEventRelayerDispatcherTrait,
+};
+use game_components_token::structs::TokenMetadata;
+use game_components_utils::renderer::{create_custom_metadata, create_default_svg};
+use openzeppelin_introspection::src5::SRC5Component;
+use openzeppelin_token::common::erc2981::erc2981::{DefaultConfig, ERC2981Component};
+
+// Core imports
+use openzeppelin_token::erc721::{ERC721Component, interface::IERC721Metadata};
+use starknet::ContractAddress;
+use starknet::storage::StoragePointerReadAccess;
+use starknet::syscalls::call_contract_syscall;
 
 
 #[starknet::contract]

@@ -1,7 +1,9 @@
-use rollyourown::dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerBody, HustlerSlotOption};
+use rollyourown::dope_contracts::dope_hustlers::dope_hustlers_models::{
+    HustlerBody, HustlerSlotOption,
+};
 use rollyourown::models::game::{GameMode, TokenId};
-use rollyourown::systems::game::{EncounterActions};
-use rollyourown::systems::helpers::traveling::{EncounterOutcomes};
+use rollyourown::systems::game::EncounterActions;
+use rollyourown::systems::helpers::traveling::EncounterOutcomes;
 use starknet::ContractAddress;
 
 #[derive(Drop, Serde)]

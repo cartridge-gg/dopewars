@@ -1,36 +1,35 @@
 // use crate::utils::randomness_helper;
-use dojo::model::{ ModelStorageTest };
+use dojo::model::ModelStorageTest;
 use dojo::world::{WorldStorage, WorldStorageTrait};
-use dojo_cairo_test::{spawn_test_world, NamespaceDef, TestResource};
-use game_components_minigame::interface::{IMinigameDispatcher};
+use dojo_cairo_test::{NamespaceDef, TestResource, spawn_test_world};
+use game_components_minigame::interface::IMinigameDispatcher;
 use rollyourown::config::game::{GameConfig, m_GameConfig};
 use rollyourown::config::randomness::{RandomnessConfig, m_RandomnessConfig};
-use rollyourown::config::ryo::{ RyoConfigTrait, m_RyoConfig};
-use rollyourown::config::ryo_address::{ m_RyoAddress};
+use rollyourown::config::ryo::{RyoConfigTrait, m_RyoConfig};
+use rollyourown::config::ryo_address::m_RyoAddress;
 use rollyourown::config::settings::{
-    SeasonSettings, m_SeasonSettings, CashMode, HealthMode, TurnsMode,
-    EncountersMode, EncountersOddsMode, DrugsMode, WantedMode
+    CashMode, DrugsMode, EncountersMode, EncountersOddsMode, HealthMode, SeasonSettings, TurnsMode,
+    WantedMode, m_SeasonSettings,
 };
-use rollyourown::models::game::{ m_Game};
-use rollyourown::models::game_store_packed::{ m_GameStorePacked};
-use rollyourown::models::game_token::{ m_GameToken};
-use rollyourown::models::season::{Season, m_Season};
-use rollyourown::store::{ StoreImpl, StoreTrait};
-use rollyourown::utils::sorted_list::{ m_SortedList, m_SortedListItem};
 use rollyourown::events::{
     // GameCreated, Traveled, GameOver, TradeDrug, HighVolatility, UpgradeItem,
     // TravelEncounter, TravelEncounterResult, NewSeason, NewHighScore, Claimed,
     e_GameCreated, e_Traveled, e_GameOver, e_TradeDrug, e_HighVolatility, e_UpgradeItem,
-    e_TravelEncounter, e_TravelEncounterResult, e_NewSeason, e_NewHighScore, e_Claimed
+    e_TravelEncounter, e_TravelEncounterResult, e_NewSeason, e_NewHighScore, e_Claimed,
 };
+use rollyourown::models::game::m_Game;
+use rollyourown::models::game_store_packed::m_GameStorePacked;
+use rollyourown::models::game_token::m_GameToken;
+use rollyourown::models::season::{Season, m_Season};
+use rollyourown::store::{StoreImpl, StoreTrait};
 use rollyourown::systems::game::{IGameActionsDispatcher, game as game_systems};
 use rollyourown::tests::mocks::denshokan::FullTokenContract;
+use rollyourown::utils::sorted_list::{m_SortedList, m_SortedListItem};
 use starknet::ContractAddress;
 
 
 fn ZERO() -> ContractAddress {
     0.try_into().unwrap()
-
 }
 
 fn PLAYER() -> ContractAddress {
@@ -74,13 +73,11 @@ pub fn setup_game_world() -> (WorldStorage, SystemDispatchers) {
             TestResource::Event(e_Claimed::TEST_CLASS_HASH.into()),
             // Contracts
             TestResource::Contract(game_systems::TEST_CLASS_HASH.into()),
-        ].span()
+        ]
+            .span(),
     };
 
-    let dope_namespace = NamespaceDef {
-        namespace: "dope",
-        resources: [].span()
-    };
+    let dope_namespace = NamespaceDef { namespace: "dope", resources: [].span() };
 
     let mut world = spawn_test_world([dopewars_namespace, dope_namespace].span());
 
@@ -101,9 +98,7 @@ pub fn setup_game_world() -> (WorldStorage, SystemDispatchers) {
     store.save_ryo_config(@ryo_config);
 
     let randomness_config = RandomnessConfig {
-        key: 0,
-        use_vrf: false,
-        vrf_provider: 0.try_into().unwrap(),
+        key: 0, use_vrf: false, vrf_provider: 0.try_into().unwrap(),
     };
     world.write_model_test(@randomness_config);
 
@@ -150,8 +145,7 @@ pub fn setup_game_world() -> (WorldStorage, SystemDispatchers) {
     world.write_model_test(@season_settings);
 
     let dispatchers = SystemDispatchers {
-        game: game_dispatcher,
-        game_token: game_token_dispatcher,
+        game: game_dispatcher, game_token: game_token_dispatcher,
     };
 
     (world, dispatchers)

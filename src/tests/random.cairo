@@ -1,6 +1,5 @@
 use debug::PrintTrait;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-
 use rollyourown::tests::test_helper::{SystemDispatchers, spawn_world};
 use rollyourown::utils::random::{Random, RandomImpl, RandomTrait};
 
@@ -44,7 +43,7 @@ fn test_random_u8() {
         rand.print();
 
         i += 1;
-    };
+    }
 
     starknet::testing::set_contract_address(222.try_into().unwrap());
     let mut randomizer2 = RandomImpl::new('world');

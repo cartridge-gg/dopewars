@@ -1,4 +1,5 @@
-use rollyourown::{packing::game_store::{GameStoreImpl}, systems::{game::{EncounterActions}}};
+use rollyourown::packing::game_store::GameStoreImpl;
+use rollyourown::systems::game::EncounterActions;
 
 #[starknet::interface]
 trait IDecide<T> {
@@ -7,11 +8,13 @@ trait IDecide<T> {
 
 #[dojo::contract]
 pub mod decide {
-    use rollyourown::{
-        packing::{game_store::{GameStoreImpl}, player::{PlayerImpl}},
-        store::{StoreImpl, StoreTrait}, systems::{helpers::{game_loop, traveling}},
-        utils::{bytes16::{Bytes16Impl}, random::{RandomImpl}, randomness_helper::{RandomnessHelperTrait}},
-    };
+    use rollyourown::packing::game_store::GameStoreImpl;
+    use rollyourown::packing::player::PlayerImpl;
+    use rollyourown::store::{StoreImpl, StoreTrait};
+    use rollyourown::systems::helpers::{game_loop, traveling};
+    use rollyourown::utils::bytes16::Bytes16Impl;
+    use rollyourown::utils::random::RandomImpl;
+    use rollyourown::utils::randomness_helper::RandomnessHelperTrait;
     use starknet::get_caller_address;
 
     #[abi(embed_v0)]
@@ -28,8 +31,12 @@ pub mod decide {
             // check player status
             assert(game_store.player.can_decide(), 'player cannot decide');
 
-            let game_context = core::poseidon::poseidon_hash_span(array![player_id.into(), game_id.into(), 'decide'].span());
-            let mut randomizer = RandomnessHelperTrait::create_randomizer(randomness_config, game_context);
+            let game_context = core::poseidon::poseidon_hash_span(
+                array![player_id.into(), game_id.into(), 'decide'].span(),
+            );
+            let mut randomizer = RandomnessHelperTrait::create_randomizer(
+                randomness_config, game_context,
+            );
             let mut season_settings = store.season_settings(game_store.game.season_version);
 
             // // resolve decision

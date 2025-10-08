@@ -1,4 +1,4 @@
-use rollyourown::{config::ryo::{RyoConfig}};
+use rollyourown::config::ryo::RyoConfig;
 use starknet::ContractAddress;
 
 #[starknet::interface]
@@ -28,12 +28,12 @@ pub mod ryo {
     use core::num::traits::Zero;
     use dojo::world::{IWorldDispatcherTrait, WorldStorageTrait};
     use rollyourown::achievements::achievements_v1::AchievementImpl;
-    use rollyourown::{
-        config::{randomness::{RandomnessConfig}, ryo::{RyoConfig, RyoConfigImpl}}, helpers::season_manager::{SeasonManagerTrait},
-        store::{StoreImpl, StoreTrait}, utils::random::{RandomImpl},
-    };
-    use starknet::get_caller_address;
-    use starknet::{ContractAddress};
+    use rollyourown::config::randomness::RandomnessConfig;
+    use rollyourown::config::ryo::{RyoConfig, RyoConfigImpl};
+    use rollyourown::helpers::season_manager::SeasonManagerTrait;
+    use rollyourown::store::{StoreImpl, StoreTrait};
+    use rollyourown::utils::random::RandomImpl;
+    use starknet::{ContractAddress, get_caller_address};
 
     component!(path: AchievableComponent, storage: achievable, event: AchievableEvent);
     impl AchievableInternalImpl = AchievableComponent::InternalImpl<ContractState>;
@@ -101,9 +101,7 @@ pub mod ryo {
         // Initialize randomness config
         // For provable-dw: use local randomness, for others: use VRF
         let randomness_config = RandomnessConfig {
-            key: 0,
-            use_vrf: !vrf_address.is_zero(),
-            vrf_provider: vrf_address,
+            key: 0, use_vrf: !vrf_address.is_zero(), vrf_provider: vrf_address,
         };
         store.save_randomness_config(@randomness_config);
 
@@ -112,8 +110,8 @@ pub mod ryo {
         let mut season_manager = SeasonManagerTrait::new(store);
         season_manager.new_season(ref randomizer, ryo_config.season_version);
         //
-        //
-        //
+    //
+    //
 
         // self.update_quests();
     }

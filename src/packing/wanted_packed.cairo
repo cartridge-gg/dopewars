@@ -1,8 +1,8 @@
-use rollyourown::{
-    config::{locations::{Locations, LocationsEnumerableImpl}}, models::game::{GameImpl},
-    packing::{drugs_packed::{DrugsPackedImpl}},
-    utils::{bits::{BitsDefaultImpl, BitsImpl, BitsMathImpl, BitsTrait}, math::{MathImplU8}},
-};
+use rollyourown::config::locations::{Locations, LocationsEnumerableImpl};
+use rollyourown::models::game::GameImpl;
+use rollyourown::packing::drugs_packed::DrugsPackedImpl;
+use rollyourown::utils::bits::{BitsDefaultImpl, BitsImpl, BitsMathImpl, BitsTrait};
+use rollyourown::utils::math::MathImplU8;
 
 
 // 18 bits : 3 bits x 6 locations

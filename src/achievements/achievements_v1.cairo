@@ -60,32 +60,12 @@ pub impl AchievementImpl of AchievementTrait {
 
     fn declare_all(mut world: WorldStorage) {
         let mut achievements: Array<Achievement> = array![
-            Self::brawler(),
-            Self::famous(),
-            Self::kingpin(),
-            Self::stuffed(),
-            Self::blsh_1(),
-            Self::blsh_2(),
-            Self::blsh_3(),
-            Self::volume_1(),
-            Self::volume_2(),
-            Self::volume_3(),
-            Self::highstakes_1(),
-            Self::highstakes_2(),
-            Self::highstakes_3(),
-            Self::paper_1(),
-            Self::paper_2(),
-            Self::paper_3(),
-            Self::gear_from(),
-            Self::survivor(),
-            Self::encounters_1(),
-            Self::encounters_2(),
-            Self::encounters_3(),
-            Self::elegant(),
-            Self::full_early(),
-            Self::full_mid(),
-            Self::full_late(),
-            Self::og(),
+            Self::brawler(), Self::famous(), Self::kingpin(), Self::stuffed(), Self::blsh_1(),
+            Self::blsh_2(), Self::blsh_3(), Self::volume_1(), Self::volume_2(), Self::volume_3(),
+            Self::highstakes_1(), Self::highstakes_2(), Self::highstakes_3(), Self::paper_1(),
+            Self::paper_2(), Self::paper_3(), Self::gear_from(), Self::survivor(),
+            Self::encounters_1(), Self::encounters_2(), Self::encounters_3(), Self::elegant(),
+            Self::full_early(), Self::full_mid(), Self::full_late(), Self::og(),
         ];
         while let Option::Some(achievement) = achievements.pop_front() {
             achievement.declare(world);

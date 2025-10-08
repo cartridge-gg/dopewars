@@ -1,4 +1,4 @@
-use rollyourown::config::hustlers::{ItemSlot};
+use rollyourown::config::hustlers::ItemSlot;
 use rollyourown::libraries::dopewars_items::ItemTierConfig;
 
 #[derive(Clone, Drop, Serde)]

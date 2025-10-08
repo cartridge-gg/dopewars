@@ -1,4 +1,4 @@
-use rollyourown::{traits::{Enumerable, Packable}};
+use rollyourown::traits::{Enumerable, Packable};
 
 #[derive(Copy, Drop, Serde, PartialEq)]
 pub enum PlayerLayout {
@@ -36,15 +36,9 @@ pub impl PlayerLayoutIntoBytes31Impl of Into<PlayerLayout, bytes31> {
 pub impl PlayerLayoutEnumerableImpl of Enumerable<PlayerLayout> {
     fn all() -> Span<PlayerLayout> {
         let items = array![
-            PlayerLayout::Cash,
-            PlayerLayout::Health,
-            PlayerLayout::Turn,
-            PlayerLayout::Status,
-            PlayerLayout::PrevLocation,
-            PlayerLayout::Location,
-            PlayerLayout::NextLocation,
-            PlayerLayout::DrugLevel,
-            PlayerLayout::Reputation,
+            PlayerLayout::Cash, PlayerLayout::Health, PlayerLayout::Turn, PlayerLayout::Status,
+            PlayerLayout::PrevLocation, PlayerLayout::Location, PlayerLayout::NextLocation,
+            PlayerLayout::DrugLevel, PlayerLayout::Reputation,
         ];
         items.span()
     }
@@ -77,7 +71,7 @@ pub impl PlayerLayoutPackableImpl of Packable<PlayerLayout> {
             } else {
                 idx += i.bits()
             }
-        };
+        }
         idx
     }
 }

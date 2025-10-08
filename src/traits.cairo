@@ -1,4 +1,5 @@
-use rollyourown::{store::{StoreImpl}, utils::random::{Random, RandomImpl}};
+use rollyourown::store::StoreImpl;
+use rollyourown::utils::random::{Random, RandomImpl};
 
 pub trait Enumerable<T> {
     fn all() -> Span<T>;

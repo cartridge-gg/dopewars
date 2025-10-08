@@ -1,6 +1,5 @@
 use dojo::meta::Layout;
 use dojo::meta::introspect::{Introspect, Ty};
-
 use rollyourown::utils::bytes16::Bytes16;
 
 pub impl Bytes31IntrospectionImpl of Introspect<bytes31> {

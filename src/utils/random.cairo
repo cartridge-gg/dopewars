@@ -47,7 +47,7 @@ pub impl RandomImpl of RandomTrait {
 
         if min >= max {
             return Zero::zero();
-        };
+        }
 
         let range: u128 = max.into() - min.into();
         let rand = (seed.low % range) + min.into();

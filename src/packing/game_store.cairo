@@ -1,26 +1,24 @@
-use rollyourown::{
-    config::{
-        drugs::{Drugs, DrugsEnumerableImpl}, game::{GameConfig},
-        locations::{Locations, LocationsEnumerableImpl},
-        settings::{SeasonSettings, SeasonSettingsTrait},
-    },
-    models::{game::{Game, GameImpl}, game_store_packed::{GameStorePacked}},
-    packing::{
-        drugs_packed::{DrugsPacked, DrugsPackedImpl},
-        game_store_layout::{
-            GameStoreLayout, GameStoreLayoutEnumerableImpl, GameStoreLayoutPackableImpl,
-        },
-        items_packed::{ItemsPacked, ItemsPackedImpl},
-        markets_packed::{MarketsPacked, MarketsPackedImpl},
-        player::{Player, PlayerImpl, PlayerPackerImpl, PlayerStatus, PlayerUnpackerImpl},
-        wanted_packed::{WantedPacked, WantedPackedImpl},
-    },
-    store::{Store, StoreImpl, StoreTrait}, traits::{Packer},
-    utils::{
-        bits::{BitsDefaultImpl, BitsImpl, BitsTrait}, math::{MathImplU8, MathTrait},
-        random::{Random, RandomImpl},
-    },
+use rollyourown::config::drugs::{Drugs, DrugsEnumerableImpl};
+use rollyourown::config::game::GameConfig;
+use rollyourown::config::locations::{Locations, LocationsEnumerableImpl};
+use rollyourown::config::settings::{SeasonSettings, SeasonSettingsTrait};
+use rollyourown::models::game::{Game, GameImpl};
+use rollyourown::models::game_store_packed::GameStorePacked;
+use rollyourown::packing::drugs_packed::{DrugsPacked, DrugsPackedImpl};
+use rollyourown::packing::game_store_layout::{
+    GameStoreLayout, GameStoreLayoutEnumerableImpl, GameStoreLayoutPackableImpl,
 };
+use rollyourown::packing::items_packed::{ItemsPacked, ItemsPackedImpl};
+use rollyourown::packing::markets_packed::{MarketsPacked, MarketsPackedImpl};
+use rollyourown::packing::player::{
+    Player, PlayerImpl, PlayerPackerImpl, PlayerStatus, PlayerUnpackerImpl,
+};
+use rollyourown::packing::wanted_packed::{WantedPacked, WantedPackedImpl};
+use rollyourown::store::{Store, StoreImpl, StoreTrait};
+use rollyourown::traits::Packer;
+use rollyourown::utils::bits::{BitsDefaultImpl, BitsImpl, BitsTrait};
+use rollyourown::utils::math::{MathImplU8, MathTrait};
+use rollyourown::utils::random::{Random, RandomImpl};
 use starknet::ContractAddress;
 
 
@@ -250,7 +248,7 @@ pub impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
                     bits.replace::<felt252>(item.idx(), item.bits(), player_packed);
                 },
             };
-        };
+        }
 
         GameStorePacked {
             game_id: self.game.game_id, player_id: self.game.player_id, packed: bits.into_felt(),
@@ -281,7 +279,7 @@ pub impl GameStoreUnpackerImpl of GameStoreUnpackerTrait {
                     game_store.player = packed.unpack();
                 },
             };
-        };
+        }
 
         game_store
     }
@@ -291,7 +289,7 @@ pub impl GameStoreUnpackerImpl of GameStoreUnpackerTrait {
 #[cfg(test)]
 mod tests {
     use rollyourown::models::game_store_packed::GameStorePacked;
-    use super::{GameStorePackerImpl};
+    use super::GameStorePackerImpl;
     // #[test]
 // #[available_gas(100000000)]
 // fn test_game_store_pack() {

@@ -1,10 +1,9 @@
-use dojo::world::{WorldStorage};
+use dojo::world::WorldStorage;
 // use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerSlots};
 // use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl, HustlerStoreTrait};
 // use dope_contracts::dope_loot::dope_loot_store::{LootStoreImpl, LootStoreTrait};
 use rollyourown::store::StoreImpl;
-
-use rollyourown::{utils::{bytes16::{Bytes16, Bytes16Impl}}};
+use rollyourown::utils::bytes16::{Bytes16, Bytes16Impl};
 use starknet::ContractAddress;
 
 pub type GearId = felt252;

@@ -1,11 +1,9 @@
-use dojo::model::{ModelStorage};
+use dojo::model::ModelStorage;
+use rollyourown::store::{Store, StoreImpl};
 use rollyourown::traits::{Enumerable, Randomizable};
+use rollyourown::utils::bytes16::{Bytes16, Bytes16Impl};
+use rollyourown::utils::introspect::Bytes31IntrospectionImpl;
 use rollyourown::utils::random::{Random, RandomImpl};
-
-use rollyourown::{
-    store::{Store, StoreImpl},
-    utils::{bytes16::{Bytes16, Bytes16Impl}, introspect::{Bytes31IntrospectionImpl}},
-};
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
@@ -34,12 +32,8 @@ pub enum Locations {
 pub impl LocationsEnumerableImpl of Enumerable<Locations> {
     fn all() -> Span<Locations> {
         array![
-            Locations::Queens,
-            Locations::Bronx,
-            Locations::Brooklyn,
-            Locations::Jersey,
-            Locations::Central,
-            Locations::Coney,
+            Locations::Queens, Locations::Bronx, Locations::Brooklyn, Locations::Jersey,
+            Locations::Central, Locations::Coney,
         ]
             .span()
     }

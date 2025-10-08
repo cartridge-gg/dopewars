@@ -1,6 +1,3 @@
-
-
-
 pub mod dope_hustlers {
     pub mod dope_hustlers_models {
         pub mod HustlerSlots {
@@ -85,6 +82,4 @@ pub mod dope_hustlers {
             }
         }
     }
-
-   
 }

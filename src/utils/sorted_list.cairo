@@ -1,10 +1,8 @@
 use core::num::traits::Zero;
 use core::traits::TryInto;
-
-use rollyourown::{
-    models::{game::Game}, store::{Store, StoreImpl, StoreTrait},
-    utils::payout_structure::{get_payout},
-};
+use rollyourown::models::game::Game;
+use rollyourown::store::{Store, StoreImpl, StoreTrait};
+use rollyourown::utils::payout_structure::get_payout;
 use starknet::ContractAddress;
 
 
@@ -285,7 +283,7 @@ pub impl SortedListImpl of SortedListTrait {
             self.process_size += 1;
 
             i += 1;
-        };
+        }
 
         self.process_cursor_k0 = curr.item_k0;
         self.process_cursor_k1 = curr.item_k1;
@@ -326,7 +324,7 @@ pub impl SortedListImpl of SortedListTrait {
             // );
 
             i += 1;
-        };
+        }
 
         stake_adj_paper_balance
     }

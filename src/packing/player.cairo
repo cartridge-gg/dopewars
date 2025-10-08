@@ -1,16 +1,16 @@
-use rollyourown::{
-    config::{drugs::{Drugs}, game::{GameConfig}, locations::Locations},
-    packing::{
-        drugs_packed::{DrugsPackedImpl}, game_store::{GameStore, GameStoreTrait},
-        markets_packed::{MarketsPackedImpl, MarketsPackedTrait},
-        player_layout::{PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl},
-    },
-    traits::{Packable, Packer},
-    utils::{
-        bits::{BitsDefaultImpl, BitsImpl, BitsTrait}, math::{MathImpl, MathTrait},
-        random::{Random, RandomImpl},
-    },
+use rollyourown::config::drugs::Drugs;
+use rollyourown::config::game::GameConfig;
+use rollyourown::config::locations::Locations;
+use rollyourown::packing::drugs_packed::DrugsPackedImpl;
+use rollyourown::packing::game_store::{GameStore, GameStoreTrait};
+use rollyourown::packing::markets_packed::{MarketsPackedImpl, MarketsPackedTrait};
+use rollyourown::packing::player_layout::{
+    PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl,
 };
+use rollyourown::traits::{Packable, Packer};
+use rollyourown::utils::bits::{BitsDefaultImpl, BitsImpl, BitsTrait};
+use rollyourown::utils::math::{MathImpl, MathTrait};
+use rollyourown::utils::random::{Random, RandomImpl};
 
 
 // TODO : move
@@ -203,7 +203,7 @@ pub impl PlayerPackerImpl of Packer<Player, felt252> {
                     bits.replace::<u8>(item.idx(), item.bits(), self.reputation.into());
                 },
             }
-        };
+        }
 
         bits.into_felt()
     }
@@ -247,7 +247,7 @@ pub impl PlayerUnpackerImpl of PlayerUnpackerTrait {
                     player.reputation = bits.extract_into::<u8>(item.idx(), item.bits()).into();
                 },
             };
-        };
+        }
 
         player
     }

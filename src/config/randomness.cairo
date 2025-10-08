@@ -1,5 +1,5 @@
-use starknet::ContractAddress;
 use core::num::traits::Zero;
+use starknet::ContractAddress;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
@@ -27,10 +27,6 @@ pub impl RandomnessConfigImpl of RandomnessConfigTrait {
     }
 
     fn default() -> RandomnessConfig {
-        RandomnessConfig {
-            key: 0,
-            use_vrf: true,
-            vrf_provider: Zero::zero(),
-        }
+        RandomnessConfig { key: 0, use_vrf: true, vrf_provider: Zero::zero() }
     }
 }

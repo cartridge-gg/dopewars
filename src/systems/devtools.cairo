@@ -9,20 +9,16 @@ trait IDevtools<T> {
 
 #[dojo::contract]
 pub mod devtools {
-    use core::traits::Into;
-    use core::traits::TryInto;
+    use core::traits::{Into, TryInto};
     use dojo::world::IWorldDispatcherTrait;
-
-    use rollyourown::{
-        helpers::season_manager::{SeasonManagerTrait}, models::{game::{Game, GameMode, TokenId}},
-        packing::game_store::{GameStoreImpl, GameStorePackerImpl}, store::{StoreImpl, StoreTrait},
-        utils::{
-            bytes16::{Bytes16Impl}, random::{RandomImpl},
-            sorted_list::{SortedListImpl, SortedListTrait},
-        },
-    };
+    use rollyourown::helpers::season_manager::SeasonManagerTrait;
+    use rollyourown::models::game::{Game, GameMode, TokenId};
+    use rollyourown::packing::game_store::{GameStoreImpl, GameStorePackerImpl};
+    use rollyourown::store::{StoreImpl, StoreTrait};
+    use rollyourown::utils::bytes16::Bytes16Impl;
+    use rollyourown::utils::random::RandomImpl;
+    use rollyourown::utils::sorted_list::{SortedListImpl, SortedListTrait};
     use starknet::get_caller_address;
-
     use super::IDevtools;
 
 

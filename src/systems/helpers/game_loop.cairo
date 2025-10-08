@@ -1,15 +1,16 @@
 use dojo::event::EventStorage;
-
-use rollyourown::{
-    config::{locations::{Locations}, settings::{SeasonSettings}}, events::{GameOver, Traveled},
-    packing::{
-        drugs_packed::{DrugsPackedTrait},
-        game_store::{GameStore, GameStoreImpl, GameStorePackerImpl},
-        markets_packed::MarketsPackedTrait, player::{PlayerImpl}, wanted_packed::{WantedPackedImpl},
-    },
-    store::{Store, StoreImpl, StoreTrait}, systems::helpers::{traveling},
-    utils::{math::{MathImpl, MathTrait}, random::{Random}},
-};
+use rollyourown::config::locations::Locations;
+use rollyourown::config::settings::SeasonSettings;
+use rollyourown::events::{GameOver, Traveled};
+use rollyourown::packing::drugs_packed::DrugsPackedTrait;
+use rollyourown::packing::game_store::{GameStore, GameStoreImpl, GameStorePackerImpl};
+use rollyourown::packing::markets_packed::MarketsPackedTrait;
+use rollyourown::packing::player::PlayerImpl;
+use rollyourown::packing::wanted_packed::WantedPackedImpl;
+use rollyourown::store::{Store, StoreImpl, StoreTrait};
+use rollyourown::systems::helpers::traveling;
+use rollyourown::utils::math::{MathImpl, MathTrait};
+use rollyourown::utils::random::Random;
 
 
 // -> (is_dead, has_encounter)
@@ -22,7 +23,7 @@ pub fn on_travel(
     // no encounter on first turn
     if game_store.player.turn == 0 {
         return (false, false);
-    };
+    }
 
     traveling::on_travel(ref game_store, ref season_settings, ref randomizer)
 }

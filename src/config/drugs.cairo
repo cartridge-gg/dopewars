@@ -1,7 +1,8 @@
-use rollyourown::{
-    config::settings::{DrugsMode}, store::{Store, StoreImpl, StoreTrait}, traits::{Enumerable},
-    utils::introspect::{Bytes31IntrospectionImpl}, utils::{bytes16::{Bytes16, Bytes16Impl}},
-};
+use rollyourown::config::settings::DrugsMode;
+use rollyourown::store::{Store, StoreImpl, StoreTrait};
+use rollyourown::traits::Enumerable;
+use rollyourown::utils::bytes16::{Bytes16, Bytes16Impl};
+use rollyourown::utils::introspect::Bytes31IntrospectionImpl;
 
 
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked, Default, DojoStore)]
@@ -40,14 +41,8 @@ pub impl DrugsEnumerableImpl of Enumerable<Drugs> {
     #[inline(always)]
     fn all() -> Span<Drugs> {
         let mut items = array![
-            Drugs::Ludes,
-            Drugs::Speed,
-            Drugs::Weed,
-            Drugs::Shrooms,
-            Drugs::Acid,
-            Drugs::Ketamine,
-            Drugs::Heroin,
-            Drugs::Cocaine,
+            Drugs::Ludes, Drugs::Speed, Drugs::Weed, Drugs::Shrooms, Drugs::Acid, Drugs::Ketamine,
+            Drugs::Heroin, Drugs::Cocaine,
         ];
         items.span()
     }

@@ -1,7 +1,6 @@
 use dojo::world::WorldStorage;
-
 use dope_contracts::dope_gear::dope_gear_store::{GearStoreImpl, GearStoreTrait};
-use dope_contracts::dope_hustlers::dope_hustlers_models::{HustlerSlots};
+use dope_contracts::dope_hustlers::dope_hustlers_models::HustlerSlots;
 use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl, HustlerStoreTrait};
 
 pub fn add_items_payout(
@@ -52,10 +51,7 @@ pub fn add_items_payout(
         }
     } else if position == 2 { // set from XXX
         let mut slots = array![
-            HustlerSlots::Weapon,
-            HustlerSlots::Clothe,
-            HustlerSlots::Foot,
-            HustlerSlots::Vehicle,
+            HustlerSlots::Weapon, HustlerSlots::Clothe, HustlerSlots::Foot, HustlerSlots::Vehicle,
             HustlerSlots::Accessory,
         ];
         let mut maybe_suffix = Option::None;
@@ -83,10 +79,7 @@ pub fn add_items_payout(
         }
     } else if position == 3 { // full random
         let mut slots = array![
-            HustlerSlots::Weapon,
-            HustlerSlots::Clothe,
-            HustlerSlots::Foot,
-            HustlerSlots::Vehicle,
+            HustlerSlots::Weapon, HustlerSlots::Clothe, HustlerSlots::Foot, HustlerSlots::Vehicle,
             HustlerSlots::Accessory,
         ];
 

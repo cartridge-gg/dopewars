@@ -1,10 +1,12 @@
 use dojo::world::WorldStorageTrait;
-use rollyourown::{
-    config::gear::{GearItemConfig, GearItemConfigTrait}, config::hustlers::{ItemSlot},
-    libraries::dopewars_items::{IDopewarsItemsDispatcherTrait, IDopewarsItemsLibraryDispatcher},
-    models::game::{Game}, store::{Store, StoreImpl},
-    utils::bits::{BitsImpl, BitsMathImpl, BitsTrait},
+use rollyourown::config::gear::{GearItemConfig, GearItemConfigTrait};
+use rollyourown::config::hustlers::ItemSlot;
+use rollyourown::libraries::dopewars_items::{
+    IDopewarsItemsDispatcherTrait, IDopewarsItemsLibraryDispatcher,
 };
+use rollyourown::models::game::Game;
+use rollyourown::store::{Store, StoreImpl};
+use rollyourown::utils::bits::{BitsImpl, BitsMathImpl, BitsTrait};
 
 
 #[derive(Copy, Drop)]

@@ -1,4 +1,4 @@
-use rollyourown::{traits::{Enumerable, Packable}};
+use rollyourown::traits::{Enumerable, Packable};
 
 #[derive(Copy, Drop, Serde, PartialEq)]
 pub enum GameStoreLayout {
@@ -28,11 +28,8 @@ pub impl GameStoreLayoutIntoBytes31Impl of Into<GameStoreLayout, bytes31> {
 pub impl GameStoreLayoutEnumerableImpl of Enumerable<GameStoreLayout> {
     fn all() -> Span<GameStoreLayout> {
         let items = array![
-            GameStoreLayout::Markets,
-            GameStoreLayout::Items,
-            GameStoreLayout::Drugs,
-            GameStoreLayout::Wanted,
-            GameStoreLayout::Player,
+            GameStoreLayout::Markets, GameStoreLayout::Items, GameStoreLayout::Drugs,
+            GameStoreLayout::Wanted, GameStoreLayout::Player,
         ];
         items.span()
     }
@@ -61,7 +58,7 @@ pub impl GameStoreLayoutPackableImpl of Packable<GameStoreLayout> {
             } else {
                 idx += i.bits()
             }
-        };
+        }
         idx
     }
 }

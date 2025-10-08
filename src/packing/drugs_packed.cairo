@@ -1,7 +1,6 @@
-use rollyourown::{
-    config::{drugs::{Drugs}}, models::game::{GameImpl},
-    utils::bits::{BitsDefaultImpl, BitsImpl, BitsMathImpl, BitsTrait},
-};
+use rollyourown::config::drugs::Drugs;
+use rollyourown::models::game::GameImpl;
+use rollyourown::utils::bits::{BitsDefaultImpl, BitsImpl, BitsMathImpl, BitsTrait};
 
 // 16 bits : 3 bits for Drugs, 13 bits for quantity
 #[derive(Copy, Drop, Serde)]

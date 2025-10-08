@@ -1,7 +1,7 @@
-use rollyourown::{
-    config::locations::{Locations}, models::game::{GameMode, TokenId},
-    packing::game_store::{GameStoreImpl}, systems::helpers::{shopping, trading},
-};
+use rollyourown::config::locations::Locations;
+use rollyourown::models::game::{GameMode, TokenId};
+use rollyourown::packing::game_store::GameStoreImpl;
+use rollyourown::systems::helpers::{shopping, trading};
 
 #[derive(Copy, Drop, Serde)]
 pub enum Actions {
@@ -31,11 +31,10 @@ pub mod game {
     // use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
     use dojo::model::ModelStorage;
-    use dojo::world::IWorldDispatcherTrait;
-    use dojo::world::WorldStorageTrait;
+    use dojo::world::{IWorldDispatcherTrait, WorldStorageTrait};
     use game_components_minigame::interface::{IMinigameDispatcher, IMinigameDispatcherTrait};
     use rollyourown::dope_contracts::dope_hustlers::dope_hustlers_models::{
-        HustlerSlotOption, HustlerSlots, HustlerBody, HustlerBodyParts,
+        HustlerBody, HustlerBodyParts, HustlerSlotOption, HustlerSlots,
     };
     // use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl,
     // HustlerStoreTrait};
@@ -48,7 +47,10 @@ pub mod game {
         packing::{game_store::{GameStore, GameStoreImpl}, player::{PlayerImpl}},
         store::{StoreImpl, StoreTrait},
         systems::{helpers::{game_loop, shopping, trading, trading::{TradeDirection}}},
-        utils::{bytes16::{Bytes16Impl}, random::{RandomImpl}, randomness_helper::{RandomnessHelperTrait}},
+        utils::{
+            bytes16::{Bytes16Impl}, random::{RandomImpl},
+            randomness_helper::{RandomnessHelperTrait},
+        },
     };
     use starknet::get_caller_address;
 
@@ -71,8 +73,12 @@ pub mod game {
 
             let randomness_config = store.randomness_config();
             let player_id = get_caller_address();
-            let game_context = core::poseidon::poseidon_hash_span(array![player_id.into(), 'create_game'].span());
-            let mut randomizer = RandomnessHelperTrait::create_randomizer(randomness_config, game_context);
+            let game_context = core::poseidon::poseidon_hash_span(
+                array![player_id.into(), 'create_game'].span(),
+            );
+            let mut randomizer = RandomnessHelperTrait::create_randomizer(
+                randomness_config, game_context,
+            );
 
             let game_id = world.dispatcher.uuid();
 
@@ -115,7 +121,7 @@ pub mod game {
                             break;
                         }
                         i += 1;
-                    };
+                    }
 
                     assert!(is_valid, "invalid guest loot id");
                 },
@@ -214,7 +220,7 @@ pub mod game {
                 //         );
                 // };
                 },
-            };
+            }
 
             // create game
             let mut game_config = store.game_config(season_version);
@@ -299,8 +305,12 @@ pub mod game {
             let mut actions = actions;
             self.execute_actions(ref game_store, ref actions);
 
-            let game_context = core::poseidon::poseidon_hash_span(array![player_id.into(), game_id.into(), 'travel'].span());
-            let mut randomizer = RandomnessHelperTrait::create_randomizer(randomness_config, game_context);
+            let game_context = core::poseidon::poseidon_hash_span(
+                array![player_id.into(), game_id.into(), 'travel'].span(),
+            );
+            let mut randomizer = RandomnessHelperTrait::create_randomizer(
+                randomness_config, game_context,
+            );
             let mut season_settings = store.season_settings(game_store.game.season_version);
             // save next_location
             game_store.player.next_location = next_location;
@@ -351,7 +361,7 @@ pub mod game {
                         );
                         if *trade_action.direction == TradeDirection::Sell {
                             is_first_sell = false;
-                        };
+                        }
                         if *trade_action.direction == TradeDirection::Buy {
                             is_first_sell = false;
                         };

@@ -1,4 +1,5 @@
-use rollyourown::config::{ryo::{RyoConfig}, settings::{SeasonSettingsModes}};
+use rollyourown::config::ryo::RyoConfig;
+use rollyourown::config::settings::SeasonSettingsModes;
 
 #[starknet::interface]
 trait IConfig<T> {
@@ -30,33 +31,24 @@ pub struct LayoutItem {
 mod config {
     use dojo::event::EventStorage;
     use dojo::world::WorldStorageTrait;
-
-    use rollyourown::{
-        config::{
-            drugs::{
-                initialize_drug_config_cheap, initialize_drug_config_expensive,
-                initialize_drug_config_normal,
-            },
-            encounters::{initialize_encounter_stats_config}, locations::initialize_location_config,
-            settings::{SeasonSettingsModesImpl},
-        },
-        libraries::dopewars_items::{
-            DopewarsItemTier, DopewarsItemTierConfig, IDopewarsItemsDispatcherTrait,
-            IDopewarsItemsLibraryDispatcher,
-        },
-        packing::{
-            game_store_layout::{
-                GameStoreLayoutEnumerableImpl, GameStoreLayoutIntoBytes31Impl,
-                GameStoreLayoutPackableImpl,
-            },
-            player_layout::{
-                PlayerLayoutEnumerableImpl, PlayerLayoutIntoBytes31Impl, PlayerLayoutPackableImpl,
-            },
-        },
-        store::{StoreImpl, StoreTrait},
+    use rollyourown::config::drugs::{
+        initialize_drug_config_cheap, initialize_drug_config_expensive,
+        initialize_drug_config_normal,
     };
-
-
+    use rollyourown::config::encounters::initialize_encounter_stats_config;
+    use rollyourown::config::locations::initialize_location_config;
+    use rollyourown::config::settings::SeasonSettingsModesImpl;
+    use rollyourown::libraries::dopewars_items::{
+        DopewarsItemTier, DopewarsItemTierConfig, IDopewarsItemsDispatcherTrait,
+        IDopewarsItemsLibraryDispatcher,
+    };
+    use rollyourown::packing::game_store_layout::{
+        GameStoreLayoutEnumerableImpl, GameStoreLayoutIntoBytes31Impl, GameStoreLayoutPackableImpl,
+    };
+    use rollyourown::packing::player_layout::{
+        PlayerLayoutEnumerableImpl, PlayerLayoutIntoBytes31Impl, PlayerLayoutPackableImpl,
+    };
+    use rollyourown::store::{StoreImpl, StoreTrait};
     use super::{Config, LayoutItem, LayoutsConfig};
 
 
@@ -90,7 +82,7 @@ mod config {
                     },
                     Option::None => { break; },
                 };
-            };
+            }
 
             //
 
@@ -105,7 +97,7 @@ mod config {
                     },
                     Option::None => { break; },
                 };
-            };
+            }
 
             let ryo_config = store.ryo_config();
             let season_settings_modes = SeasonSettingsModesImpl::all();
@@ -133,7 +125,7 @@ mod config {
                 let tier = disp.get_item_tier(slot_id, item_id);
                 world.emit_event(@DopewarsItemTier { slot_id, item_id, tier });
                 item_id += 1;
-            };
+            }
 
             // (1, "CLOTHES", 20)
             let slot_id = 1;
@@ -142,7 +134,7 @@ mod config {
                 let tier = disp.get_item_tier(slot_id, item_id);
                 world.emit_event(@DopewarsItemTier { slot_id, item_id, tier });
                 item_id += 1;
-            };
+            }
 
             // (2, "VEHICLE", 17)
             let slot_id = 2;
@@ -151,7 +143,7 @@ mod config {
                 let tier = disp.get_item_tier(slot_id, item_id);
                 world.emit_event(@DopewarsItemTier { slot_id, item_id, tier });
                 item_id += 1;
-            };
+            }
 
             // (5, "FOOT", 17)
             let slot_id = 5;
@@ -160,7 +152,7 @@ mod config {
                 let tier = disp.get_item_tier(slot_id, item_id);
                 world.emit_event(@DopewarsItemTier { slot_id, item_id, tier });
                 item_id += 1;
-            };
+            }
 
             // emit all DopewarsItemTierConfig
             let mut all_slot_ids: Array<u8> = array![0, 1, 2, 5];

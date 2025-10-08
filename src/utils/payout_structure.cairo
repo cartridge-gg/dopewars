@@ -512,7 +512,7 @@ pub mod tests {
             let payout = payout_0_2(rank);
             total += payout;
             rank += 1;
-        };
+        }
 
         assert(total == 10000, 'invalid total !')
     }
@@ -531,7 +531,7 @@ pub mod tests {
             let payout = payout_3_10(rank);
             total += payout;
             rank += 1;
-        };
+        }
 
         assert(total == 10000, 'invalid total !')
     }
@@ -550,7 +550,7 @@ pub mod tests {
             let payout = payout_11_30(rank);
             total += payout;
             rank += 1;
-        };
+        }
 
         assert(total == 10000, 'invalid total !')
     }
@@ -569,7 +569,7 @@ pub mod tests {
             let payout = payout_31_50(rank);
             total += payout;
             rank += 1;
-        };
+        }
 
         assert(total == 10000, 'invalid total !')
     }
@@ -588,7 +588,7 @@ pub mod tests {
             let payout = payout_51_75(rank);
             total += payout;
             rank += 1;
-        };
+        }
 
         assert(total == 10000, 'invalid total !')
     }
@@ -607,7 +607,7 @@ pub mod tests {
             let payout = payout_76_100(rank);
             total += payout;
             rank += 1;
-        };
+        }
 
         assert(total == 10000, 'invalid total !')
     }
@@ -626,7 +626,7 @@ pub mod tests {
             let payout = payout_101_150(rank);
             total += payout;
             rank += 1;
-        };
+        }
 
         assert(total == 10000, 'invalid total !')
     }
@@ -645,7 +645,7 @@ pub mod tests {
             let payout = payout_151_200(rank);
             total += payout;
             rank += 1;
-        };
+        }
 
         assert(total == 10000, 'invalid total !')
     }
@@ -664,7 +664,7 @@ pub mod tests {
             let payout = payout_201_250(rank);
             total += payout;
             rank += 1;
-        };
+        }
 
         assert(total == 10000, 'invalid total !')
     }
@@ -683,7 +683,7 @@ pub mod tests {
             let payout = payout_251_300(rank);
             total += payout;
             rank += 1;
-        };
+        }
 
         assert(total == 10000, 'invalid total !')
     }
@@ -702,7 +702,7 @@ pub mod tests {
             let payout = payout_301_350(rank);
             total += payout;
             rank += 1;
-        };
+        }
 
         assert(total == 10000, 'invalid total !')
     }
@@ -721,7 +721,7 @@ pub mod tests {
             let payout = payout_351_400(rank);
             total += payout;
             rank += 1;
-        };
+        }
 
         assert(total == 10000, 'invalid total !')
     }
@@ -740,7 +740,7 @@ pub mod tests {
             let payout = payout_401_500(rank);
             total += payout;
             rank += 1;
-        };
+        }
 
         assert(total == 10000, 'invalid total !')
     }
@@ -759,7 +759,7 @@ pub mod tests {
             let payout = payout_501_700(rank);
             total += payout;
             rank += 1;
-        };
+        }
 
         assert(total == 10000, 'invalid total !')
     }

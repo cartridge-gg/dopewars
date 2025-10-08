@@ -1,7 +1,6 @@
-use rollyourown::{
-    config::{game::{GameConfig}}, traits::{Enumerable, RandomizableImpl},
-    utils::random::{Random, RandomImpl},
-};
+use rollyourown::config::game::GameConfig;
+use rollyourown::traits::{Enumerable, RandomizableImpl};
+use rollyourown::utils::random::{Random, RandomImpl};
 
 #[derive(IntrospectPacked, Copy, Drop, Serde, DojoStore)]
 #[dojo::model]
@@ -126,15 +125,15 @@ pub impl SeasonSettingsImpl of SeasonSettingsTrait {
     fn get_initial_health(self: SeasonSettings) -> u8 {
         5
         // match self.health_mode {
-        //     HealthMode::Junkie => { 70 },
-        //     HealthMode::Hustler => { 90 },
-        //     HealthMode::Streetboss => { 110 },
-        // }
+    //     HealthMode::Junkie => { 70 },
+    //     HealthMode::Hustler => { 90 },
+    //     HealthMode::Streetboss => { 110 },
+    // }
     }
 
     fn get_max_turns(self: SeasonSettings) -> u8 {
         6
-    //     match self.turns_mode {
+        //     match self.turns_mode {
     //     TurnsMode::OnSpeed => { 15 },
     //     TurnsMode::OnWeed => { 18 },
     //     TurnsMode::OnMush => { 21 },

@@ -1,9 +1,7 @@
 use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
-use starknet::{get_tx_info, get_block_timestamp, get_caller_address};
-use rollyourown::{
-    config::randomness::{RandomnessConfig, RandomnessConfigTrait, RandomnessMode},
-    utils::random::{Random, RandomImpl},
-};
+use rollyourown::config::randomness::{RandomnessConfig, RandomnessConfigTrait, RandomnessMode};
+use rollyourown::utils::random::{Random, RandomImpl};
+use starknet::{get_block_timestamp, get_caller_address, get_tx_info};
 
 #[generate_trait]
 pub impl RandomnessHelperImpl of RandomnessHelperTrait {
@@ -23,13 +21,12 @@ pub impl RandomnessHelperImpl of RandomnessHelperTrait {
                 // Combine multiple entropy sources
                 core::poseidon::poseidon_hash_span(
                     array![
-                        tx_info.transaction_hash,
-                        block_timestamp.into(),
-                        game_context,
-                        tx_info.nonce.try_into().unwrap_or(0)
-                    ].span()
+                        tx_info.transaction_hash, block_timestamp.into(), game_context,
+                        tx_info.nonce.try_into().unwrap_or(0),
+                    ]
+                        .span(),
                 )
-            }
+            },
         }
     }
 

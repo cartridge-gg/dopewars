@@ -1,17 +1,16 @@
-use achievement::store::{StoreTrait as BushidoStoreTrait};
+use achievement::store::StoreTrait as BushidoStoreTrait;
 use dojo::event::EventStorage;
 use rollyourown::achievements::achievements_v1::Tasks;
-use rollyourown::packing::game_store::GameStoreTrait;
-
-use rollyourown::{
-    config::{hustlers::{ItemSlot}, locations::{Locations}}, events::{UpgradeItem},
-    models::game::{GameImpl, GameTrait},
-    packing::{
-        game_store::{GameStore, GameStoreImpl}, items_packed::{ItemsPackedImpl},
-        player::{PlayerImpl}, wanted_packed::{WantedPackedImpl},
-    },
-    store::{StoreImpl}, utils::{math::{MathImpl, MathTrait}},
-};
+use rollyourown::config::hustlers::ItemSlot;
+use rollyourown::config::locations::Locations;
+use rollyourown::events::UpgradeItem;
+use rollyourown::models::game::{GameImpl, GameTrait};
+use rollyourown::packing::game_store::{GameStore, GameStoreImpl, GameStoreTrait};
+use rollyourown::packing::items_packed::ItemsPackedImpl;
+use rollyourown::packing::player::PlayerImpl;
+use rollyourown::packing::wanted_packed::WantedPackedImpl;
+use rollyourown::store::StoreImpl;
+use rollyourown::utils::math::{MathImpl, MathTrait};
 use super::super::super::config::gear::GearItemConfigTrait;
 
 

@@ -10,18 +10,15 @@ pub trait IGameTokenSystems<T> {
 #[dojo::contract]
 pub mod game_token_systems {
     use core::num::traits::Zero;
-use super::IGameTokenSystems;
-    use starknet::ContractAddress;
-
     use dojo::model::ModelStorage;
-
-    use rollyourown::store::{StoreImpl, StoreTrait};
-    use rollyourown::packing::game_store::{GameStoreTrait};
-    use rollyourown::models::game_token::GameToken;
-
     use game_components_minigame::interface::IMinigameTokenData;
     use game_components_minigame::minigame::MinigameComponent;
     use openzeppelin::introspection::src5::SRC5Component;
+    use rollyourown::models::game_token::GameToken;
+    use rollyourown::packing::game_store::GameStoreTrait;
+    use rollyourown::store::{StoreImpl, StoreTrait};
+    use starknet::ContractAddress;
+    use super::IGameTokenSystems;
 
     // Components
     component!(path: MinigameComponent, storage: minigame, event: MinigameEvent);
@@ -56,25 +53,25 @@ use super::IGameTokenSystems;
     /// @param creator_address: the address of the creator of the game
     /// @param token_address: Denshokan address
     fn dojo_init(
-        ref self: ContractState,
-        creator_address: ContractAddress,
-        token_address: ContractAddress,
+        ref self: ContractState, creator_address: ContractAddress, token_address: ContractAddress,
     ) {
-        self.minigame.initializer(
-            creator_address,
-            "DopeWars",
-            "Roll Your Own - Dope Wars on StarkNet. Build your empire.",
-            "Cartridge",
-            "Dope Wars",
-            "Strategy",
-            "https://dopewars.gg/favicon.png",
-            Option::None, // color - uses default
-            Option::None, // client_url
-            Option::None, // renderer_address - uses default renderer
-            Option::None, // settings_address
-            Option::None, // objectives_address
-            token_address,
-        );
+        self
+            .minigame
+            .initializer(
+                creator_address,
+                "DopeWars",
+                "Roll Your Own - Dope Wars on StarkNet. Build your empire.",
+                "Cartridge",
+                "Dope Wars",
+                "Strategy",
+                "https://dopewars.gg/favicon.png",
+                Option::None, // color - uses default
+                Option::None, // client_url
+                Option::None, // renderer_address - uses default renderer
+                Option::None, // settings_address
+                Option::None, // objectives_address
+                token_address,
+            );
     }
 
     // ------------------------------------------ //
@@ -93,7 +90,7 @@ use super::IGameTokenSystems;
             let mut store = StoreImpl::new(world);
 
             let mut game_store = GameStoreTrait::load(
-                ref store, game_token.game_id, game_token.player_id
+                ref store, game_token.game_id, game_token.player_id,
             );
 
             // Return player's cash as the score
