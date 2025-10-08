@@ -25,6 +25,7 @@ build-external-contracts = [
 
 [dev-dependencies]
 cairo_test = "2.12.2"
+dojo_cairo_test = { git = "https://github.com/dojoengine/dojo", tag = "v1.7.0" }
 
 [dependencies]
 starknet = "2.12.2"
@@ -36,6 +37,7 @@ game_components_minigame = { path = "../game-components" }
 game_components_metagame = { path = "../game-components" }
 game_components_test_starknet = { path = "../game-components" }
 game_components_token = { path = "../game-components" }
+game_components_utils = { path = "../game-components" }
 # dojo = { path = "../dojo/crates/dojo/core" }
 # cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
 # achievement = { path = "../arcade/packages/achievement" }
@@ -43,6 +45,7 @@ game_components_token = { path = "../game-components" }
 
 openzeppelin = "1.0.0"
 openzeppelin_token = "1.0.0"
+openzeppelin_introspection = "1.0.0"
 
 [scripts]
 katana = "katana --config ./katana_dev.toml"
@@ -61,7 +64,7 @@ migrate_dopewars = "PROFILE=dopewars && sozo -P $PROFILE build && sozo -P $PROFI
 migrate_ryosepolia_controller = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --slot.controller -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 migrate_ryosepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --fee eth --fee-estimate-multiplier 2 --keystore ../../../sozo_acc -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 migrate_ryomainnet = "PROFILE=mainnet && sozo -P $PROFILE build && sozo -P $PROFILE migrate --fee eth --fee-estimate-multiplier 2 --keystore ../../../dopewars_key -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
-migrate_provable = "PROFILE=provable-dw && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && sozo -P $PROFILE inspect"
+migrate_provable = "PROFILE=provable-dw && sozo -P $PROFILE build && sozo -P $PROFILE migrate --guest -vvv && scarb run copy_manifest $PROFILE && sozo -P $PROFILE inspect"
 
 # slot dopewars
 slot_dopewars_katana = "slot d create -t insane --team cartridge dopewars katana -v v1.5.0 --config ./katana_dopewars.toml"

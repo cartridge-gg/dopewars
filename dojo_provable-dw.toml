@@ -38,6 +38,10 @@ skip_contracts = [
     "0x0",      # vrf address, 0x0 = use local randomness instead of VRF
     "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a", # treasury / multisig address
 ]
+"dopewars-game_token_systems" = [
+    "0x0127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec", # creator address
+    "0x07f9214a7bb805f6e09b487e41d9603761bf090e0179e7464105dc36c720ca79", # token address (Denshokan address)
+]
 
 # [writers]
 # "dopewars" = [
@@ -68,6 +72,7 @@ skip_contracts = [
 "dopewars-EncounterStatsConfig" = ["dopewars-config"]
 
 "dopewars-Game" = ["dopewars-game", "dopewars-laundromat", "dopewars-decide"]
+"dopewars-GameToken" = ["dopewars-game", "dopewars-laundromat", "dopewars-decide", "dopewars-game_token_systems"]
 "dopewars-GameStorePacked" = ["dopewars-game", "dopewars-decide"]
 "dopewars-RyoConfig" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]
 "dopewars-Season" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]

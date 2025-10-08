@@ -8,7 +8,7 @@ trait IDevtools<T> {
 // use with katana --chain_id != 'KATANA'
 
 #[dojo::contract]
-mod devtools {
+pub mod devtools {
     use core::traits::Into;
     use core::traits::TryInto;
     use dojo::world::IWorldDispatcherTrait;

@@ -11,7 +11,7 @@ trait ILaundromat<T> {
 }
 
 #[dojo::contract]
-mod laundromat {
+pub mod laundromat {
     use achievement::store::{StoreTrait as BushidoStoreTrait};
     use dojo::event::EventStorage;
     // use dojo::world::WorldStorageTrait;
@@ -38,7 +38,7 @@ mod laundromat {
         },
     };
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
-    use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
+    // use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
 
     #[abi(embed_v0)]
     impl LaundromatImpl of super::ILaundromat<ContractState> {

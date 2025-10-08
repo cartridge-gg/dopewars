@@ -17,7 +17,7 @@ pub enum EncounterActions {
 }
 
 #[starknet::interface]
-trait IGameActions<T> {
+pub trait IGameActions<T> {
     fn create_game(
         self: @T, game_mode: GameMode, player_name: felt252, multiplier: u8, token_id: TokenId,
     );
@@ -26,9 +26,9 @@ trait IGameActions<T> {
 }
 
 #[dojo::contract]
-mod game {
+pub mod game {
     // use achievement::store::{StoreTrait as BushidoStoreTrait};
-    use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
+    // use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
     use dojo::model::ModelStorage;
     use dojo::world::IWorldDispatcherTrait;

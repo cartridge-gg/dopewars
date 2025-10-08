@@ -23,7 +23,7 @@ trait IRyo<T> {
 }
 
 #[dojo::contract]
-mod ryo {
+pub mod ryo {
     use achievement::components::achievable::AchievableComponent;
     use core::num::traits::Zero;
     use dojo::world::{IWorldDispatcherTrait, WorldStorageTrait};

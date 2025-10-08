@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-use starknet::ContractAddress;
+// use starknet::ContractAddress;
 
 #[starknet::interface]
 pub trait IGameTokenSystems<T> {
@@ -8,7 +8,7 @@ pub trait IGameTokenSystems<T> {
 }
 
 #[dojo::contract]
-mod game_token_systems {
+pub mod game_token_systems {
     use core::num::traits::Zero;
 use super::IGameTokenSystems;
     use starknet::ContractAddress;
@@ -54,7 +54,7 @@ use super::IGameTokenSystems;
     /// @title Dojo Init
     /// @notice Initializes the game token system
     /// @param creator_address: the address of the creator of the game
-    /// @param token_address: the address of the FullTokenContract (ERC721)
+    /// @param token_address: Denshokan address
     fn dojo_init(
         ref self: ContractState,
         creator_address: ContractAddress,
@@ -63,8 +63,8 @@ use super::IGameTokenSystems;
         self.minigame.initializer(
             creator_address,
             "DopeWars",
-            "Roll Your Own - Dope Wars on StarkNet. Build your empire in NYC.",
-            "Dope Wars Team",
+            "Roll Your Own - Dope Wars on StarkNet. Build your empire.",
+            "Cartridge",
             "Dope Wars",
             "Strategy",
             "https://dopewars.gg/favicon.png",

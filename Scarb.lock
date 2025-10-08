@@ -75,6 +75,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "dojo_cairo_test"
+version = "1.7.0"
+source = "git+https://github.com/dojoengine/dojo?tag=v1.7.0#503934a3882b245f104612af15b07475507614f7"
+dependencies = [
+ "dojo",
+]
+
+[[package]]
 name = "dojo_macros"
 version = "1.7.0"
 source = "git+https://github.com/dojoengine/dojo?tag=v1.7.0#503934a3882b245f104612af15b07475507614f7"
@@ -267,12 +275,15 @@ dependencies = [
  "achievement",
  "cartridge_vrf",
  "dojo",
+ "dojo_cairo_test",
  "dojo_macros",
  "game_components_metagame",
  "game_components_minigame",
  "game_components_test_starknet",
  "game_components_token",
+ "game_components_utils",
  "openzeppelin",
+ "openzeppelin_introspection",
  "openzeppelin_token",
 ]
 

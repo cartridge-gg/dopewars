@@ -6,7 +6,7 @@ trait IDecide<T> {
 }
 
 #[dojo::contract]
-mod decide {
+pub mod decide {
     use rollyourown::{
         packing::{game_store::{GameStoreImpl}, player::{PlayerImpl}},
         store::{StoreImpl, StoreTrait}, systems::{helpers::{game_loop, traveling}},
