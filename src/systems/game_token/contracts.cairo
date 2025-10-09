@@ -38,7 +38,7 @@ pub mod game_token_systems {
         #[substorage(v0)]
         src5: SRC5Component::Storage,
     }
-
+    
     #[event]
     #[derive(Drop, starknet::Event)]
     enum Event {
@@ -47,7 +47,7 @@ pub mod game_token_systems {
         #[flat]
         SRC5Event: SRC5Component::Event,
     }
-
+    
     /// @title Dojo Init
     /// @notice Initializes the game token system
     /// @param creator_address: the address of the creator of the game
@@ -56,24 +56,34 @@ pub mod game_token_systems {
         ref self: ContractState, creator_address: ContractAddress, token_address: ContractAddress,
     ) {
         self
-            .minigame
-            .initializer(
-                creator_address,
-                "DopeWars",
-                "Roll Your Own - Dope Wars on StarkNet. Build your empire.",
-                "Cartridge",
-                "Dope Wars",
-                "Strategy",
-                "https://dopewars.gg/favicon.png",
-                Option::None, // color - uses default
-                Option::None, // client_url
-                Option::None, // renderer_address - uses default renderer
-                Option::None, // settings_address
-                Option::None, // objectives_address
-                token_address,
-            );
+        .minigame
+        .initializer(
+            creator_address,
+            "DopeWars",
+            "Roll Your Own - Dope Wars on StarkNet. Build your empire.",
+            "Cartridge",
+            "Dope Wars",
+            "Strategy",
+            "https://dopewars.gg/favicon.png",
+            Option::None, // color - uses default
+            Option::None, // client_url
+            Option::None, // renderer_address - uses default renderer
+            Option::None, // settings_address
+            Option::None, // objectives_address
+            token_address,
+        );
     }
-
+    
+    // ------------------------------------------ //
+    // ------------ Game Token Systems ---------- //
+    // ------------------------------------------ //
+    #[abi(embed_v0)]
+    impl GameTokenSystemsImpl of IGameTokenSystems<ContractState> {
+        fn player_name(self: @ContractState, token_id: u64) -> felt252 {
+            self.minigame.get_player_name(token_id)
+        }
+    }
+    
     // ------------------------------------------ //
     // ------------ Minigame Component ---------- //
     // ------------------------------------------ //
@@ -82,7 +92,7 @@ pub mod game_token_systems {
         fn score(self: @ContractState, token_id: u64) -> u32 {
             let world = self.world(@"dopewars");
             let game_token: GameToken = world.read_model(token_id);
-
+            
             if game_token.game_id == 0 {
                 return 0;
             }
@@ -112,13 +122,4 @@ pub mod game_token_systems {
         }
     }
 
-    // ------------------------------------------ //
-    // ------------ Game Token Systems ---------- //
-    // ------------------------------------------ //
-    #[abi(embed_v0)]
-    impl GameTokenSystemsImpl of IGameTokenSystems<ContractState> {
-        fn player_name(self: @ContractState, token_id: u64) -> felt252 {
-            self.minigame.get_player_name(token_id)
-        }
-    }
 }

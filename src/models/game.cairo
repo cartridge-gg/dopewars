@@ -48,6 +48,7 @@ pub struct Game {
     pub position: u16,
     //
     pub token_id: TokenId,
+    pub minigame_token_id: u64, // NFT token ID from game_components_minigame
     // sorted by slot order 0,1,2,3
     pub equipment_by_slot: Span<GearId>,
 }
@@ -131,6 +132,7 @@ pub impl GameImpl of GameTrait {
             position: 0,
             //
             token_id,
+            minigame_token_id: 0, // Will be set after minting
             equipment_by_slot,
         }
     }

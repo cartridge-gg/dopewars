@@ -61,6 +61,7 @@ pub mod devtools {
                 claimable: 0,
                 position: 0,
                 token_id: TokenId::LootId(loot_id.into()),
+                minigame_token_id: 0,
                 equipment_by_slot: array![0, 0, 0, 0].span(),
             };
 

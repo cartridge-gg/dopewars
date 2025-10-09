@@ -33,6 +33,7 @@ pub mod game {
     use dojo::model::ModelStorage;
     use dojo::world::{IWorldDispatcherTrait, WorldStorageTrait};
     use game_components_minigame::interface::{IMinigameDispatcher, IMinigameDispatcherTrait};
+    use game_components_minigame::libs::{assert_token_ownership, post_action, pre_action};
     use rollyourown::dope_contracts::dope_hustlers::dope_hustlers_models::{
         HustlerBody, HustlerBodyParts, HustlerSlotOption, HustlerSlots,
     };
@@ -246,7 +247,7 @@ pub mod game {
             let (game_token_contract, _) = world.dns(@"game_token_systems").unwrap();
             let minigame_dispatcher = IMinigameDispatcher { contract_address: game_token_contract };
 
-            let nft_token_id = minigame_dispatcher
+            let minigame_token_id = minigame_dispatcher
                 .mint_game(
                     Option::Some(player_name), // player_name
                     Option::None, // settings_id
@@ -260,8 +261,12 @@ pub mod game {
                     true // soulbound - NFT cannot be transferred
                 );
 
+            // update game with NFT token_id and save again
+            game.minigame_token_id = minigame_token_id;
+            store.set_game(@game);
+
             // store the GameToken mapping
-            world.write_model(@GameToken { token_id: nft_token_id, game_id, player_id });
+            world.write_model(@GameToken { token_id: minigame_token_id, game_id, player_id });
 
             // emit GameCreated
             world.emit_event(@game_created);
@@ -271,6 +276,13 @@ pub mod game {
             let player_id = get_caller_address();
 
             let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let game = store.game(game_id, player_id);
+
+            // assert token ownership and pre_action
+            let token_address = self.get_game_token_address();
+            assert_token_ownership(token_address, game.minigame_token_id);
+            pre_action(token_address, game.minigame_token_id);
+
             let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
 
             // execute actions (trades & shop)
@@ -279,6 +291,9 @@ pub mod game {
 
             //save & on_game_over
             game_loop::on_game_over(ref game_store, ref store);
+
+            // post_action
+            post_action(token_address, game.minigame_token_id);
         }
 
 
@@ -288,10 +303,17 @@ pub mod game {
             next_location: Locations,
             actions: Span<super::Actions>,
         ) {
+            let player_id = get_caller_address();
+
             let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let game = store.game(game_id, player_id);
+
+            // assert token ownership and pre_action
+            let token_address = self.get_game_token_address();
+            assert_token_ownership(token_address, game.minigame_token_id);
+            pre_action(token_address, game.minigame_token_id);
 
             let randomness_config = store.randomness_config();
-            let player_id = get_caller_address();
 
             //
             let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
@@ -333,6 +355,9 @@ pub mod game {
                     game_loop::on_turn_end(ref game_store, ref randomizer, ref store);
                 }
             }
+
+            // post_action
+            post_action(token_address, game.minigame_token_id);
         }
     }
 
@@ -344,6 +369,23 @@ pub mod game {
             let mut store = StoreImpl::new(self.world(@"dopewars"));
             let ryo_config = store.ryo_config();
             assert(!ryo_config.paused, 'game is paused');
+        }
+
+        fn get_game_token_address(self: @ContractState) -> starknet::ContractAddress {
+            let world = self.world(@"dopewars");
+            let (game_token_systems_address, _) = world.dns(@"game_token_systems").unwrap();
+            let minigame_dispatcher = IMinigameDispatcher { contract_address: game_token_systems_address };
+            minigame_dispatcher.token_address()
+        }
+
+        fn assert_game_not_started(self: @ContractState, game_id: u32, player_id: starknet::ContractAddress) {
+            let store = StoreImpl::new(self.world(@"dopewars"));
+            let game = store.game(game_id, player_id);
+            assert!(
+                game.minigame_token_id == 0,
+                "DopeWars: Game {} has already started",
+                game_id,
+            );
         }
 
         fn execute_actions(
