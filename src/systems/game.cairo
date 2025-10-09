@@ -270,6 +270,10 @@ pub mod game {
 
             // emit GameCreated
             world.emit_event(@game_created);
+
+            // Initialize token state with game data
+            let token_address = self._get_game_token_address();
+            post_action(token_address, minigame_token_id);
         }
 
         fn end_game(self: @ContractState, game_id: u32, actions: Span<super::Actions>) {
@@ -279,7 +283,7 @@ pub mod game {
             let game = store.game(game_id, player_id);
 
             // assert token ownership and pre_action
-            let token_address = self.get_game_token_address();
+            let token_address = self._get_game_token_address();
             assert_token_ownership(token_address, game.minigame_token_id);
             pre_action(token_address, game.minigame_token_id);
 
@@ -309,7 +313,7 @@ pub mod game {
             let game = store.game(game_id, player_id);
 
             // assert token ownership and pre_action
-            let token_address = self.get_game_token_address();
+            let token_address = self._get_game_token_address();
             assert_token_ownership(token_address, game.minigame_token_id);
             pre_action(token_address, game.minigame_token_id);
 
@@ -371,7 +375,7 @@ pub mod game {
             assert(!ryo_config.paused, 'game is paused');
         }
 
-        fn get_game_token_address(self: @ContractState) -> starknet::ContractAddress {
+        fn _get_game_token_address(self: @ContractState) -> starknet::ContractAddress {
             let world = self.world(@"dopewars");
             let (game_token_systems_address, _) = world.dns(@"game_token_systems").unwrap();
             let minigame_dispatcher = IMinigameDispatcher { contract_address: game_token_systems_address };

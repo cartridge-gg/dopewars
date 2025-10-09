@@ -8,6 +8,9 @@ trait IDecide<T> {
 
 #[dojo::contract]
 pub mod decide {
+    use dojo::world::WorldStorageTrait;
+    use game_components_minigame::interface::{IMinigameDispatcher, IMinigameDispatcherTrait};
+    use game_components_minigame::libs::{assert_token_ownership, post_action, pre_action};
     use rollyourown::packing::game_store::GameStoreImpl;
     use rollyourown::packing::player::PlayerImpl;
     use rollyourown::store::{StoreImpl, StoreTrait};
@@ -27,6 +30,11 @@ pub mod decide {
 
             //
             let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
+
+            // Assert token ownership and playability
+            let token_address = self._get_game_token_address();
+            assert_token_ownership(token_address, game_store.game.minigame_token_id);
+            pre_action(token_address, game_store.game.minigame_token_id);
 
             // check player status
             assert(game_store.player.can_decide(), 'player cannot decide');
@@ -52,6 +60,22 @@ pub mod decide {
                 // on_turn_end & save
                 game_loop::on_turn_end(ref game_store, ref randomizer, ref store);
             };
+
+            // Update token state
+            post_action(token_address, game_store.game.minigame_token_id);
         }
     }
+
+    #[generate_trait]
+    impl InternalImpl of InternalTrait {
+        fn _get_game_token_address(self: @ContractState) -> starknet::ContractAddress {
+            let world = self.world(@"dopewars");
+            let (game_token_systems_address, _) = world.dns(@"game_token_systems").unwrap();
+            let minigame_dispatcher = IMinigameDispatcher {
+                contract_address: game_token_systems_address,
+            };
+            minigame_dispatcher.token_address()
+        }
+    }
+
 }

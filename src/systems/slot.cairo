@@ -186,6 +186,8 @@ trait ISlotMachine<T> {
 mod slotmachine {
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::world::IWorldDispatcherTrait;
+    use game_components_minigame::interface::{IMinigameDispatcher, IMinigameDispatcherTrait};
+    use game_components_minigame::libs::{assert_token_ownership, post_action, pre_action};
     use rollyourown::store::{Store, StoreImpl, StoreTrait};
     use starknet::{ContractAddress, get_caller_address};
     use super::{SlotMachine, SlotMachineImpl, SlotMachineTrait};
@@ -202,14 +204,34 @@ mod slotmachine {
         payout: u32,
     }
 
+    #[generate_trait]
+    impl InternalImpl of InternalTrait {
+        fn _get_game_token_address(self: @ContractState) -> starknet::ContractAddress {
+            let world = self.world(@"dopewars");
+            let (game_token_systems_address, _) = world.dns(@"game_token_systems").unwrap();
+            let minigame_dispatcher = IMinigameDispatcher {
+                contract_address: game_token_systems_address,
+            };
+            minigame_dispatcher.token_address()
+        }
+    }
+
     #[abi(embed_v0)]
     impl SlotMachineImp of super::ISlotMachine<ContractState> {
         fn roll(ref self: ContractState, game_id: u32) {
             // TODO: checks
+            let player_id = get_caller_address();
             let mut store = StoreImpl::new(self.world(@"dopewars"));
 
+            // Load game to get minigame_token_id
+            let game = store.game(game_id, player_id);
+
+            // Assert token ownership and playability
+            let token_address = self._get_game_token_address();
+            assert_token_ownership(token_address, game.minigame_token_id);
+            pre_action(token_address, game.minigame_token_id);
+
             let ryo_addresses = store.ryo_addresses();
-            let player_id = get_caller_address();
             let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
                 .consume_random(Source::Nonce(player_id));
 
@@ -231,6 +253,9 @@ mod slotmachine {
             // }
 
             store.set_slot_machine(@machine);
+
+            // Update token state
+            post_action(token_address, game.minigame_token_id);
         }
     }
 }

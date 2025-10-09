@@ -12,8 +12,12 @@ trait ILaundromat<T> {
 
 #[dojo::contract]
 pub mod laundromat {
+    use dojo::world;
     use achievement::store::StoreTrait as BushidoStoreTrait;
     use dojo::event::EventStorage;
+    use dojo::world::WorldStorageTrait;
+    use game_components_minigame::interface::{IMinigameDispatcher, IMinigameDispatcherTrait};
+    use game_components_minigame::libs::{assert_token_ownership, post_action, pre_action};
     // use dojo::world::WorldStorageTrait;
     // use dope_contracts::dope_gear::dope_gear_ext::{GearItem};
     // use dope_contracts::dope_gear::interface::{IDopeGearABIDispatcher,
@@ -55,6 +59,11 @@ pub mod laundromat {
 
             let mut game = store.game(game_id, player_id);
             let season = store.season(game.season_version);
+
+            // Assert token ownership and playability
+            let token_address = self._get_game_token_address();
+            assert_token_ownership(token_address, game.minigame_token_id);
+            pre_action(token_address, game.minigame_token_id);
 
             // check if valid game
             assert(game.exists(), 'invalid game');
@@ -156,6 +165,9 @@ pub mod laundromat {
         //             .progress(player_id.into(), task, 1, starknet::get_block_timestamp());
         //     }
         // }
+
+            // Update token state
+            post_action(token_address, game.minigame_token_id);
         }
 
         fn launder(self: @ContractState, season_version: u16) {
@@ -387,4 +399,17 @@ pub mod laundromat {
                 .transfer_from(get_caller_address(), get_contract_address(), amount);
         }
     }
+
+    #[generate_trait]
+    impl InternalImpl of InternalTrait {
+        fn _get_game_token_address(self: @ContractState) -> starknet::ContractAddress {
+            let world = self.world(@"dopewars");
+            let (game_token_systems_address, _) = world.dns(@"game_token_systems").unwrap();
+            let minigame_dispatcher = IMinigameDispatcher {
+                contract_address: game_token_systems_address,
+            };
+            minigame_dispatcher.token_address()
+        }
+    }
+
 }

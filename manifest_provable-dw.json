@@ -2026,7 +2026,7 @@
     },
     {
       "address": "0x41caa0fb71647cc3926e515ecfa56bb7bc96920d3d269f8d44305ca14f89f1d",
-      "class_hash": "0x18801b3b12eaccddf90d738723b37a82e00eec43254b6462a4bd8f9b58b9fb9",
+      "class_hash": "0x5464e13d0298ae63b19852fe3a773100146a108d5a54f7952732f455c85c3f3",
       "abi": [
         {
           "type": "impl",
@@ -2247,7 +2247,7 @@
     },
     {
       "address": "0x30c3940de6df0de8636ac50c9f24233c6849b966b16d2e178315bdda1308ea",
-      "class_hash": "0x6e3b68052483364ecf677bad2420d960d771c5d83744c5a54dc94aabd26e1a2",
+      "class_hash": "0xecd20dbd24949abae987b1653eab8b471332fbb94602581680208bbbd30972",
       "abi": [
         {
           "type": "impl",
@@ -2460,7 +2460,7 @@
     },
     {
       "address": "0x51b986cd0c4abc33d28dab0d685edbdddda3537b5a2429199013477c0419d62",
-      "class_hash": "0x3517ff2a72945dda76397f213846fa8454e86fdae320c3d8beec723b721b73",
+      "class_hash": "0x46305813d0f44d2a5d026ecde9b47ebe83b7c6ada95a479b63107ad0d772e1",
       "abi": [
         {
           "type": "impl",
@@ -2903,7 +2903,7 @@
     },
     {
       "address": "0x71f22a81da1625592b2a0f053c8c889d8cfbcc4782a01dff4bcfd6f9c4b2ea4",
-      "class_hash": "0x7a9141b244745ce565b6781f6f1a1aec882a9bcfc5530f481f2440db2a5a3b7",
+      "class_hash": "0x5f4847dc8ad98baceae94e0ff66ed4e2896d0c4786df3b72337640c19b908a",
       "abi": [
         {
           "type": "impl",
@@ -2973,6 +2973,33 @@
         },
         {
           "type": "impl",
+          "name": "GameTokenSystemsImpl",
+          "interface_name": "rollyourown::systems::game_token::contracts::IGameTokenSystems"
+        },
+        {
+          "type": "interface",
+          "name": "rollyourown::systems::game_token::contracts::IGameTokenSystems",
+          "items": [
+            {
+              "type": "function",
+              "name": "player_name",
+              "inputs": [
+                {
+                  "name": "token_id",
+                  "type": "core::integer::u64"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::felt252"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
           "name": "GameTokenDataImpl",
           "interface_name": "game_components_minigame::interface::IMinigameTokenData"
         },
@@ -3022,33 +3049,6 @@
               "outputs": [
                 {
                   "type": "core::bool"
-                }
-              ],
-              "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "GameTokenSystemsImpl",
-          "interface_name": "rollyourown::systems::game_token::contracts::IGameTokenSystems"
-        },
-        {
-          "type": "interface",
-          "name": "rollyourown::systems::game_token::contracts::IGameTokenSystems",
-          "items": [
-            {
-              "type": "function",
-              "name": "player_name",
-              "inputs": [
-                {
-                  "name": "token_id",
-                  "type": "core::integer::u64"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::felt252"
                 }
               ],
               "state_mutability": "view"
@@ -3475,7 +3475,7 @@
     },
     {
       "address": "0x5f229d8b024b0cf4a7c9f09f6e5cf0d51c2c5b84a1e6d0e2432932141df023c",
-      "class_hash": "0xd6d694c42f89fd109828fde0ac99cd20c3548be9747806434fea9b9d47a651",
+      "class_hash": "0x20f7ce3d51cea386753b59b8e3ac49258ae57275a67f9eba2ebc9f58f25b0b8",
       "abi": [
         {
           "type": "impl",
@@ -5282,7 +5282,7 @@
     },
     {
       "members": [],
-      "class_hash": "0xba2eed7ba69416cf241ad1321830a3d3008f632a3dedf8fd1b32b895a40d3f",
+      "class_hash": "0x1e35f626b23aeb45227a8e4a342c5a3a112f9f61004da7bf0a8b81802935575",
       "tag": "dopewars-Game",
       "selector": "0x4462fb348c1b170b0ef251ec6bf8185d6dd6162541df7b01b777137fc4b7cb0"
     },

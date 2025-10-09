@@ -48,9 +48,9 @@ pub struct Game {
     pub position: u16,
     //
     pub token_id: TokenId,
-    pub minigame_token_id: u64, // NFT token ID from game_components_minigame
     // sorted by slot order 0,1,2,3
     pub equipment_by_slot: Span<GearId>,
+    pub minigame_token_id: u64, // NFT token ID from game_components_minigame
 }
 
 #[generate_trait]
