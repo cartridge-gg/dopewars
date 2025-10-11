@@ -244,7 +244,7 @@ pub mod game {
             game_store.save();
 
             // mint NFT and store mapping
-            let (game_token_contract, _) = world.dns(@"game_token_systems").unwrap();
+            let (game_token_contract, _) = world.dns(@"game_token").unwrap();
             let minigame_dispatcher = IMinigameDispatcher { contract_address: game_token_contract };
 
             let minigame_token_id = minigame_dispatcher
@@ -377,7 +377,7 @@ pub mod game {
 
         fn _get_game_token_address(self: @ContractState) -> starknet::ContractAddress {
             let world = self.world(@"dopewars");
-            let (game_token_systems_address, _) = world.dns(@"game_token_systems").unwrap();
+            let (game_token_systems_address, _) = world.dns(@"game_token").unwrap();
             let minigame_dispatcher = IMinigameDispatcher { contract_address: game_token_systems_address };
             minigame_dispatcher.token_address()
         }

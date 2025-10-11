@@ -17,7 +17,7 @@ pub mod laundromat {
     use dojo::event::EventStorage;
     use dojo::world::WorldStorageTrait;
     use game_components_minigame::interface::{IMinigameDispatcher, IMinigameDispatcherTrait};
-    use game_components_minigame::libs::{assert_token_ownership, post_action, pre_action};
+    use game_components_minigame::libs::{assert_token_ownership, post_action};
     // use dojo::world::WorldStorageTrait;
     // use dope_contracts::dope_gear::dope_gear_ext::{GearItem};
     // use dope_contracts::dope_gear::interface::{IDopeGearABIDispatcher,
@@ -63,7 +63,6 @@ pub mod laundromat {
             // Assert token ownership and playability
             let token_address = self._get_game_token_address();
             assert_token_ownership(token_address, game.minigame_token_id);
-            pre_action(token_address, game.minigame_token_id);
 
             // check if valid game
             assert(game.exists(), 'invalid game');
@@ -404,7 +403,7 @@ pub mod laundromat {
     impl InternalImpl of InternalTrait {
         fn _get_game_token_address(self: @ContractState) -> starknet::ContractAddress {
             let world = self.world(@"dopewars");
-            let (game_token_systems_address, _) = world.dns(@"game_token_systems").unwrap();
+            let (game_token_systems_address, _) = world.dns(@"game_token").unwrap();
             let minigame_dispatcher = IMinigameDispatcher {
                 contract_address: game_token_systems_address,
             };

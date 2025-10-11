@@ -91,6 +91,7 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
   const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game").address;
   const decideAddress = getContractByName(selectedChain.manifest, DW_NS, "decide").address;
   const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
+  const gameTokenAddress = getContractByName(selectedChain.manifest, DW_NS, "game_token").address;
   const dopeLootClaimAddress = getContractByName(selectedChain.manifest, "dope", "DopeLootClaim").address;
   const dopeGearAddress = getContractByName(selectedChain.manifest, "dope", "DopeGear").address;
   const dopeHustlersAddress = getContractByName(selectedChain.manifest, "dope", "DopeHustlers").address;
@@ -109,6 +110,13 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
           { entrypoint: "travel" },
           { entrypoint: "end_game" },
           { entrypoint: "travel" },
+        ],
+      },
+      [gameTokenAddress]: {
+        methods: [
+          { entrypoint: "mint_game" },
+          { entrypoint: "player_name" },
+          { entrypoint: "token_uri" },
         ],
       },
       [decideAddress]: {

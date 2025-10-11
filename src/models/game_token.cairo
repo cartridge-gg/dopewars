@@ -1,7 +1,7 @@
 use starknet::ContractAddress;
 
 /// GameToken model stores the mapping between NFT token_id and game data
-/// This allows the game_token_systems to resolve which game a token represents
+/// This allows the game_token system to resolve which game a token represents
 #[derive(Copy, Drop, Serde, Introspect)]
 #[dojo::model]
 pub struct GameToken {

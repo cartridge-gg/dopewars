@@ -8,7 +8,7 @@ pub trait IGameTokenSystems<T> {
 }
 
 #[dojo::contract]
-pub mod game_token_systems {
+pub mod game_token {
     use core::num::traits::Zero;
     use dojo::model::ModelStorage;
     use game_components_minigame::interface::IMinigameTokenData;
@@ -61,7 +61,7 @@ pub mod game_token_systems {
             creator_address,
             "DopeWars",
             "Roll Your Own - Dope Wars on StarkNet. Build your empire.",
-            "Cartridge",
+            "Cartridge/Dope DAO",
             "Dope Wars",
             "Strategy",
             "https://dopewars.gg/favicon.png",

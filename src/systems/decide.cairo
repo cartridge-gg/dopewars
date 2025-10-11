@@ -70,7 +70,7 @@ pub mod decide {
     impl InternalImpl of InternalTrait {
         fn _get_game_token_address(self: @ContractState) -> starknet::ContractAddress {
             let world = self.world(@"dopewars");
-            let (game_token_systems_address, _) = world.dns(@"game_token_systems").unwrap();
+            let (game_token_systems_address, _) = world.dns(@"game_token").unwrap();
             let minigame_dispatcher = IMinigameDispatcher {
                 contract_address: game_token_systems_address,
             };

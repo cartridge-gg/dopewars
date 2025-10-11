@@ -13,6 +13,7 @@ contracts = [
     "ERC721:0x02016df21843eb1fc84a862a2dc16f936346f00d6a5f7bde92eedeb2b5ba6d68", # dope_loot
     "ERC721:0x03217ebee55ce235b3c97fff8946fb7ce9b383d4deb09a775daedddf378ea996", # dope_hustlers
     "ERC1155:0x029cec265f06c2d9d05b351eb8fd13e2bf977218923d7b19dfbbd4961cb46075", # dope_gear
+    "ERC721:0x3d3d11cc1dc5a92a70fd520e0292d476453024b1cbf913585d4d97f5355c160", # Denshokan NFT
 ]
 
 
