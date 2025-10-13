@@ -18,6 +18,7 @@ import theme from "../theme";
 import { enableStaticRendering } from "mobx-react-lite";
 import { SeasonDetailsModal } from "@/components/pages/home/SeasonDetailsModal";
 import { GlobalEvents } from "@/components/layout/GlobalEvents";
+import ConnectionError from "@/components/layout/ConnectionError";
 enableStaticRendering(typeof window === "undefined");
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -38,7 +39,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <ChakraProvider theme={theme}>
-        <DojoContextProvider dojoContextConfig={dojoContextConfig}>
+        {/* <DojoContextProvider dojoContextConfig={dojoContextConfig}> */}
           <Fonts />
           <GlobalStyles />
           <NextHead>
@@ -48,12 +49,12 @@ export default function App({ Component, pageProps }: AppProps) {
               content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
             />
           </NextHead>
-          {isRightSequence && <MakeItRain />}
+
+          <ConnectionError errors={[]}/>
+          {/* {isRightSequence && <MakeItRain />}
           <Component {...pageProps} />
           <SpeedInsights />
-          {/* <Debug /> */}
-
-          {/* Common modales */}
+        
           <LoadingModal />
           <DeployingModal />
           <ConnectModal />
@@ -62,8 +63,8 @@ export default function App({ Component, pageProps }: AppProps) {
           <RefreshGameModal />
           <SeasonDetailsModal />
 
-          <GlobalEvents />
-        </DojoContextProvider>
+          <GlobalEvents /> */}
+        {/* </DojoContextProvider> */}
       </ChakraProvider>
     </>
   );
