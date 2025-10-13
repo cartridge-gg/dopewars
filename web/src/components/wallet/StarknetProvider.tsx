@@ -174,12 +174,15 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
         rpcUrl: "https://api.cartridge.gg/x/starknet/sepolia",
       },
       {
+        rpcUrl: "https://api.cartridge.gg/x/provable-dw/katana",
+      },
+      {
         rpcUrl: "https://api.cartridge.gg/x/starknet/mainnet",
       },
     ],
     defaultChainId: `0x${selectedChain.chainConfig.id.toString(16)}`,
     url: selectedChain.keychain ? selectedChain.keychain : "https://x.cartridge.gg",
-    // rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
+    rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
     // profileUrl: selectedChain.profileUrl ? selectedChain.profileUrl : undefined,
     namespace: selectedChain.namespace ? selectedChain.namespace : "dopewars",
     slot: selectedChain.slot ? selectedChain.slot : "ryo",

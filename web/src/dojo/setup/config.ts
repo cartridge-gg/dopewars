@@ -154,11 +154,13 @@ const provableDW: DojoChainConfig = {
   rpcUrl: "https://api.cartridge.gg/x/provable-dw/katana",
   toriiUrl: "http://127.0.0.1:8080/graphql",
   toriiWsUrl: "ws://127.0.0.1:8080/graphql/ws",
+  // toriiUrl: "https://api.cartridge.gg/x/provable-dw/torii/graphql",
+  // toriiWsUrl: "wss://api.cartridge.gg/x/provable-dw/torii/graphql/ws",
   manifest: mergeManifests(manifestProvableDw, [manifestDopeProvableDw]),
   slot: "provable-dw",
   predeployedAccounts: [],
   paperAddress: manifestProvableDw.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
-  vrfProviderAddress: "0x00", 
+  vrfProviderAddress: "0x00",
   vrfProviderSecret: undefined,
 };
 
