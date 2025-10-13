@@ -49,13 +49,13 @@ export default function Editor() {
   }, []);
   const { tokens: allGearTokens } = useDojoTokens(toriiClient, dopeGearAddressArr);
 
-  const tokenIds = useMemo(() => {
-    return hustlerId ? [toToriiTokenId(hustlerId)] : [];
-  }, [hustlerId]);
+  // const tokenIds = useMemo(() => {
+  //   return hustlerId ? [toToriiTokenId(hustlerId)] : [];
+  // }, [hustlerId]);
 
-  const dopeHustlersAddressArr = useMemo(() => {
-    return [dopeHustlersContractManifest.address];
-  }, []);
+  // const dopeHustlersAddressArr = useMemo(() => {
+  //   return [dopeHustlersContractManifest.address];
+  // }, []);
 
   //   const { tokens: hustlerTokens } = useDojoTokens(toriiClient, dopeHustlersAddressArr, undefined, tokenIds);
 
@@ -72,7 +72,6 @@ export default function Editor() {
   } = useHustler(toriiClient, Number(hustlerId));
 
   const [hustlerEquipment, setHustlerEquipment] = useState<HustlerEquipment>({});
-
   const [hustlerInitialEquipment, setHustlerInitialEquipment] = useState<HustlerEquipment>({});
 
   useEffect(() => {

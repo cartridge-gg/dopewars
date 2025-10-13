@@ -60,7 +60,7 @@ export function ItemPicker({
     if (itemFilter) {
       filtered = filtered.filter((t) => itemFilter(t));
     }
-    console.log(filtered)
+    // console.log(filtered)
 
     if (filter && filter !== "") {
       filtered = filtered.filter((t) => {

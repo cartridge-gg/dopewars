@@ -5379,8 +5379,8 @@
       ]
     },
     {
-      "address": "0x39b9b086e60a147c6878df721ee143f0291758c46dca634567112e93732b52c",
-      "class_hash": "0x7cfa8bb27a7a78bf64f9f463b48afe6e9cb4a0ca65955d03f24266842284",
+      "address": "0xa50ee43f9e295e5eb32ea91fd3f69c99ef18a4edf187ffddedf34d6e95f060",
+      "class_hash": "0x4fcf214efce393170ac542e9c76187fab26270ed42be80f82a7716437d6f259",
       "abi": [
         {
           "type": "impl",
@@ -5570,6 +5570,18 @@
                 }
               ],
               "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "set_forwarder_address",
+              "inputs": [
+                {
+                  "name": "forwarder_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
             }
           ]
         },
@@ -5791,6 +5803,7 @@
         "release",
         "open",
         "toggle_open_restricted",
+        "set_forwarder_address",
         "upgrade"
       ]
     }
