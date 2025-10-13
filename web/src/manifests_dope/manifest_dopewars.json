@@ -1479,8 +1479,8 @@
   },
   "contracts": [
     {
-      "address": "0x6c6b927a731087377aa5d7caf57aa1dec7ed5d0c16b231ba0a6e216dec48f92",
-      "class_hash": "0x6fc80155627598fbca1f2f1705bae04810796603f68fc78621fc8ca809ffd7",
+      "address": "0x1569adb1f06d93049e049c2c0500fbde25404ee4b662752fd48d40de6bc44f2",
+      "class_hash": "0x575ef1dbb5933bfb58283af31ccfd2ab053cd3b3f259973a3214222f225e939",
       "abi": [
         {
           "type": "impl",
@@ -2664,8 +2664,8 @@
       ]
     },
     {
-      "address": "0x1c14abe1d25b8c10b89958a6bc6f2441ece48312a35d29916d5d1bea592f1f0",
-      "class_hash": "0x75190b95202165d8c84bd16d35ed73c40298a79c60a82265f1920a818507478",
+      "address": "0x3e7678c6ebf9dd50a65d8d3e477600e0114b1e4cc38094579c92bdd65a7ad89",
+      "class_hash": "0x75c1731476ce614651549bb3a1bc13abc2b6009a8a280236fc74f8063e19fdb",
       "abi": [
         {
           "type": "impl",
@@ -4017,8 +4017,8 @@
       ]
     },
     {
-      "address": "0x1ee0fe152c71643aa7c6325c9e2d8278c2ed1da681733ec90f64be98ac6645",
-      "class_hash": "0x40481a9fe4ed12a82ea66ac4d4833c6c08282f92d5c99beddefb0def030301b",
+      "address": "0x372d82484c119b2e11556d4d50e3917c9c42b162306623756c064ade0339d8c",
+      "class_hash": "0x310f84cd1015cf5210b432d154f8ea513e2098c08d702bef9cdc237c76b7c5c",
       "abi": [
         {
           "type": "impl",
@@ -5379,8 +5379,8 @@
       ]
     },
     {
-      "address": "0x37e52dab569c7cbde97a555cbffe890011db5230c7a7e7268253e1de2d83b02",
-      "class_hash": "0x1f1e6a0d9135034ba65aa1619b0215342c18b187b3202168de951b8a67eec06",
+      "address": "0x39b9b086e60a147c6878df721ee143f0291758c46dca634567112e93732b52c",
+      "class_hash": "0x7cfa8bb27a7a78bf64f9f463b48afe6e9cb4a0ca65955d03f24266842284",
       "abi": [
         {
           "type": "impl",
@@ -5437,12 +5437,8 @@
           "name": "dojo_init",
           "inputs": [
             {
-              "name": "owner",
+              "name": "forwarder_address",
               "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
-              "name": "merkle_tree_root",
-              "type": "core::felt252"
             }
           ],
           "outputs": [],
@@ -5455,32 +5451,8 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<core::felt252>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<core::felt252>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::starknet::eth_address::EthAddress",
-          "members": [
-            {
-              "name": "address",
-              "type": "core::felt252"
-            }
-          ]
-        },
-        {
-          "type": "struct",
           "name": "dope_types::dope_loot_claim::merkle::LeafData",
           "members": [
-            {
-              "name": "eth_address",
-              "type": "core::starknet::eth_address::EthAddress"
-            },
             {
               "name": "ids",
               "type": "core::array::Array::<core::integer::u32>"
@@ -5539,27 +5511,15 @@
             },
             {
               "type": "function",
-              "name": "claim",
+              "name": "claim_from_forwarder",
               "inputs": [
                 {
-                  "name": "proof",
-                  "type": "core::array::Span::<core::felt252>"
+                  "name": "recipient",
+                  "type": "core::starknet::contract_address::ContractAddress"
                 },
                 {
                   "name": "data",
                   "type": "dope_types::dope_loot_claim::merkle::LeafData"
-                },
-                {
-                  "name": "v",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "r",
-                  "type": "core::integer::u256"
-                },
-                {
-                  "name": "s",
-                  "type": "core::integer::u256"
                 }
               ],
               "outputs": [],
@@ -5819,8 +5779,7 @@
         }
       ],
       "init_calldata": [
-        "0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec",
-        "0x42bdd8816744c59789f03d864a697c8609704c56412ae09951fe6d83f4801bc"
+        "0x0"
       ],
       "tag": "dope-DopeLootClaim",
       "selector": "0x1877be3967ef682bf16bc64b46e0f5f66211cf63c6f5072037bf0cd67b3d061",
@@ -5828,7 +5787,7 @@
         "dojo_init",
         "pause",
         "unpause",
-        "claim",
+        "claim_from_forwarder",
         "release",
         "open",
         "toggle_open_restricted",
@@ -5838,7 +5797,7 @@
   ],
   "libraries": [
     {
-      "class_hash": "0x3ef4a0accb4510e703374708fdd52fa416fbfa27e2cce4bd682298a8c5891c5",
+      "class_hash": "0x455e2cc966a0537e0a2f9fa808f2708def8256ac3ef84c2a09920b8ab5153be",
       "abi": [
         {
           "type": "impl",
@@ -6038,7 +5997,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x1b87584c012495ebd3a761aecd5a675a48b28cabc82fbda7dd33a7ee3d286e8",
+      "class_hash": "0xd0b79c7326bda396d5b2c8f94bf28ff5c8341d2dc1cf038bb43004702de84d",
       "abi": [
         {
           "type": "impl",
@@ -6261,7 +6220,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x13053ea616c27547daab9dc989d14bb01fcb5a171dca2121740ee0793c78ef7",
+      "class_hash": "0x17e977d61629308f3139f2eeab251f459a745d813087b4648a2480d09c9d62f",
       "abi": [
         {
           "type": "impl",
@@ -10055,7 +10014,7 @@
       "version": "0"
     },
     {
-      "class_hash": "0x180c3e5917e28267ef5ee4bbecb9790dafbccbd025a9671390763a4e08471cd",
+      "class_hash": "0x69c3c426e810a6600140887ac2b53b9d88dc0dc2bcb74dc67cdada0e25f46dc",
       "abi": [
         {
           "type": "impl",
@@ -15983,7 +15942,7 @@
     },
     {
       "members": [],
-      "class_hash": "0x57a9a118513e3f8a8087669be8ec1e1dd5dfb554779f2beebaf7d2562461ce",
+      "class_hash": "0x2cf330a116989da7245eb93063b121407007b254bd1ae4b6bdd361d970d2278",
       "tag": "dope-DopeLootClaimedEvent",
       "selector": "0x6cd5806cf1ba8395f097762e7b718eb01508fc1d25856ad4e5de126345c846f"
     },

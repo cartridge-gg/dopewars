@@ -138,6 +138,10 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
       entrypoint: "faucet",
     });
 
+    policies.contracts![dopeLootClaimAddress].methods.push({
+      entrypoint: "claim_from_forwarder",
+    });
+
     policies.contracts![laundromatAddress].methods.push({
       entrypoint: "supercharge_jackpot",
     });

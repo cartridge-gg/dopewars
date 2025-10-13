@@ -17,6 +17,7 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
+import { Input } from "../common";
 
 export function ItemPicker({
   title,
@@ -51,12 +52,22 @@ export function ItemPicker({
   const { tokens, tokensBalances, isLoading } = useDojoTokens(toriiClient, addresses, account?.address);
 
   const [filteredTokens, setFilteredTokens] = useState(tokens);
+  const [filter, setFilter] = useState("");
 
   useEffect(() => {
     let filtered = tokens || [];
 
     if (itemFilter) {
       filtered = filtered.filter((t) => itemFilter(t));
+    }
+    console.log(filtered)
+
+    if (filter && filter !== "") {
+      filtered = filtered.filter((t) => {
+        const name = t.metadata.name?.toLowerCase() || "";
+        const attributes = t.metadata.attributes?.map((i) => i.value).join(" ");
+        return `${name} ${attributes}`.indexOf(filter.toLowerCase()) > -1;
+      });
     }
 
     // filter by account address
@@ -73,7 +84,7 @@ export function ItemPicker({
     }
 
     setFilteredTokens(filtered);
-  }, [tokens, tokensBalances, account, account?.address, equipped, selected, itemFilter]);
+  }, [tokens, tokensBalances, account, account?.address, equipped, selected, itemFilter, filter]);
 
   const onSelect = (item?: ParsedToken) => {
     setSelected && setSelected(item);
@@ -122,7 +133,14 @@ export function ItemPicker({
             {title}
           </ModalHeader>
           <ModalBody>
-            <List maxH="60vh" overflowY="scroll" w="full">
+            <Input
+              display="flex"
+              placeholder="Filter"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              marginBottom="10px"
+            />
+            <List minH="420px" maxH="420px" overflowY="scroll" w="full">
               {filteredTokens &&
                 filteredTokens.map((t) => {
                   return (
@@ -176,7 +194,7 @@ export function ItemPicker({
               onClick={() => onSelect(undefined)}
               opacity={selected ? 1 : 0.25}
             >
-              <Close /> CLEAR
+              <Close /> UNEQUIP
             </Box>
           </ModalBody>
         </ModalContent>

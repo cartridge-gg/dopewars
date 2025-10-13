@@ -4,7 +4,7 @@ import { katanaLocalChain, katanaSlotDopewarsChain } from "./chains";
 import manifestDev from "../../manifests/manifest_dev.json";
 import manifestDopewars from "../../manifests/manifest_dopewars.json";
 import manifestMainnet from "../../manifests/manifest_mainnet.json";
-import manifestRyoSepolia from "../../manifests/manifest_ryosepolia.json";
+import manifestSepolia from "../../manifests/manifest_sepolia.json";
 
 import manifestDopeDev from "../../manifests_dope/manifest_dev.json";
 // import manifestDopeDope from "../../manifests_dope/manifest_dope.json";
@@ -81,9 +81,9 @@ const snSepolia: DojoChainConfig = {
   rpcUrl: "https://api.cartridge.gg/x/starknet/sepolia",
   toriiUrl: "https://api.cartridge.gg/x/ryosepolia2/torii/graphql",
   toriiWsUrl: "wss://api.cartridge.gg/x/ryosepolia2/torii/graphql/ws",
-  manifest: mergeManifests(manifestRyoSepolia, [manifestDopeSepolia]),
+  manifest: mergeManifests(manifestSepolia, [manifestDopeSepolia]),
   slot: "ryosepolia2",
-  paperAddress: manifestRyoSepolia.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
+  paperAddress: manifestSepolia.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
   vrfProviderAddress: VRF_PROVIDER_SEPOLIA,
   vrfProviderSecret: undefined,
 };

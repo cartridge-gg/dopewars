@@ -17,7 +17,7 @@ description = "Dope Wars is an onchain adaptation of the classic arbitrage game 
 default = "dopewars"
 
 [migration]
-skip_contracts = ["dopewars-vrf_provider_mock"]
+skip_contracts = ["dopewars-vrf_provider_mock", "dopewars-devtools"]
 
 [init_call_args]
 "dopewars-ryo" = [
@@ -26,14 +26,6 @@ skip_contracts = ["dopewars-vrf_provider_mock"]
     "0x44cea566ac53bf7c36b298e36536c1a53ba0b0bdf66b2c5f437965605acface",  # treasury: click_save controller address
 ]
 
-# [writers]
-# "dopewars" = [
-#     "dopewars-config",
-#     "dopewars-laundromat",
-#     "dopewars-game",
-#     "dopewars-ryo",
-#     "dopewars-paper_mock",
-# ]
 
 [writers]
 "dopewars-ERC20BalanceEvent" = ["dopewars-paper_mock"]

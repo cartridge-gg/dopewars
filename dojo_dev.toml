@@ -1,9 +1,5 @@
-
 [env]
 rpc_url = "http://localhost:5050"
-
-# account_address = "0xefe83e47e9de95b7f44a6aef57d687ad176587ab16128f7b41aa870913e24f"
-# private_key = "0x1c2231484e87f73f5e605674442411bb0fc5eac82dd38dd47085631c63de94d"
 account_address = "0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"
 private_key = "0xc5b2fcab997346f3ea1c00b002ecf6f382c5f9c9659a3894eb783c5320f912"
 
@@ -22,12 +18,7 @@ description = "Dope Wars is an onchain adaptation of the classic arbitrage game 
 default = "dopewars"
 
 [migration]
-skip_contracts = [
-    # "dopewars-slotmachine",
-    # "dopewars-SlotMachine",
-    # "dopewars-SlotMachineCombination",
-    # "dopewars-chips",
-]
+skip_contracts = []
 
 [init_call_args]
 "dopewars-vrf_provider_mock" = [
@@ -40,17 +31,7 @@ skip_contracts = [
     "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a", # treasury / multisig address
 ]
 
-# [writers]
-# "dopewars" = [
-#     "dopewars-config",
-#     "dopewars-laundromat",
-#     "dopewars-game",
-#     "dopewars-ryo",
-#     "dopewars-paper_mock",
-# ]
-
 [writers]
-
 
 "dopewars" = ["dopewars-devtools"]
 

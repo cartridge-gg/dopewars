@@ -24,11 +24,8 @@ build-external-contracts = [
 
 [dependencies]
 starknet = "2.12.2"
-# dojo = { path = "../dojo/crates/dojo/core" }
-# dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.7.0" }
-# dojo_macros = { git = "https://github.com/dojoengine/dojo", tag = "v1.7.0" }
 dojo = "1.7.1" 
-
+openzeppelin = "2.0.0"
 
 cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
 # cartridge_vrf = { path = "../vrf" }
@@ -37,8 +34,6 @@ achievement = { git = "https://github.com/cartridge-gg/arcade", branch="dojo_1.7
 # achievement = { git = "https://github.com/cartridge-gg/arcade" }
 
 dope_types = { path = "../dope-migration/cairo/types"}
-
-openzeppelin = "2.0.0"
 
 [scripts]
 katana = "katana --config ./katana_dev.toml"
@@ -54,22 +49,22 @@ emit_items = "./scripts/emit_items.sh"
 # migrate  && scarb run gendojo $PROFILE
 migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && scarb run gendojo $PROFILE && sozo -P $PROFILE inspect"
 migrate_dopewars = "PROFILE=dopewars && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
-migrate_ryosepolia_controller = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --slot.controller -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
-migrate_ryosepolia = "PROFILE=ryosepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --fee eth --fee-estimate-multiplier 2 --keystore ../../../sozo_acc -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
+migrate_sepolia_controller = "PROFILE=sepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --slot.controller -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
+migrate_sepolia = "PROFILE=sepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate --fee eth --fee-estimate-multiplier 2 --keystore ../../../sozo_acc -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 migrate_ryomainnet = "PROFILE=mainnet && sozo -P $PROFILE build && sozo -P $PROFILE migrate --fee eth --fee-estimate-multiplier 2 --keystore ../../../dopewars_key -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 
 # slot dopewars
 slot_dopewars_katana = "slot d create -t pro --team cartridge dopewars katana --config ./katana_dopewars.toml"
-slot_dopewars_torii = "slot d create -t pro --team cartridge dopewars torii --version v1.7.2 --config ./torii_dopewars.toml"
+slot_dopewars_torii = "slot d create -t epic --team cartridge dopewars torii --version v1.7.3 --config ./torii_dopewars.toml"
 
-# slot ryosepolia 
-slot_ryosepolia_torii = "slot d create ryosepolia2 torii -v v1.0.0-rc.2 --config-file ./torii_ryosepolia2.toml"
+# slot sepolia 
+slot_sepolia_torii = "slot d create ryosepolia2 torii -v v1.0.0-rc.2 --config-file ./torii_sepolia.toml"
 
 # slot ryomainnet
 # slot_ryomainnet_torii = "slot d create --tier rare ryomainnet torii -v v1.0.5 --config ./torii_mainnet.toml" 
 slot_ryomainnet_torii = "slot d create --tier legendary ryomainnet torii -v v1.0.5 --config ./torii_mainnet.toml" # with slot v0.34.0
 
 [profile.dopewars]
-[profile.ryosepolia]
+[profile.sepolia]
 [profile.mainnet]
 

@@ -30,7 +30,7 @@ sozo -P $PROFILE execute $DOPE_GEAR_ADDRESS grant_role sstr:MINTER_ROLE $LAUNDRO
 # if [ $PROFILE == "dopewars" ]; then
 # fi
 
-if [ $PROFILE == "ryosepolia" ]; then
+if [ $PROFILE == "sepolia" ]; then
     echo "grant owner on dopewars-ryo to clicksave controller"
     RYO_SELECTOR="0x032b65ba76433a3384da18dba9d4a63d3a7de35be8bf53a61d71928482a6d75e"
     sozo -P $PROFILE execute $WORLD_ADDRESS grant_owner -c $RYO_SELECTOR,0x40eef43f4d7b9cc357312a83365c3649273886c5394efafdcc9144bd6b86424 --keystore ../../../sozo_acc --wait

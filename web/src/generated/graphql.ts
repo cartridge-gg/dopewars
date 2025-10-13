@@ -17,7 +17,6 @@ export type Scalars = {
   Cursor: any;
   DateTime: any;
   Enum: any;
-  EthAddress: any;
   bool: any;
   felt252: any;
   u8: any;
@@ -1647,9 +1646,9 @@ export type Dope_DopeLootClaimedEdge = {
 export type Dope_DopeLootClaimedEvent = {
   __typename?: 'dope_DopeLootClaimedEvent';
   entity?: Maybe<World__Entity>;
-  eth_address?: Maybe<Scalars['EthAddress']>;
   eventMessage?: Maybe<World__EventMessage>;
-  sn_address?: Maybe<Scalars['ContractAddress']>;
+  og_ids?: Maybe<Array<Maybe<Scalars['u32']>>>;
+  recipient?: Maybe<Scalars['ContractAddress']>;
   token_ids?: Maybe<Array<Maybe<Scalars['u32']>>>;
 };
 
@@ -1672,34 +1671,23 @@ export type Dope_DopeLootClaimedEventOrder = {
 };
 
 export enum Dope_DopeLootClaimedEventOrderField {
-  EthAddress = 'ETH_ADDRESS',
-  SnAddress = 'SN_ADDRESS',
+  OgIds = 'OG_IDS',
+  Recipient = 'RECIPIENT',
   TokenIds = 'TOKEN_IDS'
 }
 
 export type Dope_DopeLootClaimedEventWhereInput = {
-  eth_address?: InputMaybe<Scalars['EthAddress']>;
-  eth_addressEQ?: InputMaybe<Scalars['EthAddress']>;
-  eth_addressGT?: InputMaybe<Scalars['EthAddress']>;
-  eth_addressGTE?: InputMaybe<Scalars['EthAddress']>;
-  eth_addressIN?: InputMaybe<Array<InputMaybe<Scalars['EthAddress']>>>;
-  eth_addressLIKE?: InputMaybe<Scalars['EthAddress']>;
-  eth_addressLT?: InputMaybe<Scalars['EthAddress']>;
-  eth_addressLTE?: InputMaybe<Scalars['EthAddress']>;
-  eth_addressNEQ?: InputMaybe<Scalars['EthAddress']>;
-  eth_addressNOTIN?: InputMaybe<Array<InputMaybe<Scalars['EthAddress']>>>;
-  eth_addressNOTLIKE?: InputMaybe<Scalars['EthAddress']>;
-  sn_address?: InputMaybe<Scalars['ContractAddress']>;
-  sn_addressEQ?: InputMaybe<Scalars['ContractAddress']>;
-  sn_addressGT?: InputMaybe<Scalars['ContractAddress']>;
-  sn_addressGTE?: InputMaybe<Scalars['ContractAddress']>;
-  sn_addressIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  sn_addressLIKE?: InputMaybe<Scalars['ContractAddress']>;
-  sn_addressLT?: InputMaybe<Scalars['ContractAddress']>;
-  sn_addressLTE?: InputMaybe<Scalars['ContractAddress']>;
-  sn_addressNEQ?: InputMaybe<Scalars['ContractAddress']>;
-  sn_addressNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
-  sn_addressNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
+  recipient?: InputMaybe<Scalars['ContractAddress']>;
+  recipientEQ?: InputMaybe<Scalars['ContractAddress']>;
+  recipientGT?: InputMaybe<Scalars['ContractAddress']>;
+  recipientGTE?: InputMaybe<Scalars['ContractAddress']>;
+  recipientIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  recipientLIKE?: InputMaybe<Scalars['ContractAddress']>;
+  recipientLT?: InputMaybe<Scalars['ContractAddress']>;
+  recipientLTE?: InputMaybe<Scalars['ContractAddress']>;
+  recipientNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  recipientNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  recipientNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
 };
 
 export type Dope_DopeLootClaimedOrder = {

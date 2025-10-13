@@ -6,7 +6,7 @@ import { IsMobile, formatCashHeader } from "@/utils/ui";
 import { Box, Button, Divider, Flex, HStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { ClaimReward } from "../pages/home";
 import { ProfileLink } from "../pages/profile/Profile";
 import { CashIndicator, DayIndicator, HealthIndicator } from "../player";
@@ -14,16 +14,22 @@ import { ConnectButton } from "../wallet/ConnectButton";
 
 import DrawerMenu from "./DrawerMenu";
 import { Cigarette, ExternalLink } from "../icons";
+import { ControllerConnector } from "@cartridge/connector";
 
 export const Header = observer(() => {
   const isMobile = IsMobile();
 
-  const { router, gameId } = useRouterContext();
-
-  const { account } = useAccount();
-
-  const { uiStore } = useDojoContext();
+  const { router, gameId, } = useRouterContext();
+  const { account, connector } = useAccount();
+  const {
+    uiStore,
+    chains: { selectedChain },
+  } = useDojoContext();
   const { game, gameConfig } = useGameStore();
+
+  const isMainnetOrSepolia = useMemo(() => {
+    return ["mainnet", "sepolia"].includes(selectedChain.chainConfig.network);
+  }, [selectedChain]);
 
   useEffect(() => {
     const init = async () => {
@@ -44,12 +50,19 @@ export const Header = observer(() => {
     >
       <HStack gap={3} flex="1">
         {!gameId && <ClaimReward />}
-        {!gameId && !router.route.includes("/claim") && (
+        {!gameId && router.route === "/" && (
           <HeaderButton
             variant="pixelated"
             h={["40px", "48px"]}
             fontSize="14px"
-            onClick={() => router.push("/claim")}
+            onClick={() => {
+              if (isMainnetOrSepolia) {
+                const controllerConnector = connector as unknown as ControllerConnector;
+                controllerConnector.controller.openStarterPack("nums-starterpack-sepolia");
+              } else {
+                router.push("/claim");
+              }
+            }}
             mr={6}
             display="flex"
             flexDirection={"row"}
@@ -57,7 +70,7 @@ export const Header = observer(() => {
             justifyContent="center"
             py={2}
           >
-            <Cigarette mr="2"/> MIGRATION
+            <Cigarette mr="2" /> MIGRATION
           </HeaderButton>
         )}
       </HStack>
