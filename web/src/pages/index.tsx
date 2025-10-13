@@ -1,7 +1,7 @@
 import { Button } from "@/components/common";
 import { CopsIcon, Flipflop, LaundromatIcon, PaperIcon, Warning } from "@/components/icons";
 import { Layout } from "@/components/layout";
-import { HomeLeftPanel, Leaderboard, Tutorial } from "@/components/pages/home";
+import { HomeLeftPanel, Leaderboard, Tutorial, YourGames } from "@/components/pages/home";
 import { HallOfFame } from "@/components/pages/home/HallOfFame";
 import { useConfigStore, useDojoContext, useRouterContext, useSeasonByVersion, useSystems } from "@/dojo/hooks";
 import { sleep } from "@/dojo/utils";
@@ -159,6 +159,7 @@ export default function Home() {
           <TabList pb={6}>
             <Tab>LEADERBOARD</Tab>
             <Tab>HALL OF FAME</Tab>
+            <Tab>YOUR GAMES</Tab>
           </TabList>
 
           <TabPanels mt={0} maxH={["100%", "calc(100dvh - 380px)"]} overflowY="scroll">
@@ -167,6 +168,9 @@ export default function Home() {
             </TabPanel>
             <TabPanel p={0}>
               <HallOfFame />
+            </TabPanel>
+            <TabPanel p={0}>
+              <YourGames />
             </TabPanel>
           </TabPanels>
         </Tabs>

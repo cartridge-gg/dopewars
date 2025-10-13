@@ -15,10 +15,17 @@ export const useSql = (query: string) => {
       setIsFetched(false);
       setIsFetching(false);
       setData([]);
-  
+
+      // Skip fetch if query is empty
+      if (!query || query.trim() === "") {
+        setIsFetched(true);
+        setIsFetching(false);
+        return;
+      }
+
       try {
         setIsFetching(true);
-  
+
         const request = `${sqlEndpoint}?query=${encodeURI(query)}`;
         const res = await fetch(request);
         const json = await res.json();
@@ -32,7 +39,7 @@ export const useSql = (query: string) => {
         setIsFetching(false);
       }
     };
-  
+
     useEffect(() => {
       refetch();
     }, [query]);

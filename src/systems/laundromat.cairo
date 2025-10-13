@@ -60,7 +60,6 @@ pub mod laundromat {
             let mut game = store.game(game_id, player_id);
             let season = store.season(game.season_version);
 
-            // Assert token ownership and playability
             let token_address = self._get_game_token_address();
             assert_token_ownership(token_address, game.minigame_token_id);
 
