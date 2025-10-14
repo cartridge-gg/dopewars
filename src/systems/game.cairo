@@ -19,7 +19,12 @@ pub enum EncounterActions {
 #[starknet::interface]
 pub trait IGameActions<T> {
     fn create_game(
-        self: @T, game_mode: GameMode, player_name: felt252, multiplier: u8, token_id: TokenId,
+        self: @T,
+        game_mode: GameMode,
+        player_name: felt252,
+        multiplier: u8,
+        token_id: TokenId,
+        minigame_token_id: u64,
     );
     fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
     fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
@@ -64,10 +69,15 @@ pub mod game {
             player_name: felt252,
             multiplier: u8,
             token_id: TokenId,
+            minigame_token_id: u64,
         ) {
             self.assert_not_paused();
             // assert(game_mode == GameMode::Noob || game_mode == GameMode::Ranked, 'invalid game
             // mode!');
+
+            let token_address = self._get_game_token_address();
+            assert_token_ownership(token_address, minigame_token_id);
+            pre_action(token_address, minigame_token_id);
 
             let mut world = self.world(@"dopewars");
             let mut store = StoreImpl::new(world);
@@ -236,6 +246,8 @@ pub mod game {
                 token_id,
             );
 
+            game.minigame_token_id = minigame_token_id;
+
             // save Game
             store.set_game(@game);
 
@@ -243,29 +255,10 @@ pub mod game {
             let game_store = GameStoreImpl::new(store, ref game, ref game_config, ref randomizer);
             game_store.save();
 
-            // mint NFT and store mapping
-            let (game_token_contract, _) = world.dns(@"game_token").unwrap();
-            let minigame_dispatcher = IMinigameDispatcher { contract_address: game_token_contract };
-
-            let minigame_token_id = minigame_dispatcher
-                .mint_game(
-                    Option::Some(player_name), // player_name
-                    Option::None, // settings_id
-                    Option::None, // start
-                    Option::None, // end
-                    Option::None, // objective_ids
-                    Option::None, // context
-                    Option::None, // client_url
-                    Option::None, // renderer_address
-                    player_id, // to
-                    true // soulbound - NFT cannot be transferred
-                );
-
-            // update game with NFT token_id and save again
-            game.minigame_token_id = minigame_token_id;
-            store.set_game(@game);
-
             // store the GameToken mapping
+            
+            // @dev
+            // GameToken model is set for backwards compatibility and easy lookup for transferred games
             world.write_model(@GameToken { token_id: minigame_token_id, game_id, player_id });
 
             // emit GameCreated

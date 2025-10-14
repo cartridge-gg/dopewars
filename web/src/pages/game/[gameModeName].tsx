@@ -48,7 +48,7 @@ const New = observer(() => {
   const { connector } = useConnect();
 
   const { account } = useAccount();
-  const { createGame, isPending } = useSystems();
+  const { mintGameToken, createGame, isPending } = useSystems();
   const configStore = useConfigStore();
   const { config } = configStore;
   const { season } = useSeasonByVersion(config?.ryo.season_version);
@@ -255,9 +255,20 @@ const New = observer(() => {
       const selectedLootTokenId = selectableTokens!.length > 0 ? Number(selectedToken.token_id) : 0;
       const tokenIdType = selectedTokenIdType;
 
-      await createGame(gameMode, name, multiplier, tokenIdType, selectedLootTokenId);
+      // mint game token
+      const { tokenId: minigameTokenId } = await mintGameToken(name);
+
+      if (!minigameTokenId) {
+        setError("Failed to mint game token");
+        toast({ message: "Failed to mint game token", isError: true, duration: 5000 });
+        return;
+      }
+
+      // create the game with minted token
+      await createGame(gameMode, name, multiplier, tokenIdType, selectedLootTokenId, minigameTokenId);
     } catch (e) {
       console.log(e);
+      setError("Game creation failed");
     }
   };
 

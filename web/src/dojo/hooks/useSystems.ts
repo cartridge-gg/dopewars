@@ -2,7 +2,7 @@ import { Dopewars_DrugConfig as DrugConfig, Dopewars_RyoConfig as RyoConfig } fr
 import { useToast } from "@/hooks/toast";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useMemo, useState } from "react";
-import { AllowArray, Call, CallData, GetTransactionReceiptResponse, shortString, uint256 } from "starknet";
+import { AllowArray, Call, CallData, GetTransactionReceiptResponse, shortString, uint256, CairoOption, CairoOptionVariant } from "starknet";
 import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
 import { EncountersAction, GameMode, Locations } from "../types";
 import { useConfigStore } from "./useConfigStore";
@@ -17,12 +17,14 @@ export const ETHER = 10n ** 18n;
 export const DW_NS = "dopewars";
 
 interface SystemsInterface {
+  mintGameToken: (playerName: string) => Promise<SystemExecuteResult & { tokenId?: number }>;
   createGame: (
     gameMode: number,
     playerName: string,
     multiplier: number,
     tokenIdType: number,
     tokenId: number,
+    minigameTokenId: number,
   ) => Promise<SystemExecuteResult>;
   endGame: (gameId: string, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
   travel: (gameId: string, locationId: Locations, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
@@ -87,13 +89,14 @@ export const useSystems = (): SystemsInterface => {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
 
-  const { gameAddress, decideAddress, laundromatAddress, dopeLootClaimAddress } = useMemo(() => {
+  const { gameAddress, decideAddress, laundromatAddress, dopeLootClaimAddress, gameTokenAddress } = useMemo(() => {
     const gameAddress = getContractByName(dojoProvider.manifest, DW_NS, "game").address;
     const decideAddress = getContractByName(dojoProvider.manifest, DW_NS, "decide").address;
     const laundromatAddress = getContractByName(dojoProvider.manifest, DW_NS, "laundromat").address;
     const dopeLootClaimAddress = getContractByName(dojoProvider.manifest, "dope", "DopeLootClaim").address;
+    const gameTokenAddress = getContractByName(dojoProvider.manifest, DW_NS, "game_token").address;
 
-    return { gameAddress, decideAddress, laundromatAddress, dopeLootClaimAddress };
+    return { gameAddress, decideAddress, laundromatAddress, dopeLootClaimAddress, gameTokenAddress };
   }, [dojoProvider]);
 
   const dopeLootClaimState = useDopeStore((state) => state.dopeLootClaimState);
@@ -168,8 +171,89 @@ export const useSystems = (): SystemsInterface => {
     [rpcProvider, dojoProvider, account, selectedChain, toast],
   );
 
+  const mintGameToken = useCallback(
+    async (playerName: string) => {
+      if (!account) {
+        toast({
+          message: `not connected`,
+          duration: 5_000,
+          isError: true,
+        });
+        throw new Error("Account not connected");
+      }
+
+      // @ts-ignore
+      account.provider = rpcProvider;
+      // @ts-ignore
+      account.chainId = await rpcProvider.getChainId();
+
+      const mintCall = {
+        contractAddress: gameTokenAddress,
+        entrypoint: "mint_game",
+        calldata: CallData.compile([
+          new CairoOption(CairoOptionVariant.Some, shortString.encodeShortString(playerName)), // player_name
+          new CairoOption(CairoOptionVariant.None), // settings_id
+          1, // start
+          1, // end
+          1, // objective_ids
+          1, // context
+          1, // client_url
+          1, // renderer_address
+          account.address, // to
+          false, // not soulbound (game is transferrable)
+        ]),
+      };
+
+      try {
+        const tx = await account.execute([mintCall]);
+
+        const receipt: any = await rpcProvider.waitForTransaction(tx.transaction_hash, {
+          retryInterval: 200,
+        });
+
+        // Extract token_id from the Transfer event
+        // Transfer event in StarkNet ERC721 has 5 keys: [selector, from, to, tokenId_low, tokenId_high]
+        const transferEvent = receipt.events?.find((event: any) => {
+          // Transfer event has 5 keys and 0 data fields
+          return event.keys && event.keys.length === 5 && event.keys[1] === "0x0";
+        });
+
+        const tokenId = transferEvent ? parseInt(transferEvent.keys[3], 16) : undefined;
+
+        if (!tokenId) {
+          toast({
+            message: "Failed to extract token ID from mint transaction",
+            duration: 5_000,
+            isError: true,
+          });
+        }
+
+        return {
+          hash: tx.transaction_hash,
+          receipt,
+          tokenId,
+        };
+      } catch (e: any) {
+        toast({
+          message: e ? tryBetterErrorMsg(e.toString()) : "Failed to mint game token",
+          duration: 10_000,
+          isError: true,
+        });
+        throw e;
+      }
+    },
+    [gameTokenAddress, account, rpcProvider, toast],
+  );
+
   const createGame = useCallback(
-    async (gameMode: GameMode, playerName: string, multiplier: number, tokenIdType: number, tokenId: number) => {
+    async (
+      gameMode: GameMode,
+      playerName: string,
+      multiplier: number,
+      tokenIdType: number,
+      tokenId: number,
+      minigameTokenId: number,
+    ) => {
       const paperFee = BigInt(config?.ryo.paper_fee * multiplier) * ETHER;
       const paperAddress = selectedChain.paperAddress;
 
@@ -189,6 +273,7 @@ export const useSystems = (): SystemsInterface => {
           multiplier,
           tokenIdType,
           tokenId,
+          minigameTokenId,
         ]),
       };
 
@@ -567,6 +652,7 @@ export const useSystems = (): SystemsInterface => {
   }, [executeAndReceipt]);
 
   return {
+    mintGameToken,
     createGame,
     endGame,
     travel,

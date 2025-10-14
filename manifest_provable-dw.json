@@ -2460,7 +2460,7 @@
     },
     {
       "address": "0x51b986cd0c4abc33d28dab0d685edbdddda3537b5a2429199013477c0419d62",
-      "class_hash": "0x2379220ab838e680e46b42cb380b4930252165f9c4f4db571c0657a7f5ac0a9",
+      "class_hash": "0x6ca89762b7c42893509f18b0505f2d4ae780a471e6167552e9fe0fc63f75685",
       "abi": [
         {
           "type": "impl",
@@ -2736,6 +2736,10 @@
                 {
                   "name": "token_id",
                   "type": "rollyourown::models::game::TokenId"
+                },
+                {
+                  "name": "minigame_token_id",
+                  "type": "core::integer::u64"
                 }
               ],
               "outputs": [],
@@ -2903,7 +2907,7 @@
     },
     {
       "address": "0x3878e59066f1496db74c3c5cbc2b345b3598a8385cac118de91494761026869",
-      "class_hash": "0x40ad378f6251c70847a799546a54caf066928368d9c9f2ddc7ed3c28e4b9883",
+      "class_hash": "0x391cb0e9bc3a3d840ce581be881094770d47b2ba7cc726ca4589e6716ff7821",
       "abi": [
         {
           "type": "impl",

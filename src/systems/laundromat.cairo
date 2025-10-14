@@ -173,7 +173,7 @@ pub mod laundromat {
             let mut store = StoreImpl::new(world);
 
             let randomness_config = store.randomness_config();
-            let player_id = get_caller_address();
+            let _player_id = get_caller_address();
 
             // around 276k steps / 10
             // almost free now, compute all in one

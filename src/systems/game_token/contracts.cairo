@@ -92,7 +92,7 @@ pub mod game_token {
         fn score(self: @ContractState, token_id: u64) -> u32 {
             let world = self.world(@"dopewars");
             let game_token: GameToken = world.read_model(token_id);
-            
+
             if game_token.game_id == 0 {
                 return 0;
             }
@@ -118,6 +118,15 @@ pub mod game_token {
             let store = StoreImpl::new(world);
 
             let game = store.game(game_token.game_id, game_token.player_id);
+
+            let ryo_config = store.ryo_config();
+            let current_season_version = ryo_config.season_version;
+
+            // Assert game belongs to current season
+            if (game.season_version < current_season_version) {
+                return true;
+            };
+
             game.game_over
         }
     }
