@@ -2,10 +2,10 @@ use starknet::ContractAddress;
 
 #[starknet::interface]
 trait ILaundromat<T> {
-    fn register_score(self: @T, game_id: u32, prev_game_id: u32, prev_player_id: ContractAddress);
+    fn register_score(self: @T, token_id: u64, prev_game_id: u32, prev_player_id: ContractAddress);
     fn launder(self: @T, season_version: u16);
 
-    fn claim(self: @T, player_id: ContractAddress, game_ids: Span<u32>);
+    fn claim(self: @T, player_id: ContractAddress, token_ids: Span<u64>);
     fn claim_treasury(self: @T);
     fn supercharge_jackpot(self: @T, season_version: u16, amount_eth: u32);
 }
@@ -49,19 +49,17 @@ pub mod laundromat {
     #[abi(embed_v0)]
     impl LaundromatImpl of super::ILaundromat<ContractState> {
         fn register_score(
-            self: @ContractState, game_id: u32, prev_game_id: u32, prev_player_id: ContractAddress,
+            self: @ContractState, token_id: u64, prev_game_id: u32, prev_player_id: ContractAddress,
         ) {
+            let token_address = self._get_game_token_address();
+            assert_token_ownership(token_address, token_id);
+
             let world = self.world(@"dopewars");
 
             let mut store = StoreImpl::new(world);
 
-            let player_id = get_caller_address();
-
-            let mut game = store.game(game_id, player_id);
+            let mut game = store.game_by_token_id(token_id);
             let season = store.season(game.season_version);
-
-            let token_address = self._get_game_token_address();
-            assert_token_ownership(token_address, game.minigame_token_id);
 
             // check if valid game
             assert(game.exists(), 'invalid game');
@@ -75,7 +73,7 @@ pub mod laundromat {
             assert(season.is_open(), 'season has closed');
 
             // register final_score
-            let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
+            let mut game_store = GameStoreImpl::load(ref store, game.game_id, game.player_id);
             game.final_score = game_store.player.cash;
             game.registered = true;
             store.set_game(@game);
@@ -97,19 +95,19 @@ pub mod laundromat {
             if game_store.player.health == 1 {
                 bushido_store
                     .progress(
-                        player_id.into(), Tasks::SURVIVOR, 1, starknet::get_block_timestamp(),
+                        game.player_id.into(), Tasks::SURVIVOR, 1, starknet::get_block_timestamp(),
                     );
             }
 
             if game_store.player.reputation == 100 {
                 bushido_store
-                    .progress(player_id.into(), Tasks::FAMOUS, 1, starknet::get_block_timestamp());
+                    .progress(game.player_id.into(), Tasks::FAMOUS, 1, starknet::get_block_timestamp());
             }
 
             if game.multiplier == MAX_MULTIPLIER {
                 bushido_store
                     .progress(
-                        player_id.into(), Tasks::HIGH_STAKES, 1, starknet::get_block_timestamp(),
+                        game.player_id.into(), Tasks::HIGH_STAKES, 1, starknet::get_block_timestamp(),
                     );
             }
             // if let TokenId::HustlerId(huster_id) = game.token_id {
@@ -250,16 +248,20 @@ pub mod laundromat {
                 .transfer(get_caller_address(), paper_reward_launderer);
         }
 
-        fn claim(self: @ContractState, player_id: ContractAddress, game_ids: Span<u32>) {
+        fn claim(self: @ContractState, player_id: ContractAddress, token_ids: Span<u64>) {
             let world = self.world(@"dopewars");
             let mut _dope_world = self.world(@"dope");
 
             let mut store = StoreImpl::new(world);
 
-            let mut game_ids = game_ids;
+            // Verify caller is player_id
+            let caller = get_caller_address();
+            assert(caller == player_id, 'caller must be player_id');
+
+            let mut token_ids = token_ids;
 
             // // check max batch size
-            // assert(game_ids.len() <= 10, 'too much game_ids');
+            // assert(token_ids.len() <= 10, 'too much token_ids');
 
             let mut _gear_ids: Array<u256> = array![];
             let mut _gear_ids_values: Array<u256> = array![];
@@ -274,9 +276,12 @@ pub mod laundromat {
 
             let bushido_store = BushidoStoreTrait::new(world);
             let mut total_claimable = 0;
+            let token_address = self._get_game_token_address();
 
-            while let Option::Some(game_id) = game_ids.pop_front() {
-                let mut game = store.game(*game_id, player_id);
+            while let Option::Some(token_id) = token_ids.pop_front() {
+                assert_token_ownership(token_address, *token_id);
+
+                let mut game = store.game_by_token_id(*token_id);
 
                 // retrieve Season SortedList
                 let list_id = game.season_version.into();

@@ -178,7 +178,7 @@ impl SlotMachineImpl of SlotMachineTrait {
 
 #[starknet::interface]
 trait ISlotMachine<T> {
-    fn roll(ref self: T, game_id: u32);
+    fn roll(ref self: T, token_id: u64);
 }
 
 
@@ -218,24 +218,19 @@ mod slotmachine {
 
     #[abi(embed_v0)]
     impl SlotMachineImp of super::ISlotMachine<ContractState> {
-        fn roll(ref self: ContractState, game_id: u32) {
-            // TODO: checks
-            let player_id = get_caller_address();
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
-
-            // Load game to get minigame_token_id
-            let game = store.game(game_id, player_id);
-
-            // Assert token ownership and playability
+        fn roll(ref self: ContractState, token_id: u64) {
             let token_address = self._get_game_token_address();
-            assert_token_ownership(token_address, game.minigame_token_id);
-            pre_action(token_address, game.minigame_token_id);
+            assert_token_ownership(token_address, token_id);
+            pre_action(token_address, token_id);
+
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let game = store.game_by_token_id(token_id);
 
             let ryo_addresses = store.ryo_addresses();
             let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
-                .consume_random(Source::Nonce(player_id));
+                .consume_random(Source::Nonce(game.player_id));
 
-            let mut machine = store.slot_machine(game_id);
+            let mut machine = store.slot_machine(game.game_id);
 
             let _result = machine.roll(random);
 
@@ -255,7 +250,7 @@ mod slotmachine {
             store.set_slot_machine(@machine);
 
             // Update token state
-            post_action(token_address, game.minigame_token_id);
+            post_action(token_address, token_id);
         }
     }
 }

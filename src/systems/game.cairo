@@ -26,8 +26,8 @@ pub trait IGameActions<T> {
         token_id: TokenId,
         minigame_token_id: u64,
     );
-    fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
-    fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
+    fn end_game(self: @T, token_id: u64, actions: Span<Actions>);
+    fn travel(self: @T, token_id: u64, next_location: Locations, actions: Span<Actions>);
 }
 
 #[dojo::contract]
@@ -269,18 +269,15 @@ pub mod game {
             post_action(token_address, minigame_token_id);
         }
 
-        fn end_game(self: @ContractState, game_id: u32, actions: Span<super::Actions>) {
-            let player_id = get_caller_address();
+        fn end_game(self: @ContractState, token_id: u64, actions: Span<super::Actions>) {
+            let token_address = self._get_game_token_address();
+            assert_token_ownership(token_address, token_id);
+            pre_action(token_address, token_id);
 
             let mut store = StoreImpl::new(self.world(@"dopewars"));
-            let game = store.game(game_id, player_id);
+            let game = store.game_by_token_id(token_id);
 
-            // assert token ownership and pre_action
-            let token_address = self._get_game_token_address();
-            assert_token_ownership(token_address, game.minigame_token_id);
-            pre_action(token_address, game.minigame_token_id);
-
-            let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
+            let mut game_store = GameStoreImpl::load(ref store, game.game_id, game.player_id);
 
             // execute actions (trades & shop)
             let mut actions = actions;
@@ -290,30 +287,28 @@ pub mod game {
             game_loop::on_game_over(ref game_store, ref store);
 
             // post_action
-            post_action(token_address, game.minigame_token_id);
+            post_action(token_address, token_id);
         }
 
 
         fn travel(
             self: @ContractState,
-            game_id: u32,
+            token_id: u64,
             next_location: Locations,
             actions: Span<super::Actions>,
         ) {
-            let player_id = get_caller_address();
-
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
-            let game = store.game(game_id, player_id);
-
             // assert token ownership and pre_action
             let token_address = self._get_game_token_address();
-            assert_token_ownership(token_address, game.minigame_token_id);
-            pre_action(token_address, game.minigame_token_id);
+            assert_token_ownership(token_address, token_id);
+            pre_action(token_address, token_id);
+
+            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let game = store.game_by_token_id(token_id);
 
             let randomness_config = store.randomness_config();
 
             //
-            let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
+            let mut game_store = GameStoreImpl::load(ref store, game.game_id, game.player_id);
 
             // check if can travel
             assert(game_store.can_continue(), 'player cannot travel');
@@ -325,7 +320,7 @@ pub mod game {
             self.execute_actions(ref game_store, ref actions);
 
             let game_context = core::poseidon::poseidon_hash_span(
-                array![player_id.into(), game_id.into(), 'travel'].span(),
+                array![game.player_id.into(), game.game_id.into(), 'travel'].span(),
             );
             let mut randomizer = RandomnessHelperTrait::create_randomizer(
                 randomness_config, game_context,
@@ -353,8 +348,7 @@ pub mod game {
                 }
             }
 
-            // post_action
-            post_action(token_address, game.minigame_token_id);
+            post_action(token_address, token_id);
         }
     }
 

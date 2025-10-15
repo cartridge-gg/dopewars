@@ -9,6 +9,7 @@ use rollyourown::config::ryo_address::RyoAddress;
 use rollyourown::config::settings::{DrugsMode, EncountersMode, SeasonSettings};
 use rollyourown::models::game::Game;
 use rollyourown::models::game_store_packed::GameStorePacked;
+use rollyourown::models::game_token::GameToken;
 use rollyourown::models::season::Season;
 use rollyourown::packing::game_store::GameStorePackerImpl;
 use rollyourown::utils::sorted_list::{SortedList, SortedListItem};
@@ -69,10 +70,24 @@ pub impl StoreImpl of StoreTrait {
         self.world.read_model((game_id, player_id))
     }
 
+    fn game_token(self: @Store, token_id: u64) -> GameToken {
+        self.world.read_model(token_id)
+    }
+
+    fn game_by_token_id(self: @Store, token_id: u64) -> Game {
+        let game_token = self.game_token(token_id);
+        self.game(game_token.game_id, game_token.player_id)
+    }
+
     fn game_store_packed(
         self: @Store, game_id: u32, player_id: ContractAddress,
     ) -> GameStorePacked {
         self.world.read_model((game_id, player_id))
+    }
+
+    fn game_store_packed_by_token_id(self: @Store, token_id: u64) -> GameStorePacked {
+        let game_token = self.game_token(token_id);
+        self.game_store_packed(game_token.game_id, game_token.player_id)
     }
 
 

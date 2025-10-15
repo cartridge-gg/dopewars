@@ -3,7 +3,7 @@ use rollyourown::systems::game::EncounterActions;
 
 #[starknet::interface]
 trait IDecide<T> {
-    fn decide(self: @T, game_id: u32, action: EncounterActions);
+    fn decide(self: @T, token_id: u64, action: EncounterActions);
 }
 
 #[dojo::contract]
@@ -18,29 +18,27 @@ pub mod decide {
     use rollyourown::utils::bytes16::Bytes16Impl;
     use rollyourown::utils::random::RandomImpl;
     use rollyourown::utils::randomness_helper::RandomnessHelperTrait;
-    use starknet::get_caller_address;
 
     #[abi(embed_v0)]
     impl DecideImpl of super::IDecide<ContractState> {
-        fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions) {
+        fn decide(self: @ContractState, token_id: u64, action: super::EncounterActions) {
+            let token_address = self._get_game_token_address();
+            assert_token_ownership(token_address, token_id);
+            pre_action(token_address, token_id);
+
             let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let game = store.game_by_token_id(token_id);
 
             let randomness_config = store.randomness_config();
-            let player_id = get_caller_address();
 
             //
-            let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
-
-            // Assert token ownership and playability
-            let token_address = self._get_game_token_address();
-            assert_token_ownership(token_address, game_store.game.minigame_token_id);
-            pre_action(token_address, game_store.game.minigame_token_id);
+            let mut game_store = GameStoreImpl::load(ref store, game.game_id, game.player_id);
 
             // check player status
             assert(game_store.player.can_decide(), 'player cannot decide');
 
             let game_context = core::poseidon::poseidon_hash_span(
-                array![player_id.into(), game_id.into(), 'decide'].span(),
+                array![game.player_id.into(), game.game_id.into(), 'decide'].span(),
             );
             let mut randomizer = RandomnessHelperTrait::create_randomizer(
                 randomness_config, game_context,
@@ -62,7 +60,7 @@ pub mod decide {
             };
 
             // Update token state
-            post_action(token_address, game_store.game.minigame_token_id);
+            post_action(token_address, token_id);
         }
     }
 
