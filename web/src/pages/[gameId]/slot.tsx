@@ -2,7 +2,7 @@ import { Cigarette, Flipflop, PaperIcon } from "@/components/icons";
 import { Cocaine, Shrooms, Weed } from "@/components/icons/drugs";
 import { AK47, Glock } from "@/components/icons/items";
 import { Layout } from "@/components/layout";
-import { useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
+import { useDojoContext, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { playSound, Sounds } from "@/hooks/sound";
 import { IsMobile } from "@/utils/ui";
 import { HStack, VStack, Text, Box, Image, keyframes } from "@chakra-ui/react";
@@ -162,6 +162,7 @@ export default function Slot() {
   } = useDojoContext();
   const { toast } = useToast();
   const { gameId } = useRouterContext();
+  const { game } = useGameStore();
   const isMobile = IsMobile();
 
   const [refresh, setRefresh] = useState(Date.now());
@@ -375,7 +376,8 @@ export default function Slot() {
     }
     setRefresh(Date.now());
 
-    const result = await rollSlot(Number(gameId));
+    const tokenId = game?.gameInfos.minigame_token_id!;
+    const result = await rollSlot(Number(tokenId));
 
     setTimeout(() => {
       setIsRolling(false);

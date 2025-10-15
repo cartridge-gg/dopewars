@@ -505,60 +505,65 @@ The hybrid approach adds `token_id` parameter alongside existing `game_id` witho
 - [ ] GameToken model still maps to original game
 - [ ] No errors during transfer
 
-#### Milestone 2.5.2: Add token_id Parameter
+#### Milestone 2.5.2: Add token_id Parameter ✅ COMPLETE
 
-**Goal:** Update game functions to accept token_id alongside game_id
+**Status:** ✅ Implemented on October 8, 2025
 
-**Tasks:**
+**Goal:** Update game functions to use token_id as primary parameter
 
-1. **Update IGame trait** (`src/systems/game.cairo`):
+**Key Decision Change:** Instead of adding token_id alongside game_id, we replaced game_id with token_id and use GameToken model for lookups. This is simpler and less error-prone.
+
+**Actual Implementation:**
+
+1. **Updated IGameActions trait** (`src/systems/game.cairo:20-31`):
    ```cairo
-   trait IGame {
-       // Add token_id parameter to existing functions
-       fn travel(
-           ref self: TContractState,
-           game_id: u32,
-           token_id: u64,  // NEW
-           next_location: Locations,
-           travel_actions: TravelActions
+   #[starknet::interface]
+   pub trait IGameActions<T> {
+       fn create_game(
+           self: @T,
+           game_mode: GameMode,
+           player_name: felt252,
+           multiplier: u8,
+           token_id: TokenId,
+           minigame_token_id: u64,
        );
-
-       fn end_game(
-           ref self: TContractState,
-           game_id: u32,
-           token_id: u64,  // NEW
-           actions: Span<Actions>
-       );
+       fn end_game(self: @T, token_id: u64, actions: Span<Actions>);  // ← token_id only
+       fn travel(self: @T, token_id: u64, next_location: Locations, actions: Span<Actions>);
    }
    ```
 
-2. **Update IDecide trait** (`src/systems/decide.cairo`):
+2. **Updated IDecide trait** (`src/systems/decide.cairo:4-7`):
    ```cairo
-   trait IDecide {
-       fn decide(
-           ref self: TContractState,
-           game_id: u32,
-           token_id: u64,  // NEW
-           action: Encounters
-       );
+   #[starknet::interface]
+   trait IDecide<T> {
+       fn decide(self: @T, token_id: u64, action: EncounterActions);  // ← token_id only
    }
    ```
 
-3. **Update ILaundromat trait** (`src/systems/laundromat.cairo`):
+3. **Updated ILaundromat trait** (`src/systems/laundromat.cairo:3-11`):
    ```cairo
-   trait ILaundromat {
-       fn claim(
-           ref self: TContractState,
-           game_id: u32,
-           token_id: u64,  // NEW
-           season_version: u16
-       );
+   #[starknet::interface]
+   trait ILaundromat<T> {
+       fn register_score(self: @T, token_id: u64, prev_game_id: u32, prev_player_id: ContractAddress);
+       fn launder(self: @T, season_version: u16);
+       fn claim(self: @T, player_id: ContractAddress, token_ids: Span<u64>);  // ← token_ids array
+       fn claim_treasury(self: @T);
+       fn supercharge_jackpot(self: @T, season_version: u16, amount_eth: u32);
+   }
+   ```
+
+4. **Updated ISlotMachine trait** (`src/systems/slot.cairo:179-182`):
+   ```cairo
+   #[starknet::interface]
+   trait ISlotMachine<T> {
+       fn roll(ref self: T, token_id: u64);  // ← token_id only
    }
    ```
 
 **Validation:**
-- All functions compile with new signature ✅
-- No breaking changes to internal logic ✅
+- ✅ All functions compile with new signature
+- ✅ No breaking changes to internal game logic
+- ✅ Build successful: `sozo build` completed without errors
 
 #### Milestone 2.5.3: Add NFT Ownership Validation ✅ COMPLETE
 
@@ -609,6 +614,100 @@ We implemented a comprehensive token ownership validation system using the game-
 - ✅ Non-owners get "Caller is not owner of token" error
 - ✅ Token state stays synchronized with game state
 - ✅ All systems compile successfully
+
+---
+
+### 🔒 CRITICAL: Security Fix in claim() Function
+
+**Issue Discovered:** During implementation, we identified a critical security vulnerability in the `claim()` function.
+
+**Original Vulnerability (laundromat.cairo:280):**
+
+```cairo
+// ❌ SECURITY ISSUE
+assert(game.player_id == player_id, 'not game owner');
+```
+
+**Problems:**
+1. Checked `game.player_id` (original creator) instead of current NFT owner
+2. No `assert_token_ownership()` call anywhere in the function
+3. Anyone who knew a token_id could steal rewards
+
+**Example Attack Scenario:**
+```
+1. Alice creates game, wins tournament, earns 1000 PAPER
+2. Alice transfers NFT #7 to Bob (sells the game)
+3. Charlie (attacker) discovers token_id = 7
+4. Charlie calls claim(player_id: 0xCharlie, token_ids: [7])
+5. Old code: Only checks game.player_id (0xAlice) != 0xCharlie → PASSES ❌
+6. Charlie steals Bob's 1000 PAPER rewards
+```
+
+**Fixed Implementation (laundromat.cairo:251-360):**
+
+```cairo
+fn claim(self: @ContractState, player_id: ContractAddress, token_ids: Span<u64>) {
+    let world = self.world(@"dopewars");
+    let mut store = StoreImpl::new(world);
+
+    // ✅ FIX 1: Verify caller is player_id parameter
+    let caller = get_caller_address();
+    assert(caller == player_id, 'caller must be player_id');
+
+    let token_address = self._get_game_token_address();
+
+    while let Option::Some(token_id) = token_ids.pop_front() {
+        // ✅ FIX 2: Verify caller owns this specific NFT
+        assert_token_ownership(token_address, *token_id);
+
+        let mut game = store.game_by_token_id(*token_id);
+
+        // ❌ REMOVED: assert(game.player_id == player_id, 'not game owner');
+        // This was checking original creator, not current owner!
+
+        // Verify game state
+        assert(sorted_list.locked, 'season has not ended');
+        assert(sorted_list.processed, 'need more launder');
+        assert(game.registered, 'unregistered game');
+        assert(game.position > 0, 'invalid position');
+        assert(!game.claimed, 'already claimed');
+
+        total_claimable = total_claimable + game.claimable;
+
+        game.claimed = true;
+        store.set_game(@game);
+
+        // Emit event, track achievements...
+    }
+
+    // Transfer rewards to current owner
+    IPaperDispatcher { contract_address: paper_address }
+        .transfer(player_id, total_claimable);
+}
+```
+
+**Security Improvements:**
+
+1. **Caller Verification:** `assert(caller == player_id)` prevents claiming to arbitrary addresses
+2. **Token Ownership Check:** `assert_token_ownership()` ensures caller owns each NFT in the batch
+3. **Removed Incorrect Check:** Old check compared against immutable `game.player_id` (storage namespace)
+
+**Result:** Now only the current NFT owner can claim rewards, enabling proper game transfer mechanics.
+
+**Test Scenarios After Fix:**
+
+✅ **Valid Claim:**
+```
+Bob owns NFT #7 → claim(0xBob, [7]) → Success
+```
+
+❌ **Invalid Claims (Now Blocked):**
+```
+Charlie doesn't own NFT #7 → claim(0xCharlie, [7]) → Error: "Caller is not owner of token"
+Bob owns NFT #7 → claim(0xAlice, [7]) → Error: "caller must be player_id"
+```
+
+---
 
 #### Milestone 2.5.4: Frontend Integration 🔄 NEXT
 
@@ -1610,6 +1709,16 @@ NFT appears in wallet with:
 
 ## Document Changelog
 
+**Version 5.0** - October 8, 2025 (Documentation Update)
+- ✅ Marked Phase 2.5.1-2.5.2 as COMPLETE with actual implementation code
+- 📝 Added comprehensive security fix documentation for claim() function
+- 🔒 Documented critical vulnerability and resolution
+- Updated function signatures to show actual implementation (token_id only, not both IDs)
+- Clarified implementation decision: simplified approach using GameToken model
+- Added test scenarios for security fixes
+- Updated all code examples with actual line references
+- Document now reflects completed backend implementation
+
 **Version 4.0** - October 8, 2025
 - ✅ Marked Phase 2.5.1-2.5.3 as COMPLETE
 - 📝 Documented comprehensive token ownership validation implementation
@@ -1632,5 +1741,5 @@ NFT appears in wallet with:
 - Soulbound NFTs working
 
 **Document Status:** Active Implementation Guide
-**Author:** Claude Code
-**Current Phase:** Phase 2.5.4 (Frontend Integration) - Backend Complete ✅
+**Author:** DopeWars Development Team
+**Current Phase:** Phase 2.5.4 (Frontend Integration) - Backend Complete ✅ | Security Fixes Applied ✅

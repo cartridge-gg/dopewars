@@ -102,7 +102,8 @@ const Decision = observer(() => {
         break;
     }
 
-    const { hash } = await decide(gameId!, action);
+    const tokenId = game.gameInfos.minigame_token_id!.toString();
+    const { hash } = await decide(tokenId, action);
   };
 
   if (!game || !router.isReady || isRedirecting || !encounterEvent) {

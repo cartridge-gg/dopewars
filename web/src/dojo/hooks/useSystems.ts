@@ -26,9 +26,9 @@ interface SystemsInterface {
     tokenId: number,
     minigameTokenId: number,
   ) => Promise<SystemExecuteResult>;
-  endGame: (gameId: string, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
-  travel: (gameId: string, locationId: Locations, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
-  decide: (gameId: string, action: EncountersAction) => Promise<SystemExecuteResult>;
+  endGame: (tokenId: string, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
+  travel: (tokenId: string, locationId: Locations, actions: Array<PendingCall>) => Promise<SystemExecuteResult>;
+  decide: (tokenId: string, action: EncountersAction) => Promise<SystemExecuteResult>;
   // ryo
   setPaused: (paused: boolean) => Promise<SystemExecuteResult>;
   updateRyoConfig: (ryoConfig: RyoConfig) => Promise<SystemExecuteResult>;
@@ -37,13 +37,13 @@ interface SystemsInterface {
   updateDrugConfig: (drugConfig: DrugConfig) => Promise<SystemExecuteResult>;
 
   // laundromat
-  registerScore: (gameId: string, prevGameId: string, prevPlayerId: string) => Promise<SystemExecuteResult>;
-  claim: (playerId: string, gameIds: number[]) => Promise<SystemExecuteResult>;
+  registerScore: (tokenId: string, prevGameId: string, prevPlayerId: string) => Promise<SystemExecuteResult>;
+  claim: (playerId: string, tokenIds: number[]) => Promise<SystemExecuteResult>;
   launder: (season: number) => Promise<SystemExecuteResult>;
   claimTreasury: () => Promise<SystemExecuteResult>;
   superchargeJackpot: (season: number, amount_eth: number) => Promise<SystemExecuteResult>;
   // slot
-  rollSlot: (gameId: number) => Promise<SystemExecuteResult>;
+  rollSlot: (tokenId: number) => Promise<SystemExecuteResult>;
   // dev
   failingTx: () => Promise<SystemExecuteResult>;
   createFakeGame: (finalScore: number) => Promise<SystemExecuteResult>;
@@ -299,14 +299,14 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const endGame = useCallback(
-    async (gameId: string, calls: Array<PendingCall>) => {
+    async (tokenId: string, calls: Array<PendingCall>) => {
       const callsEnum = calls.map(pendingCallToCairoEnum);
 
       const { hash } = await executeAndReceipt({
         contractAddress: gameAddress,
         entrypoint: "end_game",
         // @ts-ignore
-        calldata: CallData.compile({ gameId, callsEnum }),
+        calldata: CallData.compile({ tokenId, callsEnum }),
       });
 
       return {
@@ -317,14 +317,14 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const travel = useCallback(
-    async (gameId: string, location: Locations, pending_calls: Array<PendingCall>) => {
+    async (tokenId: string, location: Locations, pending_calls: Array<PendingCall>) => {
       const callsEnum = pending_calls.map(pendingCallToCairoEnum);
 
       const call = {
         contractAddress: gameAddress,
         entrypoint: "travel",
         // @ts-ignore
-        calldata: CallData.compile({ gameId, location, callsEnum }),
+        calldata: CallData.compile({ tokenId, location, callsEnum }),
       };
 
       const calls = await buildRandomnessCalls({
@@ -343,11 +343,11 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const decide = useCallback(
-    async (gameId: string, action: EncountersAction) => {
+    async (tokenId: string, action: EncountersAction) => {
       const call = {
         contractAddress: decideAddress,
         entrypoint: "decide",
-        calldata: CallData.compile([gameId, action]),
+        calldata: CallData.compile([tokenId, action]),
       };
 
       const calls = await buildRandomnessCalls({
@@ -370,21 +370,26 @@ export const useSystems = (): SystemsInterface => {
   //
 
   const registerScore = useCallback(
-    async (gameId: string, prevGameId: string, prevPlayerId: string) => {
+    async (tokenId: string, prevGameId: string, prevPlayerId: string) => {
       const calls = [
         {
           contractName: `laundromat`,
           entrypoint: "register_score",
           // @ts-ignore
-          calldata: CallData.compile([gameId, prevGameId, prevPlayerId]),
+          calldata: CallData.compile([tokenId, prevGameId, prevPlayerId]),
         },
       ];
 
+      // Note: We still need to query the game to check for loot_id for DopeLoot release
+      // But we need to get game_id first from token_id via GameToken model
       const playerId = account?.address;
+
+      // TODO: Query GameToken to get game_id from token_id, then query Game
+      // For now, keeping the existing logic but it needs to be updated
       const gameEntities = await toriiClient.getEntities({
         clause: {
           Keys: {
-            keys: [Number(gameId).toString(), playerId],
+            keys: [Number(tokenId).toString(), playerId],
             models: ["dopewars-Game"],
             pattern_matching: "FixedLen",
           },
@@ -439,12 +444,12 @@ export const useSystems = (): SystemsInterface => {
   );
 
   const claim = useCallback(
-    async (playerId: string, gameIds: number[]) => {
+    async (playerId: string, tokenIds: number[]) => {
       const { hash, events, parsedEvents } = await executeAndReceipt({
         contractName: `laundromat`,
         entrypoint: "claim",
-        calldata: [playerId, gameIds],
-        // calldata: CallData.compile([playerId, gameIds]),
+        calldata: [playerId, tokenIds],
+        // calldata: CallData.compile([playerId, tokenIds]),
       });
 
       return {
@@ -580,7 +585,7 @@ export const useSystems = (): SystemsInterface => {
   //
 
   const rollSlot = useCallback(
-    async (gameId: number) => {
+    async (tokenId: number) => {
       const slotMachineAddress = dojoProvider.manifest.contracts.find(
         (i: any) => i.tag === `${DW_NS}-slotmachine`,
       ).address;
@@ -588,7 +593,7 @@ export const useSystems = (): SystemsInterface => {
       const call = {
         contractAddress: slotMachineAddress,
         entrypoint: "roll",
-        calldata: [gameId],
+        calldata: [tokenId],
       };
       const calls = await buildRandomnessCalls({
         account: account!,

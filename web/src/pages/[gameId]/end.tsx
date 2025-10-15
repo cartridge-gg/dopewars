@@ -98,7 +98,8 @@ const End = () => {
       const prevGameId = prev ? prev.game_id : 0;
       const prevPlayerId = prev ? prev.player_id : 0;
 
-      const { hash } = await registerScore(gameInfos?.game_id!, prevGameId, prevPlayerId);
+      const tokenId = gameInfos?.minigame_token_id!.toString();
+      const { hash } = await registerScore(tokenId, prevGameId, prevPlayerId);
 
       if (hash !== "") {
         toast({

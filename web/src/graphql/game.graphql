@@ -16,6 +16,7 @@ query GameById($gameId: u32) {
         claimable
         position
         multiplier
+        minigame_token_id
         token_id {
           option
           GuestLootId
@@ -42,13 +43,13 @@ query RegisteredGamesBySeason($version: u16) {
         player_name {
           value
         }
-
         final_score
         registered
         claimed
         claimable
         position
         multiplier
+        minigame_token_id
         token_id {
           option
           GuestLootId
@@ -84,6 +85,7 @@ query GamesByPlayer($playerId: String) {
             claimed
             claimable
             position
+            minigame_token_id
             token_id {
               option
               GuestLootId
@@ -188,6 +190,61 @@ query GetAllGames {
         claimable
         claimed
         multiplier
+        minigame_token_id
+      }
+    }
+  }
+}
+
+# Query GameToken model to map token_id to game
+query GameTokenById($tokenId: u64) {
+  dopewarsGameTokenModels(where: { token_id: $tokenId }) {
+    edges {
+      node {
+        token_id
+        game_id
+        player_id
+      }
+    }
+  }
+}
+
+# Query Game by token_id (using GameToken lookup)
+query GameByTokenId($tokenId: u64) {
+  dopewarsGameTokenModels(where: { token_id: $tokenId }) {
+    edges {
+      node {
+        token_id
+        game_id
+        player_id
+      }
+    }
+  }
+  dopewarsGameModels(limit: 1) {
+    edges {
+      node {
+        season_version
+        game_id
+        game_mode
+        player_name {
+          value
+        }
+        player_id
+        game_over
+        final_score
+        registered
+        claimed
+        claimable
+        position
+        multiplier
+        minigame_token_id
+        token_id {
+          option
+          GuestLootId
+          LootId
+          HustlerId
+        }
+        equipment_by_slot
       }
     }
   }

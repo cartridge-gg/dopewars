@@ -20,7 +20,8 @@ const Redirector = observer(() => {
     if (!game) {
       handle = setTimeout(() => {
         router.push(`/`);
-      }, 2000);
+      // }, 2000);
+    }, 10000); // temp fix for slow indexer
     } else {
       clearTimeout(handle);
 

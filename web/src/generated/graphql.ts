@@ -66,7 +66,7 @@ export type Erc1155__Token = {
 
 export type Erc__Token = Erc20__Token | Erc721__Token | Erc1155__Token;
 
-export type ModelUnion = Dope_Collection | Dope_CollectionComponent | Dope_CollectionComponentList | Dope_CollectionComponentSlug | Dope_ComponentValueEvent | Dope_ComponentValueResourceEvent | Dope_DopeLootClaimed | Dope_DopeLootClaimedEvent | Dope_DopeLootOpened | Dope_DopeLootOpenedEvent | Dope_DopeLootReleased | Dope_DopeLootReleasedEvent | Dope_HustlerBody | Dope_HustlerMetadata | Dope_HustlerSlot | Dope_PaletteEvent | Dopewars_Claimed | Dopewars_DopewarsItemTier | Dopewars_DopewarsItemTierConfig | Dopewars_DrugConfig | Dopewars_Erc20BalanceEvent | Dopewars_EncounterStatsConfig | Dopewars_Game | Dopewars_GameConfig | Dopewars_GameCreated | Dopewars_GameOver | Dopewars_GameStorePacked | Dopewars_HighVolatility | Dopewars_HustlerBody | Dopewars_HustlerSlot | Dopewars_LocationConfig | Dopewars_NewHighScore | Dopewars_NewSeason | Dopewars_RandomnessConfig | Dopewars_RyoAddress | Dopewars_RyoConfig | Dopewars_Season | Dopewars_SeasonSettings | Dopewars_SortedList | Dopewars_SortedListItem | Dopewars_TradeDrug | Dopewars_TravelEncounter | Dopewars_TravelEncounterResult | Dopewars_Traveled | Dopewars_TrophyCreation | Dopewars_TrophyProgression | Dopewars_UpgradeItem;
+export type ModelUnion = Dope_Collection | Dope_CollectionComponent | Dope_CollectionComponentList | Dope_CollectionComponentSlug | Dope_ComponentValueEvent | Dope_ComponentValueResourceEvent | Dope_DopeLootClaimed | Dope_DopeLootClaimedEvent | Dope_DopeLootOpened | Dope_DopeLootOpenedEvent | Dope_DopeLootReleased | Dope_DopeLootReleasedEvent | Dope_HustlerBody | Dope_HustlerMetadata | Dope_HustlerSlot | Dope_PaletteEvent | Dopewars_Claimed | Dopewars_DopewarsItemTier | Dopewars_DopewarsItemTierConfig | Dopewars_DrugConfig | Dopewars_Erc20BalanceEvent | Dopewars_EncounterStatsConfig | Dopewars_Game | Dopewars_GameConfig | Dopewars_GameCreated | Dopewars_GameOver | Dopewars_GameStorePacked | Dopewars_GameToken | Dopewars_HighVolatility | Dopewars_HustlerBody | Dopewars_HustlerSlot | Dopewars_LocationConfig | Dopewars_NewHighScore | Dopewars_NewSeason | Dopewars_RandomnessConfig | Dopewars_RyoAddress | Dopewars_RyoConfig | Dopewars_Season | Dopewars_SeasonSettings | Dopewars_SortedList | Dopewars_SortedListItem | Dopewars_TradeDrug | Dopewars_TravelEncounter | Dopewars_TravelEncounterResult | Dopewars_Traveled | Dopewars_TrophyCreation | Dopewars_TrophyProgression | Dopewars_UpgradeItem;
 
 export enum OrderDirection {
   Asc = 'ASC',
@@ -359,6 +359,7 @@ export type World__Query = {
   dopewarsGameModels?: Maybe<Dopewars_GameConnection>;
   dopewarsGameOverModels?: Maybe<Dopewars_GameOverConnection>;
   dopewarsGameStorePackedModels?: Maybe<Dopewars_GameStorePackedConnection>;
+  dopewarsGameTokenModels?: Maybe<Dopewars_GameTokenConnection>;
   dopewarsHighVolatilityModels?: Maybe<Dopewars_HighVolatilityConnection>;
   dopewarsHustlerBodyModels?: Maybe<Dopewars_HustlerBodyConnection>;
   dopewarsHustlerSlotModels?: Maybe<Dopewars_HustlerSlotConnection>;
@@ -732,6 +733,18 @@ export type World__QueryDopewarsGameStorePackedModelsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order?: InputMaybe<Dopewars_GameStorePackedOrder>;
   where?: InputMaybe<Dopewars_GameStorePackedWhereInput>;
+};
+
+
+export type World__QueryDopewarsGameTokenModelsArgs = {
+  after?: InputMaybe<Scalars['Cursor']>;
+  before?: InputMaybe<Scalars['Cursor']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<Dopewars_GameTokenOrder>;
+  where?: InputMaybe<Dopewars_GameTokenWhereInput>;
 };
 
 
@@ -2830,6 +2843,7 @@ export type Dopewars_Game = {
   game_id?: Maybe<Scalars['u32']>;
   game_mode?: Maybe<Scalars['Enum']>;
   game_over?: Maybe<Scalars['bool']>;
+  minigame_token_id?: Maybe<Scalars['u64']>;
   multiplier?: Maybe<Scalars['u8']>;
   player_id?: Maybe<Scalars['ContractAddress']>;
   player_name?: Maybe<Dopewars_Bytes16>;
@@ -3167,6 +3181,7 @@ export enum Dopewars_GameOrderField {
   GameId = 'GAME_ID',
   GameMode = 'GAME_MODE',
   GameOver = 'GAME_OVER',
+  MinigameTokenId = 'MINIGAME_TOKEN_ID',
   Multiplier = 'MULTIPLIER',
   PlayerId = 'PLAYER_ID',
   PlayerName = 'PLAYER_NAME',
@@ -3419,6 +3434,75 @@ export type Dopewars_GameStorePackedWhereInput = {
   player_idNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
 };
 
+export type Dopewars_GameToken = {
+  __typename?: 'dopewars_GameToken';
+  entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
+  game_id?: Maybe<Scalars['u32']>;
+  player_id?: Maybe<Scalars['ContractAddress']>;
+  token_id?: Maybe<Scalars['u64']>;
+};
+
+export type Dopewars_GameTokenConnection = {
+  __typename?: 'dopewars_GameTokenConnection';
+  edges?: Maybe<Array<Maybe<Dopewars_GameTokenEdge>>>;
+  pageInfo: World__PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type Dopewars_GameTokenEdge = {
+  __typename?: 'dopewars_GameTokenEdge';
+  cursor?: Maybe<Scalars['Cursor']>;
+  node?: Maybe<Dopewars_GameToken>;
+};
+
+export type Dopewars_GameTokenOrder = {
+  direction: OrderDirection;
+  field: Dopewars_GameTokenOrderField;
+};
+
+export enum Dopewars_GameTokenOrderField {
+  GameId = 'GAME_ID',
+  PlayerId = 'PLAYER_ID',
+  TokenId = 'TOKEN_ID'
+}
+
+export type Dopewars_GameTokenWhereInput = {
+  game_id?: InputMaybe<Scalars['u32']>;
+  game_idEQ?: InputMaybe<Scalars['u32']>;
+  game_idGT?: InputMaybe<Scalars['u32']>;
+  game_idGTE?: InputMaybe<Scalars['u32']>;
+  game_idIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  game_idLIKE?: InputMaybe<Scalars['u32']>;
+  game_idLT?: InputMaybe<Scalars['u32']>;
+  game_idLTE?: InputMaybe<Scalars['u32']>;
+  game_idNEQ?: InputMaybe<Scalars['u32']>;
+  game_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u32']>>>;
+  game_idNOTLIKE?: InputMaybe<Scalars['u32']>;
+  player_id?: InputMaybe<Scalars['ContractAddress']>;
+  player_idEQ?: InputMaybe<Scalars['ContractAddress']>;
+  player_idGT?: InputMaybe<Scalars['ContractAddress']>;
+  player_idGTE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  player_idLIKE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idLT?: InputMaybe<Scalars['ContractAddress']>;
+  player_idLTE?: InputMaybe<Scalars['ContractAddress']>;
+  player_idNEQ?: InputMaybe<Scalars['ContractAddress']>;
+  player_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['ContractAddress']>>>;
+  player_idNOTLIKE?: InputMaybe<Scalars['ContractAddress']>;
+  token_id?: InputMaybe<Scalars['u64']>;
+  token_idEQ?: InputMaybe<Scalars['u64']>;
+  token_idGT?: InputMaybe<Scalars['u64']>;
+  token_idGTE?: InputMaybe<Scalars['u64']>;
+  token_idIN?: InputMaybe<Array<InputMaybe<Scalars['u64']>>>;
+  token_idLIKE?: InputMaybe<Scalars['u64']>;
+  token_idLT?: InputMaybe<Scalars['u64']>;
+  token_idLTE?: InputMaybe<Scalars['u64']>;
+  token_idNEQ?: InputMaybe<Scalars['u64']>;
+  token_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u64']>>>;
+  token_idNOTLIKE?: InputMaybe<Scalars['u64']>;
+};
+
 export type Dopewars_GameWhereInput = {
   claimable?: InputMaybe<Scalars['u32']>;
   claimableEQ?: InputMaybe<Scalars['u32']>;
@@ -3456,6 +3540,17 @@ export type Dopewars_GameWhereInput = {
   game_idNOTLIKE?: InputMaybe<Scalars['u32']>;
   game_mode?: InputMaybe<Scalars['Enum']>;
   game_over?: InputMaybe<Scalars['bool']>;
+  minigame_token_id?: InputMaybe<Scalars['u64']>;
+  minigame_token_idEQ?: InputMaybe<Scalars['u64']>;
+  minigame_token_idGT?: InputMaybe<Scalars['u64']>;
+  minigame_token_idGTE?: InputMaybe<Scalars['u64']>;
+  minigame_token_idIN?: InputMaybe<Array<InputMaybe<Scalars['u64']>>>;
+  minigame_token_idLIKE?: InputMaybe<Scalars['u64']>;
+  minigame_token_idLT?: InputMaybe<Scalars['u64']>;
+  minigame_token_idLTE?: InputMaybe<Scalars['u64']>;
+  minigame_token_idNEQ?: InputMaybe<Scalars['u64']>;
+  minigame_token_idNOTIN?: InputMaybe<Array<InputMaybe<Scalars['u64']>>>;
+  minigame_token_idNOTLIKE?: InputMaybe<Scalars['u64']>;
   multiplier?: InputMaybe<Scalars['u8']>;
   multiplierEQ?: InputMaybe<Scalars['u8']>;
   multiplierGT?: InputMaybe<Scalars['u8']>;
@@ -3643,6 +3738,8 @@ export type Dopewars_HighVolatilityWhereInput = {
 
 export type Dopewars_HustlerBody = {
   __typename?: 'dopewars_HustlerBody';
+  entity?: Maybe<World__Entity>;
+  eventMessage?: Maybe<World__EventMessage>;
   slot?: Maybe<Scalars['felt252']>;
   token_id?: Maybe<Scalars['felt252']>;
   value?: Maybe<Scalars['u8']>;
@@ -5732,21 +5829,21 @@ export type GameByIdQueryVariables = Exact<{
 }>;
 
 
-export type GameByIdQuery = { __typename?: 'World__Query', dopewarsGameModels?: { __typename?: 'dopewars_GameConnection', edges?: Array<{ __typename?: 'dopewars_GameEdge', node?: { __typename?: 'dopewars_Game', season_version?: any | null, game_id?: any | null, game_mode?: any | null, player_id?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null, multiplier?: any | null, equipment_by_slot?: Array<any | null> | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null, token_id?: { __typename?: 'dopewars_TokenId', option?: any | null, GuestLootId?: any | null, LootId?: any | null, HustlerId?: any | null } | null } | null } | null> | null } | null };
+export type GameByIdQuery = { __typename?: 'World__Query', dopewarsGameModels?: { __typename?: 'dopewars_GameConnection', edges?: Array<{ __typename?: 'dopewars_GameEdge', node?: { __typename?: 'dopewars_Game', season_version?: any | null, game_id?: any | null, game_mode?: any | null, player_id?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null, multiplier?: any | null, minigame_token_id?: any | null, equipment_by_slot?: Array<any | null> | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null, token_id?: { __typename?: 'dopewars_TokenId', option?: any | null, GuestLootId?: any | null, LootId?: any | null, HustlerId?: any | null } | null } | null } | null> | null } | null };
 
 export type RegisteredGamesBySeasonQueryVariables = Exact<{
   version?: InputMaybe<Scalars['u16']>;
 }>;
 
 
-export type RegisteredGamesBySeasonQuery = { __typename?: 'World__Query', dopewarsGameModels?: { __typename?: 'dopewars_GameConnection', edges?: Array<{ __typename?: 'dopewars_GameEdge', node?: { __typename?: 'dopewars_Game', season_version?: any | null, game_id?: any | null, player_id?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null, multiplier?: any | null, equipment_by_slot?: Array<any | null> | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null, token_id?: { __typename?: 'dopewars_TokenId', option?: any | null, GuestLootId?: any | null, LootId?: any | null, HustlerId?: any | null } | null } | null } | null> | null } | null };
+export type RegisteredGamesBySeasonQuery = { __typename?: 'World__Query', dopewarsGameModels?: { __typename?: 'dopewars_GameConnection', edges?: Array<{ __typename?: 'dopewars_GameEdge', node?: { __typename?: 'dopewars_Game', season_version?: any | null, game_id?: any | null, player_id?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null, multiplier?: any | null, minigame_token_id?: any | null, equipment_by_slot?: Array<any | null> | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null, token_id?: { __typename?: 'dopewars_TokenId', option?: any | null, GuestLootId?: any | null, LootId?: any | null, HustlerId?: any | null } | null } | null } | null> | null } | null };
 
 export type GamesByPlayerQueryVariables = Exact<{
   playerId?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GamesByPlayerQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'dope_Collection' } | { __typename: 'dope_CollectionComponent' } | { __typename: 'dope_CollectionComponentList' } | { __typename: 'dope_CollectionComponentSlug' } | { __typename: 'dope_ComponentValueEvent' } | { __typename: 'dope_ComponentValueResourceEvent' } | { __typename: 'dope_DopeLootClaimed' } | { __typename: 'dope_DopeLootClaimedEvent' } | { __typename: 'dope_DopeLootOpened' } | { __typename: 'dope_DopeLootOpenedEvent' } | { __typename: 'dope_DopeLootReleased' } | { __typename: 'dope_DopeLootReleasedEvent' } | { __typename: 'dope_HustlerBody' } | { __typename: 'dope_HustlerMetadata' } | { __typename: 'dope_HustlerSlot' } | { __typename: 'dope_PaletteEvent' } | { __typename: 'dopewars_Claimed' } | { __typename: 'dopewars_DopewarsItemTier' } | { __typename: 'dopewars_DopewarsItemTierConfig' } | { __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game', game_id?: any | null, player_id?: any | null, season_version?: any | null, game_mode?: any | null, multiplier?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null, equipment_by_slot?: Array<any | null> | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null, token_id?: { __typename?: 'dopewars_TokenId', option?: any | null, GuestLootId?: any | null, LootId?: any | null, HustlerId?: any | null } | null } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameCreated' } | { __typename: 'dopewars_GameOver' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_HighVolatility' } | { __typename: 'dopewars_HustlerBody' } | { __typename: 'dopewars_HustlerSlot' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_NewHighScore' } | { __typename: 'dopewars_NewSeason' } | { __typename: 'dopewars_RandomnessConfig' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | { __typename: 'dopewars_TradeDrug' } | { __typename: 'dopewars_TravelEncounter' } | { __typename: 'dopewars_TravelEncounterResult' } | { __typename: 'dopewars_Traveled' } | { __typename: 'dopewars_TrophyCreation' } | { __typename: 'dopewars_TrophyProgression' } | { __typename: 'dopewars_UpgradeItem' } | null> | null } | null } | null> | null } | null };
+export type GamesByPlayerQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'dope_Collection' } | { __typename: 'dope_CollectionComponent' } | { __typename: 'dope_CollectionComponentList' } | { __typename: 'dope_CollectionComponentSlug' } | { __typename: 'dope_ComponentValueEvent' } | { __typename: 'dope_ComponentValueResourceEvent' } | { __typename: 'dope_DopeLootClaimed' } | { __typename: 'dope_DopeLootClaimedEvent' } | { __typename: 'dope_DopeLootOpened' } | { __typename: 'dope_DopeLootOpenedEvent' } | { __typename: 'dope_DopeLootReleased' } | { __typename: 'dope_DopeLootReleasedEvent' } | { __typename: 'dope_HustlerBody' } | { __typename: 'dope_HustlerMetadata' } | { __typename: 'dope_HustlerSlot' } | { __typename: 'dope_PaletteEvent' } | { __typename: 'dopewars_Claimed' } | { __typename: 'dopewars_DopewarsItemTier' } | { __typename: 'dopewars_DopewarsItemTierConfig' } | { __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game', game_id?: any | null, player_id?: any | null, season_version?: any | null, game_mode?: any | null, multiplier?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null, minigame_token_id?: any | null, equipment_by_slot?: Array<any | null> | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null, token_id?: { __typename?: 'dopewars_TokenId', option?: any | null, GuestLootId?: any | null, LootId?: any | null, HustlerId?: any | null } | null } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameCreated' } | { __typename: 'dopewars_GameOver' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_GameToken' } | { __typename: 'dopewars_HighVolatility' } | { __typename: 'dopewars_HustlerBody' } | { __typename: 'dopewars_HustlerSlot' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_NewHighScore' } | { __typename: 'dopewars_NewSeason' } | { __typename: 'dopewars_RandomnessConfig' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | { __typename: 'dopewars_TradeDrug' } | { __typename: 'dopewars_TravelEncounter' } | { __typename: 'dopewars_TravelEncounterResult' } | { __typename: 'dopewars_Traveled' } | { __typename: 'dopewars_TrophyCreation' } | { __typename: 'dopewars_TrophyProgression' } | { __typename: 'dopewars_UpgradeItem' } | null> | null } | null } | null> | null } | null };
 
 export type GameStorePackedQueryVariables = Exact<{
   gameId: Scalars['String'];
@@ -5754,14 +5851,14 @@ export type GameStorePackedQueryVariables = Exact<{
 }>;
 
 
-export type GameStorePackedQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'dope_Collection' } | { __typename: 'dope_CollectionComponent' } | { __typename: 'dope_CollectionComponentList' } | { __typename: 'dope_CollectionComponentSlug' } | { __typename: 'dope_ComponentValueEvent' } | { __typename: 'dope_ComponentValueResourceEvent' } | { __typename: 'dope_DopeLootClaimed' } | { __typename: 'dope_DopeLootClaimedEvent' } | { __typename: 'dope_DopeLootOpened' } | { __typename: 'dope_DopeLootOpenedEvent' } | { __typename: 'dope_DopeLootReleased' } | { __typename: 'dope_DopeLootReleasedEvent' } | { __typename: 'dope_HustlerBody' } | { __typename: 'dope_HustlerMetadata' } | { __typename: 'dope_HustlerSlot' } | { __typename: 'dope_PaletteEvent' } | { __typename: 'dopewars_Claimed' } | { __typename: 'dopewars_DopewarsItemTier' } | { __typename: 'dopewars_DopewarsItemTierConfig' } | { __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game' } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameCreated' } | { __typename: 'dopewars_GameOver' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_HighVolatility' } | { __typename: 'dopewars_HustlerBody' } | { __typename: 'dopewars_HustlerSlot' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_NewHighScore' } | { __typename: 'dopewars_NewSeason' } | { __typename: 'dopewars_RandomnessConfig' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | { __typename: 'dopewars_TradeDrug' } | { __typename: 'dopewars_TravelEncounter' } | { __typename: 'dopewars_TravelEncounterResult' } | { __typename: 'dopewars_Traveled' } | { __typename: 'dopewars_TrophyCreation' } | { __typename: 'dopewars_TrophyProgression' } | { __typename: 'dopewars_UpgradeItem' } | null> | null } | null } | null> | null } | null };
+export type GameStorePackedQuery = { __typename?: 'World__Query', entities?: { __typename?: 'World__EntityConnection', totalCount: number, edges?: Array<{ __typename?: 'World__EntityEdge', node?: { __typename?: 'World__Entity', id?: string | null, models?: Array<{ __typename: 'dope_Collection' } | { __typename: 'dope_CollectionComponent' } | { __typename: 'dope_CollectionComponentList' } | { __typename: 'dope_CollectionComponentSlug' } | { __typename: 'dope_ComponentValueEvent' } | { __typename: 'dope_ComponentValueResourceEvent' } | { __typename: 'dope_DopeLootClaimed' } | { __typename: 'dope_DopeLootClaimedEvent' } | { __typename: 'dope_DopeLootOpened' } | { __typename: 'dope_DopeLootOpenedEvent' } | { __typename: 'dope_DopeLootReleased' } | { __typename: 'dope_DopeLootReleasedEvent' } | { __typename: 'dope_HustlerBody' } | { __typename: 'dope_HustlerMetadata' } | { __typename: 'dope_HustlerSlot' } | { __typename: 'dope_PaletteEvent' } | { __typename: 'dopewars_Claimed' } | { __typename: 'dopewars_DopewarsItemTier' } | { __typename: 'dopewars_DopewarsItemTierConfig' } | { __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game' } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameCreated' } | { __typename: 'dopewars_GameOver' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_GameToken' } | { __typename: 'dopewars_HighVolatility' } | { __typename: 'dopewars_HustlerBody' } | { __typename: 'dopewars_HustlerSlot' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_NewHighScore' } | { __typename: 'dopewars_NewSeason' } | { __typename: 'dopewars_RandomnessConfig' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | { __typename: 'dopewars_TradeDrug' } | { __typename: 'dopewars_TravelEncounter' } | { __typename: 'dopewars_TravelEncounterResult' } | { __typename: 'dopewars_Traveled' } | { __typename: 'dopewars_TrophyCreation' } | { __typename: 'dopewars_TrophyProgression' } | { __typename: 'dopewars_UpgradeItem' } | null> | null } | null } | null> | null } | null };
 
 export type GameStorePackedSubscriptionSubscriptionVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
 }>;
 
 
-export type GameStorePackedSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'dope_Collection' } | { __typename: 'dope_CollectionComponent' } | { __typename: 'dope_CollectionComponentList' } | { __typename: 'dope_CollectionComponentSlug' } | { __typename: 'dope_ComponentValueEvent' } | { __typename: 'dope_ComponentValueResourceEvent' } | { __typename: 'dope_DopeLootClaimed' } | { __typename: 'dope_DopeLootClaimedEvent' } | { __typename: 'dope_DopeLootOpened' } | { __typename: 'dope_DopeLootOpenedEvent' } | { __typename: 'dope_DopeLootReleased' } | { __typename: 'dope_DopeLootReleasedEvent' } | { __typename: 'dope_HustlerBody' } | { __typename: 'dope_HustlerMetadata' } | { __typename: 'dope_HustlerSlot' } | { __typename: 'dope_PaletteEvent' } | { __typename: 'dopewars_Claimed' } | { __typename: 'dopewars_DopewarsItemTier' } | { __typename: 'dopewars_DopewarsItemTierConfig' } | { __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game' } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameCreated' } | { __typename: 'dopewars_GameOver' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_HighVolatility' } | { __typename: 'dopewars_HustlerBody' } | { __typename: 'dopewars_HustlerSlot' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_NewHighScore' } | { __typename: 'dopewars_NewSeason' } | { __typename: 'dopewars_RandomnessConfig' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | { __typename: 'dopewars_TradeDrug' } | { __typename: 'dopewars_TravelEncounter' } | { __typename: 'dopewars_TravelEncounterResult' } | { __typename: 'dopewars_Traveled' } | { __typename: 'dopewars_TrophyCreation' } | { __typename: 'dopewars_TrophyProgression' } | { __typename: 'dopewars_UpgradeItem' } | null> | null } };
+export type GameStorePackedSubscriptionSubscription = { __typename?: 'World__Subscription', entityUpdated: { __typename?: 'World__Entity', id?: string | null, keys?: Array<string | null> | null, models?: Array<{ __typename: 'dope_Collection' } | { __typename: 'dope_CollectionComponent' } | { __typename: 'dope_CollectionComponentList' } | { __typename: 'dope_CollectionComponentSlug' } | { __typename: 'dope_ComponentValueEvent' } | { __typename: 'dope_ComponentValueResourceEvent' } | { __typename: 'dope_DopeLootClaimed' } | { __typename: 'dope_DopeLootClaimedEvent' } | { __typename: 'dope_DopeLootOpened' } | { __typename: 'dope_DopeLootOpenedEvent' } | { __typename: 'dope_DopeLootReleased' } | { __typename: 'dope_DopeLootReleasedEvent' } | { __typename: 'dope_HustlerBody' } | { __typename: 'dope_HustlerMetadata' } | { __typename: 'dope_HustlerSlot' } | { __typename: 'dope_PaletteEvent' } | { __typename: 'dopewars_Claimed' } | { __typename: 'dopewars_DopewarsItemTier' } | { __typename: 'dopewars_DopewarsItemTierConfig' } | { __typename: 'dopewars_DrugConfig' } | { __typename: 'dopewars_ERC20BalanceEvent' } | { __typename: 'dopewars_EncounterStatsConfig' } | { __typename: 'dopewars_Game' } | { __typename: 'dopewars_GameConfig' } | { __typename: 'dopewars_GameCreated' } | { __typename: 'dopewars_GameOver' } | { __typename: 'dopewars_GameStorePacked', game_id?: any | null, player_id?: any | null, packed?: any | null } | { __typename: 'dopewars_GameToken' } | { __typename: 'dopewars_HighVolatility' } | { __typename: 'dopewars_HustlerBody' } | { __typename: 'dopewars_HustlerSlot' } | { __typename: 'dopewars_LocationConfig' } | { __typename: 'dopewars_NewHighScore' } | { __typename: 'dopewars_NewSeason' } | { __typename: 'dopewars_RandomnessConfig' } | { __typename: 'dopewars_RyoAddress' } | { __typename: 'dopewars_RyoConfig' } | { __typename: 'dopewars_Season' } | { __typename: 'dopewars_SeasonSettings' } | { __typename: 'dopewars_SortedList' } | { __typename: 'dopewars_SortedListItem' } | { __typename: 'dopewars_TradeDrug' } | { __typename: 'dopewars_TravelEncounter' } | { __typename: 'dopewars_TravelEncounterResult' } | { __typename: 'dopewars_Traveled' } | { __typename: 'dopewars_TrophyCreation' } | { __typename: 'dopewars_TrophyProgression' } | { __typename: 'dopewars_UpgradeItem' } | null> | null } };
 
 export type TravelEncounterByPlayerQueryVariables = Exact<{
   travelEncounterSelector?: InputMaybe<Scalars['String']>;
@@ -5790,7 +5887,28 @@ export type TradedDrugByPlayerQuery = { __typename?: 'World__Query', events?: { 
 export type GetAllGamesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllGamesQuery = { __typename?: 'World__Query', dopewarsGameModels?: { __typename?: 'dopewars_GameConnection', edges?: Array<{ __typename?: 'dopewars_GameEdge', node?: { __typename?: 'dopewars_Game', game_id?: any | null, player_id?: any | null, season_version?: any | null, position?: any | null, final_score?: any | null, claimable?: any | null, claimed?: any | null, multiplier?: any | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null } | null } | null> | null } | null };
+export type GetAllGamesQuery = { __typename?: 'World__Query', dopewarsGameModels?: { __typename?: 'dopewars_GameConnection', edges?: Array<{ __typename?: 'dopewars_GameEdge', node?: { __typename?: 'dopewars_Game', game_id?: any | null, player_id?: any | null, season_version?: any | null, position?: any | null, final_score?: any | null, claimable?: any | null, claimed?: any | null, multiplier?: any | null, minigame_token_id?: any | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null } | null } | null> | null } | null };
+
+export type GameTokenByIdQueryVariables = Exact<{
+  tokenId?: InputMaybe<Scalars['u64']>;
+}>;
+
+
+export type GameTokenByIdQuery = { __typename?: 'World__Query', dopewarsGameTokenModels?: { __typename?: 'dopewars_GameTokenConnection', edges?: Array<{ __typename?: 'dopewars_GameTokenEdge', node?: { __typename?: 'dopewars_GameToken', token_id?: any | null, game_id?: any | null, player_id?: any | null } | null } | null> | null } | null };
+
+export type GameTokensByPlayerQueryVariables = Exact<{
+  playerId?: InputMaybe<Scalars['ContractAddress']>;
+}>;
+
+
+export type GameTokensByPlayerQuery = { __typename?: 'World__Query', dopewarsGameTokenModels?: { __typename?: 'dopewars_GameTokenConnection', edges?: Array<{ __typename?: 'dopewars_GameTokenEdge', node?: { __typename?: 'dopewars_GameToken', token_id?: any | null, game_id?: any | null, player_id?: any | null } | null } | null> | null } | null };
+
+export type GameByTokenIdQueryVariables = Exact<{
+  tokenId?: InputMaybe<Scalars['u64']>;
+}>;
+
+
+export type GameByTokenIdQuery = { __typename?: 'World__Query', dopewarsGameTokenModels?: { __typename?: 'dopewars_GameTokenConnection', edges?: Array<{ __typename?: 'dopewars_GameTokenEdge', node?: { __typename?: 'dopewars_GameToken', token_id?: any | null, game_id?: any | null, player_id?: any | null } | null } | null> | null } | null, dopewarsGameModels?: { __typename?: 'dopewars_GameConnection', edges?: Array<{ __typename?: 'dopewars_GameEdge', node?: { __typename?: 'dopewars_Game', season_version?: any | null, game_id?: any | null, game_mode?: any | null, player_id?: any | null, game_over?: any | null, final_score?: any | null, registered?: any | null, claimed?: any | null, claimable?: any | null, position?: any | null, multiplier?: any | null, minigame_token_id?: any | null, equipment_by_slot?: Array<any | null> | null, player_name?: { __typename?: 'dopewars_Bytes16', value?: any | null } | null, token_id?: { __typename?: 'dopewars_TokenId', option?: any | null, GuestLootId?: any | null, LootId?: any | null, HustlerId?: any | null } | null } | null } | null> | null } | null };
 
 export type SeasonByVersionQueryVariables = Exact<{
   version?: InputMaybe<Scalars['u16']>;
@@ -6165,6 +6283,7 @@ export const GameByIdDocument = `
         claimable
         position
         multiplier
+        minigame_token_id
         token_id {
           option
           GuestLootId
@@ -6232,6 +6351,7 @@ export const RegisteredGamesBySeasonDocument = `
         claimable
         position
         multiplier
+        minigame_token_id
         token_id {
           option
           GuestLootId
@@ -6302,6 +6422,7 @@ export const GamesByPlayerDocument = `
             claimed
             claimable
             position
+            minigame_token_id
             token_id {
               option
               GuestLootId
@@ -6582,6 +6703,7 @@ export const GetAllGamesDocument = `
         claimable
         claimed
         multiplier
+        minigame_token_id
       }
     }
   }
@@ -6619,6 +6741,175 @@ export const useInfiniteGetAllGamesQuery = <
 
 
 useInfiniteGetAllGamesQuery.getKey = (variables?: GetAllGamesQueryVariables) => variables === undefined ? ['GetAllGames.infinite'] : ['GetAllGames.infinite', variables];
+;
+
+export const GameTokenByIdDocument = `
+    query GameTokenById($tokenId: u64) {
+  dopewarsGameTokenModels(where: {token_id: $tokenId}) {
+    edges {
+      node {
+        token_id
+        game_id
+        player_id
+      }
+    }
+  }
+}
+    `;
+export const useGameTokenByIdQuery = <
+      TData = GameTokenByIdQuery,
+      TError = unknown
+    >(
+      variables?: GameTokenByIdQueryVariables,
+      options?: UseQueryOptions<GameTokenByIdQuery, TError, TData>
+    ) =>
+    useQuery<GameTokenByIdQuery, TError, TData>(
+      variables === undefined ? ['GameTokenById'] : ['GameTokenById', variables],
+      useFetchData<GameTokenByIdQuery, GameTokenByIdQueryVariables>(GameTokenByIdDocument).bind(null, variables),
+      options
+    );
+
+useGameTokenByIdQuery.getKey = (variables?: GameTokenByIdQueryVariables) => variables === undefined ? ['GameTokenById'] : ['GameTokenById', variables];
+;
+
+export const useInfiniteGameTokenByIdQuery = <
+      TData = GameTokenByIdQuery,
+      TError = unknown
+    >(
+      variables?: GameTokenByIdQueryVariables,
+      options?: UseInfiniteQueryOptions<GameTokenByIdQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<GameTokenByIdQuery, GameTokenByIdQueryVariables>(GameTokenByIdDocument)
+    return useInfiniteQuery<GameTokenByIdQuery, TError, TData>(
+      variables === undefined ? ['GameTokenById.infinite'] : ['GameTokenById.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteGameTokenByIdQuery.getKey = (variables?: GameTokenByIdQueryVariables) => variables === undefined ? ['GameTokenById.infinite'] : ['GameTokenById.infinite', variables];
+;
+
+export const GameTokensByPlayerDocument = `
+    query GameTokensByPlayer($playerId: ContractAddress) {
+  dopewarsGameTokenModels(limit: 1000, where: {player_id: $playerId}) {
+    edges {
+      node {
+        token_id
+        game_id
+        player_id
+      }
+    }
+  }
+}
+    `;
+export const useGameTokensByPlayerQuery = <
+      TData = GameTokensByPlayerQuery,
+      TError = unknown
+    >(
+      variables?: GameTokensByPlayerQueryVariables,
+      options?: UseQueryOptions<GameTokensByPlayerQuery, TError, TData>
+    ) =>
+    useQuery<GameTokensByPlayerQuery, TError, TData>(
+      variables === undefined ? ['GameTokensByPlayer'] : ['GameTokensByPlayer', variables],
+      useFetchData<GameTokensByPlayerQuery, GameTokensByPlayerQueryVariables>(GameTokensByPlayerDocument).bind(null, variables),
+      options
+    );
+
+useGameTokensByPlayerQuery.getKey = (variables?: GameTokensByPlayerQueryVariables) => variables === undefined ? ['GameTokensByPlayer'] : ['GameTokensByPlayer', variables];
+;
+
+export const useInfiniteGameTokensByPlayerQuery = <
+      TData = GameTokensByPlayerQuery,
+      TError = unknown
+    >(
+      variables?: GameTokensByPlayerQueryVariables,
+      options?: UseInfiniteQueryOptions<GameTokensByPlayerQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<GameTokensByPlayerQuery, GameTokensByPlayerQueryVariables>(GameTokensByPlayerDocument)
+    return useInfiniteQuery<GameTokensByPlayerQuery, TError, TData>(
+      variables === undefined ? ['GameTokensByPlayer.infinite'] : ['GameTokensByPlayer.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteGameTokensByPlayerQuery.getKey = (variables?: GameTokensByPlayerQueryVariables) => variables === undefined ? ['GameTokensByPlayer.infinite'] : ['GameTokensByPlayer.infinite', variables];
+;
+
+export const GameByTokenIdDocument = `
+    query GameByTokenId($tokenId: u64) {
+  dopewarsGameTokenModels(where: {token_id: $tokenId}) {
+    edges {
+      node {
+        token_id
+        game_id
+        player_id
+      }
+    }
+  }
+  dopewarsGameModels(limit: 1) {
+    edges {
+      node {
+        season_version
+        game_id
+        game_mode
+        player_name {
+          value
+        }
+        player_id
+        game_over
+        final_score
+        registered
+        claimed
+        claimable
+        position
+        multiplier
+        minigame_token_id
+        token_id {
+          option
+          GuestLootId
+          LootId
+          HustlerId
+        }
+        equipment_by_slot
+      }
+    }
+  }
+}
+    `;
+export const useGameByTokenIdQuery = <
+      TData = GameByTokenIdQuery,
+      TError = unknown
+    >(
+      variables?: GameByTokenIdQueryVariables,
+      options?: UseQueryOptions<GameByTokenIdQuery, TError, TData>
+    ) =>
+    useQuery<GameByTokenIdQuery, TError, TData>(
+      variables === undefined ? ['GameByTokenId'] : ['GameByTokenId', variables],
+      useFetchData<GameByTokenIdQuery, GameByTokenIdQueryVariables>(GameByTokenIdDocument).bind(null, variables),
+      options
+    );
+
+useGameByTokenIdQuery.getKey = (variables?: GameByTokenIdQueryVariables) => variables === undefined ? ['GameByTokenId'] : ['GameByTokenId', variables];
+;
+
+export const useInfiniteGameByTokenIdQuery = <
+      TData = GameByTokenIdQuery,
+      TError = unknown
+    >(
+      variables?: GameByTokenIdQueryVariables,
+      options?: UseInfiniteQueryOptions<GameByTokenIdQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<GameByTokenIdQuery, GameByTokenIdQueryVariables>(GameByTokenIdDocument)
+    return useInfiniteQuery<GameByTokenIdQuery, TError, TData>(
+      variables === undefined ? ['GameByTokenId.infinite'] : ['GameByTokenId.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteGameByTokenIdQuery.getKey = (variables?: GameByTokenIdQueryVariables) => variables === undefined ? ['GameByTokenId.infinite'] : ['GameByTokenId.infinite', variables];
 ;
 
 export const SeasonByVersionDocument = `

@@ -39,6 +39,7 @@
       "dopewars_GameCreated",
       "dopewars_GameOver",
       "dopewars_GameStorePacked",
+      "dopewars_GameToken",
       "dopewars_HighVolatility",
       "dopewars_HustlerBody",
       "dopewars_HustlerSlot",

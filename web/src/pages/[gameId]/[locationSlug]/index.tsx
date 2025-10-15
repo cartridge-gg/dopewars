@@ -95,7 +95,8 @@ const Location = observer(() => {
                 }
                 if (isLastDay) {
                   try {
-                    await endGame(gameId, game.getPendingCalls());
+                    const tokenId = game.gameInfos.minigame_token_id!.toString();
+                    await endGame(tokenId, game.getPendingCalls());
                     router.push(`/${gameId}/end`);
                   } catch (e: any) {
                     game.clearPendingCalls();

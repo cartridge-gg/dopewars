@@ -120,7 +120,8 @@ const Travel = observer(() => {
     if (targetLocation && game) {
       try {
         const locationId = configStore.getLocation(targetLocation).location_id;
-        const { hash } = await travel(gameId!, locationId, game.getPendingCalls());
+        const tokenId = game.gameInfos.minigame_token_id.toString();
+        const { hash } = await travel(tokenId, locationId, game.getPendingCalls());
       } catch (e) {
         game.clearPendingCalls();
         console.log(e);
