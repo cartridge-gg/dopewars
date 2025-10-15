@@ -2026,7 +2026,7 @@
     },
     {
       "address": "0x41caa0fb71647cc3926e515ecfa56bb7bc96920d3d269f8d44305ca14f89f1d",
-      "class_hash": "0x5576589e86f1a7e220c78e353a4dce7eacb2eaa0662d3f25449af593da4dce6",
+      "class_hash": "0x493f67dfa691745bd40d534ebaaf7c799d67af5449ae5ddb7118dbeb34ca5f7",
       "abi": [
         {
           "type": "impl",
@@ -2110,8 +2110,8 @@
               "name": "decide",
               "inputs": [
                 {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
+                  "name": "token_id",
+                  "type": "core::integer::u64"
                 },
                 {
                   "name": "action",
@@ -2460,7 +2460,7 @@
     },
     {
       "address": "0x51b986cd0c4abc33d28dab0d685edbdddda3537b5a2429199013477c0419d62",
-      "class_hash": "0x6ca89762b7c42893509f18b0505f2d4ae780a471e6167552e9fe0fc63f75685",
+      "class_hash": "0x38addb676978633ea9a7403c1cd329f059cc11bfbd608b08de695f43b4967be",
       "abi": [
         {
           "type": "impl",
@@ -2750,8 +2750,8 @@
               "name": "end_game",
               "inputs": [
                 {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
+                  "name": "token_id",
+                  "type": "core::integer::u64"
                 },
                 {
                   "name": "actions",
@@ -2766,8 +2766,8 @@
               "name": "travel",
               "inputs": [
                 {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
+                  "name": "token_id",
+                  "type": "core::integer::u64"
                 },
                 {
                   "name": "next_location",
@@ -3479,7 +3479,7 @@
     },
     {
       "address": "0x5f229d8b024b0cf4a7c9f09f6e5cf0d51c2c5b84a1e6d0e2432932141df023c",
-      "class_hash": "0x5d9a75c933857c4ec08e4ba5aa0a2b9c19772c7d9299d117a2d41dc933bd306",
+      "class_hash": "0x316c39b556cbcc0f22f79519d702e13eb0b4b451b6ffa50c03d755642beb1ca",
       "abi": [
         {
           "type": "impl",
@@ -3538,11 +3538,11 @@
         },
         {
           "type": "struct",
-          "name": "core::array::Span::<core::integer::u32>",
+          "name": "core::array::Span::<core::integer::u64>",
           "members": [
             {
               "name": "snapshot",
-              "type": "@core::array::Array::<core::integer::u32>"
+              "type": "@core::array::Array::<core::integer::u64>"
             }
           ]
         },
@@ -3555,8 +3555,8 @@
               "name": "register_score",
               "inputs": [
                 {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
+                  "name": "token_id",
+                  "type": "core::integer::u64"
                 },
                 {
                   "name": "prev_game_id",
@@ -3591,8 +3591,8 @@
                   "type": "core::starknet::contract_address::ContractAddress"
                 },
                 {
-                  "name": "game_ids",
-                  "type": "core::array::Span::<core::integer::u32>"
+                  "name": "token_ids",
+                  "type": "core::array::Span::<core::integer::u64>"
                 }
               ],
               "outputs": [],
