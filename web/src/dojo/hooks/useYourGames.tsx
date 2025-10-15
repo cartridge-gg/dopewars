@@ -1,66 +1,130 @@
-import { useMemo } from "react";
-import { useSql } from "./useSql";
-import { addAddressPadding, shortString } from "starknet";
+import { useEffect, useState, useCallback } from "react";
 import { useAccount } from "@starknet-react/core";
 import { useConfigStore } from "./useConfigStore";
+import { useDojoContext } from "./useDojoContext";
+import { useGameTokens } from "./useGameTokens";
+import { GameTokenData, EnrichedGame } from "../types";
+import { getContractByName } from "@dojoengine/core";
+import { DW_NS } from "./useSystems";
 
-const sqlQuery = (playerAddress: string, seasonVersion: number) => `SELECT season_version,
-game_id,
-player_id,
-"player_name.value",
-game_mode,
-token_id,
-"token_id.guestlootid",
-"token_id.lootid",
-"token_id.hustlerid"
-FROM "dopewars-Game"
-WHERE player_id = "${addAddressPadding(playerAddress)}"
-AND game_over = 0
-AND season_version = ${seasonVersion}
-ORDER BY game_id DESC
-LIMIT 1000;`;
+/**
+ * Helper function to create GameTokenData structure from token IDs
+ */
+const createGameTokenData = (tokenId: number, ownerAddress: string): GameTokenData => ({
+  token_id: tokenId,
+  game_id: undefined,
+  game_over: undefined,
+  lifecycle: { start: undefined, end: undefined },
+  minted_at: undefined,
+  minted_by: undefined,
+  minted_by_address: undefined,
+  owner: ownerAddress,
+  settings_id: undefined,
+  soulbound: undefined,
+  completed_all_objectives: undefined,
+  player_name: undefined,
+  metadata: undefined,
+  context: undefined,
+  settings: undefined,
+  score: 0,
+  objective_ids: [],
+  renderer: undefined,
+  client_url: undefined,
+  gameMetadata: undefined,
+});
 
 export const useYourGames = () => {
   const { account } = useAccount();
   const { config } = useConfigStore();
+  const {
+    chains: { selectedChain },
+    clients: { rpcProvider },
+  } = useDojoContext();
+  const { getGameTokens, fetchGameData } = useGameTokens();
+
+  const [yourGames, setYourGames] = useState<EnrichedGame[]>([]);
+  const [isFetching, setIsFetching] = useState(false);
+  const [gameTokenAddress, setGameTokenAddress] = useState<string | undefined>();
 
   const currentSeasonVersion = config?.ryo.season_version;
 
-  // Skip query if no account is connected
-  const query = account?.address && currentSeasonVersion
-    ? sqlQuery(account.address, currentSeasonVersion)
-    : "";
-  const shouldSkip = !account?.address || !currentSeasonVersion;
+  // Fetch the ERC721 token contract address from the game_token contract
+  useEffect(() => {
+    const fetchTokenAddress = async () => {
+      try {
+        const gameTokenContract = getContractByName(
+          selectedChain.manifest,
+          DW_NS,
+          "game_token"
+        );
 
-  const { data, isFetching, refetch } = useSql(query);
+        if (!gameTokenContract?.address) {
+          console.error("[useYourGames] game_token contract not found");
+          return;
+        }
 
-  // console.log("[useYourGames DEBUG]", {
-  //   hasAccount: !!account?.address,
-  //   hasConfig: !!currentSeasonVersion,
-  //   shouldSkip,
-  //   isFetching,
-  //   dataType: Array.isArray(data) ? 'array' : typeof data,
-  //   dataLength: Array.isArray(data) ? data.length : 'n/a',
-  // });
+        const result = await rpcProvider.callContract(
+          {
+            contractAddress: gameTokenContract.address,
+            entrypoint: "token_address",
+          },
+          "latest"
+        );
 
-  const yourGames = useMemo(() => {
-    if (!account || shouldSkip) return [];
-    if (!data) return [];
-    if (!Array.isArray(data)) return [];
+        if (result && result.length > 0) {
+          setGameTokenAddress(result[0]);
+        }
+      } catch (error) {
+        console.error("[useYourGames] Error fetching token address:", error);
+      }
+    };
 
-    return (data || []).map((i: any) => {
-      return {
-        ...i,
-        player_name: shortString.decodeShortString(BigInt(i["player_name.value"]).toString()),
-        token_id_type: i.token_id,
-        token_id: Number(i[`token_id.${i.token_id}`]),
-      };
-    });
-  }, [data, account, shouldSkip]);
+    fetchTokenAddress();
+  }, [selectedChain.manifest, rpcProvider]);
+
+  /**
+   * Load games owned by the current account.
+   * Fetches token IDs from token_balances, then enriches with game data.
+   */
+  const loadGames = useCallback(async () => {
+    if (!account?.address || !gameTokenAddress || !currentSeasonVersion) {
+      setYourGames([]);
+      return;
+    }
+
+    setIsFetching(true);
+    try {
+      const tokenIds = await getGameTokens(account.address, gameTokenAddress);
+
+      if (tokenIds.length === 0) {
+        setYourGames([]);
+        return;
+      }
+
+      const gameTokensData = tokenIds.map((tokenId) =>
+        createGameTokenData(tokenId, account.address)
+      );
+
+      const games = await fetchGameData(gameTokensData, currentSeasonVersion);
+
+      const activeGames = games.filter((game) => !game.game_over);
+
+      setYourGames(activeGames);
+    } catch (error) {
+      console.error("[useYourGames] Error loading games:", error);
+      setYourGames([]);
+    } finally {
+      setIsFetching(false);
+    }
+  }, [account?.address, gameTokenAddress, currentSeasonVersion, getGameTokens, fetchGameData]);
+
+  useEffect(() => {
+    loadGames();
+  }, [loadGames]);
 
   return {
     yourGames,
-    isFetchingYourGames: shouldSkip ? false : isFetching,
-    refetchYourGames: refetch,
+    isFetchingYourGames: isFetching,
+    refetchYourGames: loadGames,
   };
 };

@@ -144,7 +144,7 @@ const End = () => {
 
               <ChildrenOrConnect>
                 <Button isLoading={isPending} onClick={() => onRegister()}>
-                  Register you score
+                  Register your score
                 </Button>
               </ChildrenOrConnect>
             </VStack>

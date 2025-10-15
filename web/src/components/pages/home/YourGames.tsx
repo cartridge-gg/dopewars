@@ -85,10 +85,15 @@ const YourGameEntry = ({ game }: { game: any; account: AccountInterface | undefi
             flexShrink={0}
           />
 
-          <VStack w="full" alignItems="flex-start" gap={1}>
-            <Text>{game.player_name as string}</Text>
+          <VStack w="full" alignItems="flex-start" gap={0}>
             <Text fontSize="sm" opacity={0.7}>
               Game #{game.game_id}
+            </Text>
+            <Text fontSize="sm" opacity={0.7}>
+              Token #{game.minigame_token_id}
+            </Text>
+            <Text color={colors.neon["400"].toString()} fontWeight="bold">
+            {game.player_name as string}
             </Text>
           </VStack>
         </HStack>
@@ -100,10 +105,11 @@ const YourGameEntry = ({ game }: { game: any; account: AccountInterface | undefi
           borderColor="neon.700"
           pt={1}
           mt={1}
-          opacity={0.7}
         >
-          <Text>SEASON {game.season_version}</Text>
-          <Text color={colors.neon["400"].toString()}>ACTIVE</Text>
+          <Text opacity={0.7}>SEASON {game.season_version}</Text>
+          <Text color={colors.neon["400"].toString()} fontWeight="bold">
+            RESUME →
+          </Text>
         </HStack>
       </VStack>
     </Card>

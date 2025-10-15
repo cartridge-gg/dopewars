@@ -180,3 +180,72 @@ export enum WantedMode {
   ThugLife = "ThugLife",
   MostWanted = "MostWanted",
 }
+
+// Game Token Types
+export interface GameTokenData {
+  game_id: number | undefined;
+  game_over: boolean | undefined;
+  lifecycle: {
+    start: number | undefined;
+    end: number | undefined;
+  };
+  minted_at: number | undefined;
+  minted_by: number | undefined;
+  minted_by_address: string | undefined;
+  owner: string | undefined;
+  settings_id: number | undefined;
+  soulbound: boolean | undefined;
+  completed_all_objectives: boolean | undefined;
+  token_id: number;
+  player_name: string | undefined;
+  metadata: any | undefined;
+  context: {
+    name: string;
+    description: string;
+    contexts: any;
+  } | undefined;
+  settings: {
+    name: string;
+    description: string;
+    data: any;
+  } | undefined;
+  score: number;
+  objective_ids: string[];
+  renderer: string | undefined;
+  client_url: string | undefined;
+  gameMetadata: {
+    game_id: number;
+    contract_address: string;
+    name: string;
+    description: string;
+    developer: string;
+    publisher: string;
+    genre: string;
+    image: string;
+    color?: string;
+    client_url?: string;
+    renderer_address?: string;
+  } | undefined;
+}
+
+export interface EnrichedGame {
+  season_version: number;
+  game_id: number;
+  player_id: string;
+  player_name: string;
+  game_mode: string;
+  game_over: number;
+  final_score: number;
+  token_id_type: string;
+  token_id: number;
+  "token_id.guestlootid": string | null;
+  "token_id.lootid": string | null;
+  "token_id.hustlerid": string | null;
+  minigame_token_id: number;
+  equipment_by_slot: string;
+  minted_by?: number;
+  lifecycle?: {
+    start: number | undefined;
+    end: number | undefined;
+  };
+}

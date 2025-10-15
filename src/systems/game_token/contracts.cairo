@@ -123,7 +123,7 @@ pub mod game_token {
             let current_season_version = ryo_config.season_version;
 
             // Assert game belongs to current season
-            if (game.season_version < current_season_version) {
+            if (game.season_version != current_season_version) {
                 return true;
             };
 
