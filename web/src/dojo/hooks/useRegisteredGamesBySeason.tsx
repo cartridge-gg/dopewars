@@ -25,6 +25,7 @@ claimed,
 claimable,
 position,
 multiplier,
+minigame_token_id,
 token_id,
 "token_id.guestlootid",
 "token_id.lootid",
@@ -50,6 +51,7 @@ export const useRegisteredGamesBySeason = (version: number): RegisteredGamesBySe
         player_name: shortString.decodeShortString(BigInt(i["player_name.value"]).toString()),
         token_id_type: i.token_id,
         token_id: Number(i[`token_id.${i.token_id}`]),
+        minigame_token_id: Number(i.minigame_token_id),
       };
     });
 

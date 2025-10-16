@@ -5,13 +5,17 @@ import {
   useRegisteredGamesBySeason,
   useRouterContext,
   useSeasonByVersion,
+  useGameStore,
+  useGameTokens,
 } from "@/dojo/hooks";
+import { getContractByName } from "@dojoengine/core";
+import { DW_NS } from "@/dojo/hooks/useSystems";
 import colors from "@/theme/colors";
 import { formatCash } from "@/utils/ui";
 import { Box, Heading, HStack, ListItem, Text, UnorderedList, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Countdown from "react-countdown";
 import { Arrow, InfosIcon, PaperIcon, Skull, Trophy } from "../../icons";
 import { Dopewars_Game as Game } from "@/generated/graphql";
@@ -61,11 +65,19 @@ const renderer = ({
 export const Leaderboard = observer(({ config }: { config?: Config }) => {
   const { router, gameId } = useRouterContext();
 
-  const { uiStore } = useDojoContext();
+  const {
+    uiStore,
+    chains: { selectedChain },
+    clients: { rpcProvider },
+  } = useDojoContext();
   const { account } = useAccount();
+  const { getGameTokens } = useGameTokens();
 
   const [currentVersion, setCurrentVersion] = useState(config?.ryo.season_version || 0);
   const [selectedVersion, setSelectedVersion] = useState(config?.ryo.season_version || 0);
+  const [ownedTokenIds, setOwnedTokenIds] = useState<Set<number>>(new Set());
+  const [isLoadingOwnedTokens, setIsLoadingOwnedTokens] = useState(true);
+  const tokenAddressRef = useRef<string | null>(null);
 
   const { season } = useSeasonByVersion(selectedVersion);
 
@@ -83,6 +95,64 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
     setCurrentVersion(config?.ryo.season_version || 0);
     refetchRegisteredGames();
   }, [config]);
+
+  // Memoize token address fetching to avoid unnecessary re-renders
+  const fetchTokenAddress = useCallback(async () => {
+    if (tokenAddressRef.current) {
+      return tokenAddressRef.current;
+    }
+
+    const gameTokenContract = getContractByName(selectedChain.manifest, DW_NS, "game_token");
+    if (!gameTokenContract?.address) {
+      throw new Error("game_token contract not found");
+    }
+
+    const result = await rpcProvider.callContract(
+      {
+        contractAddress: gameTokenContract.address,
+        entrypoint: "token_address",
+      },
+      "latest",
+    );
+
+    if (result && result.length > 0) {
+      const tokenAddress = result[0];
+      tokenAddressRef.current = tokenAddress;
+      return tokenAddress;
+    }
+
+    throw new Error("No token address found");
+  }, [selectedChain.manifest, rpcProvider]);
+
+  // Fetch owned tokens for current account
+  useEffect(() => {
+    const fetchOwnedTokens = async () => {
+      if (!account?.address) {
+        setOwnedTokenIds(new Set());
+        setIsLoadingOwnedTokens(false);
+        return;
+      }
+
+      try {
+        setIsLoadingOwnedTokens(true);
+        const tokenAddress = await fetchTokenAddress();
+        const tokenIds = await getGameTokens(account.address, tokenAddress);
+        setOwnedTokenIds(new Set(tokenIds));
+      } catch (error) {
+        console.error("Error fetching owned tokens:", error);
+        setOwnedTokenIds(new Set());
+      } finally {
+        setIsLoadingOwnedTokens(false);
+      }
+    };
+
+    fetchOwnedTokens();
+  }, [account?.address, getGameTokens, fetchTokenAddress, selectedChain.manifest, rpcProvider]);
+
+  // Reset token address when account changes
+  useEffect(() => {
+    tokenAddressRef.current = null;
+  }, [account?.address]);
 
   const onPrev = async () => {
     if (selectedVersion > 1) {
@@ -157,7 +227,12 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
           <UnorderedList boxSize="full" variant="dotted" h="auto">
             {registeredGames && registeredGames.length > 0 ? (
               registeredGames.map((game: Game, index: number) => {
-                const isOwn = BigInt(game.player_id) === BigInt(account?.address || 0);
+                // Check if player currently owns the token (not just if they are original owner)
+                const tokenId = Number(game.minigame_token_id);
+                // Use current ownership check if available, otherwise fall back to original owner check
+                const isOwn = isLoadingOwnedTokens
+                  ? BigInt(game.player_id) === BigInt(account?.address || 0)
+                  : ownedTokenIds.has(tokenId);
                 const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
                 const avatarColor = isOwn ? "yellow" : "green";
                 const displayName = game.player_name ? `${game.player_name}${isOwn ? " (you)" : ""}` : "Anonymous";
