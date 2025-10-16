@@ -88,79 +88,94 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
 const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig }) => {
   // console.log("cartridgeConnector", selectedChain.name);
   const paperAddress = selectedChain.paperAddress;
-  const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game").address;
-  const decideAddress = getContractByName(selectedChain.manifest, DW_NS, "decide").address;
-  const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
-  const gameTokenAddress = getContractByName(selectedChain.manifest, DW_NS, "game_token").address;
-  const dopeLootClaimAddress = getContractByName(selectedChain.manifest, "dope", "DopeLootClaim").address;
-  const dopeGearAddress = getContractByName(selectedChain.manifest, "dope", "DopeGear").address;
-  const dopeHustlersAddress = getContractByName(selectedChain.manifest, "dope", "DopeHustlers").address;
+  const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game")?.address;
+  const decideAddress = getContractByName(selectedChain.manifest, DW_NS, "decide")?.address;
+  const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat")?.address;
+  const gameTokenAddress = getContractByName(selectedChain.manifest, DW_NS, "game_token")?.address;
+  const dopeLootClaimAddress = getContractByName(selectedChain.manifest, "dope", "DopeLootClaim")?.address;
+  const dopeGearAddress = getContractByName(selectedChain.manifest, "dope", "DopeGear")?.address;
+  const dopeHustlersAddress = getContractByName(selectedChain.manifest, "dope", "DopeHustlers")?.address;
 
-  const policies: SessionPolicies = {
-    contracts: {
-      [selectedChain.vrfProviderAddress]: {
-        methods: [{ entrypoint: "request_random" }],
-      },
-      [paperAddress]: {
-        methods: [{ entrypoint: "approve" }],
-      },
-      [gameAddress]: {
-        methods: [
-          { entrypoint: "create_game" },
-          { entrypoint: "travel" },
-          { entrypoint: "end_game" },
-          { entrypoint: "travel" },
-        ],
-      },
-      [gameTokenAddress]: {
-        methods: [
-          { entrypoint: "mint_game" },
-          { entrypoint: "player_name" },
-          { entrypoint: "token_uri" },
-        ],
-      },
-      [decideAddress]: {
-        methods: [{ entrypoint: "decide" }],
-      },
-      [laundromatAddress]: {
-        methods: [{ entrypoint: "register_score" }, { entrypoint: "claim" }, { entrypoint: "launder" }],
-      },
-      [dopeLootClaimAddress]: {
-        methods: [{ entrypoint: "release" }, { entrypoint: "claim" }, { entrypoint: "open" }],
-      },
-      [dopeGearAddress]: {
-        methods: [{ entrypoint: "mint" }, { entrypoint: "set_approval_for_all" }],
-      },
-      [dopeHustlersAddress]: {
-        methods: [
-          { entrypoint: "update_hustler" },
-          { entrypoint: "update_hustler_body" },
-          { entrypoint: "equip" },
-          { entrypoint: "unequip" },
-        ],
-      },
-    },
-  };
+  const policies: SessionPolicies = { contracts: {} };
+
+  // Only add contracts to policies if the address is available in the manifest
+  if (selectedChain.vrfProviderAddress) {
+    policies.contracts![selectedChain.vrfProviderAddress] = { methods: [{ entrypoint: "request_random" }] };
+  }
+
+  if (paperAddress) {
+    policies.contracts![paperAddress] = { methods: [{ entrypoint: "approve" }] };
+  }
+
+  if (gameAddress) {
+    policies.contracts![gameAddress] = {
+      methods: [
+        { entrypoint: "create_game" },
+        { entrypoint: "travel" },
+        { entrypoint: "end_game" },
+        { entrypoint: "travel" },
+      ],
+    };
+  }
+
+  if (gameTokenAddress) {
+    policies.contracts![gameTokenAddress] = {
+      methods: [{ entrypoint: "mint_game" }, { entrypoint: "player_name" }, { entrypoint: "token_uri" }],
+    };
+  }
+
+  if (decideAddress) {
+    policies.contracts![decideAddress] = { methods: [{ entrypoint: "decide" }] };
+  }
+
+  if (laundromatAddress) {
+    policies.contracts![laundromatAddress] = {
+      methods: [{ entrypoint: "register_score" }, { entrypoint: "claim" }, { entrypoint: "launder" }],
+    };
+  }
+
+  if (dopeLootClaimAddress) {
+    policies.contracts![dopeLootClaimAddress] = {
+      methods: [{ entrypoint: "release" }, { entrypoint: "claim" }, { entrypoint: "open" }],
+    };
+  }
+
+  if (dopeGearAddress) {
+    policies.contracts![dopeGearAddress] = {
+      methods: [{ entrypoint: "mint" }, { entrypoint: "set_approval_for_all" }],
+    };
+  }
+
+  if (dopeHustlersAddress) {
+    policies.contracts![dopeHustlersAddress] = {
+      methods: [
+        { entrypoint: "update_hustler" },
+        { entrypoint: "update_hustler_body" },
+        { entrypoint: "equip" },
+        { entrypoint: "unequip" },
+      ],
+    };
+  }
 
   if (selectedChain.name !== "MAINNET") {
     const devtoolsAddress = getContractByName(selectedChain.manifest, DW_NS, "devtools")?.address;
 
-    policies.contracts![devtoolsAddress] = { methods: [{ entrypoint: "create_fake_game" }] };
+    if (devtoolsAddress) {
+      policies.contracts![devtoolsAddress] = { methods: [{ entrypoint: "create_fake_game" }] };
+    }
 
-    policies.contracts![paperAddress].methods.push({
-      entrypoint: "faucet",
-    });
+    if (paperAddress && policies.contracts![paperAddress]) {
+      policies.contracts![paperAddress].methods.push({ entrypoint: "faucet" });
+    }
 
-    policies.contracts![laundromatAddress].methods.push({
-      entrypoint: "supercharge_jackpot",
-    });
+    if (laundromatAddress && policies.contracts![laundromatAddress]) {
+      policies.contracts![laundromatAddress].methods.push({ entrypoint: "supercharge_jackpot" });
+    }
 
-    policies.contracts![selectedChain.vrfProviderAddress].methods.push({
-      entrypoint: "submit_random",
-    });
-    policies.contracts![selectedChain.vrfProviderAddress].methods.push({
-      entrypoint: "assert_consumed",
-    });
+    if (selectedChain.vrfProviderAddress && policies.contracts![selectedChain.vrfProviderAddress]) {
+      policies.contracts![selectedChain.vrfProviderAddress].methods.push({ entrypoint: "submit_random" });
+      policies.contracts![selectedChain.vrfProviderAddress].methods.push({ entrypoint: "assert_consumed" });
+    }
   }
 
   // console.log(policies);
@@ -182,14 +197,14 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
     ],
     defaultChainId: `0x${selectedChain.chainConfig.id.toString(16)}`,
     url: selectedChain.keychain ? selectedChain.keychain : "https://x.cartridge.gg",
-    rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
+    // rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
     // profileUrl: selectedChain.profileUrl ? selectedChain.profileUrl : undefined,
     namespace: selectedChain.namespace ? selectedChain.namespace : "dopewars",
     slot: selectedChain.slot ? selectedChain.slot : "ryo",
     tokens: {
       erc20: [
         // paperAddress
-        "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113",
+        // "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113",
       ],
     },
     preset: "dope-wars",

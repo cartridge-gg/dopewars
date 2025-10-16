@@ -102,7 +102,12 @@ const Decision = observer(() => {
         break;
     }
 
-    const tokenId = game.gameInfos.minigame_token_id!.toString();
+    if (!game || !game.gameInfos || !game.gameInfos.minigame_token_id) {
+      console.warn("onDecision: missing game or minigame_token_id");
+      return;
+    }
+
+    const tokenId = game.gameInfos.minigame_token_id.toString();
     const { hash } = await decide(tokenId, action);
   };
 

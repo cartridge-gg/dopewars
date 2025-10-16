@@ -177,11 +177,12 @@ const snMainnet: DojoChainConfig = {
 };
 
 // keys must match chain.id
+// The first chain in this object is the default chain in production
 export const dojoContextConfig = {
   // SN_MAIN: snMainnet,
   // SN_SEPOLIA: snSepolia,
-  WP_DOPEWARS: katanaSlotDopewars,
   WP_PROVABLE_DW: provableDW,
+  WP_DOPEWARS: katanaSlotDopewars,
   KATANA: katanaLocal,
 };
 

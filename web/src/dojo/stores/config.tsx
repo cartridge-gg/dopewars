@@ -6,7 +6,6 @@ import {
   Dopewars_EncounterStatsConfig as EncounterStatsConfig,
   Dopewars_EncounterStatsConfigEdge as EncounterStatsConfigEdge,
   Dopewars_GameConfig as GameConfig,
-  
   Dopewars_LocationConfig as LocationConfig,
   Dopewars_LocationConfigEdge as LocationConfigEdge,
   Dopewars_RyoAddress as RyoAddress,
@@ -27,12 +26,7 @@ import { flow, makeObservable, observable } from "mobx";
 import React, { ReactNode } from "react";
 import { Contract, TypedContractV2, shortString, RpcProvider } from "starknet";
 import { ABI as configAbi } from "../abis/configAbi";
-import {
-  drugIcons,
-  drugIconsKeys,
-  locationIcons,
-  locationIconsKeys,
-} from "../helpers";
+import { drugIcons, drugIconsKeys, locationIcons, locationIconsKeys } from "../helpers";
 import { CashMode, DrugsMode, EncountersMode, EncountersOddsMode, HealthMode, ItemSlot, TurnsMode } from "../types";
 import { GearItem } from "@/dope/helpers";
 
@@ -148,7 +142,7 @@ export class ConfigStoreClass {
     });
   }
 
-  *init() {
+  *init(): Generator<any, any, any> {
     this.isInitialized = false;
 
     this.config = undefined;
@@ -175,7 +169,6 @@ export class ConfigStoreClass {
 
     //
 
-   
     //
 
     const encounterStatsConfigEdges = data.dopewarsEncounterStatsConfigModels!.edges as EncounterStatsConfigEdge[];
@@ -228,11 +221,14 @@ export class ConfigStoreClass {
 
     // Make direct RPC call to avoid "pending" block ID issue
     const configContractAddress = this.manifest.contracts.find((c: any) => c.tag === "dopewars-config")?.address;
-    const getConfigResult = yield this.rpcProvider.callContract({
-      contractAddress: configContractAddress,
-      entrypoint: "get_config",
-      calldata: []
-    }, "latest");
+    const getConfigResult = yield this.rpcProvider.callContract(
+      {
+        contractAddress: configContractAddress,
+        entrypoint: "get_config",
+        calldata: [],
+      },
+      "latest",
+    );
 
     // For now, provide a fallback config with empty layouts
     // TODO: Fix the config parsing once we understand the exact format
@@ -246,7 +242,7 @@ export class ConfigStoreClass {
           { name: "Items", idx: BigInt(144), bits: BigInt(8) },
           { name: "Drugs", idx: BigInt(152), bits: BigInt(16) },
           { name: "Wanted", idx: BigInt(168), bits: BigInt(18) },
-          { name: "Player", idx: BigInt(186), bits: BigInt(64) }
+          { name: "Player", idx: BigInt(186), bits: BigInt(64) },
         ],
         player: [
           { name: "Cash", idx: BigInt(0), bits: BigInt(30) },
@@ -257,17 +253,17 @@ export class ConfigStoreClass {
           { name: "Location", idx: BigInt(48), bits: BigInt(3) },
           { name: "NextLocation", idx: BigInt(51), bits: BigInt(3) },
           { name: "DrugLevel", idx: BigInt(54), bits: BigInt(3) },
-          { name: "Reputation", idx: BigInt(57), bits: BigInt(7) }
-        ]
+          { name: "Reputation", idx: BigInt(57), bits: BigInt(7) },
+        ],
       },
       ryo_config: {} as RyoConfig,
-      season_settings_modes: {} as SeasonSettingsModes
+      season_settings_modes: {} as SeasonSettingsModes,
     };
 
-    console.log('Parsed config:', {
+    console.log("Parsed config:", {
       layouts: getConfig.layouts,
       gameStoreItems: getConfig.layouts.game_store?.length || 0,
-      playerItems: getConfig.layouts.player?.length || 0
+      playerItems: getConfig.layouts.player?.length || 0,
     });
 
     /*************************************************** */
@@ -317,8 +313,6 @@ export class ConfigStoreClass {
     // return this.config?.config.layouts.player.find((i) => shortString.decodeShortString(i.name) === name)!;
     return this.config?.config.layouts.player.find((i) => i.name === name)!;
   }
-
-  
 
   // loot
 

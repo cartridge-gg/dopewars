@@ -49,7 +49,7 @@ const Admin = () => {
           <Tab>SEASON</Tab>
           <Tab>GAME</Tab>
           <Tab>DRUGS</Tab>
-    
+
           <Tab>ENCOUNTERS</Tab>
           {/* <Tab>LAYOUTS</Tab> */}
 
@@ -161,8 +161,16 @@ const RyoAddressCard = observer(() => {
           </HStack>
           <HStack>
             <Text w="100px">LAUNDROMAT</Text>
-            <Text fontFamily="monospace">{config?.ryoAddress.laundromat}</Text>
-            <TokenBalance address={config?.ryoAddress.laundromat} token={config?.ryoAddress.paper} icon={PaperIcon} />
+            {/* `laundromat` may not exist on the generated GraphQL type; read it safely */}
+            {(() => {
+              const laundromat = (config?.ryoAddress as any)?.laundromat;
+              return (
+                <>
+                  <Text fontFamily="monospace">{laundromat ?? "N/A"}</Text>
+                  <TokenBalance address={laundromat} token={config?.ryoAddress.paper} icon={PaperIcon} />
+                </>
+              );
+            })()}
           </HStack>
         </VStack>
       </CardBody>
