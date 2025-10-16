@@ -82,4 +82,3 @@ slot_ryomainnet_torii = "slot d create --tier legendary ryomainnet torii -v v1.0
 [profile.ryosepolia]
 [profile.mainnet]
 [profile.provable-dw]
-
