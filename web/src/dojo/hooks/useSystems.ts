@@ -2,7 +2,16 @@ import { Dopewars_DrugConfig as DrugConfig, Dopewars_RyoConfig as RyoConfig } fr
 import { useToast } from "@/hooks/toast";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useMemo, useState } from "react";
-import { AllowArray, Call, CallData, GetTransactionReceiptResponse, shortString, uint256, CairoOption, CairoOptionVariant } from "starknet";
+import {
+  AllowArray,
+  Call,
+  CallData,
+  GetTransactionReceiptResponse,
+  shortString,
+  uint256,
+  CairoOption,
+  CairoOptionVariant,
+} from "starknet";
 import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
 import { EncountersAction, GameMode, Locations } from "../types";
 import { useConfigStore } from "./useConfigStore";
@@ -94,7 +103,7 @@ export const useSystems = (): SystemsInterface => {
     const decideAddress = getContractByName(dojoProvider.manifest, DW_NS, "decide").address;
     const laundromatAddress = getContractByName(dojoProvider.manifest, DW_NS, "laundromat").address;
     const dopeLootClaimAddress = getContractByName(dojoProvider.manifest, "dope", "DopeLootClaim").address;
-    const gameTokenAddress = getContractByName(dojoProvider.manifest, DW_NS, "game_token").address;
+    const gameTokenAddress = getContractByName(dojoProvider.manifest, DW_NS, "game_token_system_v0").address;
 
     return { gameAddress, decideAddress, laundromatAddress, dopeLootClaimAddress, gameTokenAddress };
   }, [dojoProvider]);

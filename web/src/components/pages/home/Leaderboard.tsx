@@ -102,9 +102,9 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
       return tokenAddressRef.current;
     }
 
-    const gameTokenContract = getContractByName(selectedChain.manifest, DW_NS, "game_token");
+    const gameTokenContract = getContractByName(selectedChain.manifest, DW_NS, "game_token_system_v0");
     if (!gameTokenContract?.address) {
-      throw new Error("game_token contract not found");
+      throw new Error("game_token_system contract not found");
     }
 
     const result = await rpcProvider.callContract(

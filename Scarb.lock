@@ -4,15 +4,15 @@ version = 1
 [[package]]
 name = "achievement"
 version = "0.0.0"
+source = "git+https://github.com/FemiOje/arcade#173453c2f8210ad80dbd068c03956819f6dada16"
 dependencies = [
  "dojo",
- "dojo_macros",
 ]
 
 [[package]]
 name = "alexandria_bytes"
-version = "0.3.0"
-source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.3.0#e3715428c990665afc495b5428ef08ab9a2089cd"
+version = "0.6.1"
+source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.6.1#3f5e6476f350bb09e919e2725489c29442f313ca"
 dependencies = [
  "alexandria_data_structures",
  "alexandria_math",
@@ -20,13 +20,13 @@ dependencies = [
 
 [[package]]
 name = "alexandria_data_structures"
-version = "0.3.0"
-source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.3.0#e3715428c990665afc495b5428ef08ab9a2089cd"
+version = "0.6.1"
+source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.6.1#3f5e6476f350bb09e919e2725489c29442f313ca"
 
 [[package]]
 name = "alexandria_encoding"
-version = "0.3.0"
-source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.3.0#e3715428c990665afc495b5428ef08ab9a2089cd"
+version = "0.6.1"
+source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.6.1#3f5e6476f350bb09e919e2725489c29442f313ca"
 dependencies = [
  "alexandria_bytes",
  "alexandria_data_structures",
@@ -36,13 +36,13 @@ dependencies = [
 
 [[package]]
 name = "alexandria_math"
-version = "0.3.0"
-source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.3.0#e3715428c990665afc495b5428ef08ab9a2089cd"
+version = "0.6.1"
+source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.6.1#3f5e6476f350bb09e919e2725489c29442f313ca"
 
 [[package]]
 name = "alexandria_numeric"
-version = "0.3.0"
-source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.3.0#e3715428c990665afc495b5428ef08ab9a2089cd"
+version = "0.6.1"
+source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.6.1#3f5e6476f350bb09e919e2725489c29442f313ca"
 dependencies = [
  "alexandria_math",
  "alexandria_searching",
@@ -50,8 +50,8 @@ dependencies = [
 
 [[package]]
 name = "alexandria_searching"
-version = "0.3.0"
-source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.3.0#e3715428c990665afc495b5428ef08ab9a2089cd"
+version = "0.6.1"
+source = "git+https://github.com/keep-starknet-strange/alexandria.git?tag=v0.6.1#3f5e6476f350bb09e919e2725489c29442f313ca"
 dependencies = [
  "alexandria_data_structures",
 ]
@@ -59,6 +59,7 @@ dependencies = [
 [[package]]
 name = "cartridge_vrf"
 version = "0.1.0"
+source = "git+https://github.com/FemiOje/vrf#c0dcb820373b3d987e860996d01ee0cfa2cfe5e3"
 dependencies = [
  "openzeppelin_access",
  "openzeppelin_upgrades",
@@ -68,28 +69,32 @@ dependencies = [
 
 [[package]]
 name = "dojo"
-version = "1.7.0"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.7.0#503934a3882b245f104612af15b07475507614f7"
+version = "1.7.1"
+source = "registry+https://scarbs.xyz/"
+checksum = "sha256:b792d9c526269f5265dd89f063da5db8daebb461f2dec2cdb712f420187b39a8"
 dependencies = [
- "dojo_macros",
+ "dojo_cairo_macros",
 ]
 
 [[package]]
+name = "dojo_cairo_macros"
+version = "1.7.1"
+source = "registry+https://scarbs.xyz/"
+checksum = "sha256:18059a9ac9ec2c0c708baad382728a99970b621b1eaab780fd9a8ec2dc975c98"
+
+[[package]]
 name = "dojo_cairo_test"
-version = "1.7.0"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.7.0#503934a3882b245f104612af15b07475507614f7"
+version = "1.7.1"
+source = "registry+https://scarbs.xyz/"
+checksum = "sha256:93fba9557e34d0aa0903092e8f32560b0ce72b66dceea2a51fd571b1217351e3"
 dependencies = [
  "dojo",
 ]
 
 [[package]]
-name = "dojo_macros"
-version = "1.7.0"
-source = "git+https://github.com/dojoengine/dojo?tag=v1.7.0#503934a3882b245f104612af15b07475507614f7"
-
-[[package]]
 name = "game_components_metagame"
 version = "1.5.1"
+source = "git+https://github.com/FemiOje/game-components#a2a607d1d302a7998ac4e487cc259566f74918a5"
 dependencies = [
  "game_components_minigame",
  "game_components_token",
@@ -101,6 +106,7 @@ dependencies = [
 [[package]]
 name = "game_components_minigame"
 version = "1.5.1"
+source = "git+https://github.com/FemiOje/game-components#a2a607d1d302a7998ac4e487cc259566f74918a5"
 dependencies = [
  "game_components_metagame",
  "game_components_token",
@@ -112,6 +118,7 @@ dependencies = [
 [[package]]
 name = "game_components_test_starknet"
 version = "1.5.1"
+source = "git+https://github.com/FemiOje/game-components#a2a607d1d302a7998ac4e487cc259566f74918a5"
 dependencies = [
  "game_components_metagame",
  "game_components_minigame",
@@ -124,6 +131,7 @@ dependencies = [
 [[package]]
 name = "game_components_token"
 version = "1.5.1"
+source = "git+https://github.com/FemiOje/game-components#a2a607d1d302a7998ac4e487cc259566f74918a5"
 dependencies = [
  "game_components_metagame",
  "game_components_minigame",
@@ -136,6 +144,7 @@ dependencies = [
 [[package]]
 name = "game_components_utils"
 version = "1.5.1"
+source = "git+https://github.com/FemiOje/game-components#a2a607d1d302a7998ac4e487cc259566f74918a5"
 dependencies = [
  "alexandria_encoding",
  "game_components_metagame",
@@ -276,7 +285,6 @@ dependencies = [
  "cartridge_vrf",
  "dojo",
  "dojo_cairo_test",
- "dojo_macros",
  "game_components_metagame",
  "game_components_minigame",
  "game_components_test_starknet",

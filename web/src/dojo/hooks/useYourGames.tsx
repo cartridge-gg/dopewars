@@ -48,18 +48,14 @@ export const useYourGames = () => {
 
   const currentSeasonVersion = config?.ryo.season_version;
 
-  // Fetch the ERC721 token contract address from the game_token contract
+  // Fetch the ERC721 token contract address from the game_token_system contract
   useEffect(() => {
     const fetchTokenAddress = async () => {
       try {
-        const gameTokenContract = getContractByName(
-          selectedChain.manifest,
-          DW_NS,
-          "game_token"
-        );
+        const gameTokenContract = getContractByName(selectedChain.manifest, DW_NS, "game_token_system_v0");
 
         if (!gameTokenContract?.address) {
-          console.error("[useYourGames] game_token contract not found");
+          console.error("[useYourGames] game_token_system contract not found");
           return;
         }
 
@@ -68,7 +64,7 @@ export const useYourGames = () => {
             contractAddress: gameTokenContract.address,
             entrypoint: "token_address",
           },
-          "latest"
+          "latest",
         );
 
         if (result && result.length > 0) {
@@ -101,9 +97,7 @@ export const useYourGames = () => {
         return;
       }
 
-      const gameTokensData = tokenIds.map((tokenId) =>
-        createGameTokenData(tokenId, account.address)
-      );
+      const gameTokensData = tokenIds.map((tokenId) => createGameTokenData(tokenId, account.address));
 
       const games = await fetchGameData(gameTokensData, currentSeasonVersion);
 

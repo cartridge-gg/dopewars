@@ -25,19 +25,18 @@ build-external-contracts = [
 
 [dev-dependencies]
 cairo_test = "2.12.2"
-dojo_cairo_test = { git = "https://github.com/dojoengine/dojo", tag = "v1.7.0" }
+dojo_cairo_test = "1.7.1"
 
 [dependencies]
 starknet = "2.12.2"
-dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.7.0" }
-dojo_macros = { git = "https://github.com/dojoengine/dojo", tag = "v1.7.0" }
-cartridge_vrf = { path = "../vrf" }
-achievement = { path = "../arcade" }
-game_components_minigame = { path = "../game-components" }
-game_components_metagame = { path = "../game-components" }
-game_components_test_starknet = { path = "../game-components" }
-game_components_token = { path = "../game-components" }
-game_components_utils = { path = "../game-components" }
+dojo = "1.7.1"
+cartridge_vrf = { git = "https://github.com/FemiOje/vrf" }
+achievement = { git = "https://github.com/FemiOje/arcade" }
+game_components_minigame = { git = "https://github.com/FemiOje/game-components" }
+game_components_metagame = { git = "https://github.com/FemiOje/game-components" }
+game_components_test_starknet = { git = "https://github.com/FemiOje/game-components" }
+game_components_token = { git = "https://github.com/FemiOje/game-components" }
+game_components_utils = { git = "https://github.com/FemiOje/game-components" }
 # dojo = { path = "../dojo/crates/dojo/core" }
 # cartridge_vrf = { git = "https://github.com/cartridge-gg/vrf" }
 # achievement = { path = "../arcade/packages/achievement" }

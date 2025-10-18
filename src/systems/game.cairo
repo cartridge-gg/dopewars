@@ -364,7 +364,7 @@ pub mod game {
 
         fn _get_game_token_address(self: @ContractState) -> starknet::ContractAddress {
             let world = self.world(@"dopewars");
-            let (game_token_systems_address, _) = world.dns(@"game_token").unwrap();
+            let (game_token_systems_address, _) = world.dns(@"game_token_system_v0").unwrap();
             let minigame_dispatcher = IMinigameDispatcher { contract_address: game_token_systems_address };
             minigame_dispatcher.token_address()
         }

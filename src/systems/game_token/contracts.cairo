@@ -8,7 +8,7 @@ pub trait IGameTokenSystems<T> {
 }
 
 #[dojo::contract]
-pub mod game_token {
+pub mod game_token_system_v0 {
     use core::num::traits::Zero;
     use dojo::model::ModelStorage;
     use game_components_minigame::interface::IMinigameTokenData;
@@ -64,8 +64,8 @@ pub mod game_token {
             "Cartridge/Dope DAO",
             "Dope Wars",
             "Strategy",
-            "https://dopewars.gg/favicon.png",
-            Option::None, // color - uses default
+            "https://raw.githubusercontent.com/cartridge-gg/dopewars/refs/heads/main/assets/icon.png",
+            Option::Some("#11ED83"), // color
             Option::None, // client_url
             Option::None, // renderer_address - uses default renderer
             Option::None, // settings_address

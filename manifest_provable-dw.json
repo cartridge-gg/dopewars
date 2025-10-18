@@ -2026,7 +2026,7 @@
     },
     {
       "address": "0x41caa0fb71647cc3926e515ecfa56bb7bc96920d3d269f8d44305ca14f89f1d",
-      "class_hash": "0x493f67dfa691745bd40d534ebaaf7c799d67af5449ae5ddb7118dbeb34ca5f7",
+      "class_hash": "0x16041af051703a8b7314aa70fed61eef908ca992047a004a369db74b0f679d4",
       "abi": [
         {
           "type": "impl",
@@ -2460,7 +2460,7 @@
     },
     {
       "address": "0x51b986cd0c4abc33d28dab0d685edbdddda3537b5a2429199013477c0419d62",
-      "class_hash": "0x38addb676978633ea9a7403c1cd329f059cc11bfbd608b08de695f43b4967be",
+      "class_hash": "0x518920905c3258a2764a2a138302c0fd9da72363f00c07bddff15dbe09b0eaa",
       "abi": [
         {
           "type": "impl",
@@ -2906,12 +2906,12 @@
       ]
     },
     {
-      "address": "0x3878e59066f1496db74c3c5cbc2b345b3598a8385cac118de91494761026869",
-      "class_hash": "0x391cb0e9bc3a3d840ce581be881094770d47b2ba7cc726ca4589e6716ff7821",
+      "address": "0x30181aa82776a519af6308b82c2cdc11c28b6c7b7ebbaed5183d70c4576131c",
+      "class_hash": "0x5bc65d8f59f31daf016b0ed51e37890595ded2fe257040d9a32d361672db99d",
       "abi": [
         {
           "type": "impl",
-          "name": "game_token__ContractImpl",
+          "name": "game_token_system_v0__ContractImpl",
           "interface_name": "dojo::contract::interface::IContract"
         },
         {
@@ -3440,7 +3440,7 @@
         },
         {
           "type": "event",
-          "name": "rollyourown::systems::game_token::contracts::game_token::Event",
+          "name": "rollyourown::systems::game_token::contracts::game_token_system_v0::Event",
           "kind": "enum",
           "variants": [
             {
@@ -3468,10 +3468,10 @@
       ],
       "init_calldata": [
         "0x0127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec",
-        "0x3d3d11cc1dc5a92a70fd520e0292d476453024b1cbf913585d4d97f5355c160"
+        "0x5a499a49f635d0a9379da557b3f13aeb74a1b2295944755575e6adb2b86f7dd"
       ],
-      "tag": "dopewars-game_token",
-      "selector": "0x658de1b7ffce2d43281b0ac5c49221af0035ffc57af41b7966ff784e2c673c9",
+      "tag": "dopewars-game_token_system_v0",
+      "selector": "0x15fa6faa647e7a4bd6e22c38b13306984789035f2fb88c017da267e05570944",
       "systems": [
         "dojo_init",
         "upgrade"
@@ -3479,7 +3479,7 @@
     },
     {
       "address": "0x5f229d8b024b0cf4a7c9f09f6e5cf0d51c2c5b84a1e6d0e2432932141df023c",
-      "class_hash": "0x316c39b556cbcc0f22f79519d702e13eb0b4b451b6ffa50c03d755642beb1ca",
+      "class_hash": "0x25fbee3354cc41ce1019ffd767127a113350d362254481d15fc3fbf3f554790",
       "abi": [
         {
           "type": "impl",
