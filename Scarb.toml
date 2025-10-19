@@ -7,6 +7,9 @@ edition = "2024_07"
 [cairo]
 # sierra-replace-ids = true
 
+[profile.dev.cairo]
+unstable-add-statements-code-locations-debug-info = true
+
 [tool.fmt]
 sort-module-level-items = true
 max-line-length = 100
