@@ -4,7 +4,7 @@ version = 1
 [[package]]
 name = "achievement"
 version = "0.0.0"
-source = "git+https://github.com/FemiOje/arcade#173453c2f8210ad80dbd068c03956819f6dada16"
+source = "git+https://github.com/FemiOje/arcade?branch=provable-dw#173453c2f8210ad80dbd068c03956819f6dada16"
 dependencies = [
  "dojo",
 ]
@@ -59,7 +59,7 @@ dependencies = [
 [[package]]
 name = "cartridge_vrf"
 version = "0.1.0"
-source = "git+https://github.com/FemiOje/vrf#c0dcb820373b3d987e860996d01ee0cfa2cfe5e3"
+source = "git+https://github.com/FemiOje/vrf?branch=provable-dw#c0dcb820373b3d987e860996d01ee0cfa2cfe5e3"
 dependencies = [
  "openzeppelin_access",
  "openzeppelin_upgrades",
@@ -94,7 +94,7 @@ dependencies = [
 [[package]]
 name = "game_components_metagame"
 version = "1.5.1"
-source = "git+https://github.com/FemiOje/game-components#a2a607d1d302a7998ac4e487cc259566f74918a5"
+source = "git+https://github.com/FemiOje/game-components?branch=provable-dw#a2a607d1d302a7998ac4e487cc259566f74918a5"
 dependencies = [
  "game_components_minigame",
  "game_components_token",
@@ -106,7 +106,7 @@ dependencies = [
 [[package]]
 name = "game_components_minigame"
 version = "1.5.1"
-source = "git+https://github.com/FemiOje/game-components#a2a607d1d302a7998ac4e487cc259566f74918a5"
+source = "git+https://github.com/FemiOje/game-components?branch=provable-dw#a2a607d1d302a7998ac4e487cc259566f74918a5"
 dependencies = [
  "game_components_metagame",
  "game_components_token",
@@ -118,7 +118,7 @@ dependencies = [
 [[package]]
 name = "game_components_test_starknet"
 version = "1.5.1"
-source = "git+https://github.com/FemiOje/game-components#a2a607d1d302a7998ac4e487cc259566f74918a5"
+source = "git+https://github.com/FemiOje/game-components?branch=provable-dw#a2a607d1d302a7998ac4e487cc259566f74918a5"
 dependencies = [
  "game_components_metagame",
  "game_components_minigame",
@@ -131,7 +131,7 @@ dependencies = [
 [[package]]
 name = "game_components_token"
 version = "1.5.1"
-source = "git+https://github.com/FemiOje/game-components#a2a607d1d302a7998ac4e487cc259566f74918a5"
+source = "git+https://github.com/FemiOje/game-components?branch=provable-dw#a2a607d1d302a7998ac4e487cc259566f74918a5"
 dependencies = [
  "game_components_metagame",
  "game_components_minigame",
@@ -144,7 +144,7 @@ dependencies = [
 [[package]]
 name = "game_components_utils"
 version = "1.5.1"
-source = "git+https://github.com/FemiOje/game-components#a2a607d1d302a7998ac4e487cc259566f74918a5"
+source = "git+https://github.com/FemiOje/game-components?branch=provable-dw#a2a607d1d302a7998ac4e487cc259566f74918a5"
 dependencies = [
  "alexandria_encoding",
  "game_components_metagame",

@@ -26,15 +26,15 @@
 
 ## Overview
 
-DopeWars has integrated the `game-components` library to enable players to view their game state as NFTs in their wallets. This integration creates ERC721 NFTs that display real-time game data (score, game-over status, player name) using the MinigameComponent pattern.
+DopeWars has integrated the `game-components` library to enable players to view their game state as custom game NFTs in their wallets, as well as transfer those tokens between players (essentially transferring ownership and enabling the new owner to pick up where the original owner left off, for example). This integration creates ERC721 NFTs that display real-time game data (score, game-over status, player name) using the MinigameComponent pattern.
 
 **Key Implementation Points:**
-- ✅ NFTs are **transferable** (marketplace-ready) - Phase 2.5 COMPLETE
-- ✅ Uses **GameToken model** to map NFT token_id to game state
-- ✅ **Token ownership validation** on all game actions
-- ✅ **Token lifecycle management** via pre_action/post_action
-- ✅ Employs **default renderer** for metadata generation
-- ✅ Minimal changes to existing architecture (10 files modified)
+- NFTs are transferable
+- Uses GameToken model to map NFT token_id to game state
+- Token ownership validation on all game actions
+- Token lifecycle management via pre_action/post_action
+- Employs default renderer for metadata generation (TODO: custom renderer with a more polished interface could be implemented)
+- Minimal changes to existing architecture
 
 ---
 
@@ -77,31 +77,6 @@ self.token_counter.write(token_id);
 - Increments: 1, 2, 3, 4, 5...
 - Used as primary key for NFT ownership
 
-### Why They Desynchronize
-
-**Example Scenario:**
-
-```
-Step 1: Alice creates game
-  → game_id = 1 (from world.dispatcher.uuid())
-  → token_id = 1 (from ERC721 mint)
-  ✅ Synchronized
-
-Step 2: Bob creates game
-  → game_id = 2
-  → token_id = 2
-  ✅ Still synchronized
-
-Step 3: Charlie starts creating a game but transaction fails
-  → game_id = 3 (UUID already consumed)
-  → token_id = NOT INCREMENTED (mint never happened)
-  ❌ Counters now out of sync
-
-Step 4: Dave creates game
-  → game_id = 4
-  → token_id = 3 (uses next available)
-  ❌ MISMATCH: game_id ≠ token_id
-```
 
 ### Why This Matters
 
@@ -199,17 +174,26 @@ pub struct GameToken {
 
 **When Creating a Game:**
 
+Game creation is a two-step process:
+1. The player first mints a "blank" game NFT, which gives them a `minigame_token_id`.
+2. The player then calls `create_game`, passing in the `minigame_token_id` to initialize the game state.
+
 ```cairo
-// src/systems/game.cairo:239-258
+// Inside create_game() in src/systems/game.cairo
+
+// 1. Ownership of the pre-minted token_id is verified
+let token_address = self._get_game_token_address();
+assert_token_ownership(token_address, minigame_token_id);
+
+// 2. A new, internal game_id is generated
 let game_id = world.dispatcher.uuid();
-// ... create game ...
 
-// Mint NFT
-let nft_token_id = minigame_dispatcher.mint_game(...);
+// 3. The Game model is created...
+// ...
 
-// Store the mapping
+// 4. The crucial mapping is stored to link the two IDs
 world.write_model(@GameToken {
-    token_id: nft_token_id,
+    token_id: minigame_token_id,
     game_id,
     player_id
 });
@@ -257,246 +241,82 @@ fn score(self: @ContractState, token_id: u64) -> u32 {
 
 ## Architectural Decisions
 
-### Decision 1: Soulbound vs Transferable NFTs
+### Decision 1: Transferable NFTs via Hybrid Approach
 
-**Chosen: Soulbound (Non-Transferable) ✅ for Phase 1**
+**Chosen: Transferable NFTs ✅**
 
-#### All Options Considered
+The primary goal was to allow players to trade their in-game progress as NFTs on marketplaces. This required making the game state NFTs transferable.
 
-| Option | Description | Pros | Cons |
-|--------|-------------|------|------|
-| **A. Soulbound (Phase 1)** | NFT cannot be transferred | ✅ Matches existing architecture<br>✅ NFT owner = game player always<br>✅ Minimal code changes<br>✅ No security concerns | ❌ Cannot trade games<br>❌ NFT is just a trophy |
-| **B. Transferable - Full Refactor** | NFT can be sold/traded<br>Game model uses token_id as key | ✅ Enables game marketplace<br>✅ True NFT ownership<br>✅ Clean single-key architecture<br>✅ No GameToken model needed | ❌ Massive refactoring (50+ files)<br>❌ 3-4 weeks development<br>❌ High risk of bugs<br>❌ Breaking change |
-| **C. Hybrid - Both IDs (Phase 2.5)** | Functions accept both game_id AND token_id | ✅ Enables transferable NFTs<br>✅ Minimal refactoring<br>✅ Keeps existing architecture<br>✅ 1-2 weeks development<br>✅ Low-medium risk | ❌ More complex signatures<br>❌ Frontend tracks both IDs<br>❌ Slightly higher gas costs<br>❌ player_id semantics shift |
+However, the existing DopeWars architecture is built around a composite key `(game_id, player_id)` for all game state models. A full refactor to a single `token_id` key was deemed unsafe.
 
-#### Rationale for Soulbound
+Instead, a **hybrid approach** was implemented. This approach keeps the existing data models but uses the NFT's `token_id` as the primary identifier for all game actions. It provides the full benefits of transferable NFTs with minimal architectural changes.
 
-**1. Architectural Alignment**
+**Key Principles of the Hybrid Approach:**
 
-DopeWars' Game model uses `player_id` (address) as a key:
+1.  **`token_id` as the Public Key:** All game system functions (`travel`, `end_game`, `decide`, etc.) accept a `token_id: u64` as their primary parameter. The frontend and other clients only need to track the `token_id`.
 
-```cairo
-#[dojo::model]
-pub struct Game {
-    #[key]
-    pub game_id: u32,
-    #[key]
-    pub player_id: ContractAddress, // Immutable key
-}
-```
+2.  **`GameToken` for Mapping:** The `GameToken` model serves as a crucial mapping layer, linking the public-facing `token_id` to the internal `(game_id, player_id)` composite key used for storing game state.
 
-If NFTs are transferable:
-- Alice creates game → player_id = Alice
-- Alice transfers NFT to Bob
-- Bob owns NFT but **cannot play** (player_id still = Alice)
-- Alice can still play but **doesn't own NFT**
+3.  **NFT Ownership as Authorization:** Before any action is performed, the system validates that the `get_caller_address()` is the current owner of the `token_id` being used. This is done via the `assert_token_ownership` helper from the `game-components` library.
 
-**This creates broken ownership invariant.**
+4.  **`player_id` as a "Storage Namespace":** The `player_id` in the `Game` model no longer represents the *current* owner. Instead, it's an immutable pointer to the original creator's address, acting as a stable storage location for that game's data. Ownership is now dictated solely by who holds the NFT.
 
-**2. Minimal Implementation**
+**Implementation Example (`travel` function):**
 
-Only one parameter change required:
+This pattern is repeated across all game systems:
 
 ```cairo
-minigame_dispatcher.mint_game(
-    // ... parameters ...
-    true  // soulbound = true (ONE LINE CHANGE)
-);
-```
-
-vs. transferable NFTs requiring:
-- Refactor Game model to use token_id as key
-- Update all system functions
-- Add ownership validation everywhere
-- Rewrite 50+ files
-
-**3. Meets Requirement**
-
-Original goal: "view game NFT in wallet while playing"
-
-Soulbound NFTs achieve this perfectly. Players see their game as an NFT with live-updating metadata without requiring game state to be transferable.
-
-#### Implementation
-
-```cairo
-// src/systems/game.cairo:254
-let nft_token_id = minigame_dispatcher.mint_game(
-    Option::Some(player_name),
-    Option::None, // settings_id
-    Option::None, // start
-    Option::None, // end
-    Option::None, // objective_ids
-    Option::None, // context
-    Option::None, // client_url
-    Option::None, // renderer_address
-    player_id,    // to
-    true          // soulbound - NFT cannot be transferred
-);
-```
-
-#### Deep Dive: Option C - Hybrid Approach ✅ IMPLEMENTED
-
-The hybrid approach enables transferable NFTs without massive refactoring. We implemented a **simplified version** that uses token_id as the primary parameter instead of requiring both IDs.
-
-**Key Insight:** `player_id` becomes a "storage namespace" rather than "current owner." NFT ownership determines access rights.
-
-**Implementation Decision:**
-- **Original Plan:** Accept both `game_id` AND `token_id` as parameters
-- **Actual Implementation:** Accept only `token_id`, use GameToken mapping to look up game_id and player_id
-- **Rationale:** Simpler API, less prone to mismatch errors, frontend only needs to track one ID
-
-**Backend Implementation (Actual Code):**
-
-```cairo
-// src/systems/game.cairo
-#[starknet::interface]
-pub trait IGameActions<T> {
-    fn travel(
-        self: @T,
-        token_id: u64,  // ← Only token_id needed (not both!)
-        next_location: Locations,
-        actions: Span<Actions>
-    );
-}
-
 fn travel(
     self: @ContractState,
-    token_id: u64,
+    token_id: u64, // ← Only token_id is needed
     next_location: Locations,
     actions: Span<Actions>,
 ) {
-    // Step 1: Get game token contract address
+    // 1. Get the game's token contract address
     let token_address = self._get_game_token_address();
 
-    // Step 2: Validate caller owns the NFT
+    // 2. Validate that the caller owns the NFT for this token_id
     assert_token_ownership(token_address, token_id);
 
-    // Step 3: Check token lifecycle (pre_action)
+    // 3. Check token lifecycle (e.g., game is not over)
     pre_action(token_address, token_id);
 
-    // Step 4: Load game using GameToken mapping
+    // 4. Load the game state using the GameToken mapping
     let mut store = StoreImpl::new(self.world(@"dopewars"));
-    let game = store.game_by_token_id(token_id);  // ← Automatic lookup!
+    let game = store.game_by_token_id(token_id); // ← Automatic lookup via GameToken
 
-    // Step 5: Load game store using ORIGINAL creator's player_id
+    // 5. Load the game store using the *original* creator's player_id
     let mut game_store = GameStoreImpl::load(
         ref store,
-        game.game_id,      // From GameToken mapping
-        game.player_id     // From GameToken mapping (immutable storage key)
+        game.game_id,      // from GameToken mapping
+        game.player_id     // from GameToken mapping (immutable storage key)
     );
 
-    // Step 6: Game logic proceeds normally
-    // ... existing travel logic ...
+    // 6. Execute game logic
+    // ...
 
-    // Step 7: Sync token state (post_action)
+    // 7. Sync token state after the action
     post_action(token_address, token_id);
 }
 ```
 
-**How NFT Transfers Work (Actual Implementation):**
+**Benefits:**
+- Enables a full NFT marketplace for games.
+- Avoided a large, high-risk refactoring of the entire codebase.
+- The API is clean, with functions taking a single `token_id`.
+- Security is maintained by checking NFT ownership for every action.
 
-```
-Timeline:
-1. Alice creates game
-   → Game { game_id: 5, player_id: 0xAlice, minigame_token_id: 7 }
-   → GameToken { token_id: 7, game_id: 5, player_id: 0xAlice }
-   → NFT #7 minted to Alice
-
-2. Alice plays
-   → travel(token_id: 7, ...)  // Only one ID needed!
-   → Ownership check: Alice owns NFT #7 ✅
-   → GameToken lookup: token_id 7 → (game_id: 5, player_id: 0xAlice)
-   → Loads Game(5, 0xAlice) ✅
-
-3. Alice transfers NFT #7 to Bob
-   → No model updates needed!
-   → GameToken still: { token_id: 7, game_id: 5, player_id: 0xAlice }
-   → Game still: { game_id: 5, player_id: 0xAlice, minigame_token_id: 7 }
-
-4. Bob plays the transferred game
-   → travel(token_id: 7, ...)
-   → Ownership check: Bob owns NFT #7 ✅
-   → GameToken lookup: token_id 7 → (game_id: 5, player_id: 0xAlice)
-   → Loads Game(5, 0xAlice) ✅
-   → Bob can now play and modify the game!
-
-5. Bob claims rewards
-   → claim(player_id: 0xBob, token_ids: [7])
-   → Caller check: Bob == Bob ✅
-   → Ownership check per token: Bob owns NFT #7 ✅
-   → Rewards sent to Bob (current owner, not Alice) ✅
-
-6. Bob transfers to Charlie
-   → Charlie can play using Game(5, 0xAlice)
-   → Storage location never changes
-   → Only NFT ownership changes
-```
-
-**player_id Semantics Shift:**
-- **Old meaning:** Current player/owner (from get_caller_address())
-- **New meaning:** Storage address for game data (immutable, from GameToken mapping)
-- **Ownership control:** Determined by NFT ownership (validated via assert_token_ownership)
-
-**Frontend Token Discovery (Phase 2.5.4 - Pending):**
-
-```typescript
-// 1. Query user's NFTs on wallet connect
-const tokens = await getGameTokens(userAddress, GAME_TOKEN_CONTRACT);
-// Returns: [7, 12, 15]
-
-// 2. For each token, get game info via GameToken mapping
-const games = await Promise.all(
-  tokens.map(async (tokenId) => {
-    const gameToken = await world.readModel('GameToken', tokenId);
-    return {
-      tokenId,                         // Frontend tracks this
-      gameId: gameToken.game_id,       // For display only
-      storageOwner: gameToken.player_id, // Original creator
-      score: await gameTokenSystems.score(tokenId),
-    };
-  })
-);
-
-// 3. Display game selector
-<GameSelector games={games} onSelect={(g) => selectGame(g.tokenId)} />
-
-// 4. All calls use ONLY token_id
-await travel(selectedTokenId, nextLocation, actions);  // Simple!
-```
-
-**Actual Implementation Steps Completed:**
-
-1. ✅ Change `soulbound: true` → `soulbound: false` in mint_game()
-2. ✅ Replace `game_id: u32` parameter with `token_id: u64` in all functions
-3. ✅ Add ownership validation: `assert_token_ownership(token_address, token_id)`
-4. ✅ Add token lifecycle checks: `pre_action()` and `post_action()`
-5. ✅ Use `game_token.player_id` from mapping (not `get_caller_address()`)
-6. ✅ Create store helper methods for token_id lookups
-7. ✅ Fix security vulnerability in claim() function
-8. ⏳ Frontend integration pending (Phase 2.5.4)
-
-**Actual Effort:** 2 days (October 6-8, 2025)
-
-**Actual Risk:** Low - Build verified, no breaking changes to data models
-
-**Key Advantage Over Original Plan:**
-- Frontend only tracks token_id (not both game_id and token_id)
-- No risk of ID mismatch errors
-- Cleaner API surface
-- Same benefits, simpler implementation
-
----
 
 ### Decision 2: GameToken Model vs Architecture Refactor
 
-**Chosen: GameToken Model ✅**
+**Chosen: GameToken Model**
 
 #### Options Considered
 
 | Option | Description | Effort | Risk |
 |--------|-------------|--------|------|
-| **A. GameToken Model** | Add mapping model | Low (4 files) | Low |
-| **B. Refactor to token_id keys** | Change Game model to use token_id | High (50+ files) | High |
+| **A. GameToken Model** | Add mapping model | Low | Low |
+| **B. Refactor to token_id keys** | Change Game model to use token_id | High | High |
 | **C. Bidirectional mapping** | Two mapping models | Medium | Medium |
 
 #### Why GameToken Model Wins
@@ -525,12 +345,11 @@ The mapping acts as an adapter between two different identification systems.
 **3. Minimal Code Changes**
 
 Files created/modified:
-- `src/models/game_token.cairo` (NEW - 20 lines)
-- `src/systems/game_token/contracts.cairo` (modified - +10 lines)
-- `src/systems/game.cairo` (modified - +15 lines)
-- `src/lib.cairo` (modified - +2 lines)
+- `src/models/game_token.cairo` (created)
+- `src/systems/game_token/contracts.cairo` (modified)
+- `src/systems/game.cairo` (modified)
+- `src/lib.cairo` (modified)
 
-Total: ~50 lines of code
 
 vs. Architecture refactor: 1000+ lines changed across 50+ files
 
@@ -544,41 +363,33 @@ GameToken model can be extended without touching game logic:
 
 ---
 
-### Decision 3: Default Renderer vs Custom Renderer
+### Decision 3: Default Renderer
 
-**Chosen: Default Renderer ✅ (Phase 1)**
+**Chosen: Default Renderer**
 
-The game-components library provides a default SVG renderer. We deferred custom renderer implementation to focus on core functionality.
+For the initial implementation, the default SVG renderer provided by the `game-components` library is used. This provides basic NFT metadata and visualization that meets the core requirement for wallet display.
 
-#### Rationale
-
-**Phase 1 (Current):**
-- Use default renderer from `game_components_utils`
-- Provides basic NFT metadata and SVG visualization
-- Meets MVP requirement for wallet display
-
-**Phase 2 (Future):**
-- Implement custom renderer with DopeWars branding
-- Add rich game visuals (location, drugs, stats)
-- Enhanced metadata for marketplaces
+A custom renderer, along with custom settings and objectives contracts, are planned for future development.
 
 #### Implementation
+
+The `initializer` function call shows the integration points for these future components.
 
 ```cairo
 // src/systems/game_token/contracts.cairo:72
 self.minigame.initializer(
     creator_address,
     "DopeWars",
-    "Roll Your Own - Dope Wars on StarkNet. Build your empire in NYC.",
-    "Dope Wars Team",
+    "Roll Your Own - Dope Wars on StarkNet. Build your empire.",
+    "Dope DAO/ Cartridge",
     "Dope Wars",
     "Strategy",
     "https://dopewars.gg/favicon.png",
-    Option::None, // color - uses default
+    Option::Some("#11ED83"), // color
     Option::None, // client_url
-    Option::None, // renderer_address - uses default renderer ✅
-    Option::None, // settings_address
-    Option::None, // objectives_address
+    Option::None, // renderer_address - TODO: Implement custom renderer
+    Option::None, // settings_address - TODO: Implement custom settings
+    Option::None, // objectives_address - TODO: Implement custom objectives
     token_address,
 );
 ```
@@ -605,10 +416,10 @@ fn explore(adventurer_id: u64, till_beast: bool)
 ```
 
 **Key Points:**
-- ✅ Single key architecture (token_id IS the game state key)
-- ✅ No separate game_id counter
-- ✅ Transferable NFTs (game ownership can be traded)
-- ✅ Ownership validation via `assert_token_ownership()`
+- Single key architecture (token_id IS the game state key)
+- No separate game_id counter
+- Transferable NFTs (game ownership can be traded)
+- Ownership validation via `assert_token_ownership()`
 
 ### DopeWars Architecture
 
@@ -627,17 +438,17 @@ fn end_game(game_id: u32, actions: Span<Actions>)
 ```
 
 **Key Points:**
-- ✅ Composite key architecture (game_id + player_id)
-- ✅ Separate UUID counter for game_id
-- ✅ Soulbound NFTs (non-transferable)
-- ✅ GameToken mapping model bridges the gap
+- Composite key architecture (game_id + player_id)
+- Separate UUID counter for game_id
+- Transferable NFTs (via hybrid approach)
+- GameToken mapping model bridges the gap
 
 ### Why Different Approaches?
 
 | Aspect | Death Mountain | DopeWars | Reason |
 |--------|---------------|----------|--------|
 | **Primary Key** | token_id | (game_id, player_id) | DopeWars has existing composite key architecture |
-| **NFT Transferability** | Transferable | Soulbound | DopeWars player_id is immutable key |
+| **NFT Transferability** | Transferable | Transferable (Hybrid) | DopeWars uses a hybrid model where NFT ownership grants access, while the game state's `player_id` key remains an immutable storage pointer. |
 | **ID Generation** | ERC721 counter | Dojo UUID | DopeWars uses world.dispatcher.uuid() throughout |
 | **Ownership Model** | NFT ownership = game access | Address-based access | DopeWars validates via composite key |
 | **Mapping Model** | Not needed | GameToken required | Bridges two separate ID systems |
@@ -648,14 +459,7 @@ fn end_game(game_id: u32, actions: Span<Actions>)
 
 1. **Rewrite Game model** to use token_id as single key
 2. **Remove UUID generation** (world.dispatcher.uuid())
-3. **Change all system functions** to accept token_id instead of game_id
-4. **Add ownership validation** to every function
-5. **Update frontend** to track token_id instead of game_id
-6. **Migrate existing data** (if any)
-
-**Estimated effort:** 2-3 weeks of development + high risk of bugs
-
-**Our approach:** 1 day of development + low risk
+3. **Migrate existing data** (if any)
 
 ---
 
@@ -745,31 +549,38 @@ fn game_over(self: @ContractState, token_id: u64) -> bool {
 ### Game Creation to NFT Minting
 
 ```
+            (Step 1: Pre-computation on Client)
 ┌─────────────────────────────────────────────────────────────┐
-│  1. Player calls create_game(game_mode, player_name, ...)  │
+│  1. Player calls a 'mint' function on the NFT contract     │
+│     to get a `minigame_token_id` (e.g., token_id = 7).        │
 └────────────────────┬────────────────────────────────────────┘
                      │
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  2. Generate game_id = world.dispatcher.uuid()              │
-│     game_id = 5                                             │
+│  2. Player calls create_game(..., minigame_token_id: 7)    │
 └────────────────────┬────────────────────────────────────────┘
                      │
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  3. Create Game model with (game_id=5, player_id=0xAlice)  │
+│  3. Ownership of token_id 7 is verified via                 │
+│     `assert_token_ownership`.                               │
+└────────────────────┬────────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────────┐
+│  4. Generate internal game_id = world.dispatcher.uuid()     │
+│     (e.g., game_id = 5)                                     │
+└────────────────────┬────────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────────┐
+│  5. Create Game model with (game_id=5, player_id=0xAlice)  │
 │     store.set_game(@game)                                   │
 └────────────────────┬────────────────────────────────────────┘
                      │
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  4. Mint NFT via minigame_dispatcher.mint_game()            │
-│     Returns token_id = 7 (from ERC721 counter)              │
-└────────────────────┬────────────────────────────────────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────────┐
-│  5. Store GameToken mapping                                 │
+│  6. Store GameToken mapping to link the two IDs             │
 │     world.write_model(@GameToken {                          │
 │         token_id: 7,                                        │
 │         game_id: 5,                                         │
@@ -779,8 +590,8 @@ fn game_over(self: @ContractState, token_id: u64) -> bool {
                      │
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│  6. Emit GameCreated event                                  │
-│     NFT appears in player's wallet                          │
+│  7. Emit GameCreated event                                  │
+│     The previously minted NFT is now linked to an active game.│
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -873,272 +684,42 @@ After deploying contracts:
 ### Expected NFT Behavior
 
 **When viewing NFT in wallet:**
-- ✅ NFT name includes player's chosen name
-- ✅ NFT shows current score (cash amount)
-- ✅ NFT indicates if game is over
-- ✅ NFT displays DopeWars branding/description
-- ✅ NFT metadata updates as game progresses
+- NFT name includes player's chosen name
+- NFT shows current score (cash amount)
+- NFT indicates if game is over
+- NFT displays DopeWars branding/description
+- NFT metadata updates as game progresses
 
 **When attempting to transfer NFT:**
-- ❌ Transaction should fail (soulbound)
-- ✅ Error message indicates non-transferability
+- Transaction should succeed.
+- The new owner should be able to play the game.
+- The original owner should lose access to game actions.
 
 ---
 
 ## Future Considerations
 
-### Phase 2: Custom Renderer
+### Custom Renderer, Settings, and Objectives
 
-**Goal:** Replace default renderer with DopeWars-branded custom renderer
+Further enhancements are planned by implementing custom components from the `game-components` library.
 
-**Implementation:**
-1. Create custom renderer contract implementing `IMinigameDetails`
-2. Generate rich SVG with:
-   - Player location visualization
-   - Current drug inventory
-   - Health/wanted status
-   - Turn count and game mode
-3. Deploy renderer contract
-4. Update game_token_systems initializer to use custom renderer address
+**Custom Renderer (TODO):**
+- **Goal:** Replace the default renderer with a DopeWars-branded, visually rich SVG.
+- **Implementation:**
+  1. Create a contract that implements the `IMinigameDetails` trait.
+  2. Generate an SVG that includes dynamic game data like player location, drug inventory, health, wanted status, etc.
+  3. Deploy the renderer and update the `initializer` to point to its address.
 
-**Effort:** 1-2 weeks
+**Custom Settings & Objectives (TODO):**
+- **Goal:** Define specific game configurations or win/loss conditions that can be displayed on the NFT.
+- **Implementation:**
+  1. Create contracts that implement the `ISettings` and `IObjectives` traits.
+  2. These can be used to define different game modes (e.g., "Ranked," "Casual") or specific goals (e.g., "Reach $1M cash").
+  3. Deploy the contracts and link them in the `initializer`.
 
-### Phase 2.5: Hybrid Transferable NFTs ✅ IMPLEMENTED (October 2025)
-
-**Status:** COMPLETE - Backend implementation finished and verified
-**Implemented:** October 8, 2025
-
-**Goal:** Enable game trading as NFTs without massive refactoring
-
-**Key Decision:** Instead of adding `token_id` as an additional function parameter, we leveraged the existing GameToken model for lookups. Each Game model stores `minigame_token_id`, which the GameToken model maps to (game_id, player_id).
-
-**Implementation Approach:**
-
-We implemented a simpler pattern than originally planned:
-1. Game model already has `minigame_token_id: u64` field
-2. Functions accept `token_id: u64` as parameter (NOT both game_id and token_id)
-3. Use GameToken model to look up (game_id, player_id) from token_id
-4. Validate ownership using game-components helpers
-
-**Actual Changes Made:**
-
-1. **Changed NFTs to transferable** (game.cairo:254):
-   ```cairo
-   let nft_token_id = minigame_dispatcher.mint_game(
-       Option::Some(player_name),
-       Option::None, // settings_id
-       Option::None, // start
-       Option::None, // end
-       Option::None, // objective_ids
-       Option::None, // context
-       Option::None, // client_url
-       Option::None, // renderer_address
-       player_id,    // to
-       false         // transferable ✅ (was: true for soulbound)
-   );
-   ```
-
-2. **Updated function signatures to accept token_id:**
-   ```cairo
-   // src/systems/game.cairo
-   #[starknet::interface]
-   pub trait IGameActions<T> {
-       fn end_game(self: @T, token_id: u64, actions: Span<Actions>);  // was: game_id: u32
-       fn travel(self: @T, token_id: u64, next_location: Locations, actions: Span<Actions>);
-   }
-
-   // src/systems/decide.cairo
-   trait IDecide<T> {
-       fn decide(self: @T, token_id: u64, action: EncounterActions);  // was: game_id: u32
-   }
-
-   // src/systems/laundromat.cairo
-   trait ILaundromat<T> {
-       fn register_score(self: @T, token_id: u64, prev_game_id: u32, prev_player_id: ContractAddress);
-       fn claim(self: @T, player_id: ContractAddress, token_ids: Span<u64>);  // was: game_ids: Span<u32>
-   }
-
-   // src/systems/slot.cairo
-   trait ISlotMachine<T> {
-       fn roll(ref self: T, token_id: u64);  // was: game_id: u32
-   }
-   ```
-
-3. **Added ownership validation pattern to all systems:**
-   ```cairo
-   // Example from travel() in game.cairo:294-352
-   fn travel(
-       self: @ContractState,
-       token_id: u64,
-       next_location: Locations,
-       actions: Span<Actions>,
-   ) {
-       // Step 1: Get game token address
-       let token_address = self._get_game_token_address();
-
-       // Step 2: Verify caller owns the NFT
-       assert_token_ownership(token_address, token_id);
-
-       // Step 3: Check token is playable (not ended, within lifecycle)
-       pre_action(token_address, token_id);
-
-       // Step 4: Load game using GameToken mapping
-       let mut store = StoreImpl::new(self.world(@"dopewars"));
-       let game = store.game_by_token_id(token_id);  // Uses GameToken lookup
-
-       let mut game_store = GameStoreImpl::load(
-           ref store,
-           game.game_id,      // From GameToken mapping
-           game.player_id     // From GameToken mapping (original creator)
-       );
-
-       // Step 5: Game logic proceeds...
-       // ... existing travel logic ...
-
-       // Step 6: Sync token state with game state
-       post_action(token_address, token_id);
-   }
-   ```
-
-4. **Internal helper pattern (all systems):**
-   ```cairo
-   #[generate_trait]
-   impl InternalImpl of InternalTrait {
-       fn _get_game_token_address(self: @ContractState) -> starknet::ContractAddress {
-           let world = self.world(@"dopewars");
-           let (game_token_systems_address, _) = world.dns(@"game_token").unwrap();
-           let minigame_dispatcher = IMinigameDispatcher {
-               contract_address: game_token_systems_address,
-           };
-           minigame_dispatcher.token_address()
-       }
-   }
-   ```
-
-5. **Store helper methods added (store.cairo:73-91):**
-   ```cairo
-   fn game_token(self: @Store, token_id: u64) -> GameToken {
-       self.world.read_model(token_id)
-   }
-
-   fn game_by_token_id(self: @Store, token_id: u64) -> Game {
-       let game_token = self.game_token(token_id);
-       self.game(game_token.game_id, game_token.player_id)
-   }
-
-   fn game_store_packed_by_token_id(self: @Store, token_id: u64) -> GameStorePacked {
-       let game_token = self.game_token(token_id);
-       self.game_store_packed(game_token.game_id, game_token.player_id)
-   }
-   ```
-
-6. **CRITICAL: Security fix in claim() function (laundromat.cairo:251-360):**
-
-   **Original vulnerability:**
-   ```cairo
-   // ❌ SECURITY ISSUE: Only checked original creator, not current NFT owner
-   assert(game.player_id == player_id, 'not game owner');
-   ```
-
-   **Fixed implementation:**
-   ```cairo
-   fn claim(self: @ContractState, player_id: ContractAddress, token_ids: Span<u64>) {
-       // ✅ Verify caller is player_id parameter
-       let caller = get_caller_address();
-       assert(caller == player_id, 'caller must be player_id');
-
-       let token_address = self._get_game_token_address();
-
-       while let Option::Some(token_id) = token_ids.pop_front() {
-           // ✅ Verify caller owns this specific token (allows transferred games)
-           assert_token_ownership(token_address, *token_id);
-
-           let mut game = store.game_by_token_id(*token_id);
-
-           // ❌ REMOVED: assert(game.player_id == player_id, 'not game owner');
-           // This was wrong - game.player_id is original creator, not current owner!
-
-           // ... rest of claim logic ...
-       }
-   }
-   ```
-
-   **Why this matters:** Without this fix, anyone who knew a token_id could claim rewards, even if they didn't own the NFT. The new implementation ensures only the current NFT owner can claim rewards for transferred games.
-
-**Systems Updated:**
-- ✅ `src/systems/game.cairo` - travel(), end_game()
-- ✅ `src/systems/decide.cairo` - decide()
-- ✅ `src/systems/laundromat.cairo` - register_score(), claim()
-- ✅ `src/systems/slot.cairo` - roll()
-- ✅ `src/store.cairo` - Helper methods for token_id lookups
-
-**How NFT Transfers Work:**
-
-```
-Timeline:
-1. Alice creates game
-   → Game { game_id: 5, player_id: 0xAlice, minigame_token_id: 7 }
-   → GameToken { token_id: 7, game_id: 5, player_id: 0xAlice }
-   → NFT #7 minted to Alice
-
-2. Alice plays
-   → travel(token_id: 7, ...)
-   → Ownership check: Alice owns NFT #7 ✅
-   → GameToken lookup: token_id 7 → game(5, 0xAlice)
-   → Loads Game(5, 0xAlice) ✅
-
-3. Alice transfers NFT #7 to Bob
-   → No model updates needed!
-   → GameToken still: { token_id: 7, game_id: 5, player_id: 0xAlice }
-   → Game still: { game_id: 5, player_id: 0xAlice }
-
-4. Bob plays the transferred game
-   → travel(token_id: 7, ...)
-   → Ownership check: Bob owns NFT #7 ✅
-   → GameToken maps to: Game(5, 0xAlice)
-   → Loads Game(5, 0xAlice) ✅
-   → Bob can now play and modify the game!
-
-5. Bob can claim rewards for winning
-   → claim(player_id: 0xBob, token_ids: [7])
-   → Caller check: Bob == Bob ✅
-   → Ownership check: Bob owns NFT #7 ✅
-   → Rewards transferred to Bob ✅
-```
-
-**player_id Semantics Shift:**
-- **Old meaning:** Current player/owner (get_caller_address())
-- **New meaning:** Storage namespace for game data (immutable, from GameToken mapping)
-- **Ownership control:** Determined by NFT ownership (validated via assert_token_ownership)
-
-**Frontend Integration (Pending Phase 2.5.4):**
-
-Frontend will need updates to:
-1. Query user's NFTs on wallet connect
-2. Map token_ids to games using GameToken model
-3. Pass token_id (not game_id) to all system calls
-4. Display game selector for multi-NFT holders
-
-**Benefits Achieved:**
-- ✅ Enables NFT marketplace/trading
-- ✅ Kept existing Game model architecture
-- ✅ player_id remains immutable (storage namespace)
-- ✅ No massive refactoring (10 files changed vs 50+)
-- ✅ GameToken model provides reliable mapping
-- ✅ Comprehensive ownership validation
-- ✅ Security vulnerability fixed
-
-**Build Status:** ✅ All systems compile successfully with `sozo build`
-
-**Effort:** 2 days (less than estimated 1-2 weeks)
-
-**Risk:** Low (implementation complete, tested via build verification)
-
-### Phase 3: Full Architecture Refactor (NOT RECOMMENDED)
+### Full Architecture Refactor
 
 **Goal:** Enable game trading with single token_id key architecture (like Death Mountain)
-
-**Why NOT Recommended:** Hybrid approach (Phase 2.5) achieves the same goal with 1/3 the effort and risk.
 
 **What This Would Require:**
 
@@ -1203,15 +784,6 @@ Frontend will need updates to:
    - Migrate existing games to new model
    - Or start fresh (lose existing data)
 
-**Files Impacted:** 50+ files across contracts and frontend
-
-**Effort:** 3-4 weeks of development + 1-2 weeks testing
-
-**Risk:** Very High
-- Breaking changes everywhere
-- High chance of introducing bugs
-- Data migration complexity
-- No backward compatibility
 
 **Comparison:**
 
@@ -1223,26 +795,9 @@ Frontend will need updates to:
 | **Breaking Changes** | Minimal | Everything breaks |
 | **Data Migration** | Not needed | Required |
 | **GameToken Model** | Keep & use | Delete |
-| **Transferable NFTs** | ✅ Yes | ✅ Yes |
+| **Transferable NFTs** | Yes | Yes |
 | **Architecture** | Hybrid (both IDs) | Clean (single ID) |
 
-**Verdict:** Only consider this if you want Death Mountain's exact architecture for philosophical reasons. The hybrid approach delivers the same functionality with significantly less risk and effort.
-
-### Phase 4: Multiple NFT Collections
-
-**Goal:** Different NFT types for different game modes
-
-**Examples:**
-- Ranked games → Competitive Collection
-- Casual games → Fun Collection
-- Special events → Limited Edition Collection
-
-**Implementation:**
-- Deploy multiple FullTokenContract instances
-- Update GameToken to include collection_address
-- Route to appropriate collection based on game_mode
-
-**Effort:** 1 week
 
 ---
 
@@ -1253,7 +808,6 @@ Frontend will need updates to:
 - `src/models/game_token.cairo` - GameToken model definition
 - `src/systems/game_token/contracts.cairo` - MinigameComponent implementation
 - `src/systems/game.cairo` - NFT minting integration
-- `GAME_COMPONENTS_INTEGRATION_PLAN.md` - Original implementation plan
 
 ### External Documentation
 
@@ -1266,85 +820,23 @@ Frontend will need updates to:
 
 - **Composite Keys:** DopeWars uses (game_id, player_id) for historical reasons
 - **UUID Generation:** Dojo's world.dispatcher.uuid() is used throughout codebase
-- **Soulbound Standard:** Following ERC5192 pattern for non-transferable tokens
 
 ---
 
 ## Summary
 
-DopeWars' NFT integration prioritizes **pragmatic implementation** over architectural purity. We've documented three possible approaches for enabling game NFTs:
+DopeWars' NFT integration uses a **pragmatic hybrid approach** to enable fully transferable, marketplace-ready game NFTs while preserving the existing, stable core architecture.
 
-### Approach Comparison
+Instead of a high-risk refactor, the implementation uses a `GameToken` model as an adapter. This model maps the public-facing `token_id` of an NFT to the game's internal `(game_id, player_id)` key, solving the two-counter synchronization problem and allowing for a clean, `token_id`-based API for all game actions.
 
-| Feature | Phase 1: Soulbound | Phase 2.5: Hybrid (Simplified) | Phase 3: Full Refactor |
-|---------|-------------------|-------------------------------|----------------------|
-| **NFT Transferability** | ❌ Non-transferable | ✅ Transferable | ✅ Transferable |
-| **Game Model** | `(game_id, player_id)` | `(game_id, player_id)` | `(token_id)` |
-| **Function Signatures** | `fn(game_id, ...)` | `fn(token_id, ...)` | `fn(token_id, ...)` |
-| **GameToken Model** | ✅ Required | ✅ Required | ❌ Not needed |
-| **player_id Meaning** | Current owner | Storage namespace | Mutable field |
-| **Development Effort** | 1 day | 2 days (actual) | 3-4 weeks |
-| **Risk Level** | Very Low | Low (actual) | Very High |
-| **Files Changed** | 4 files | 10 files (actual) | 50+ files |
-| **Breaking Changes** | None | Function signatures only | Everything |
-| **Backward Compatible** | ✅ Yes | ⚠️ Frontend needs update | ❌ No |
-| **Status** | ✅ **Implemented (Oct 2025)** | ✅ **Implemented (Oct 2025)** | ⚠️ Not Recommended |
+**The key principles of the current architecture are:**
 
-### Current Implementation: Phase 2.5 (Hybrid Transferable) ✅ COMPLETE
+1.  **Transferable NFTs:** Games can be freely traded.
+2.  **`token_id` as the Key:** All game actions are initiated via the NFT's `token_id`.
+3.  **Ownership as Authorization:** Game access is secured by verifying NFT ownership for every action.
+4.  **Stable Architecture:** The core `Game` model and its composite keys remain unchanged, minimizing risk.
+5.  **`player_id` as a Namespace:** The `player_id` field now serves as an immutable storage pointer, not a representation of the current owner.
 
-The GameToken model adds a minimal mapping layer that enables transferable NFTs:
-
-1. ✅ Preserves existing codebase architecture (composite keys)
-2. ✅ Solves the two-counter synchronization problem
-3. ✅ Enables reliable NFT metadata queries
-4. ✅ Maintains clean separation of concerns
-5. ✅ Enables NFT marketplace trading without massive refactor
-6. ✅ Comprehensive ownership validation on all game actions
-7. ✅ Token lifecycle management (pre_action/post_action)
-8. ✅ Security vulnerability fixed in claim() function
-
-**The key insights:**
-
-1. **GameToken as Adapter:** Rather than forcing DopeWars to conform to Death Mountain's architecture, we created an adapter (GameToken) that bridges the gap between DopeWars' composite-key design and the game-components' token-id-based expectations.
-
-2. **Simplified Hybrid Approach:** Instead of requiring both game_id AND token_id as parameters, we use only token_id and leverage the GameToken model for automatic lookups. This is simpler and less error-prone than the original plan.
-
-3. **player_id Semantic Shift:** The player_id field transitioned from "current owner" (get_caller_address) to "storage namespace" (from GameToken mapping). NFT ownership determines access rights.
-
-This decision trades a small amount of storage overhead (one mapping model) for massive reduction in refactoring risk and development time while enabling full NFT marketplace functionality.
-
-### Implementation Timeline
-
-1. ✅ **Phase 1 (October 2025):** Initial soulbound NFT integration
-   - Players can view games as NFTs in wallets
-   - GameToken model created
-   - Default renderer integration
-
-2. ✅ **Phase 2.5 (October 2025):** Hybrid transferable NFTs **COMPLETE**
-   - Changed NFTs to transferable
-   - Updated all function signatures to accept token_id
-   - Added comprehensive ownership validation
-   - Fixed security vulnerability in claim()
-   - 2 days development, low risk (actual)
-
-3. 🔄 **Phase 2.5.4 (Next):** Frontend integration
-   - Update frontend to track token_id instead of game_id
-   - Add game selection UI for multi-NFT holders
-   - Query GameToken model for NFT discovery
-   - Estimated 3-4 days
-
-4. ⏭️ **Phase 3 (Not Recommended):** Full architecture refactor
-   - Only if Death Mountain's exact architecture needed
-   - Phase 2.5 delivers same functionality with 90% less effort
-   - Not recommended unless compelling reason exists
-
-**Current Status:** Backend complete and verified ✅ | Frontend integration next 🔄
-
-**Result:** DopeWars NFTs are now marketplace-ready with minimal architectural changes and comprehensive security.
+This approach delivers the full functionality of tradable game NFTs.
 
 ---
-
-*Last Updated: 2025-10-08*
-*Author: DopeWars Development Team*
-*Contributors: Sequential thinking analysis of hybrid architecture approach*
-*Phase 2.5 Implementation: October 6-8, 2025*

@@ -67,9 +67,9 @@ pub mod game_token_system_v0 {
             "https://raw.githubusercontent.com/cartridge-gg/dopewars/refs/heads/main/assets/icon.png",
             Option::Some("#11ED83"), // color
             Option::None, // client_url
-            Option::None, // renderer_address - uses default renderer
-            Option::None, // settings_address
-            Option::None, // objectives_address
+            Option::None, // renderer_address - TODO: Implement custom renderer
+            Option::None, // settings_address - TODO: Implement custom settings
+            Option::None, // objectives_address - TODO: Implement custom objectives
             token_address,
         );
     }
