@@ -8,6 +8,6 @@ pub mod systems {
     pub mod game_token;
 }
 
-pub mod mocks {
-    pub mod denshokan;
-}
+// pub mod denshokan_test;
+
+pub mod setup_denshokan;

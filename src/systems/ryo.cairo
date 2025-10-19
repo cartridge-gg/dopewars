@@ -2,7 +2,7 @@ use rollyourown::config::ryo::RyoConfig;
 use starknet::ContractAddress;
 
 #[starknet::interface]
-trait IRyo<T> {
+pub trait IRyo<T> {
     //
     fn set_paused(self: @T, paused: bool);
     fn update_ryo_config(self: @T, ryo_config: RyoConfig);

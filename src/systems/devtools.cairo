@@ -1,5 +1,5 @@
 #[starknet::interface]
-trait IDevtools<T> {
+pub trait IDevtools<T> {
     fn failing_tx(self: @T);
     fn create_fake_game(self: @T, final_score: u32);
     fn create_new_season(self: @T);

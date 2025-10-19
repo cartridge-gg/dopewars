@@ -2,7 +2,7 @@ use rollyourown::packing::game_store::GameStoreImpl;
 use rollyourown::systems::game::EncounterActions;
 
 #[starknet::interface]
-trait IDecide<T> {
+pub trait IDecide<T> {
     fn decide(self: @T, token_id: u64, action: EncounterActions);
 }
 

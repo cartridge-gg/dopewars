@@ -12,6 +12,9 @@ sort-module-level-items = true
 max-line-length = 100
 tab-size = 4
 
+[tool.scarb]
+allow-prebuilt-plugins = ["snforge_std"]
+
 [[target.starknet-contract]]
 sierra = true
 casm = true
@@ -24,8 +27,11 @@ build-external-contracts = [
 ]
 
 [dev-dependencies]
-cairo_test = "2.12.2"
-dojo_cairo_test = "1.7.1"
+# cairo_test = "2.12.2"
+snforge_std = "0.48.0"
+assert_macros = "2.12.2"
+dojo_snf_test = "1.7.1"
+# dojo_cairo_test = "1.7.1"
 
 [dependencies]
 starknet = "2.12.2"
@@ -47,6 +53,7 @@ openzeppelin_token = "1.0.0"
 openzeppelin_introspection = "1.0.0"
 
 [scripts]
+test = "snforge test"
 katana = "katana --config ./katana_dev.toml"
 katana_with_db = "katana --config ./katana_dev.toml --db-dir db"
 torii = "torii --config ./torii_dev.toml"

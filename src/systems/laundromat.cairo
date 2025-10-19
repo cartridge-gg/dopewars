@@ -1,7 +1,7 @@
 use starknet::ContractAddress;
 
 #[starknet::interface]
-trait ILaundromat<T> {
+pub trait ILaundromat<T> {
     fn register_score(self: @T, token_id: u64, prev_game_id: u32, prev_player_id: ContractAddress);
     fn launder(self: @T, season_version: u16);
 

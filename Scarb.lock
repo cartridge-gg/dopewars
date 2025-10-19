@@ -59,7 +59,7 @@ dependencies = [
 [[package]]
 name = "cartridge_vrf"
 version = "0.1.0"
-source = "git+https://github.com/FemiOje/vrf?branch=provable-dw#c0dcb820373b3d987e860996d01ee0cfa2cfe5e3"
+source = "git+https://github.com/FemiOje/vrf?branch=provable-dw#279d7802a52d49320a9e5b77c6c14165784a0762"
 dependencies = [
  "openzeppelin_access",
  "openzeppelin_upgrades",
@@ -83,12 +83,13 @@ source = "registry+https://scarbs.xyz/"
 checksum = "sha256:18059a9ac9ec2c0c708baad382728a99970b621b1eaab780fd9a8ec2dc975c98"
 
 [[package]]
-name = "dojo_cairo_test"
+name = "dojo_snf_test"
 version = "1.7.1"
 source = "registry+https://scarbs.xyz/"
-checksum = "sha256:93fba9557e34d0aa0903092e8f32560b0ce72b66dceea2a51fd571b1217351e3"
+checksum = "sha256:ce2f31c7e45769aa8786eb8daf69295a3c90b96a82a7a1d13fa2c9d639d2038a"
 dependencies = [
  "dojo",
+ "snforge_std",
 ]
 
 [[package]]
@@ -284,7 +285,7 @@ dependencies = [
  "achievement",
  "cartridge_vrf",
  "dojo",
- "dojo_cairo_test",
+ "dojo_snf_test",
  "game_components_metagame",
  "game_components_minigame",
  "game_components_test_starknet",
@@ -293,24 +294,25 @@ dependencies = [
  "openzeppelin",
  "openzeppelin_introspection",
  "openzeppelin_token",
+ "snforge_std",
 ]
 
 [[package]]
 name = "snforge_scarb_plugin"
-version = "0.34.1"
+version = "0.48.1"
 source = "registry+https://scarbs.xyz/"
-checksum = "sha256:3a1bcfcd8e65cb3c9a437f59c44969756a78a99450ea3e7bd9362a7e97e1778e"
+checksum = "sha256:2dd27e8215eea8785b3930e9f452e11b429ca262b1c1fbb071bfc173b9ebc125"
 
 [[package]]
 name = "snforge_std"
-version = "0.34.1"
+version = "0.48.1"
 source = "registry+https://scarbs.xyz/"
-checksum = "sha256:61df5e54dbe1c946861f0580dc5e06f87a7a71c42d27931dccf7f3824f59ac34"
+checksum = "sha256:89f759fa685d48ed0ba7152d2ac2eb168da08dfa8b84b2bee96e203dc5b2413e"
 dependencies = [
  "snforge_scarb_plugin",
 ]
 
 [[package]]
 name = "stark_vrf"
-version = "0.1.0"
-source = "git+https://github.com/dojoengine/stark-vrf.git#96d6d2a88b1ef46c4a285d0ccc334237205edae3"
+version = "0.1.1"
+source = "git+https://github.com/dojoengine/stark-vrf.git#f0a6d102c680ce02c482299b23ca710e8d54f2f6"
