@@ -63,6 +63,13 @@ const New = observer(() => {
   const { season } = useSeasonByVersion(config?.ryo.season_version);
   const gameMode = gameModeFromName[gameModeName as gameModeFromNameKeys] as GameMode;
 
+  const { isMainnet, isSepolia } = useMemo(() => {
+    return {
+      isMainnet: selectedChain.chainConfig.network === "mainnet",
+      isSepolia: selectedChain.chainConfig.network === "sepolia",
+    };
+  }, [selectedChain]);
+
   const [selectedTokenIdType, setSelectedTokenIdType] = useState(
     (Number(router.query.tokenIdType) as TokenIdType) || (TokenIdType.LootId as TokenIdType),
   );
@@ -540,14 +547,30 @@ const New = observer(() => {
                 <VStack minH={"250px"} alignItems="center" justifyContent="center">
                   <Text>ERROR 420: {selectedTokenIdType === TokenIdType.HustlerId ? "Hustler" : "Dope"} not found</Text>
                   <HStack>
-                    <Button onClick={() => router.push("/claim")}>Migration</Button>
                     <Button
+                      onClick={() => {
+                        if (isMainnet || isSepolia) {
+                          const controllerConnector = connector as unknown as ControllerConnector;
+                          if (isSepolia) {
+                            controllerConnector.controller.openStarterPack("dopewars-claim-sepolia");
+                          }
+                          if (isMainnet) {
+                            controllerConnector.controller.openStarterPack("dopewars-claim-mainnet");
+                          }
+                        } else {
+                          router.push("/claim");
+                        }
+                      }}
+                    >
+                      Migration
+                    </Button>
+                    {/* <Button
                       onClick={() => {
                         (connector as unknown as ControllerConnector).controller.openPurchaseCredits();
                       }}
                     >
                       Buy
-                    </Button>
+                    </Button> */}
                   </HStack>
                 </VStack>
               )}

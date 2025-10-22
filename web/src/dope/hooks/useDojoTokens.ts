@@ -75,6 +75,10 @@ export const useDojoTokens = (
         },
       });
 
+      // console.log(addresses)
+      // console.log(tokens)
+      // console.log(tokensBalances)
+
       const parsedTokens = tokens.items.map((t: Token) => {
         let metadata = {};
         try {

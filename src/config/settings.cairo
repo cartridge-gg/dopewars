@@ -1,7 +1,6 @@
-use rollyourown::{
-    config::{game::{GameConfig}}, traits::{Enumerable, RandomizableImpl},
-    utils::random::{Random, RandomImpl},
-};
+use rollyourown::config::game::GameConfig;
+use rollyourown::traits::{Enumerable, RandomizableImpl};
+use rollyourown::utils::random::{Random, RandomImpl};
 
 #[derive(IntrospectPacked, Copy, Drop, Serde, DojoStore)]
 #[dojo::model]
@@ -115,7 +114,6 @@ pub impl SeasonSettingsImpl of SeasonSettingsTrait {
     //
 
     fn get_initial_cash(self: SeasonSettings) -> u32 {
-        // 42_000
         match self.cash_mode {
             CashMode::Broke => { 420 },
             CashMode::Average => { 1000 },

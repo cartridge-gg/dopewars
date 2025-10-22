@@ -1,12 +1,17 @@
 
 [env]
 rpc_url = "https://api.cartridge.gg/x/starknet/sepolia"
-account_address = "0x3677d8443f74dcc6cd23c4b3f217256c70f084ee7edc4ddc431af2ce91eb936"
-keystore = "../../../sozo_acc"
+
+account_address = "0x1a23809dd875550157fe85f07c9a4f73963025966e6d3d1c3390806af9fe5cb"
+keystore_path = "../../dev_accounts/dope_key"
+keystore_password = "dope_key"
+
+world_address = "0x0481a7d7b499c8ba774ab492787e8f2678ff63d3ba33ab513b29a79e31f6c0b8" # set when deployed
+world_block = 2553960
 
 [world]
 name = "Dope Wars"
-seed = "sepo6seed"
+seed = "dopeseed"
 description = "Dope Wars is an onchain adaptation of the classic arbitrage game Drug Wars, built by Cartridge in partnership with Dope DAO."
 # website = "https://rollyourown.preview.cartridge.gg/"
 # icon_uri = "file://assets/icon.png"
@@ -24,10 +29,13 @@ skip_contracts = ["dopewars-vrf_provider_mock", "dopewars-devtools"]
     "0x0",                                                                # paper address, 0x0 = use dns world to retrieve paper_mock
     "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f", # vrf address
     "0x44cea566ac53bf7c36b298e36536c1a53ba0b0bdf66b2c5f437965605acface",  # treasury: click_save controller address
+    "3600",                                                               # season_duration: u32, 60 min
+    "300",                                                                # season_time_limit: u16 5min
 ]
 
 
 [writers]
+
 "dopewars-ERC20BalanceEvent" = ["dopewars-paper_mock"]
 "dopewars-GameConfig" = [
     "dopewars-config",
@@ -41,8 +49,8 @@ skip_contracts = ["dopewars-vrf_provider_mock", "dopewars-devtools"]
 "dopewars-HustlerItemTiersConfig" = ["dopewars-config"]
 "dopewars-EncounterStatsConfig" = ["dopewars-config"]
 
-"dopewars-Game" = ["dopewars-game", "dopewars-laundromat"]
-"dopewars-GameStorePacked" = ["dopewars-game"]
+"dopewars-Game" = ["dopewars-game", "dopewars-laundromat", "dopewars-decide"]
+"dopewars-GameStorePacked" = ["dopewars-game", "dopewars-decide"]
 "dopewars-RyoConfig" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]
 "dopewars-Season" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]
 "dopewars-SeasonSettings" = [
@@ -55,20 +63,40 @@ skip_contracts = ["dopewars-vrf_provider_mock", "dopewars-devtools"]
 "dopewars-SortedListItem" = ["dopewars-game", "dopewars-laundromat"]
 "dopewars-RyoAddress" = ["dopewars-ryo"]
 
+#
 # events
+#
+
 "dopewars-GameCreated" = ["dopewars-game"]
-"dopewars-Traveled" = ["dopewars-game"]
-"dopewars-GameOver" = ["dopewars-game"]
-"dopewars-TradeDrug" = ["dopewars-game"]
-"dopewars-UpgradeItem" = ["dopewars-game"]
-"dopewars-HighVolatility" = ["dopewars-game"]
-"dopewars-TravelEncounter" = ["dopewars-game"]
-"dopewars-TravelEncounterResult" = ["dopewars-game"]
+
+"dopewars-Traveled" = ["dopewars-game", "dopewars-decide"]
+"dopewars-GameOver" = ["dopewars-game", "dopewars-decide"]
+"dopewars-TradeDrug" = ["dopewars-game", "dopewars-decide"]
+"dopewars-UpgradeItem" = ["dopewars-game", "dopewars-decide"]
+"dopewars-HighVolatility" = ["dopewars-game", "dopewars-decide"]
+"dopewars-TravelEncounter" = ["dopewars-game", "dopewars-decide"]
+"dopewars-TravelEncounterResult" = ["dopewars-game", "dopewars-decide"]
 #
 "dopewars-NewSeason" = ["dopewars-laundromat"]
 "dopewars-NewHighScore" = ["dopewars-laundromat"]
 "dopewars-Claimed" = ["dopewars-laundromat"]
 
 # bushido
-"dopewars-TrophyProgression" = ["dopewars-game", "dopewars-laundromat"]
+"dopewars-TrophyProgression" = [
+    "dopewars-game",
+    "dopewars-laundromat",
+    "dopewars-decide",
+]
 "dopewars-TrophyCreation" = ["dopewars-ryo"]
+
+# items
+"dopewars-DopewarsItemTier" = ["dopewars-config"]
+"dopewars-DopewarsItemTierConfig" = ["dopewars-config"]
+
+#
+# libraries
+#
+
+[lib_versions]
+
+"dopewars-DopewarsItems" = "0"

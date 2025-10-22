@@ -18,7 +18,6 @@
       "dope_CollectionComponentSlug",
       "dope_ComponentValueEvent",
       "dope_ComponentValueResEvent",
-      "dope_DopeLootClaimed",
       "dope_DopeLootClaimedEvent",
       "dope_DopeLootOpened",
       "dope_DopeLootOpenedEvent",

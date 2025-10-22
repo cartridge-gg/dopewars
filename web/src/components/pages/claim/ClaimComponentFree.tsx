@@ -1,5 +1,5 @@
 import { Button } from "@/components/common";
-import { tryBetterErrorMsg, useDojoContext, useRouterContext } from "@/dojo/hooks";
+import { tryBetterErrorMsg, useDojoContext, useRouterContext, waitForTransaction } from "@/dojo/hooks";
 import { checkTxReceipt, sleep } from "@/dope/helpers";
 import { useToast } from "@/hooks/toast";
 import { Table, TableContainer, Tbody, Td, Text, Tr, VStack } from "@chakra-ui/react";
@@ -33,15 +33,14 @@ export default function ClaimComponentFree() {
             // @ts-ignore
             account.address,
             // @ts-ignore
+            entry[2].length,
+            // @ts-ignore
             ...entry[2],
           ],
         },
       ]);
 
-      let txReceipt = await account.waitForTransaction(execution.transaction_hash, {
-        retryInterval: 200,
-        successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
-      });
+      const txReceipt = await waitForTransaction(account, execution.transaction_hash);
 
       checkTxReceipt(txReceipt);
 

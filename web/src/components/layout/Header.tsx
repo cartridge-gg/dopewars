@@ -27,8 +27,11 @@ export const Header = observer(() => {
   } = useDojoContext();
   const { game, gameConfig } = useGameStore();
 
-  const isMainnetOrSepolia = useMemo(() => {
-    return ["mainnet", "sepolia"].includes(selectedChain.chainConfig.network);
+  const {isMainnet, isSepolia} = useMemo(() => {
+    return {
+      isMainnet: selectedChain.chainConfig.network ==="mainnet",
+      isSepolia: selectedChain.chainConfig.network ==="sepolia",
+    }
   }, [selectedChain]);
 
   useEffect(() => {
@@ -50,15 +53,20 @@ export const Header = observer(() => {
     >
       <HStack gap={3} flex="1">
         {!gameId && <ClaimReward />}
-        {!gameId && router.route === "/" && (
+        {!gameId && router.route === "/" && account && (
           <HeaderButton
             variant="pixelated"
             h={["40px", "48px"]}
             fontSize="14px"
             onClick={() => {
-              if (isMainnetOrSepolia) {
+              if (isMainnet || isSepolia) {
                 const controllerConnector = connector as unknown as ControllerConnector;
-                controllerConnector.controller.openStarterPack("nums-starterpack-sepolia");
+                if(isSepolia){
+                  controllerConnector.controller.openStarterPack("dopewars-claim-sepolia");
+                }
+                if(isMainnet){
+                  controllerConnector.controller.openStarterPack("dopewars-claim-mainnet");
+                }
               } else {
                 router.push("/claim");
               }

@@ -45,6 +45,8 @@ export default function Dope() {
     account?.address,
   );
 
+  // console.log(accountTokens)
+
   const { loot, hustlers, gear, gearAddress, gearCount } = useMemo(() => {
     const gearAddress = getContractByName(selectedChain.manifest, "dope", "DopeGear")!.address;
     const loot = (accountTokens || []).filter(

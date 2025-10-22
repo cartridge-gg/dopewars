@@ -7,12 +7,12 @@ import manifestMainnet from "../../manifests/manifest_mainnet.json";
 import manifestSepolia from "../../manifests/manifest_sepolia.json";
 
 import manifestDopeDev from "../../manifests_dope/manifest_dev.json";
+import manifestDopeSepolia from "../../manifests_dope/manifest_sepolia.json";
 // import manifestDopeDope from "../../manifests_dope/manifest_dope.json";
 
 import {
   default as manifestDopeDopewars,
   default as manifestDopeMainnet,
-  default as manifestDopeSepolia,
 } from "../../manifests_dope/manifest_dopewars.json";
 // import {
 //   manifestDev as manifestDopeDev,
@@ -104,9 +104,9 @@ const snMainnet: DojoChainConfig = {
 // keys must match chain.id
 export const dojoContextConfig = {
   // SN_MAIN: snMainnet,
-  // SN_SEPOLIA: snSepolia,
-  WP_DOPEWARS: katanaSlotDopewars,
-  KATANA: katanaLocal,
+  SN_SEPOLIA: snSepolia,
+  // WP_DOPEWARS: katanaSlotDopewars,
+  // KATANA: katanaLocal,
 };
 
 export const dojoChains = Object.values(dojoContextConfig);

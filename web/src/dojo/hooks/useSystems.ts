@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/toast";
 import { DojoCall, getContractByName } from "@dojoengine/core";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useMemo, useState } from "react";
-import { AllowArray, Call, CallData, GetTransactionReceiptResponse, num, shortString, uint256 } from "starknet";
+import { AccountInterface, AllowArray, Call, CallData, GetTransactionReceiptResponse, num, RpcProvider, shortString, uint256 } from "starknet";
 import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
 import { EncountersAction, GameMode, Locations } from "../types";
 import { buildVrfCalls } from "../utils";
@@ -73,6 +73,31 @@ export const tryBetterErrorMsg = (msg: string): string => {
   return msg;
 };
 
+export const waitForTransaction = async (
+  account: AccountInterface,
+  txHash: string,
+  maxRetry = 5
+) => {
+  let receipt = undefined;
+  while (maxRetry > 0) {
+    try {
+      receipt = await account.waitForTransaction(txHash, {
+        retryInterval: 200,
+        successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
+      });
+      return receipt;
+    } catch (e) {
+      console.log("waitForTransaction error", maxRetry, e);
+      if (maxRetry === 0) {
+        throw e;
+      }
+    }
+
+    maxRetry -= 1;
+  }
+  return undefined
+};
+
 export const useSystems = (): SystemsInterface => {
   const {
     clients: { dojoProvider, rpcProvider, toriiClient },
@@ -124,10 +149,8 @@ export const useSystems = (): SystemsInterface => {
         ///@ts-ignore
         tx = await dojoProvider.execute(account!, calls, DW_NS);
 
-        receipt = await rpcProvider.waitForTransaction(tx.transaction_hash, {
-          retryInterval: 200,
-          successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
-        });
+        receipt = await waitForTransaction(account!, tx.transaction_hash);
+        
       } catch (e: any) {
         setIsPending(false);
         // setError(e.toString());

@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { useAccount } from "@starknet-react/core";
 import { Contract, uint256 } from "starknet";
 import { checkTxReceipt } from "../helpers";
-import { tryBetterErrorMsg } from "@/dojo/hooks";
+import { tryBetterErrorMsg, waitForTransaction } from "@/dojo/hooks";
 
 export const useERC721 = ({
   toast,
@@ -44,10 +44,7 @@ export const useERC721 = ({
           },
         ]);
 
-        let txReceipt = await account.waitForTransaction(execution.transaction_hash, {
-          retryInterval: 200,
-          successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
-        });
+        const txReceipt = await waitForTransaction(account!, execution.transaction_hash);
 
         checkTxReceipt(txReceipt);
         setIsLoading(false);

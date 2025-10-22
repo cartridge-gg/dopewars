@@ -67,6 +67,8 @@ mod ryo {
         paper_address: ContractAddress,
         vrf_address: ContractAddress,
         treasury_address: ContractAddress,
+        season_duration: u32, 
+        season_time_limit: u16
     ) {
         // consume first ID = 0
         let _ = self.world_dispatcher().uuid();
@@ -79,7 +81,7 @@ mod ryo {
         assert(ryo_config.initialized == false, 'Already initialized');
 
         // initial config
-        ryo_config = RyoConfigImpl::build_initial_ryo_config();
+        ryo_config = RyoConfigImpl::build_initial_ryo_config(season_duration, season_time_limit);
         // save
         store.save_ryo_config(@ryo_config);
 

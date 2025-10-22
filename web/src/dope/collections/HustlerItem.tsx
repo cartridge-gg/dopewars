@@ -34,9 +34,10 @@ export default function HustlerItem({ token }: { token: ParsedToken }) {
           <CardAnim onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
             <>
               {token.metadata && token.metadata.image !== "" ? (
-                <img className="aspect-square w-full mb-1" src={token.metadata.image} loading="lazy" />
+            
+                <img className="aspect-square w-full mb-1" src={token.metadata.image} loading="lazy" draggable="false" />
               ) : (
-                <img className="aspect-square w-full mb-1" src="/public/images/dope-smiley.svg" />
+                <img className="aspect-square w-full mb-1" src="/public/images/dope-smiley.svg" draggable="false"/>
               )}
 
               {/* {details && (

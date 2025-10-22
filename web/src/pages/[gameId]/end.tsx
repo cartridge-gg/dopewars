@@ -36,6 +36,7 @@ import { Dopewars_Game as Game } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { HustlerAvatarIcon } from "@/components/pages/profile/HustlerAvatarIcon";
+import { useAccount } from "@starknet-react/core";
 
 const End = () => {
   const gameStore = useGameStore();
@@ -106,10 +107,7 @@ const End = () => {
           duration: 5_000,
           isError: false,
         });
-        await rpcProvider.waitForTransaction(hash, {
-          retryInterval: 200,
-          successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
-        });
+
         setTimeout(async () => {
           await gameStore.init(gameInfos?.game_id!);
           setTimeout(() => {

@@ -4,7 +4,7 @@ import { useAccount } from "@starknet-react/core";
 import { Contract, uint256 } from "starknet";
 import { checkTxReceipt } from "../helpers";
 import { useToast } from "@/hooks/toast";
-import { tryBetterErrorMsg } from "@/dojo/hooks";
+import { tryBetterErrorMsg, waitForTransaction } from "@/dojo/hooks";
 
 export const useDopeLootClaim = ({ getDojoContract }: { getDojoContract: (tag: string) => Contract }) => {
   const { account } = useAccount();
@@ -39,10 +39,7 @@ export const useDopeLootClaim = ({ getDojoContract }: { getDojoContract: (tag: s
           },
         ]);
 
-        let txReceipt = await account.waitForTransaction(execution.transaction_hash, {
-          retryInterval: 200,
-          successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
-        });
+        const txReceipt = await waitForTransaction(account!, execution.transaction_hash);
 
         checkTxReceipt(txReceipt);
         setIsLoading(false);
@@ -86,10 +83,7 @@ export const useDopeLootClaim = ({ getDojoContract }: { getDojoContract: (tag: s
           },
         ]);
 
-        let txReceipt = await account.waitForTransaction(execution.transaction_hash, {
-          retryInterval: 200,
-          successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
-        });
+        const txReceipt = await waitForTransaction(account!, execution.transaction_hash);
 
         checkTxReceipt(txReceipt);
         setIsLoading(false);

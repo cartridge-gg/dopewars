@@ -40,7 +40,6 @@ export function customJsonRpcProvider(selectedChain: DojoChainConfig): ChainProv
   };
 }
 
-
 function getConnectorsForChain(selectedChain: DojoChainConfig, path: string) {
   const controller = cartridgeConnector({ selectedChain });
 
@@ -130,9 +129,9 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
   };
 
   if (selectedChain.name !== "MAINNET") {
-    const devtoolsAddress = getContractByName(selectedChain.manifest, DW_NS, "devtools")?.address;
+    // const devtoolsAddress = getContractByName(selectedChain.manifest, DW_NS, "devtools")?.address;
 
-    policies.contracts![devtoolsAddress] = { methods: [{ entrypoint: "create_fake_game" }] };
+    // policies.contracts![devtoolsAddress] = { methods: [{ entrypoint: "create_fake_game" }] };
 
     policies.contracts![paperAddress].methods.push({
       entrypoint: "faucet",
@@ -154,7 +153,7 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
     });
   }
 
-  // console.log(policies);
+  console.log(policies);
 
   return new ControllerConnector({
     chains: [
@@ -173,10 +172,10 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
     // rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
     // profileUrl: selectedChain.profileUrl ? selectedChain.profileUrl : undefined,
     // namespace: selectedChain.namespace ? selectedChain.namespace : "dopewars",
-    // slot: selectedChain.slot ? selectedChain.slot : "ryo",
+    slot: selectedChain.slot ? selectedChain.slot : "ryo",
+    namespace: "dopewars",
     tokens: {
       erc20: [
-      
         // "ERC721:0x020dfc24de987d7d11f70a7306ae39b6ac71b178eaf19bf12e831b3522c14ebf"
         // paperAddress
         // "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113",

@@ -38,14 +38,14 @@ pub struct RyoConfig {
 
 #[generate_trait]
 pub impl RyoConfigImpl of RyoConfigTrait {
-    fn build_initial_ryo_config() -> RyoConfig {
+    fn build_initial_ryo_config(season_duration: u32, season_time_limit: u16) -> RyoConfig {
         RyoConfig {
             key: 0,
             initialized: true,
             paused: false,
             season_version: 1,
-            season_duration:  TEMP_VALUE, //ONE_DAY, 
-            season_time_limit: TWO_MIN, // HALF_HOUR, 
+            season_duration, 
+            season_time_limit,
             paper_fee: 1000, // in ether
             paper_reward_launderer: 100, // in ether  
             treasury_fee_pct: 10,

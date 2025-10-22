@@ -3,6 +3,7 @@ import { useAccount } from "@starknet-react/core";
 import { useCallback, useState } from "react";
 import { Account, Contract, TypedContractV2 } from "starknet";
 import { ABI as paperAbi } from "../abis/paperAbi";
+import { waitForTransaction } from "./useSystems";
 
 export interface FaucetExecuteResult {
   hash: string;
@@ -44,10 +45,7 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
         isError: false,
       });
 
-      receipt = await account!.waitForTransaction(tx.transaction_hash, {
-        retryInterval: 200,
-        successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
-      });
+      receipt = await waitForTransaction(account!, tx.transaction_hash);
     } catch (e: any) {
       console.log(e);
       setIsPending(false);
@@ -83,8 +81,5 @@ export const paperFaucet = async ({ account, paperAddress }: { account: Account;
 
   const tx = await contract.invoke("faucet", [], { parseRequest: false });
 
-  const receipt = await account!.waitForTransaction(tx.transaction_hash, {
-    retryInterval: 200,
-    successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
-  });
+  const receipt = await waitForTransaction(account!, tx.transaction_hash);;
 };

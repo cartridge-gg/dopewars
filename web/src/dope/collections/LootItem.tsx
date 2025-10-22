@@ -30,7 +30,6 @@ export default function LootItem({ token }: { token: ParsedToken }) {
 
   const dopeLootClaimState = useDopeStore((state) => state.dopeLootClaimState);
 
-
   const { isOpened, isReleased } = useMemo(() => {
     const tokenState = dopeLootClaimState[Number(token.token_id)];
     const isOpened = tokenState ? tokenState.isOpened : false;
@@ -61,6 +60,7 @@ export default function LootItem({ token }: { token: ParsedToken }) {
             className="aspect-square w-full pointer-events-none select-none"
             src={token.metadata.image}
             loading="lazy"
+            draggable="false"
           />
         ) : (
           <HustlerPreviewFromLoot tokenId={Number(token.token_id)} />

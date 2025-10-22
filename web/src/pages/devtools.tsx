@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layout";
-import { useSystems } from "@/dojo/hooks";
+import { useSystems, waitForTransaction } from "@/dojo/hooks";
 import { useToast } from "@/hooks/toast";
 import { Button, HStack, Input, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
@@ -25,10 +25,8 @@ export default function LeaderboardPage() {
 
   const onCreateFakeGame = async () => {
     const { hash } = await createFakeGame(valueRef.current);
-    await account?.waitForTransaction(hash, {
-      retryInterval: 200,
-      successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
-    });
+    await waitForTransaction(account!,hash);
+    
 
     toast({ message: "created fake game Ser" });
   };

@@ -1,7 +1,7 @@
 {
   "world": {
     "class_hash": "0x57994b6a75fad550ca18b41ee82e2110e158c59028c4478109a67965a0e5b1e",
-    "address": "0x3b95b1b1d3d504d0b841294cec694e6d088192fc22c0ac2e083ff2df2e844b7",
+    "address": "0x481a7d7b499c8ba774ab492787e8f2678ff63d3ba33ab513b29a79e31f6c0b8",
     "seed": "dopeseed",
     "name": "Dope Wars",
     "entrypoints": [
@@ -1479,7 +1479,7 @@
   },
   "contracts": [
     {
-      "address": "0x57f73057d38137fed00c73ff732e414a9d202965304521970abfee52d7af6e5",
+      "address": "0x361c0306f97365fadf73e181db728cf4b64bdc52985e78d8b0bdb248d9fb4f8",
       "class_hash": "0x77516225ff32aa5f6cfb958d544aa899bdea045d1f95381d42a745ecd098b7",
       "abi": [
         {
@@ -2037,7 +2037,7 @@
       ]
     },
     {
-      "address": "0xda09d5cad625f60398eac078b32ccbbf9b95793fa34ab556ecc78122133dd2",
+      "address": "0x9263c4f8483012b8b8037254aebf1db6821206da1067718243b5ad5002335e",
       "class_hash": "0x41ec9895680595f4acba382832de3b8a24b312a2898084666b9635447ae2794",
       "abi": [
         {
@@ -2258,7 +2258,7 @@
       ]
     },
     {
-      "address": "0x1a7f9be78ecd7314c93e2873519c50d5dc81adff85b525fa2cd436bf5a94b14",
+      "address": "0x713a2866dc5e3f4be50dd92af4a4d79f09fd81a2355d7120b791f78be288bc",
       "class_hash": "0x31be2b542b94e46d173c32ab64fee0348a163a420695ab5d33e2bf23252bb88",
       "abi": [
         {
@@ -2471,7 +2471,7 @@
       ]
     },
     {
-      "address": "0x1b970f0b7fc5ad0e1428101ae9106b4a6c4ee4436668a8f1a2d667edf7bfc31",
+      "address": "0x5b52991f84dace1abf3e5a073c95e59f9ce4f15eb8a49d3247acaa4b5e4d1d3",
       "class_hash": "0x55f375a7567a4f898ec220d1dfbdc5ad9f1389a17931e741ad17f8c11118790",
       "abi": [
         {
@@ -2914,7 +2914,7 @@
       ]
     },
     {
-      "address": "0x38d448e2784318d3aca7c8e6768a094ed87860311fb296f95bb24a00b50fd90",
+      "address": "0x6196a1e9b2fe74fa2036b343a0a7889ba74df6b219d8b1dd18a995a0a1bcda3",
       "class_hash": "0x1d867b63ccdf83e162ed9a4cfa0a77985b0bb4b203ef9a150956b7dca6e8b32",
       "abi": [
         {
@@ -3182,7 +3182,7 @@
       ]
     },
     {
-      "address": "0x20dfc24de987d7d11f70a7306ae39b6ac71b178eaf19bf12e831b3522c14ebf",
+      "address": "0x7911f16dc122877dee96a1ec2cc1f8a6853096253568118047b5e1e0edba17c",
       "class_hash": "0x3f6b36f2bab028f1309b2ae581b9e498caeb809b901865ca8276a136f97baac",
       "abi": [
         {
@@ -3610,8 +3610,8 @@
       ]
     },
     {
-      "address": "0x7d76806c03cfadae90322a7a597ac3613dadc841bfc8646510c226f7b23d175",
-      "class_hash": "0x1a57767e84cd1276a04ad8d031dfe0d1ca55eeffc336cc71c72e31ea56880ea",
+      "address": "0x132d8bf48aec86b8e1001955382511e97b36a688815fe4f987459fa6e1edd46",
+      "class_hash": "0x64d2df7e12890eb58fd6bf797045a593c11a32b2c863cffd98e616a1856efe2",
       "abi": [
         {
           "type": "impl",
@@ -3678,6 +3678,14 @@
             {
               "name": "treasury_address",
               "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "season_duration",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "season_time_limit",
+              "type": "core::integer::u16"
             }
           ],
           "outputs": [],
@@ -4086,7 +4094,9 @@
       "init_calldata": [
         "0x0",
         "0x0",
-        "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a"
+        "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a",
+        "1800",
+        "180"
       ],
       "tag": "dopewars-ryo",
       "selector": "0x32b65ba76433a3384da18dba9d4a63d3a7de35be8bf53a61d71928482a6d75e",
@@ -4101,7 +4111,7 @@
       ]
     },
     {
-      "address": "0xa379c26ca504eedfe5508963b7150f7ca6a770b70c9eff5398c38d086158f8",
+      "address": "0x7e8e97d6fd4f4eb68833580250aa4080d47ec9123bbd8f63d176bfb85821e8b",
       "class_hash": "0x3da3ba11ab50008af9900123f2773c95b279065b2c188b0d17673d3debf2a",
       "abi": [
         {
