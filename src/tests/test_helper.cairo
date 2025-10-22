@@ -10,10 +10,11 @@ use rollyourown::events::{
     Claimed, GameCreated, GameOver, HighVolatility, NewHighScore, NewSeason, TradeDrug,
     TravelEncounter, TravelEncounterResult, Traveled, UpgradeItem,
 };
-use rollyourown::models::game::Game;
-use rollyourown::models::game_store_packed::GameStorePacked;
-use rollyourown::models::game_token::GameToken;
-use rollyourown::models::season::Season;
+// use rollyourown::models::game::Game;
+// use rollyourown::models::game_store_packed::GameStorePacked;
+// use rollyourown::models::game_token::GameToken;
+// use rollyourown::models::season::Season;
+use rollyourown::config::config::{IConfigDispatcher};
 use rollyourown::systems::decide::{IDecideDispatcher, IDecideDispatcherTrait, decide};
 use rollyourown::systems::devtools::{IDevtoolsDispatcher, IDevtoolsDispatcherTrait, devtools};
 use rollyourown::systems::game::{IGameActionsDispatcher, IGameActionsDispatcherTrait, game};
@@ -33,21 +34,40 @@ fn NAMESPACE() -> ByteArray {
 
 fn namespace_def() -> NamespaceDef {
     let mut resources = array![
-        TestResource::Model("Game"), TestResource::Model("GameStorePacked"),
-        TestResource::Model("GameToken"), TestResource::Model("RyoConfig"),
-        TestResource::Model("Season"), TestResource::Model("DrugConfig"),
-        TestResource::Model("EncounterStatsConfig"), TestResource::Model("GameConfig"),
-        TestResource::Model("RandomnessConfig"), TestResource::Model("RyoAddress"),
-        TestResource::Model("SeasonSettings"), TestResource::Model("SortedList"),
-        TestResource::Model("SortedListItem"), TestResource::Contract("game"),
-        TestResource::Contract("decide"), TestResource::Contract("laundromat"),
-        TestResource::Contract("ryo"), TestResource::Contract("devtools"),
-        TestResource::Contract("game_token_system_v0"), TestResource::Event("GameCreated"),
-        TestResource::Event("Traveled"), TestResource::Event("GameOver"),
-        TestResource::Event("TradeDrug"), TestResource::Event("HighVolatility"),
-        TestResource::Event("UpgradeItem"), TestResource::Event("TravelEncounter"),
-        TestResource::Event("TravelEncounterResult"), TestResource::Event("NewSeason"),
-        TestResource::Event("NewHighScore"), TestResource::Event("Claimed"),
+        TestResource::Model("Game"),
+        TestResource::Model("GameStorePacked"),
+        TestResource::Model("GameToken"),
+        TestResource::Model("RyoConfig"),
+        TestResource::Model("Season"),
+        TestResource::Model("DrugConfig"),
+        TestResource::Model("LocationConfig"),
+        TestResource::Model("HustlerBody"),
+        TestResource::Model("HustlerSlot"),
+        TestResource::Model("EncounterStatsConfig"),
+        TestResource::Model("GameConfig"),
+        TestResource::Model("RandomnessConfig"),
+        TestResource::Model("RyoAddress"),
+        TestResource::Model("SeasonSettings"),
+        TestResource::Model("SortedList"),
+        TestResource::Model("SortedListItem"),
+        TestResource::Contract("game"),
+        TestResource::Contract("decide"),
+        TestResource::Contract("laundromat"),
+        TestResource::Contract("config"),
+        TestResource::Contract("ryo"),
+        TestResource::Contract("devtools"),
+        TestResource::Contract("game_token_system_v0"),
+        TestResource::Event("GameCreated"),
+        TestResource::Event("Traveled"),
+        TestResource::Event("GameOver"),
+        TestResource::Event("TradeDrug"),
+        TestResource::Event("HighVolatility"),
+        TestResource::Event("UpgradeItem"),
+        TestResource::Event("TravelEncounter"),
+        TestResource::Event("TravelEncounterResult"),
+        TestResource::Event("NewSeason"),
+        TestResource::Event("NewHighScore"),
+        TestResource::Event("Claimed"),
     ];
     NamespaceDef { namespace: NAMESPACE(), resources: resources.span() }
 }
@@ -91,22 +111,25 @@ fn contract_defs() -> Span<ContractDef> {
         ContractDefTrait::new(@NAMESPACE(), @"game_token_system_v0")
             .with_writer_of([dojo::utils::bytearray_hash(@NAMESPACE())].span())
             .with_init_calldata(game_token_init_calldata.span()),
+        ContractDefTrait::new(@NAMESPACE(), @"config")
+            .with_writer_of([dojo::utils::bytearray_hash(@NAMESPACE())].span()),
     ]
         .span()
 }
 
 #[derive(Drop)]
 pub struct TestContracts {
-    pub world: IWorldDispatcher,
+    pub world: WorldStorage,
     pub game: IGameActionsDispatcher,
     pub decide: IDecideDispatcher,
     pub laundromat: ILaundromatDispatcher,
     pub ryo: IRyoDispatcher,
     pub devtools: IDevtoolsDispatcher,
     pub game_token: IGameTokenSystemsDispatcher,
+    pub config: IConfigDispatcher,
 }
 
-fn deploy_world() -> TestContracts {
+pub fn deploy_world() -> TestContracts{
     let mut world = spawn_test_world([namespace_def()].span());
     world.sync_perms_and_inits(contract_defs());
 
@@ -116,16 +139,18 @@ fn deploy_world() -> TestContracts {
     let (ryo_address, _) = world.dns(@"ryo").unwrap();
     let (devtools_address, _) = world.dns(@"devtools").unwrap();
     let (game_token_address, _) = world.dns(@"game_token_system_v0").unwrap();
+    let (config_address, _) = world.dns(@"config").unwrap();
 
     TestContracts {
-    world: world.dispatcher,
-    game: IGameActionsDispatcher { contract_address: game_address },
-    decide: IDecideDispatcher { contract_address: decide_address },
-    laundromat: ILaundromatDispatcher { contract_address: laundromat_address },
-    ryo: IRyoDispatcher { contract_address: ryo_address },
-    devtools: IDevtoolsDispatcher { contract_address: devtools_address },
-    game_token: IGameTokenSystemsDispatcher { contract_address: game_token_address },
-}
+        world,
+        game: IGameActionsDispatcher { contract_address: game_address },
+        decide: IDecideDispatcher { contract_address: decide_address },
+        laundromat: ILaundromatDispatcher { contract_address: laundromat_address },
+        ryo: IRyoDispatcher { contract_address: ryo_address },
+        devtools: IDevtoolsDispatcher { contract_address: devtools_address },
+        game_token: IGameTokenSystemsDispatcher { contract_address: game_token_address },
+        config: IConfigDispatcher { contract_address: config_address },
+    }
 }
 
 #[test]

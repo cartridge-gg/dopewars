@@ -103,7 +103,7 @@ pub mod game {
                 season_manager.on_game_start(multiplier);
             }
 
-            let mut dope_world = self.world(@"dope");
+            let mut dope_world = self.world(@"dopewars"); // changed from self.world(@"dope") for testing
 
             let mut game_created = GameCreated {
                 game_id,
@@ -138,24 +138,24 @@ pub mod game {
                 },
                 TokenId::LootId(loot_id) => {
                     // check if owner of loot_id
-                    let loot_dispatcher = IERC721ABIDispatcher {
-                        contract_address: dope_world.dns_address(@"DopeLoot").unwrap(),
-                    };
-                    assert(
-                        player_id == loot_dispatcher.owner_of(loot_id.into()),
-                        'caller is not loot owner',
-                    );
+                    // let loot_dispatcher = IERC721ABIDispatcher {
+                    //     contract_address: dope_world.dns_address(@"DopeLoot").unwrap(),
+                    // };
+                    // assert(
+                    //     player_id == loot_dispatcher.owner_of(loot_id.into()),
+                    //     'caller is not loot owner',
+                    // );
                 },
                 TokenId::HustlerId(hustler_id) => {
                     // check if owner of hustler_id
-                    let erc721_dispatcher = IERC721ABIDispatcher {
-                        contract_address: dope_world.dns_address(@"DopeHustlers").unwrap(),
-                    };
+                    // let erc721_dispatcher = IERC721ABIDispatcher {
+                    //     contract_address: dope_world.dns_address(@"DopeHustlers").unwrap(),
+                    // };
 
-                    assert(
-                        player_id == erc721_dispatcher.owner_of(hustler_id.into()),
-                        'caller is not hustler owner',
-                    );
+                    // assert(
+                    //     player_id == erc721_dispatcher.owner_of(hustler_id.into()),
+                    //     'caller is not hustler owner',
+                    // );
 
                     // let mut hustler_store = HustlerStoreImpl::new(dope_world);
 

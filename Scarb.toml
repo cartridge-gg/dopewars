@@ -30,11 +30,9 @@ build-external-contracts = [
 ]
 
 [dev-dependencies]
-# cairo_test = "2.12.2"
 snforge_std = "0.48.0"
 assert_macros = "2.12.2"
 dojo_snf_test = "1.7.1"
-# dojo_cairo_test = "1.7.1"
 
 [dependencies]
 starknet = "2.12.2"

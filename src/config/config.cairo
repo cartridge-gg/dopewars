@@ -2,7 +2,7 @@ use rollyourown::config::ryo::RyoConfig;
 use rollyourown::config::settings::SeasonSettingsModes;
 
 #[starknet::interface]
-trait IConfig<T> {
+pub trait IConfig<T> {
     fn get_config(self: @T) -> Config;
     fn emit_items_config(self: @T);
 }
