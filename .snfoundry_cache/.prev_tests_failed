@@ -1,1 +1,12 @@
-rollyourown::tests::test_game_ownership::test_game_ownership::test_owner_can_create_game
+rollyourown::tests::systems::laundromat::tests::test_owner_can_claim
+rollyourown::tests::systems::laundromat::tests::test_non_owner_cannot_register_score
+rollyourown::tests::systems::game::tests::test_integration_new_owner_can_travel
+rollyourown::tests::systems::laundromat::tests::test_non_owner_cannot_claim
+rollyourown::tests::systems::game::tests::test_owner_can_create_game
+rollyourown::tests::systems::laundromat::tests::test_owner_can_register_score
+rollyourown::tests::systems::game::tests::test_non_owner_cannot_create_game
+rollyourown::tests::systems::game::tests::test_non_owner_cannot_travel
+rollyourown::tests::systems::decide::tests::test_owner_can_decide
+rollyourown::tests::systems::decide::tests::test_non_owner_cannot_decide
+rollyourown::tests::systems::game::tests::test_owner_can_travel
+rollyourown::tests::systems::game::tests::test_integration_old_owner_cannot_travel

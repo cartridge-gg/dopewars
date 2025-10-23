@@ -25,7 +25,6 @@ use rollyourown::systems::laundromat::{
     ILaundromatDispatcher, ILaundromatDispatcherTrait, laundromat,
 };
 use rollyourown::systems::ryo::{IRyoDispatcher, IRyoDispatcherTrait, ryo};
-use starknet::{ContractAddress, contract_address_const};
 
 
 fn NAMESPACE() -> ByteArray {
@@ -76,25 +75,30 @@ fn contract_defs() -> Span<ContractDef> {
     let mut game_token_init_calldata: Array<felt252> = array![];
     game_token_init_calldata
         .append(
-            0x065d2AB17338b5AffdEbAF95E2D79834B5f30Bac596fF55563c62C3c98700150.try_into().unwrap(),
+            // 0x065d2AB17338b5AffdEbAF95E2D79834B5f30Bac596fF55563c62C3c98700150.try_into().unwrap(),
+            0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec.try_into().unwrap(),
         ); // creator_address
     game_token_init_calldata
         .append(
-            0x02334dc9c950c74c3228e2a343d495ae36f0b4edf06767a679569e9f9de08776.try_into().unwrap(),
+            // 0x02334dc9c950c74c3228e2a343d495ae36f0b4edf06767a679569e9f9de08776.try_into().unwrap(),
+            0x05a499a49f635d0a9379da557b3f13aeb74a1b2295944755575e6adb2b86f7dd.try_into().unwrap()
         ); // denshokan_address
 
     let mut ryo_init_calldata: Array<felt252> = array![];
     ryo_init_calldata
         .append(
+            // 0x01d98402b4e52674d9460Feceb8B98DC78A039350590B73CeaA0B32ed02b1425.try_into().unwrap(),
             0x01d98402b4e52674d9460Feceb8B98DC78A039350590B73CeaA0B32ed02b1425.try_into().unwrap(),
         ); // paper address
     ryo_init_calldata
         .append(
+            // 0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f.try_into().unwrap(),
             0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f.try_into().unwrap(),
         ); //vrf address
     ryo_init_calldata
         .append(
-            0x44cea566ac53bf7c36b298e36536c1a53ba0b0bdf66b2c5f437965605acface.try_into().unwrap(),
+            // 0x44cea566ac53bf7c36b298e36536c1a53ba0b0bdf66b2c5f437965605acface.try_into().unwrap(),
+            0x025ede3b40d5A404Abe7C96755d4Bb7168e95739d75db012040901907a5E1628.try_into().unwrap(),
         ); //treasury address
     [
         ContractDefTrait::new(@NAMESPACE(), @"game")
@@ -154,7 +158,7 @@ pub fn deploy_world() -> TestContracts{
 }
 
 #[test]
-#[fork(url: "https://api.cartridge.gg/x/starknet/sepolia", block_tag: latest)]
+#[fork("provable-dw")]
 fn test_world_setup() {
-    let contracts = deploy_world();
+    deploy_world();
 }

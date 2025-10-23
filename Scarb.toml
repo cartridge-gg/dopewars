@@ -18,6 +18,16 @@ tab-size = 4
 [tool.scarb]
 allow-prebuilt-plugins = ["snforge_std"]
 
+[[tool.snforge.fork]]
+name = "provable-dw"
+url = "https://api.cartridge.gg/x/provable-dw/katana"
+block_id.tag = "latest"
+
+# [[tool.snforge.fork]]
+# name = "sepolia"
+# url = "https://api.cartridge.gg/x/starknet/sepolia"
+# block_id.tag = "latest"
+
 [[target.starknet-contract]]
 sierra = true
 casm = true

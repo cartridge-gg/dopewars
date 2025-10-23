@@ -8,5 +8,6 @@ deployment.md
 
 *.pem
 
+.snfoundry_cache
 GEMINI.md
-GAME_COMPONENTS_INTEGRATION_PLAN.md
+AGENTS.md
