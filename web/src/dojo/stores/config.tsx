@@ -24,10 +24,19 @@ import { DojoProvider } from "@dojoengine/core";
 import { GraphQLClient } from "graphql-request";
 import { flow, makeObservable, observable } from "mobx";
 import React, { ReactNode } from "react";
-import { Contract, TypedContractV2, shortString, RpcProvider } from "starknet";
+import { Contract, ProviderInterface, shortString } from "starknet";
 import { ABI as configAbi } from "../abis/configAbi";
 import { drugIcons, drugIconsKeys, locationIcons, locationIconsKeys } from "../helpers";
-import { CashMode, DrugsMode, EncountersMode, EncountersOddsMode, HealthMode, ItemSlot, TurnsMode } from "../types";
+import {
+  CashMode,
+  DrugsMode,
+  EncountersMode,
+  EncountersOddsMode,
+  HealthMode,
+  ItemSlot,
+  TurnsMode,
+  // WantedMode,
+} from "../types";
 import { GearItem } from "@/dope/helpers";
 
 export type DrugConfigFull = Omit<DrugConfig, "name"> & { icon: React.FC; name: string };
@@ -81,6 +90,7 @@ export type SeasonSettingsModes = {
   encounters_modes: Array<EncountersMode>;
   encounters_odds_modes: Array<EncountersOddsMode>;
   drugs_modes: Array<DrugsMode>;
+  // wanted_modes: Array<WantedMode>;
 };
 
 export type GetConfig = {
@@ -111,14 +121,12 @@ export type Config = {
 type ConfigStoreProps = {
   client: GraphQLClient;
   dojoProvider: DojoProvider;
-  rpcProvider: RpcProvider;
   manifest: any;
 };
 
 export class ConfigStoreClass {
   client: GraphQLClient;
   dojoProvider: DojoProvider;
-  rpcProvider: RpcProvider;
   manifest: any;
 
   config: Config | undefined = undefined;
@@ -127,12 +135,11 @@ export class ConfigStoreClass {
   isInitialized = false;
   error: any | undefined = undefined;
 
-  constructor({ client, dojoProvider, rpcProvider, manifest }: ConfigStoreProps) {
+  constructor({ client, dojoProvider, manifest }: ConfigStoreProps) {
     // console.log("new ConfigStoreClass");
 
     this.client = client;
     this.dojoProvider = dojoProvider;
-    this.rpcProvider = rpcProvider;
     this.manifest = manifest;
 
     makeObservable(this, {
@@ -219,52 +226,124 @@ export class ConfigStoreClass {
 
     /*************************************************** */
 
-    // Make direct RPC call to avoid "pending" block ID issue
     const configContractAddress = this.manifest.contracts.find((c: any) => c.tag === "dopewars-config")?.address;
-    const getConfigResult = yield this.rpcProvider.callContract(
-      {
-        contractAddress: configContractAddress,
-        entrypoint: "get_config",
-        calldata: [],
-      },
-      "latest",
-    );
+    if (!configContractAddress) {
+      throw new Error("Config contract address not found in manifest");
+    }
 
-    // For now, provide a fallback config with empty layouts
-    // TODO: Fix the config parsing once we understand the exact format
-
-    // Hardcoded fallback based on the Cairo GameStoreLayout enum
-    // This matches the structure from src/packing/game_store_layout.cairo
-    const getConfig: GetConfig = {
-      layouts: {
-        game_store: [
-          { name: "Markets", idx: BigInt(0), bits: BigInt(144) },
-          { name: "Items", idx: BigInt(144), bits: BigInt(8) },
-          { name: "Drugs", idx: BigInt(152), bits: BigInt(16) },
-          { name: "Wanted", idx: BigInt(168), bits: BigInt(18) },
-          { name: "Player", idx: BigInt(186), bits: BigInt(64) },
-        ],
-        player: [
-          { name: "Cash", idx: BigInt(0), bits: BigInt(30) },
-          { name: "Health", idx: BigInt(30), bits: BigInt(7) },
-          { name: "Turn", idx: BigInt(37), bits: BigInt(6) },
-          { name: "Status", idx: BigInt(43), bits: BigInt(2) },
-          { name: "PrevLocation", idx: BigInt(45), bits: BigInt(3) },
-          { name: "Location", idx: BigInt(48), bits: BigInt(3) },
-          { name: "NextLocation", idx: BigInt(51), bits: BigInt(3) },
-          { name: "DrugLevel", idx: BigInt(54), bits: BigInt(3) },
-          { name: "Reputation", idx: BigInt(57), bits: BigInt(7) },
-        ],
-      },
-      ryo_config: {} as RyoConfig,
-      season_settings_modes: {} as SeasonSettingsModes,
+    const provider = this.dojoProvider.provider as unknown as ProviderInterface;
+    const getConfigRaw = (yield this.fetchConfigWithLatestBlock(provider, configContractAddress)) as {
+      layouts: { game_store: Array<any>; player: Array<any> };
+      ryo_config: any;
+      season_settings_modes: any;
     };
 
-    console.log("Parsed config:", {
-      layouts: getConfig.layouts,
-      gameStoreItems: getConfig.layouts.game_store?.length || 0,
-      playerItems: getConfig.layouts.player?.length || 0,
-    });
+    const toBigInt = (value: any): bigint => {
+      if (typeof value === "bigint") {
+        return value;
+      }
+      if (typeof value === "number") {
+        return BigInt(value);
+      }
+      if (typeof value === "string") {
+        if (value.startsWith("0x")) {
+          return BigInt(value);
+        }
+        const parsed = Number(value);
+        if (Number.isNaN(parsed)) {
+          return BigInt(0);
+        }
+        return BigInt(parsed);
+      }
+      return BigInt(value ?? 0);
+    };
+
+    const decodeLayoutName = (value: any): string => {
+      if (typeof value === "string" && !value.startsWith("0x")) {
+        return value;
+      }
+
+      const hex =
+        typeof value === "string"
+          ? value.startsWith("0x")
+            ? value
+            : `0x${toBigInt(value).toString(16)}`
+          : `0x${toBigInt(value).toString(16)}`;
+
+      try {
+        return shortString.decodeShortString(hex);
+      } catch {
+        return hex;
+      }
+    };
+
+    const mapLayout = (items: Array<any>): Array<LayoutItem> =>
+      items.map((item) => ({
+        name: decodeLayoutName(item.name),
+        idx: toBigInt(item.idx),
+        bits: toBigInt(item.bits),
+      }));
+
+    const toBool = (value: any): boolean => {
+      if (typeof value === "boolean") {
+        return value;
+      }
+      if (typeof value === "string") {
+        return value === "0x1" || value === "1";
+      }
+      return Boolean(Number(value ?? 0));
+    };
+
+    const toNumber = (value: any): number => Number(value ?? 0);
+
+    const mapModes = <T extends Record<string, string>>(
+      values: Array<any> | undefined,
+      enumObj: T,
+    ): Array<T[keyof T]> => {
+      const options = Object.values(enumObj) as Array<T[keyof T]>;
+
+      return (values ?? []).map((value) => {
+        if (typeof value === "string" && !value.startsWith("0x")) {
+          return value as T[keyof T];
+        }
+        const index = Number(value);
+        return options[index] ?? (options[0] as T[keyof T]);
+      });
+    };
+
+    const rawRyoConfig = getConfigRaw.ryo_config ?? {};
+
+    const getConfig: GetConfig = {
+      layouts: {
+        game_store: mapLayout(getConfigRaw.layouts?.game_store ?? []),
+        player: mapLayout(getConfigRaw.layouts?.player ?? []),
+      },
+      ryo_config: {
+        ...rawRyoConfig,
+        key: toNumber(rawRyoConfig.key),
+        initialized: toBool(rawRyoConfig.initialized),
+        paused: toBool(rawRyoConfig.paused),
+        season_version: toNumber(rawRyoConfig.season_version),
+        season_duration: toNumber(rawRyoConfig.season_duration),
+        season_time_limit: toNumber(rawRyoConfig.season_time_limit),
+        paper_fee: toNumber(rawRyoConfig.paper_fee),
+        paper_reward_launderer: toNumber(rawRyoConfig.paper_reward_launderer),
+        treasury_fee_pct: toNumber(rawRyoConfig.treasury_fee_pct),
+        treasury_balance: toNumber(rawRyoConfig.treasury_balance),
+      } as RyoConfig,
+      season_settings_modes: {
+        cash_modes: mapModes(getConfigRaw.season_settings_modes?.cash_modes, CashMode),
+        health_modes: mapModes(getConfigRaw.season_settings_modes?.health_modes, HealthMode),
+        turns_modes: mapModes(getConfigRaw.season_settings_modes?.turns_modes, TurnsMode),
+        encounters_modes: mapModes(getConfigRaw.season_settings_modes?.encounters_modes, EncountersMode),
+        encounters_odds_modes: mapModes(
+          getConfigRaw.season_settings_modes?.encounters_odds_modes,
+          EncountersOddsMode,
+        ),
+        drugs_modes: mapModes(getConfigRaw.season_settings_modes?.drugs_modes, DrugsMode),
+        // wanted_modes: mapModes(getConfigRaw.season_settings_modes?.wanted_modes, WantedMode),
+      },
+    };
 
     /*************************************************** */
 
@@ -339,4 +418,28 @@ export class ConfigStoreClass {
   getGearItemTier(gearItem: GearItem) {
     return this.config?.dopewarsItemsTiers.find((i) => i.slot_id === gearItem.slot && i.item_id === gearItem.item);
   }
+
+  /** jinius
+   * Dojo's typed `call` helper defaults to `block_id: "pending"`, which our RPC gateway
+   * (and several hosted providers) currently reject. To stay aligned with upstream data
+   * structures while avoiding the `block_id` failure we issue the call manually with
+   * `blockIdentifier: "latest"`.
+   *
+   * NOTE: When the upstream gateway accepts `pending` again we can revert to the
+   * original `dojoProvider.call` path (see commented block below) and delete this helper.
+   */
+  private async fetchConfigWithLatestBlock(
+    provider: ProviderInterface,
+    configContractAddress: string,
+  ): Promise<any> {
+    const configContract = new Contract(configAbi, configContractAddress, provider);
+    return configContract.call("get_config", [], { blockIdentifier: "latest" });
+  }
+
+  // Legacy approach kept for reviewers/context:
+  // const getConfig = await this.dojoProvider.call("dopewars", {
+  //   contractName: "config",
+  //   entrypoint: "get_config",
+  //   calldata: [],
+  // });
 }

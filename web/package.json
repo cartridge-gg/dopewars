@@ -47,7 +47,6 @@
     "howler": "^2.2.3",
     "json-to-csv-export": "^2.1.1",
     "ka-table": "^8.11.0",
-    "metagame-sdk": "^0.1.24",
     "mobx": "^6.10.2",
     "mobx-react-lite": "^4.0.5",
     "next": "v15.3.1",
