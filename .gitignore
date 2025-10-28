@@ -9,5 +9,4 @@ deployment.md
 *.pem
 
 .snfoundry_cache
-GEMINI.md
 AGENTS.md

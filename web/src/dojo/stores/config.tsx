@@ -419,9 +419,9 @@ export class ConfigStoreClass {
     return this.config?.dopewarsItemsTiers.find((i) => i.slot_id === gearItem.slot && i.item_id === gearItem.item);
   }
 
-  /** jinius
-   * Dojo's typed `call` helper defaults to `block_id: "pending"`, which our RPC gateway
-   * (and several hosted providers) currently reject. To stay aligned with upstream data
+  /** @dev
+   * Dojo's typed `call` helper defaults to `block_id: "pending"`, which my RPC gateway
+   * currently rejects. To stay aligned with upstream data
    * structures while avoiding the `block_id` failure we issue the call manually with
    * `blockIdentifier: "latest"`.
    *

@@ -103,7 +103,7 @@ pub mod game {
                 season_manager.on_game_start(multiplier);
             }
 
-            let mut dope_world = self.world(@"dopewars"); // changed from self.world(@"dope") for testing
+            let mut dope_world = self.world(@"dope");
 
             let mut game_created = GameCreated {
                 game_id,

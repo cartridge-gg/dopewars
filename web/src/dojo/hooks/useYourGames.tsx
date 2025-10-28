@@ -79,6 +79,14 @@ export const useYourGames = () => {
   }, [selectedChain.manifest, rpcProvider]);
 
   /**
+   * NOTE: We previously attempted to replace the SQL helper with
+   * `toriiClient.getTokenBalances/ getTokens`, but the gRPC gateway
+   * backing our Torii deployment returned
+   * `invalid tag value: 0` while decoding the protobuf payload whenever
+   * we passed those filtered queries. Until that backend is upgraded
+   * (or the client adapts to its expectations), we fall back to the SQL
+   * helper that already filters by account.
+   *
    * Load games owned by the current account.
    * Fetches token IDs from token_balances, then enriches with game data.
    */
