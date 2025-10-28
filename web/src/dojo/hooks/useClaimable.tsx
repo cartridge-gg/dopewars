@@ -1,8 +1,10 @@
-import { Dopewars_Game as Game, World__ModelEdge, useClaimableQuery } from "@/generated/graphql";
+import { Dopewars_V0_Game as Game, World__ModelEdge, useClaimableQuery } from "@/generated/graphql";
 import { useEffect, useMemo } from "react";
 import { useDojoContext } from "./useDojoContext";
 import { useSql } from "./useSql";
 import { addAddressPadding, shortString } from "starknet";
+import { DW_NS } from "../constants";
+import { useSeasons } from "./useSeasons";
 
 type ClaimableResult = ReturnType<typeof useClaimable>;
 
@@ -18,7 +20,7 @@ token_id,
 "token_id.guestlootid",
 "token_id.lootid",
 "token_id.hustlerid"
-FROM "dopewars-Game" 
+FROM "${DW_NS}-Game" 
 WHERE player_id = "${addAddressPadding(playerId)}" AND claimed = false AND claimable > 0
 ORDER BY position ASC
 LIMIT 1000;`;

@@ -55,7 +55,7 @@ export const useEquipment = (toriiClient: ToriiClient, tokenId: string) => {
       setEquipment(parsedEquipment);
     };
 
-    if (toriiClient && tokenId && tokenId !== "NaN") {
+    if (toriiClient && Number(tokenId)>-1 && tokenId !== "NaN") {
       setEquipment(undefined);
       initAsync();
     }

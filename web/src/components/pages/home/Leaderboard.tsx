@@ -14,7 +14,7 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Countdown from "react-countdown";
 import { Arrow, InfosIcon, PaperIcon, Skull, Trophy } from "../../icons";
-import { Dopewars_Game as Game } from "@/generated/graphql";
+import { Dopewars_V0_Game as Game } from "@/generated/graphql";
 import { Config } from "@/dojo/stores/config";
 import { getPayedCount } from "@/dojo/helpers";
 import { HustlerAvatarIcon } from "../profile/HustlerAvatarIcon";

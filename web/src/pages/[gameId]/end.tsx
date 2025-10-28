@@ -32,7 +32,7 @@ import { formatCash } from "@/utils/ui";
 import { observer } from "mobx-react-lite";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { num, shortString } from "starknet";
-import { Dopewars_Game as Game } from "@/generated/graphql";
+import { Dopewars_V0_Game as Game } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { HustlerAvatarIcon } from "@/components/pages/profile/HustlerAvatarIcon";

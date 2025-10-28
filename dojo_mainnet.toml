@@ -20,13 +20,13 @@ default = "dopewars"
 
 [migration]
 skip_contracts = [
-    "dopewars-devtools",
-    "dopewars-paper_mock",
-    "dopewars-vrf_provider_mock",
+    "dopewars_v0-devtools",
+    "dopewars_v0-paper_mock",
+    "dopewars_v0-vrf_provider_mock",
 ]
 
 [init_call_args]
-"dopewars-ryo" = [
+"dopewars_v0-ryo" = [
     "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113",  # PAPER address
     "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f", # vrf address
     "0x026C8df51A3b2652b6FaFD2d38ea0639f9131Ef097507758adef6E983Bcb7106", # treasury / multisig address
@@ -34,48 +34,48 @@ skip_contracts = [
 
 
 [writers]
-# "dopewars-ERC20BalanceEvent" = ["dopewars-paper_mock"]
+# "dopewars_v0-ERC20BalanceEvent" = ["dopewars_v0-paper_mock"]
 
-"dopewars-GameConfig" = [
-    "dopewars-config",
-    "dopewars-laundromat",
-    "dopewars-ryo",
+"dopewars_v0-GameConfig" = [
+    "dopewars_v0-config",
+    "dopewars_v0-laundromat",
+    "dopewars_v0-ryo",
 ]
 
-"dopewars-DrugConfig" = ["dopewars-config"]
-"dopewars-LocationConfig" = ["dopewars-config"]
-"dopewars-HustlerItemBaseConfig" = ["dopewars-config"]
-"dopewars-HustlerItemTiersConfig" = ["dopewars-config"]
-"dopewars-EncounterStatsConfig" = ["dopewars-config"]
+"dopewars_v0-DrugConfig" = ["dopewars_v0-config"]
+"dopewars_v0-LocationConfig" = ["dopewars_v0-config"]
+"dopewars_v0-HustlerItemBaseConfig" = ["dopewars_v0-config"]
+"dopewars_v0-HustlerItemTiersConfig" = ["dopewars_v0-config"]
+"dopewars_v0-EncounterStatsConfig" = ["dopewars_v0-config"]
 
-"dopewars-Game" = ["dopewars-game", "dopewars-laundromat"]
-"dopewars-GameStorePacked" = ["dopewars-game"]
-"dopewars-RyoConfig" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]
-"dopewars-Season" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]
-"dopewars-SeasonSettings" = [
-    "dopewars-game",
-    "dopewars-laundromat",
-    "dopewars-ryo",
+"dopewars_v0-Game" = ["dopewars_v0-game", "dopewars_v0-laundromat"]
+"dopewars_v0-GameStorePacked" = ["dopewars_v0-game"]
+"dopewars_v0-RyoConfig" = ["dopewars_v0-game", "dopewars_v0-laundromat", "dopewars_v0-ryo"]
+"dopewars_v0-Season" = ["dopewars_v0-game", "dopewars_v0-laundromat", "dopewars_v0-ryo"]
+"dopewars_v0-SeasonSettings" = [
+    "dopewars_v0-game",
+    "dopewars_v0-laundromat",
+    "dopewars_v0-ryo",
 ]
 
-"dopewars-SortedList" = ["dopewars-game", "dopewars-laundromat"]
-"dopewars-SortedListItem" = ["dopewars-game", "dopewars-laundromat"]
-"dopewars-RyoAddress" = ["dopewars-ryo"]
+"dopewars_v0-SortedList" = ["dopewars_v0-game", "dopewars_v0-laundromat"]
+"dopewars_v0-SortedListItem" = ["dopewars_v0-game", "dopewars_v0-laundromat"]
+"dopewars_v0-RyoAddress" = ["dopewars_v0-ryo"]
 
 # events
-"dopewars-GameCreated" = ["dopewars-game"]
-"dopewars-Traveled" = ["dopewars-game"]
-"dopewars-GameOver" = ["dopewars-game"]
-"dopewars-TradeDrug" = ["dopewars-game"]
-"dopewars-UpgradeItem" = ["dopewars-game"]
-"dopewars-HighVolatility" = ["dopewars-game"]
-"dopewars-TravelEncounter" = ["dopewars-game"]
-"dopewars-TravelEncounterResult" = ["dopewars-game"]
+"dopewars_v0-GameCreated" = ["dopewars_v0-game"]
+"dopewars_v0-Traveled" = ["dopewars_v0-game"]
+"dopewars_v0-GameOver" = ["dopewars_v0-game"]
+"dopewars_v0-TradeDrug" = ["dopewars_v0-game"]
+"dopewars_v0-UpgradeItem" = ["dopewars_v0-game"]
+"dopewars_v0-HighVolatility" = ["dopewars_v0-game"]
+"dopewars_v0-TravelEncounter" = ["dopewars_v0-game"]
+"dopewars_v0-TravelEncounterResult" = ["dopewars_v0-game"]
 #
-"dopewars-NewSeason" = ["dopewars-laundromat"]
-"dopewars-NewHighScore" = ["dopewars-laundromat"]
-"dopewars-Claimed" = ["dopewars-laundromat"]
+"dopewars_v0-NewSeason" = ["dopewars_v0-laundromat"]
+"dopewars_v0-NewHighScore" = ["dopewars_v0-laundromat"]
+"dopewars_v0-Claimed" = ["dopewars_v0-laundromat"]
 
 # bushido
-"dopewars-TrophyProgression" = ["dopewars-game", "dopewars-laundromat"]
-"dopewars-TrophyCreation" = ["dopewars-ryo"]
+"dopewars_v0-TrophyProgression" = ["dopewars_v0-game", "dopewars_v0-laundromat"]
+"dopewars_v0-TrophyCreation" = ["dopewars_v0-ryo"]

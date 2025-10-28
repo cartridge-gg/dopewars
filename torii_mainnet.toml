@@ -12,18 +12,18 @@ contracts = []
 [events]
 raw = true    
 historical = [
-    "dopewars-GameCreated",
-    "dopewars-Traveled",
-    "dopewars-GameOver",
-    "dopewars-TradeDrug",
-    "dopewars-HighVolatility",
-    "dopewars-UpgradeItem",
-    "dopewars-TravelEncounter",
-    "dopewars-TravelEncounterResult",
-    "dopewars-NewSeason",
-    "dopewars-NewHighScore",
-    "dopewars-Claimed",
+    "dopewars_v0-GameCreated",
+    "dopewars_v0-Traveled",
+    "dopewars_v0-GameOver",
+    "dopewars_v0-TradeDrug",
+    "dopewars_v0-HighVolatility",
+    "dopewars_v0-UpgradeItem",
+    "dopewars_v0-TravelEncounter",
+    "dopewars_v0-TravelEncounterResult",
+    "dopewars_v0-NewSeason",
+    "dopewars_v0-NewHighScore",
+    "dopewars_v0-Claimed",
     # bushido 
-    "dopewars-TrophyCreation",
-    "dopewars-TrophyProgression",
+    "dopewars_v0-TrophyCreation",
+    "dopewars_v0-TrophyProgression",
 ]

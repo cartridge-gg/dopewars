@@ -38,6 +38,7 @@ mod config {
     use rollyourown::config::encounters::initialize_encounter_stats_config;
     use rollyourown::config::locations::initialize_location_config;
     use rollyourown::config::settings::SeasonSettingsModesImpl;
+    use rollyourown::constants::ns;
     use rollyourown::libraries::dopewars_items::{
         DopewarsItemTier, DopewarsItemTierConfig, IDopewarsItemsDispatcherTrait,
         IDopewarsItemsLibraryDispatcher,
@@ -53,7 +54,7 @@ mod config {
 
 
     fn dojo_init(ref self: ContractState) {
-        let mut store = StoreImpl::new(self.world(@"dopewars"));
+        let mut store = StoreImpl::new(self.world(@ns()));
 
         initialize_drug_config_normal(ref store);
         initialize_drug_config_cheap(ref store);
@@ -69,7 +70,7 @@ mod config {
     #[abi(embed_v0)]
     impl ConfigImpl of super::IConfig<ContractState> {
         fn get_config(self: @ContractState) -> Config {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
 
             let mut game_store: Array<LayoutItem> = array![];
             let mut game_store_layout_items = GameStoreLayoutEnumerableImpl::all();
@@ -97,7 +98,7 @@ mod config {
         }
 
         fn emit_items_config(self: @ContractState) {
-            let mut world = self.world(@"dopewars");
+            let mut world = self.world(@ns());
 
             let disp = IDopewarsItemsLibraryDispatcher {
                 class_hash: world.dns_class_hash(@"DopewarsItems_v0").unwrap(),

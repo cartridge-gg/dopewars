@@ -8,4 +8,4 @@ else
 fi
 
 echo "emit quests"
-sozo -P $PROFILE execute dopewars-ryo update_quests
+sozo -P $PROFILE execute dopewars_v0-ryo update_quests

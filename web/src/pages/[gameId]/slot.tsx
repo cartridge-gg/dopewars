@@ -184,7 +184,7 @@ export default function Slot() {
     //     // clause: {
     //     //   Member: {
     //     //     member: "game_id",
-    //     //     model: "dopewars-SlotMachine",
+    //     //     model: "dopewars_v0-SlotMachine",
     //     //     operator: "Eq",
     //     //     value: {
     //     //       Primitive: { U32: Number(gameId) },
@@ -194,7 +194,7 @@ export default function Slot() {
     //     clause: {
     //       Keys: {
     //         keys: [Number(gameId).toString()],
-    //         models: ["dopewars-SlotMachine"],
+    //         models: ["dopewars_v0-SlotMachine"],
     //         pattern_matching: "FixedLen",
     //       },
     //     },
@@ -202,7 +202,7 @@ export default function Slot() {
     //     offset: 0,
     //     dont_include_hashed_keys: false,
     //     entity_models:[],
-    //     // entity_models:["dopewars-SlotMachine"],
+    //     // entity_models:["dopewars_v0-SlotMachine"],
     //     entity_updated_after:0,
     //     order_by:[]
     //   }, false);
@@ -212,7 +212,7 @@ export default function Slot() {
     //   if (Object.keys(entities).length === 0) {
     //     // ???
     //   } else {
-    //     const machine = entities[Object.keys(entities)[0]]["dopewars-SlotMachine"] as Model;
+    //     const machine = entities[Object.keys(entities)[0]]["dopewars_v0-SlotMachine"] as Model;
     //     setCredits(Number(machine.credits.value));
     //     const newOffsets = [
     //       Number(machine.offset_r.value),
@@ -231,7 +231,7 @@ export default function Slot() {
     //         {
     //           Keys: {
     //             keys: [gameId],
-    //             models: ["dopewars-SlotMachine"],
+    //             models: ["dopewars_v0-SlotMachine"],
     //             pattern_matching: "FixedLen",
     //           },
     //         },
@@ -248,7 +248,7 @@ export default function Slot() {
     //         {
     //           Keys: {
     //             keys: [account?.address],
-    //             models: ["dopewars-SlotMachineCombination"],
+    //             models: ["dopewars_v0-SlotMachineCombination"],
     //             pattern_matching: "FixedLen",
     //           },
     //         },
@@ -272,7 +272,7 @@ export default function Slot() {
   const onEventMessageUpdated = useCallback(
     async (entity: string, update: any) => {
       console.log("onEventMessageUpdated", entity, update);
-      const combination = update["dopewars-SlotMachineCombination"] as Model;
+      const combination = update["dopewars_v0-SlotMachineCombination"] as Model;
       if (!combination) return;
 
       const name = shortString.decodeShortString(combination.name.value!.toString());
@@ -293,7 +293,7 @@ export default function Slot() {
   const onEntityUpdated = useCallback(
     async (entity: string, update: any) => {
       console.log("onEntityUpdated");
-      const machine = update["dopewars-SlotMachine"] as Model;
+      const machine = update["dopewars_v0-SlotMachine"] as Model;
       if (!machine) return;
       const newOffsets = [
         Number(machine.offset_r.value),

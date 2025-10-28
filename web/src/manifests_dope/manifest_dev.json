@@ -5358,8 +5358,8 @@
       ]
     },
     {
-      "address": "0x1f1f111e69f5834e251d2a3d0cbe7a038aa6d592511234880c40e8a31e5f23c",
-      "class_hash": "0x1ebdde0d0c4db65d87e3f1ceb1efa99b5dba970886c3ea506c1fa3e6b4a5dfb",
+      "address": "0xdf95c85df0b19a8c8d26263ecffcf109cd87260cbb2caf2a4b31aaf2b81fb",
+      "class_hash": "0x6b1528675698dd54fbeff169776f06dbeb779fd559d0108ea15ba2643dee3ac",
       "abi": [
         {
           "type": "impl",
@@ -5569,6 +5569,18 @@
                 {
                   "name": "forwarder_address",
                   "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "set_dopewars_namespace",
+              "inputs": [
+                {
+                  "name": "ns",
+                  "type": "core::byte_array::ByteArray"
                 }
               ],
               "outputs": [],
@@ -5796,6 +5808,7 @@
         "open",
         "toggle_open_restricted",
         "set_forwarder_address",
+        "set_dopewars_namespace",
         "upgrade"
       ]
     }

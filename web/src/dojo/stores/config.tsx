@@ -1,23 +1,22 @@
 import {
   ConfigDocument,
   ConfigQuery,
-  Dopewars_DrugConfig as DrugConfig,
-  Dopewars_DrugConfigEdge as DrugConfigEdge,
-  Dopewars_EncounterStatsConfig as EncounterStatsConfig,
-  Dopewars_EncounterStatsConfigEdge as EncounterStatsConfigEdge,
-  Dopewars_GameConfig as GameConfig,
-  
-  Dopewars_LocationConfig as LocationConfig,
-  Dopewars_LocationConfigEdge as LocationConfigEdge,
-  Dopewars_RyoAddress as RyoAddress,
-  Dopewars_RyoAddressEdge as RyoAddressEdge,
-  Dopewars_RyoConfig as RyoConfig,
-  Dopewars_RyoConfigEdge as RyoConfigEdge,
-  Dopewars_SeasonSettings as SeasonSettings,
-  Dopewars_DopewarsItemTier as DopewarsItemTier,
-  Dopewars_DopewarsItemTierEdge as DopewarsItemTierEdge,
-  Dopewars_DopewarsItemTierConfig as DopewarsItemTierConfig,
-  Dopewars_DopewarsItemTierConfigEdge as DopewarsItemTierConfigEdge,
+  Dopewars_V0_DrugConfig as DrugConfig,
+  Dopewars_V0_DrugConfigEdge as DrugConfigEdge,
+  Dopewars_V0_EncounterStatsConfig as EncounterStatsConfig,
+  Dopewars_V0_EncounterStatsConfigEdge as EncounterStatsConfigEdge,
+  Dopewars_V0_GameConfig as GameConfig,
+  Dopewars_V0_LocationConfig as LocationConfig,
+  Dopewars_V0_LocationConfigEdge as LocationConfigEdge,
+  Dopewars_V0_RyoAddress as RyoAddress,
+  Dopewars_V0_RyoAddressEdge as RyoAddressEdge,
+  Dopewars_V0_RyoConfig as RyoConfig,
+  Dopewars_V0_RyoConfigEdge as RyoConfigEdge,
+  Dopewars_V0_SeasonSettings as SeasonSettings,
+  Dopewars_V0_DopewarsItemTier as DopewarsItemTier,
+  Dopewars_V0_DopewarsItemTierEdge as DopewarsItemTierEdge,
+  Dopewars_V0_DopewarsItemTierConfig as DopewarsItemTierConfig,
+  Dopewars_V0_DopewarsItemTierConfigEdge as DopewarsItemTierConfigEdge,
   Dope_ComponentValueEventEdge as ComponentValueEventEdge,
   Dope_ComponentValueEvent as ComponentValueEvent,
 } from "@/generated/graphql";
@@ -27,14 +26,10 @@ import { flow, makeObservable, observable } from "mobx";
 import React, { ReactNode } from "react";
 import { Contract, TypedContractV2, shortString } from "starknet";
 import { ABI as configAbi } from "../abis/configAbi";
-import {
-  drugIcons,
-  drugIconsKeys,
-  locationIcons,
-  locationIconsKeys,
-} from "../helpers";
+import { drugIcons, drugIconsKeys, locationIcons, locationIconsKeys } from "../helpers";
 import { CashMode, DrugsMode, EncountersMode, EncountersOddsMode, HealthMode, ItemSlot, TurnsMode } from "../types";
 import { GearItem } from "@/dope/helpers";
+import { DW_GRAPHQL_MODEL_NS, DW_NS } from "../constants";
 
 export type DrugConfigFull = Omit<DrugConfig, "name"> & { icon: React.FC; name: string };
 export type LocationConfigFull = Omit<LocationConfig, "name"> & { icon: React.FC; name: string };
@@ -154,28 +149,28 @@ export class ConfigStoreClass {
 
     /*************************************************** */
 
-    const ryoConfigEdges = data.dopewarsRyoConfigModels!.edges as RyoConfigEdge[];
+    const ryoConfigEdges = data[`${DW_GRAPHQL_MODEL_NS}RyoConfigModels`]!.edges as RyoConfigEdge[];
     const ryoConfig = ryoConfigEdges[0]!.node as RyoConfig;
 
-    const ryoAddressEdges = data.dopewarsRyoAddressModels!.edges as RyoAddressEdge[];
+    const ryoAddressEdges = data[`${DW_GRAPHQL_MODEL_NS}RyoAddressModels`]!.edges as RyoAddressEdge[];
     const ryoAddress = ryoAddressEdges[0]!.node as RyoAddress;
 
     /*************************************************** */
 
-    const drugConfigEdges = data.dopewarsDrugConfigModels!.edges as DrugConfigEdge[];
+    const drugConfigEdges = data[`${DW_GRAPHQL_MODEL_NS}DrugConfigModels`]!.edges as DrugConfigEdge[];
     const drugConfig = drugConfigEdges.map((i) => i.node as DrugConfig);
 
     //
 
-    const locationConfigEdges = data.dopewarsLocationConfigModels!.edges as LocationConfigEdge[];
+    const locationConfigEdges = data[`${DW_GRAPHQL_MODEL_NS}LocationConfigModels`]!.edges as LocationConfigEdge[];
     const locationConfig = locationConfigEdges.map((i) => i.node as LocationConfig);
 
     //
 
-   
     //
 
-    const encounterStatsConfigEdges = data.dopewarsEncounterStatsConfigModels!.edges as EncounterStatsConfigEdge[];
+    const encounterStatsConfigEdges = data[`${DW_GRAPHQL_MODEL_NS}EncounterStatsConfigModels`]!
+      .edges as EncounterStatsConfigEdge[];
     const encounterStatsConfig = encounterStatsConfigEdges.map((i) => i.node as EncounterStatsConfig);
 
     /*************************************************** */
@@ -202,10 +197,11 @@ export class ConfigStoreClass {
     });
 
     /*************************************************** */
-    const dopewarsItemsTiersEdges = data.dopewarsDopewarsItemTierModels?.edges as DopewarsItemTierEdge[];
+    const dopewarsItemsTiersEdges = data[`${DW_GRAPHQL_MODEL_NS}DopewarsItemTierModels`]
+      ?.edges as DopewarsItemTierEdge[];
     const dopewarsItemsTiers = dopewarsItemsTiersEdges.map((i) => i.node as DopewarsItemTier);
 
-    const dopewarsItemsTierConfigsEdges = data.dopewarsDopewarsItemTierConfigModels
+    const dopewarsItemsTierConfigsEdges = data[`${DW_GRAPHQL_MODEL_NS}DopewarsItemTierConfigModels`]
       ?.edges as DopewarsItemTierConfigEdge[];
     const dopewarsItemsTierConfigs = dopewarsItemsTierConfigsEdges.map((i) => i.node as DopewarsItemTierConfig);
 
@@ -225,7 +221,7 @@ export class ConfigStoreClass {
     /*************************************************** */
 
     ///@ts-ignore
-    const getConfig = yield this.dojoProvider.call("dopewars", {
+    const getConfig = yield this.dojoProvider.call(DW_NS, {
       contractName: "config",
       entrypoint: "get_config",
       calldata: [],
@@ -278,8 +274,6 @@ export class ConfigStoreClass {
     // return this.config?.config.layouts.player.find((i) => shortString.decodeShortString(i.name) === name)!;
     return this.config?.config.layouts.player.find((i) => i.name === name)!;
   }
-
-  
 
   // loot
 

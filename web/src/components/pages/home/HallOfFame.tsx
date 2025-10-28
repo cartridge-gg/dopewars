@@ -4,7 +4,7 @@ import { Loader } from "@/components/layout/Loader";
 import { useConfigStore, useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { useGameById } from "@/dojo/hooks/useGameById";
 import { useHallOfFame } from "@/dojo/hooks/useHallOfFame";
-import { Dopewars_Game as Game } from "@/generated/graphql";
+import { Dopewars_V0_Game as Game } from "@/generated/graphql";
 import colors from "@/theme/colors";
 import { formatCash } from "@/utils/ui";
 import { Card, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";

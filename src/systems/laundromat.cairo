@@ -12,29 +12,29 @@ trait ILaundromat<T> {
 
 #[dojo::contract]
 mod laundromat {
-    use achievement::store::{StoreTrait as BushidoStoreTrait};
+    use achievement::store::StoreTrait as BushidoStoreTrait;
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
     use dojo::world::WorldStorageTrait;
-    use dope_types::dope_gear::{GearItem};
-    use dope_types::dope_gear::{IDopeGearABIDispatcher, IDopeGearABIDispatcherTrait};
-    use dope_types::dope_hustlers::{
-        IDopeHustlersABIDispatcher, IDopeHustlersABIDispatcherTrait,
-    };
+    use dope_types::dope_gear::{GearItem, IDopeGearABIDispatcher, IDopeGearABIDispatcherTrait};
+    use dope_types::dope_hustlers::{IDopeHustlersABIDispatcher, IDopeHustlersABIDispatcherTrait};
     use dope_types::helpers::is_og;
     use rollyourown::achievements::achievements_v1::Tasks;
-    use rollyourown::{
-        constants::{ETHER, MAX_MULTIPLIER}, events::{Claimed, NewSeason},
-        helpers::season_manager::{SeasonManagerImpl, SeasonManagerTrait},
-        interfaces::{paper::{IPaperDispatcher, IPaperDispatcherTrait}},
-        libraries::dopewars_items::{IDopewarsItemsDispatcherTrait, IDopewarsItemsLibraryDispatcher},
-        models::{game::{Game, GameImpl, GameTrait, TokenId}, season::{SeasonImpl, SeasonTrait}},
-        packing::game_store::{GameStoreImpl}, store::{StoreImpl, StoreTrait},
-        utils::{
-            payout_items::{add_items_payout}, payout_structure::{get_payed_count},
-            random::{RandomImpl}, sorted_list::{SortedListImpl, SortedListTrait},
-        },
+    use rollyourown::constants::{ETHER, MAX_MULTIPLIER, ns};
+    use rollyourown::events::{Claimed, NewSeason};
+    use rollyourown::helpers::season_manager::{SeasonManagerImpl, SeasonManagerTrait};
+    use rollyourown::interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait};
+    use rollyourown::libraries::dopewars_items::{
+        IDopewarsItemsDispatcherTrait, IDopewarsItemsLibraryDispatcher,
     };
+    use rollyourown::models::game::{Game, GameImpl, GameTrait, TokenId};
+    use rollyourown::models::season::{SeasonImpl, SeasonTrait};
+    use rollyourown::packing::game_store::GameStoreImpl;
+    use rollyourown::store::{StoreImpl, StoreTrait};
+    use rollyourown::utils::payout_items::add_items_payout;
+    use rollyourown::utils::payout_structure::get_payed_count;
+    use rollyourown::utils::random::RandomImpl;
+    use rollyourown::utils::sorted_list::{SortedListImpl, SortedListTrait};
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
 
 
@@ -43,7 +43,7 @@ mod laundromat {
         fn register_score(
             self: @ContractState, game_id: u32, prev_game_id: u32, prev_player_id: ContractAddress,
         ) {
-            let world = self.world(@"dopewars");
+            let world = self.world(@ns());
 
             let mut store = StoreImpl::new(world);
 
@@ -154,7 +154,7 @@ mod laundromat {
         }
 
         fn launder(self: @ContractState, season_version: u16) {
-            let world = self.world(@"dopewars");
+            let world = self.world(@ns());
             let mut store = StoreImpl::new(world);
 
             let ryo_addresses = store.ryo_addresses();
@@ -221,7 +221,7 @@ mod laundromat {
                 } else {
                     assert(false, 'launder already ended');
                 }
-            };
+            }
 
             // retrieve paper address
             let paper_address = store.ryo_addresses().paper;
@@ -233,7 +233,7 @@ mod laundromat {
         }
 
         fn claim(self: @ContractState, player_id: ContractAddress, game_ids: Span<u32>) {
-            let world = self.world(@"dopewars");
+            let world = self.world(@ns());
             let mut dope_world = self.world(@"dope");
 
             let mut store = StoreImpl::new(world);
@@ -308,7 +308,7 @@ mod laundromat {
                             player_id.into(), Tasks::KINGPIN, 1, starknet::get_block_timestamp(),
                         );
                 }
-            };
+            }
 
             bushido_store
                 .progress(
@@ -338,7 +338,7 @@ mod laundromat {
         }
 
         fn claim_treasury(self: @ContractState) {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             let mut ryo_config = store.ryo_config();
 
             assert(ryo_config.treasury_balance > 0, 'nothin to claim');
@@ -357,7 +357,7 @@ mod laundromat {
         }
 
         fn supercharge_jackpot(self: @ContractState, season_version: u16, amount_eth: u32) {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             // retrieve season
             let mut season = store.season(season_version);
 

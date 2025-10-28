@@ -8,4 +8,4 @@ else
 fi
 
 echo "emit items config"
-sozo -P $PROFILE execute dopewars-config emit_items_config
+sozo -P $PROFILE execute dopewars_v0-config emit_items_config

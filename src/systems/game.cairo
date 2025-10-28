@@ -1,7 +1,7 @@
-use rollyourown::{
-    config::locations::{Locations}, models::game::{GameMode, TokenId},
-    packing::game_store::{GameStoreImpl}, systems::helpers::{shopping, trading},
-};
+use rollyourown::config::locations::Locations;
+use rollyourown::models::game::{GameMode, TokenId};
+use rollyourown::packing::game_store::GameStoreImpl;
+use rollyourown::systems::helpers::{shopping, trading};
 
 #[derive(Copy, Drop, Serde)]
 pub enum Actions {
@@ -27,24 +27,25 @@ trait IGameActions<T> {
 
 #[dojo::contract]
 mod game {
-    use achievement::store::{StoreTrait as BushidoStoreTrait};
+    use achievement::store::StoreTrait as BushidoStoreTrait;
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
-    use dojo::world::IWorldDispatcherTrait;
-    use dojo::world::WorldStorageTrait;
-    use dope_types::dope_hustlers::{HustlerSlots};
-    use dope_types::dope_hustlers::{HustlerStoreImpl, HustlerStoreTrait};
+    use dojo::world::{IWorldDispatcherTrait, WorldStorageTrait};
+    use dope_types::dope_hustlers::{HustlerSlots, HustlerStoreImpl, HustlerStoreTrait};
     use rollyourown::achievements::achievements_v1::Tasks;
-    use rollyourown::{
-        config::{locations::{Locations}}, events::{GameCreated},
-        helpers::season_manager::{SeasonManagerTrait},
-        interfaces::{erc721::{IERC721ABIDispatcher, IERC721ABIDispatcherTrait}},
-        models::{game::{GameImpl, GameMode, TokenId}},
-        packing::{game_store::{GameStore, GameStoreImpl}, player::{PlayerImpl}},
-        store::{StoreImpl, StoreTrait},
-        systems::{helpers::{game_loop, shopping, trading, trading::{TradeDirection}}},
-        utils::{bytes16::{Bytes16Impl}, random::{RandomImpl}},
-    };
+    use rollyourown::config::locations::Locations;
+    use rollyourown::constants::ns;
+    use rollyourown::events::GameCreated;
+    use rollyourown::helpers::season_manager::SeasonManagerTrait;
+    use rollyourown::interfaces::erc721::{IERC721ABIDispatcher, IERC721ABIDispatcherTrait};
+    use rollyourown::models::game::{GameImpl, GameMode, TokenId};
+    use rollyourown::packing::game_store::{GameStore, GameStoreImpl};
+    use rollyourown::packing::player::PlayerImpl;
+    use rollyourown::store::{StoreImpl, StoreTrait};
+    use rollyourown::systems::helpers::trading::TradeDirection;
+    use rollyourown::systems::helpers::{game_loop, shopping, trading};
+    use rollyourown::utils::bytes16::Bytes16Impl;
+    use rollyourown::utils::random::RandomImpl;
     use starknet::get_caller_address;
 
 
@@ -61,7 +62,7 @@ mod game {
             // assert(game_mode == GameMode::Noob || game_mode == GameMode::Ranked, 'invalid game
             // mode!');
 
-            let mut world = self.world(@"dopewars");
+            let mut world = self.world(@ns());
             let mut store = StoreImpl::new(world);
 
             let ryo_addresses = store.ryo_addresses();
@@ -114,7 +115,7 @@ mod game {
                             break;
                         }
                         i += 1;
-                    };
+                    }
 
                     assert!(is_valid, "invalid guest loot id");
                 },
@@ -169,7 +170,7 @@ mod game {
                             );
                     };
                 },
-            };
+            }
 
             // create game
             let mut game_config = store.game_config(season_version);
@@ -198,7 +199,7 @@ mod game {
         fn end_game(self: @ContractState, game_id: u32, actions: Span<super::Actions>) {
             let player_id = get_caller_address();
 
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
 
             // execute actions (trades & shop)
@@ -216,7 +217,7 @@ mod game {
             next_location: Locations,
             actions: Span<super::Actions>,
         ) {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
 
             let ryo_addresses = store.ryo_addresses();
             let player_id = get_caller_address();
@@ -266,7 +267,7 @@ mod game {
     impl InternalImpl of InternalTrait {
         // #[inline(always)]
         fn assert_not_paused(self: @ContractState) {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             let ryo_config = store.ryo_config();
             assert(!ryo_config.paused, 'game is paused');
         }
@@ -286,7 +287,7 @@ mod game {
                         );
                         if *trade_action.direction == TradeDirection::Sell {
                             is_first_sell = false;
-                        };
+                        }
                         if *trade_action.direction == TradeDirection::Buy {
                             is_first_sell = false;
                         };

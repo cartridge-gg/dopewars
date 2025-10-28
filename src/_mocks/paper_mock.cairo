@@ -48,11 +48,10 @@ trait IPaperMockFaucet<TState> {
 
 #[dojo::contract]
 mod paper_mock {
-    // use openzeppelin::token::erc20::ERC20HooksEmptyImpl;
     use dojo::event::EventStorage;
     use dojo::world::WorldStorageTrait;
     use openzeppelin::token::erc20::ERC20Component;
-    // use openzeppelin::token::erc20::interface::IERC20Metadata;
+    use rollyourown::constants::ns;
     use rollyourown::store::StoreImpl;
     use starknet::{ContractAddress, get_caller_address};
 
@@ -90,7 +89,7 @@ mod paper_mock {
     fn dojo_init(ref self: ContractState) {
         self.erc20.initializer("fPaper", "fPAPER");
 
-        let (laundromat_address, _) = self.world(@"dopewars").dns(@"laundromat").unwrap();
+        let (laundromat_address, _) = self.world(@ns()).dns(@"laundromat").unwrap();
         self.faucetTo(laundromat_address);
     }
 
@@ -143,7 +142,7 @@ mod paper_mock {
             let balance_from = contract_state.erc20.balance_of(from);
             let balance_recipient = contract_state.erc20.balance_of(recipient);
 
-            let mut world = contract_state.world(@"dopewars");
+            let mut world = contract_state.world(@ns());
 
             world
                 .emit_event(

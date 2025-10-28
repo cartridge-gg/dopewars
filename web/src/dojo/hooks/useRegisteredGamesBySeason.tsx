@@ -1,12 +1,13 @@
 import {
-  Dopewars_Game as Game,
-  Dopewars_GameEdge as GameEdge,
+  Dopewars_V0_Game as Game,
+  Dopewars_V0_GameEdge as GameEdge,
   useGameByIdQuery,
   useRegisteredGamesBySeasonQuery,
 } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { useSql } from "./useSql";
 import { shortString } from "starknet";
+import { DW_NS } from "../constants";
 
 interface RegisteredGamesBySeasonInterface {
   registeredGames: Game[];
@@ -29,7 +30,7 @@ token_id,
 "token_id.guestlootid",
 "token_id.lootid",
 "token_id.hustlerid"
-FROM "dopewars-Game" 
+FROM "${DW_NS}-Game" 
 where season_version = ${season_version} and registered = true
 ORDER BY final_score DESC
 LIMIT 1000;`;

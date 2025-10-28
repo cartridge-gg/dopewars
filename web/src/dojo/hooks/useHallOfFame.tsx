@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useDojoContext } from "./useDojoContext";
 import { useSql } from "./useSql";
 import { shortString } from "starknet";
+import { DW_NS } from "../constants";
 
 type HallOfFameResult = ReturnType<typeof useHallOfFame>;
 
@@ -16,7 +17,7 @@ token_id,
 "token_id.guestlootid",
 "token_id.lootid",
 "token_id.hustlerid"
-FROM "dopewars-Game" 
+FROM "${DW_NS}-Game" 
 WHERE position = 1
 ORDER BY season_version DESC
 LIMIT 1000;`;

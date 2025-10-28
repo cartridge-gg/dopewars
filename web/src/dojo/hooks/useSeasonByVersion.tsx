@@ -1,13 +1,14 @@
 import {
-  Dopewars_Season as Season,
-  Dopewars_SeasonEdge as SeasonEdge,
-  Dopewars_SeasonSettings as SeasonSettings,
-  Dopewars_SeasonSettingsEdge as SeasonSettingsEdge,
-  Dopewars_SortedList as SortedList,
-  Dopewars_SortedListEdge as SortedListEdge,
+  Dopewars_V0_Season as Season,
+  Dopewars_V0_SeasonEdge as SeasonEdge,
+  Dopewars_V0_SeasonSettings as SeasonSettings,
+  Dopewars_V0_SeasonSettingsEdge as SeasonSettingsEdge,
+  Dopewars_V0_SortedList as SortedList,
+  Dopewars_V0_SortedListEdge as SortedListEdge,
   useSeasonByVersionQuery,
 } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
+import { DW_GRAPHQL_MODEL_NS } from "../constants";
 
 export interface SeasonByVersionInterface {
   season?: Season;
@@ -29,17 +30,17 @@ export const useSeasonByVersion = (seasonId: number): SeasonByVersionInterface =
   });
 
   const season = useMemo(() => {
-    const edges = data?.dopewarsSeasonModels?.edges as SeasonEdge[];
+    const edges = data?.[`${DW_GRAPHQL_MODEL_NS}SeasonModels`]?.edges as SeasonEdge[];
     return edges?.length > 0 ? (edges[0].node as Season) : undefined;
   }, [data]);
 
   const seasonSettings = useMemo(() => {
-    const edges = data?.dopewarsSeasonSettingsModels?.edges as SeasonSettingsEdge[];
+    const edges = data?.[`${DW_GRAPHQL_MODEL_NS}SeasonSettingsModels`]?.edges as SeasonSettingsEdge[];
     return edges?.length > 0 ? (edges[0].node as SeasonSettings) : undefined;
   }, [data]);
 
   const sortedList = useMemo(() => {
-    const edges = data?.dopewarsSortedListModels?.edges as SortedListEdge[];
+    const edges = data?.[`${DW_GRAPHQL_MODEL_NS}SortedListModels`]?.edges as SortedListEdge[];
     return edges?.length > 0 ? (edges[0].node as SortedList) : undefined;
   }, [data]);
 

@@ -6,9 +6,9 @@ mod chips {
     use dojo::world::{WorldStorage, WorldStorageTrait};
     use openzeppelin_token::erc20::ERC20Component;
     use openzeppelin_token::erc20::interface::IERC20Metadata;
-    use rollyourown::{store::{Store, StoreImpl, StoreTrait}};
-    // use openzeppelin::token::erc20::ERC20HooksEmptyImpl;
-    use starknet::{ContractAddress};
+    use rollyourown::constants::ns;
+    use rollyourown::store::{Store, StoreImpl, StoreTrait};
+    use starknet::ContractAddress;
 
     component!(path: ERC20Component, storage: erc20, event: ERC20Event);
 
@@ -82,13 +82,13 @@ mod chips {
     impl ChipsInternalImpl of ChipsInternalTrait {
         fn assert_only_minter(self: @ContractState) {
             let caller = starknet::get_caller_address();
-            let game_address = self.world(@"dopewars").dns(@"game").unwrap();
+            let game_address = self.world(@ns()).dns(@"game").unwrap();
             assert(caller == game_address, 'not minter!');
         }
 
         fn assert_only_burner(self: @ContractState) {
             let caller = starknet::get_caller_address();
-            let slot_address = self.world(@"dopewars").dns(@"slot").unwrap();
+            let slot_address = self.world(@ns()).dns(@"slot").unwrap();
             assert(caller == slot_address, 'not burner!');
         }
     }
@@ -111,7 +111,7 @@ mod chips {
             let balance_from = contract_state.erc20.balance_of(from);
             let balance_recipient = contract_state.erc20.balance_of(recipient);
 
-            let mut world = contract_state.world(@"dopewars");
+            let mut world = contract_state.world(@ns());
 
             world
                 .emit_event(

@@ -87,17 +87,17 @@ export const SeasonDetailsModal = observer(() => {
 
                     <VStack w="full" gap={2} color="neon.500">
                       <HStack w="full" alignItems="flex-start">
-                        <Text w="120px">Entry fee:</Text>
+                        <Text w="150px">Base Entry fee:</Text>
                         <Text color="neon.400">
                           {season.paper_fee} <PaperIcon />
                         </Text>
                       </HStack>
                       <HStack w="full" alignItems="flex-start">
-                        <Text w="120px">Player cut:</Text>
+                        <Text w="150px">Player cut:</Text>
                         <Text color="neon.400">{100 - season.treasury_fee_pct}%</Text>
                       </HStack>
                       <HStack w="full" alignItems="flex-start">
-                        <Text w="120px">DAO cut:</Text>
+                        <Text w="150px">DAO cut:</Text>
                         <Text color="neon.400">{season.treasury_fee_pct}%</Text>
                       </HStack>
                     </VStack>

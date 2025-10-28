@@ -1,6 +1,6 @@
 query Config {
   # RyoAddress
-  dopewarsRyoAddressModels(limit: 1) {
+  dopewarsV0RyoAddressModels(limit: 1) {
     edges {
       node {
         key
@@ -11,7 +11,7 @@ query Config {
   }
 
   # Ryo
-  dopewarsRyoConfigModels(limit: 1) {
+  dopewarsV0RyoConfigModels(limit: 1) {
     edges {
       node {
         key
@@ -32,7 +32,7 @@ query Config {
   }
 
   # Drugs
-  dopewarsDrugConfigModels(limit: 24, order: { field: DRUG_ID, direction: ASC }) {
+  dopewarsV0DrugConfigModels(limit: 24, order: { field: DRUG_ID, direction: ASC }) {
     edges {
       node {
         drugs_mode
@@ -49,7 +49,7 @@ query Config {
   }
 
   # Locations
-  dopewarsLocationConfigModels(order: { field: LOCATION_ID, direction: ASC }) {
+  dopewarsV0LocationConfigModels(order: { field: LOCATION_ID, direction: ASC }) {
     edges {
       node {
         location
@@ -62,7 +62,7 @@ query Config {
   }
 
   # # HustlerItemBaseConfig
-  # dopewarsHustlerItemBaseConfigModels {
+  # dopewarsV0HustlerItemBaseConfigModels {
   #   edges {
   #     node {
   #       slot
@@ -75,7 +75,7 @@ query Config {
   # }
 
   # # HustlerItemTiersConfig
-  # dopewarsHustlerItemTiersConfigModels(limit: 24) {
+  # dopewarsV0HustlerItemTiersConfigModels(limit: 24) {
   #   edges {
   #     node {
   #       slot
@@ -87,7 +87,7 @@ query Config {
   #   }
   # }
 
-  dopewarsEncounterStatsConfigModels(limit: 100) {
+  dopewarsV0EncounterStatsConfigModels(limit: 100) {
     edges {
       node {
         encounters_mode
@@ -105,7 +105,7 @@ query Config {
   }
 
   # DopewarsItemTierModels
-  dopewarsDopewarsItemTierModels(limit: 1000) {
+  dopewarsV0DopewarsItemTierModels(limit: 1000) {
     edges {
       node {
         slot_id
@@ -116,7 +116,7 @@ query Config {
   }
 
   # DopewarsItemTierConfigModels
-  dopewarsDopewarsItemTierConfigModels(limit: 1000) {
+  dopewarsV0DopewarsItemTierConfigModels(limit: 1000) {
     edges {
       node {
         slot_id
@@ -144,7 +144,7 @@ query Config {
 }
 
 query GameConfig($version: u16) {
-  dopewarsGameConfigModels(where: { season_version: $version }) {
+  dopewarsV0GameConfigModels(where: { season_version: $version }) {
     edges {
       node {
         season_version
@@ -163,7 +163,7 @@ query GameConfig($version: u16) {
 }
 
 query AllGameConfig {
-  dopewarsGameConfigModels(limit: 420) {
+  dopewarsV0GameConfigModels(limit: 420) {
     edges {
       node {
         season_version

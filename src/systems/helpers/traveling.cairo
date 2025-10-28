@@ -1,22 +1,22 @@
-use achievement::store::{StoreTrait as BushidoStoreTrait};
+use achievement::store::StoreTrait as BushidoStoreTrait;
 use dojo::event::EventStorage;
 use rollyourown::achievements::achievements_v1::Tasks;
-
-use rollyourown::{
-    config::{
-        encounters::{EncounterConfig, EncounterImpl, EncounterSpawnerImpl, Encounters},
-        locations::{LocationsRandomizableImpl}, settings::{SeasonSettings},
-    },
-    events::{TravelEncounter, TravelEncounterResult}, models::game::{GameMode, GameTrait},
-    packing::{
-        drugs_packed::{DrugsPackedImpl, DrugsPackedTrait, DrugsUnpacked},
-        game_store::{GameStore, GameStoreImpl, GameStoreTrait},
-        items_packed::{ItemsPackedImpl, ItemsPackedTrait}, player::{PlayerImpl, PlayerStatus},
-        wanted_packed::{WantedPackedImpl},
-    },
-    store::StoreImpl, systems::game::{EncounterActions},
-    utils::{math::{MathImpl, MathImplU8, MathTrait}, random::{Random, RandomImpl, RandomTrait}},
+use rollyourown::config::encounters::{
+    EncounterConfig, EncounterImpl, EncounterSpawnerImpl, Encounters,
 };
+use rollyourown::config::locations::LocationsRandomizableImpl;
+use rollyourown::config::settings::SeasonSettings;
+use rollyourown::events::{TravelEncounter, TravelEncounterResult};
+use rollyourown::models::game::{GameMode, GameTrait};
+use rollyourown::packing::drugs_packed::{DrugsPackedImpl, DrugsPackedTrait, DrugsUnpacked};
+use rollyourown::packing::game_store::{GameStore, GameStoreImpl, GameStoreTrait};
+use rollyourown::packing::items_packed::{ItemsPackedImpl, ItemsPackedTrait};
+use rollyourown::packing::player::{PlayerImpl, PlayerStatus};
+use rollyourown::packing::wanted_packed::WantedPackedImpl;
+use rollyourown::store::StoreImpl;
+use rollyourown::systems::game::EncounterActions;
+use rollyourown::utils::math::{MathImpl, MathImplU8, MathTrait};
+use rollyourown::utils::random::{Random, RandomImpl, RandomTrait};
 
 
 #[derive(Copy, Drop, Serde, PartialEq, Introspect)]
@@ -152,7 +152,7 @@ pub fn decide(
     if game_store.game.game_mode == GameMode::Warrior {
         result.rep_pos = result.rep_pos * 2;
         result.rep_neg = result.rep_neg * 2;
-    };
+    }
 
     // update reputation
     game_store.player.reputation = game_store.player.reputation.add_capped(result.rep_pos, 100);
@@ -280,7 +280,7 @@ fn on_pay(
             // update player cash
             game_store.player.cash -= result.cash_loss;
         },
-    };
+    }
 
     result
 }
@@ -325,7 +325,7 @@ fn on_run(
             }
         } else {
             break;
-        };
+        }
 
         if result.rounds == game_store.game_config().max_rounds {
             // didnt escaped -> land in random location
@@ -333,7 +333,7 @@ fn on_run(
             is_caught = true;
             break;
         }
-    };
+    }
 
     let game_config = game_store.game_config();
 
@@ -341,33 +341,31 @@ fn on_run(
         .outcome =
             if game_store.player.is_dead() {
                 EncounterOutcomes::Died
+            } else if !is_caught {
+                result.rep_pos += encounter.rep_run;
+                EncounterOutcomes::Escaped
             } else {
-                if !is_caught {
-                    result.rep_pos += encounter.rep_run;
-                    EncounterOutcomes::Escaped
-                } else {
-                    match encounter.encounter {
-                        Encounters::Cops => {
-                            // Jailed for 2 days
-                            result.turn_loss = 2;
+                match encounter.encounter {
+                    Encounters::Cops => {
+                        // Jailed for 2 days
+                        result.turn_loss = 2;
 
-                            // REP +2
-                            result.rep_pos += game_config.rep_jailed;
-                            result.rep_neg += encounter.rep_run;
+                        // REP +2
+                        result.rep_pos += game_config.rep_jailed;
+                        result.rep_neg += encounter.rep_run;
 
-                            EncounterOutcomes::Jailed
-                        },
-                        Encounters::Gang => {
-                            // Hospitalized for 1 days
-                            result.turn_loss = 1;
+                        EncounterOutcomes::Jailed
+                    },
+                    Encounters::Gang => {
+                        // Hospitalized for 1 days
+                        result.turn_loss = 1;
 
-                            // REP +2
-                            result.rep_pos += game_config.rep_hospitalized;
-                            result.rep_neg += encounter.rep_run;
+                        // REP +2
+                        result.rep_pos += game_config.rep_hospitalized;
+                        result.rep_neg += encounter.rep_run;
 
-                            EncounterOutcomes::Hospitalized
-                        },
-                    }
+                        EncounterOutcomes::Hospitalized
+                    },
                 }
             };
 
@@ -425,7 +423,7 @@ fn on_fight(
                 }
             },
         };
-    };
+    }
 
     result
         .cash_earnt =
@@ -567,7 +565,7 @@ impl ResolutionImpl of ResolutionTrait {
         if possible_drug_loss <= drug_unpacked.quantity {
             drug_unpacked.quantity -= possible_drug_loss;
             drug_loss = possible_drug_loss;
-        };
+        }
 
         // set drugs
         game_store.drugs.set(drug_unpacked);

@@ -23,7 +23,7 @@ import {
 // } from "@/dope/manifests";
 
 import { mergeManifests } from "@/dope/helpers";
-import { DW_NS } from "../hooks";
+import { DW_NS } from "../constants";
 
 const VRF_PROVIDER_SEPOLIA = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f";
 const VRF_PROVIDER_MAINNET = "0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f";
@@ -48,7 +48,6 @@ export type DojoChainConfig = {
   vrfProviderSecret?: string;
 };
 
-
 const katanaLocal: DojoChainConfig = {
   name: "KATANA",
   chainConfig: katanaLocalChain,
@@ -59,6 +58,7 @@ const katanaLocal: DojoChainConfig = {
   paperAddress: manifestDev.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
   vrfProviderAddress: manifestDev.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
   vrfProviderSecret: "0x420",
+  namespace: DW_NS,
 };
 
 const katanaSlotDopewars: DojoChainConfig = {
@@ -73,6 +73,7 @@ const katanaSlotDopewars: DojoChainConfig = {
   paperAddress: manifestDopewars.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
   vrfProviderAddress: manifestDopewars.contracts.find((i) => i.tag === `${DW_NS}-vrf_provider_mock`)?.address || "0x0",
   vrfProviderSecret: "0x420",
+  namespace: DW_NS,
 };
 
 const snSepolia: DojoChainConfig = {
@@ -86,6 +87,7 @@ const snSepolia: DojoChainConfig = {
   paperAddress: manifestSepolia.contracts.find((i) => i.tag === `${DW_NS}-paper_mock`)?.address || "0x0",
   vrfProviderAddress: VRF_PROVIDER_SEPOLIA,
   vrfProviderSecret: undefined,
+  namespace: DW_NS,
 };
 
 const snMainnet: DojoChainConfig = {
@@ -99,6 +101,7 @@ const snMainnet: DojoChainConfig = {
   paperAddress: PAPER_MAINNET,
   vrfProviderAddress: VRF_PROVIDER_MAINNET,
   vrfProviderSecret: undefined,
+  namespace: DW_NS,
 };
 
 // keys must match chain.id

@@ -1,4 +1,5 @@
-use rollyourown::{packing::game_store::{GameStoreImpl}, systems::{game::{EncounterActions}}};
+use rollyourown::packing::game_store::GameStoreImpl;
+use rollyourown::systems::game::EncounterActions;
 
 #[starknet::interface]
 trait IDecide<T> {
@@ -8,17 +9,19 @@ trait IDecide<T> {
 #[dojo::contract]
 mod decide {
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
-    use rollyourown::{
-        packing::{game_store::{GameStoreImpl}, player::{PlayerImpl}},
-        store::{StoreImpl, StoreTrait}, systems::{helpers::{game_loop, traveling}},
-        utils::{bytes16::{Bytes16Impl}, random::{RandomImpl}},
-    };
+    use rollyourown::constants::ns;
+    use rollyourown::packing::game_store::GameStoreImpl;
+    use rollyourown::packing::player::PlayerImpl;
+    use rollyourown::store::{StoreImpl, StoreTrait};
+    use rollyourown::systems::helpers::{game_loop, traveling};
+    use rollyourown::utils::bytes16::Bytes16Impl;
+    use rollyourown::utils::random::RandomImpl;
     use starknet::get_caller_address;
 
     #[abi(embed_v0)]
     impl DecideImpl of super::IDecide<ContractState> {
         fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions) {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
 
             let ryo_addresses = store.ryo_addresses();
             let player_id = get_caller_address();

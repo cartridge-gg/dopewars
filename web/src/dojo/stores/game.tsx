@@ -3,10 +3,10 @@ import { GraphQLClient } from "graphql-request";
 import { GameCreated } from "@/components/layout/GlobalEvents";
 import { parseModels } from "@/dope/toriiUtils";
 import {
-  Dopewars_Game as Game,
-  Dopewars_GameConfig as GameConfig,
-  Dopewars_GameStorePacked as GameStorePacked,
-  Dopewars_SeasonSettings as SeasonSettings,
+  Dopewars_V0_Game as Game,
+  Dopewars_V0_GameConfig as GameConfig,
+  Dopewars_V0_GameStorePacked as GameStorePacked,
+  Dopewars_V0_SeasonSettings as SeasonSettings,
 } from "@/generated/graphql";
 import { Entities, Entity, Subscription, ToriiClient } from "@dojoengine/torii-client";
 import { action, flow, makeObservable, observable } from "mobx";
@@ -18,6 +18,7 @@ import { PlayerStatus } from "../types";
 import { parseStruct } from "../utils";
 import { ConfigStoreClass } from "./config";
 import { DojoChainConfig } from "../setup/config";
+import { DW_NS } from "../constants";
 
 type GameStoreProps = {
   toriiClient: ToriiClient;
@@ -120,7 +121,7 @@ export class GameStoreClass {
       {
         Keys: {
           keys: [num.toHexString(this.gameInfos?.game_id), this.gameInfos?.player_id],
-          models: ["dopewars-GameStorePacked"],
+          models: [`${DW_NS}-GameStorePacked`],
           pattern_matching: "VariableLen",
         },
       },
@@ -133,7 +134,7 @@ export class GameStoreClass {
       {
         Keys: {
           keys: [num.toHexString(this.gameInfos?.game_id), this.gameInfos?.player_id],
-          models: ["dopewars-*"],
+          models: [`${DW_NS}-*`],
           pattern_matching: "VariableLen",
         },
       },
@@ -157,7 +158,7 @@ export class GameStoreClass {
   //////////////////////////////////////////////
   *loadGameEvents() {
     const entities: Entities = yield this.toriiClient.getEventMessages({
-      world_addresses:[this.selectedChain.manifest.world.address],
+      world_addresses: [this.selectedChain.manifest.world.address],
       clause: {
         Keys: {
           keys: [num.toHexString(this.gameInfos?.game_id), this.gameInfos?.player_id],
@@ -184,11 +185,11 @@ export class GameStoreClass {
 
   *loadGameInfos(gameId: string) {
     const entities: Entities = yield this.toriiClient.getEntities({
-      world_addresses:[this.selectedChain.manifest.world.address],
+      world_addresses: [this.selectedChain.manifest.world.address],
       clause: {
         Member: {
           member: "game_id",
-          model: "dopewars-Game",
+          model: `${DW_NS}-Game`,
           operator: "Eq",
           value: { Primitive: { U32: Number(gameId) } },
         },
@@ -200,7 +201,7 @@ export class GameStoreClass {
         order_by: [],
       },
       no_hashed_keys: true,
-      models: ["dopewars-Game", "dopewars-GameStorePacked"],
+      models: [`${DW_NS}-Game`, `${DW_NS}-GameStorePacked`],
       historical: false,
     });
 
@@ -208,9 +209,9 @@ export class GameStoreClass {
     // const gameEntity = Object.values(entities)[0];
     // if (!gameEntity) return;
 
-    // const gameInfos = parseStruct(entities.items[0].models["dopewars-Game"]) as Game;
-    const gameInfos = parseModels(entities, "dopewars-Game")[0] as Game;
-    const gameStorePacked = parseModels(entities, "dopewars-GameStorePacked")[0] as GameStorePacked;
+    // const gameInfos = parseStruct(entities.items[0].models[`${DW_NS}-Game"]) as Game;
+    const gameInfos = parseModels(entities, `${DW_NS}-Game`)[0] as Game;
+    const gameStorePacked = parseModels(entities, `${DW_NS}-GameStorePacked`)[0] as GameStorePacked;
 
     if (!gameInfos || !gameStorePacked) return;
 
@@ -228,11 +229,11 @@ export class GameStoreClass {
 
   *loadSeasonSettings(season_version: string) {
     const entities: Entities = yield this.toriiClient.getEntities({
-      world_addresses:[this.selectedChain.manifest.world.address],
+      world_addresses: [this.selectedChain.manifest.world.address],
       clause: {
         Keys: {
           keys: [num.toHexString(season_version)],
-          models: ["dopewars-SeasonSettings", "dopewars-GameConfig"],
+          models: [`${DW_NS}-SeasonSettings`, `${DW_NS}-GameConfig`],
           pattern_matching: "VariableLen",
         },
       },
@@ -243,14 +244,14 @@ export class GameStoreClass {
         order_by: [],
       },
       no_hashed_keys: true,
-      models: ["dopewars-SeasonSettings", "dopewars-GameConfig"],
+      models: [`${DW_NS}-SeasonSettings`, `${DW_NS}-GameConfig`],
       historical: false,
     });
 
     if (!entities.items[0]) return;
 
-    const seasonSettings = parseStruct(entities.items[0].models["dopewars-SeasonSettings"]) as SeasonSettings;
-    const gameConfig = parseStruct(entities.items[0].models["dopewars-GameConfig"]) as GameConfig;
+    const seasonSettings = parseStruct(entities.items[0].models[`${DW_NS}-SeasonSettings`]) as SeasonSettings;
+    const gameConfig = parseStruct(entities.items[0].models[`${DW_NS}-GameConfig`]) as GameConfig;
 
     if (!gameConfig || !seasonSettings) return;
 
@@ -278,8 +279,8 @@ export class GameStoreClass {
 
     const prevState = this.game?.player;
 
-    if (entity.models["dopewars-GameStorePacked"]) {
-      this.gameStorePacked = parseStruct(entity.models["dopewars-GameStorePacked"]);
+    if (entity.models[`${DW_NS}-GameStorePacked`]) {
+      this.gameStorePacked = parseStruct(entity.models[`${DW_NS}-GameStorePacked`]);
       this.initGameStore();
 
       if (this.game?.player.status === PlayerStatus.Normal) {
@@ -308,11 +309,11 @@ export class GameStoreClass {
     if (loaded) return loaded;
 
     const entities: Entities = yield this.toriiClient.getEventMessages({
-      world_addresses:[this.selectedChain.manifest.world.address],
+      world_addresses: [this.selectedChain.manifest.world.address],
       clause: {
         Member: {
           member: "game_id",
-          model: "dopewars-GameCreated",
+          model: `${DW_NS}-GameCreated`,
           operator: "Eq",
           value: { Primitive: { U32: Number(gameId) } },
         },
@@ -328,7 +329,7 @@ export class GameStoreClass {
       historical: false,
     });
 
-    const gameCreated = parseModels(entities, "dopewars-GameCreated")[0];
+    const gameCreated = parseModels(entities, `${DW_NS}-GameCreated`)[0];
     if (gameCreated) {
       // @ts-ignore
       gameCreated.token_id_type = gameCreated.token_id.activeVariant();

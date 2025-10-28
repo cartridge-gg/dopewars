@@ -1,7 +1,7 @@
 import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { parseStruct } from "@/dojo/utils";
 import { parseModels } from "@/dope/toriiUtils";
-import { Dopewars_Game as Game } from "@/generated/graphql";
+import { Dopewars_V0_Game as Game } from "@/generated/graphql";
 import { playSound, Sounds } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { formatCashHeader } from "@/utils/ui";
@@ -11,6 +11,7 @@ import { useEffect, useRef } from "react";
 import { CairoOption, num, shortString } from "starknet";
 import { PaperIcon, Siren, Truck } from "../icons";
 import { HustlerAvatarIcon } from "../pages/profile/HustlerAvatarIcon";
+import { DW_NS } from "@/dojo/constants";
 
 export const GlobalEvents = () => {
   const { toast } = useToast();
@@ -58,12 +59,12 @@ export const GlobalEvents = () => {
             Keys: {
               keys: [undefined],
               models: [
-                "dopewars-GameCreated",
-                "dopewars-NewSeason",
-                "dopewars-NewHighScore",
-                "dopewars-GameOver",
-                "dope-DopeLootReleasedEvent",
-                "dopewars-TrophyProgression",
+                `${DW_NS}-GameCreated`,
+                `${DW_NS}-NewSeason`,
+                `${DW_NS}-NewHighScore`,
+                `${DW_NS}-GameOver`,
+                `${DW_NS}-TrophyProgression`,
+                `dope-DopeLootReleasedEvent`,
               ],
               pattern_matching: "VariableLen",
             },
@@ -85,10 +86,10 @@ export const GlobalEvents = () => {
   }, [selectedChain, accountAddress.current]);
 
   const onEventMessage = async (entity: Entity) => {
-    if (entity.models["dopewars-GameCreated"]) {
-      // const gameCreated = parseStruct(entity.models["dopewars-GameCreated"]) as GameCreated;
+    if (entity.models[`${DW_NS}-GameCreated`]) {
+      // const gameCreated = parseStruct(entity.models[`${DW_NS}-GameCreated`]) as GameCreated;
 
-      const gameCreated = parseModels({ items: [entity], next_cursor: "" }, "dopewars-GameCreated")[0] as GameCreated;
+      const gameCreated = parseModels({ items: [entity], next_cursor: "" }, `${DW_NS}-GameCreated`)[0] as GameCreated;
       gameCreated.player_name = shortString.decodeShortString(num.toHexString(BigInt(gameCreated.player_name)));
 
       // @ts-ignore
@@ -117,8 +118,8 @@ export const GlobalEvents = () => {
       }
     }
 
-    if (entity.models["dopewars-NewSeason"]) {
-      const newSeason = parseStruct(entity.models["dopewars-NewSeason"]) as NewSeason;
+    if (entity.models[`${DW_NS}-NewSeason`]) {
+      const newSeason = parseStruct(entity.models[`${DW_NS}-NewSeason`]) as NewSeason;
       playSound(Sounds.Uzi);
       toast({
         icon: () => <PaperIcon width="16px" height="16px" />,
@@ -126,8 +127,8 @@ export const GlobalEvents = () => {
       });
     }
 
-    if (entity.models["dopewars-NewHighScore"]) {
-      const newHighScore = parseStruct(entity.models["dopewars-NewHighScore"]) as NewHighScore;
+    if (entity.models[`${DW_NS}-NewHighScore`]) {
+      const newHighScore = parseStruct(entity.models[`${DW_NS}-NewHighScore`]) as NewHighScore;
       newHighScore.player_name = shortString.decodeShortString(num.toHexString(BigInt(newHighScore.player_name)));
 
       const game = (await gameStore.getGameCreated(newHighScore.game_id)) as unknown as Game;
@@ -145,8 +146,8 @@ export const GlobalEvents = () => {
       });
     }
 
-    if (entity.models["dopewars-GameOver"]) {
-      const gameOver = parseStruct(entity.models["dopewars-GameOver"]) as GameOver;
+    if (entity.models[`${DW_NS}-GameOver`]) {
+      const gameOver = parseStruct(entity.models[`${DW_NS}-GameOver`]) as GameOver;
       gameOver.player_name = shortString.decodeShortString(num.toHexString(BigInt(gameOver.player_name)));
       if (BigInt(gameOver.player_id) !== accountAddress.current) {
         if (gameOver.health === 0) {
@@ -177,8 +178,8 @@ export const GlobalEvents = () => {
     }
 
     // uncomment to check TrophyProgression
-    // if (entity.models["dopewars-TrophyProgression"]) {
-    //   const progression = parseStruct(entity.models["dopewars-TrophyProgression"]);
+    // if (entity.models[`${DW_NS}-TrophyProgression"]) {
+    //   const progression = parseStruct(entity.models[`${DW_NS}-TrophyProgression"]);
     //   progression.task_id = shortString.decodeShortString(progression.task_id);
     //   progression.count = Number(progression.count);
     //   if (BigInt(progression.player_id) === accountAddress.current) {

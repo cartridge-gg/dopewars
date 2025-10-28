@@ -1,8 +1,8 @@
 import {
-  Dopewars_Game as Game,
-  Dopewars_GameConfig as GameConfig,
-  Dopewars_GameStorePacked as GameStorePacked,
-  Dopewars_SeasonSettings as SeasonSettings,
+  Dopewars_V0_Game as Game,
+  Dopewars_V0_GameConfig as GameConfig,
+  Dopewars_V0_GameStorePacked as GameStorePacked,
+  Dopewars_V0_SeasonSettings as SeasonSettings,
   World__EntityEdge,
   useAllGameConfigQuery,
   useAllSeasonSettingsQuery,
@@ -16,6 +16,7 @@ import { Entities, ToriiClient } from "@dojoengine/torii-client";
 import { DojoEvent, EventClass } from "../class/Events";
 import { TradeDrug, TravelEncounter, TravelEncounterResult } from "@/components/layout/GlobalEvents";
 import { num } from "starknet";
+import { DW_GRAPHQL_MODEL_NS, DW_NS } from "../constants";
 
 export type PlayerStats = {
   totalGamesPlayed: number;
@@ -60,15 +61,17 @@ export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId: string): 
   const [allTradedDrug, setAllTradedDrug] = useState<TradeDrug[]>([]);
   const [allTravelEncounters, setAllTravelEncounters] = useState<TravelEncounter[]>([]);
   const [allTravelEncounterResults, setAllTravelEncounterResults] = useState<TravelEncounterResult[]>([]);
-  const { chains: {selectedChain}} = useDojoContext()
+  const {
+    chains: { selectedChain },
+  } = useDojoContext();
   useEffect(() => {
     const init = async () => {
       const entities = await toriiClient.getEventMessages({
-         world_addresses: [selectedChain.manifest.world.address],
+        world_addresses: [selectedChain.manifest.world.address],
         clause: {
           Keys: {
             keys: [undefined, num.toHex64(playerId)],
-            models: ["dopewars-TradeDrug", "dopewars-TravelEncounter", "dopewars-TravelEncounterResult"],
+            models: [`${DW_NS}-TradeDrug`, `${DW_NS}-TravelEncounter`, `${DW_NS}-TravelEncounterResult`],
             pattern_matching: "FixedLen",
           },
         },
@@ -79,7 +82,7 @@ export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId: string): 
           order_by: [],
         },
         no_hashed_keys: true,
-        models: ["dopewars-TradeDrug", "dopewars-TravelEncounter", "dopewars-TravelEncounterResult"],
+        models: [`${DW_NS}-TradeDrug`, `${DW_NS}-TravelEncounter`, `${DW_NS}-TravelEncounterResult`],
         historical: true,
       });
 
@@ -126,9 +129,9 @@ export const useGamesByPlayer = (toriiClient: ToriiClient, playerIdRaw: string):
     const nodes = (edges || []).map((i) => i.node);
 
     const games = nodes.flatMap((i) => {
-      const gameInfos = (i!.models || []).find((i) => i?.__typename === "dopewars_Game") as Game;
+      const gameInfos = (i!.models || []).find((i) => i?.__typename === `${DW_NS}_Game`) as Game;
       const gameStorePacked = (i!.models || []).find(
-        (i) => i?.__typename === "dopewars_GameStorePacked",
+        (i) => i?.__typename === `${DW_NS}_GameStorePacked`,
       ) as GameStorePacked;
 
       if (!gameInfos || !gameStorePacked) return [];
@@ -139,11 +142,11 @@ export const useGamesByPlayer = (toriiClient: ToriiClient, playerIdRaw: string):
       // @ts-ignore
       gameInfos.token_id = Number(gameInfos.token_id![gameInfos.token_id?.option as keyof typeof gameInfos.token_id]);
 
-      const seasonSettings = allSeasonSettings?.dopewarsSeasonSettingsModels?.edges?.find(
+      const seasonSettings = allSeasonSettings?.[`${DW_GRAPHQL_MODEL_NS}SeasonSettingsModels`]?.edges?.find(
         (i) => i?.node?.season_version === gameInfos.season_version,
       )?.node as SeasonSettings;
 
-      const gameConfig = allGameConfig?.dopewarsGameConfigModels?.edges?.find(
+      const gameConfig = allGameConfig?.[`${DW_GRAPHQL_MODEL_NS}GameConfigModels`]?.edges?.find(
         (i) => i?.node?.season_version === gameInfos.season_version,
       )?.node as GameConfig;
 

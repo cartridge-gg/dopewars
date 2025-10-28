@@ -9,27 +9,24 @@ trait IDevtools<T> {
 
 #[dojo::contract]
 mod devtools {
-    use core::traits::Into;
-    use core::traits::TryInto;
+    use core::traits::{Into, TryInto};
     use dojo::world::IWorldDispatcherTrait;
-
-    use rollyourown::{
-        helpers::season_manager::{SeasonManagerTrait}, models::{game::{Game, GameMode, TokenId}},
-        packing::game_store::{GameStoreImpl, GameStorePackerImpl}, store::{StoreImpl, StoreTrait},
-        utils::{
-            bytes16::{Bytes16Impl}, random::{RandomImpl},
-            sorted_list::{SortedListImpl, SortedListTrait},
-        },
-    };
+    use rollyourown::constants::ns;
+    use rollyourown::helpers::season_manager::SeasonManagerTrait;
+    use rollyourown::models::game::{Game, GameMode, TokenId};
+    use rollyourown::packing::game_store::{GameStoreImpl, GameStorePackerImpl};
+    use rollyourown::store::{StoreImpl, StoreTrait};
+    use rollyourown::utils::bytes16::Bytes16Impl;
+    use rollyourown::utils::random::RandomImpl;
+    use rollyourown::utils::sorted_list::{SortedListImpl, SortedListTrait};
     use starknet::get_caller_address;
-
     use super::IDevtools;
 
 
     #[abi(embed_v0)]
     impl DevtoolsImpl of IDevtools<ContractState> {
         fn create_fake_game(self: @ContractState, final_score: u32) {
-            let world = self.world(@"dopewars");
+            let world = self.world(@ns());
             let game_id = world.dispatcher.uuid();
             let player_id = get_caller_address();
 
@@ -92,7 +89,7 @@ mod devtools {
         }
 
         fn create_new_season(self: @ContractState) {
-            let world = self.world(@"dopewars");
+            let world = self.world(@ns());
 
             let mut store = StoreImpl::new(world);
 

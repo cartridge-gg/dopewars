@@ -1,6 +1,6 @@
 import { useDopeStore } from "@/dope/store";
 import { parseModels } from "@/dope/toriiUtils";
-import { Dopewars_DrugConfig as DrugConfig, Dopewars_RyoConfig as RyoConfig } from "@/generated/graphql";
+import { Dopewars_V0_DrugConfig as DrugConfig, Dopewars_V0_RyoConfig as RyoConfig } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
 import { DojoCall, getContractByName } from "@dojoengine/core";
 import { useAccount } from "@starknet-react/core";
@@ -21,9 +21,9 @@ import { EncountersAction, GameMode, Locations } from "../types";
 import { buildVrfCalls } from "../utils";
 import { useConfigStore } from "./useConfigStore";
 import { useDojoContext } from "./useDojoContext";
+import { DW_NS } from "../constants";
 
 export const ETHER = 10n ** 18n;
-export const DW_NS = "dopewars";
 
 interface SystemsInterface {
   createGame: (
@@ -342,7 +342,7 @@ export const useSystems = (): SystemsInterface => {
         clause: {
           Keys: {
             keys: [Number(gameId).toString(), num.toHex64(playerId)],
-            models: ["dopewars-Game"],
+            models: [`${DW_NS}-Game`],
             pattern_matching: "FixedLen",
           },
         },
@@ -353,13 +353,13 @@ export const useSystems = (): SystemsInterface => {
           order_by: [],
         },
         no_hashed_keys: true,
-        models: ["dopewars-Game"],
+        models: [`${DW_NS}-Game`],
         historical: false,
       });
 
       if (Object.keys(gameEntities).length > 0) {
         // retrieve loot_id used with game_id
-        const game = parseModels(gameEntities, "dopewars-Game")[0];
+        const game = parseModels(gameEntities, `${DW_NS}-Game`)[0];
 
         let lootId = 0;
         // @ts-ignore

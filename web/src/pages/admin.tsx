@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout";
 import { ChildrenOrConnect, PaperFaucet, TokenBalance } from "@/components/wallet";
-import { DW_NS, useDojoContext, useRouterContext, useSeasonByVersion, useSystems } from "@/dojo/hooks";
+import {  useDojoContext, useRouterContext, useSeasonByVersion, useSystems } from "@/dojo/hooks";
 import {
   Button,
   Card,
@@ -28,7 +28,7 @@ import { useEffect, useState } from "react";
 // import { RyoConfigTable } from "@/components/pages/admin/RyoConfigTable";
 import { Bag, Clock, CopsIcon, DollarBag, Flipflop, GangIcon, PaperIcon } from "@/components/icons";
 import { formatCash } from "@/utils/ui";
-import { Dopewars_Game as Game, Dopewars_GameEdge as GameEdge, useGetAllGamesQuery } from "@/generated/graphql";
+import { Dopewars_V0_Game as Game, Dopewars_V0_GameEdge as GameEdge, useGetAllGamesQuery } from "@/generated/graphql";
 import { shortString } from "starknet";
 
 const Admin = () => {
@@ -247,6 +247,7 @@ const RyoPauseCard = observer(() => {
 
 import jsonToCsvExport from "json-to-csv-export";
 import { getContractByName } from "@dojoengine/core";
+import { DW_GRAPHQL_MODEL_NS, DW_NS } from "@/dojo/constants";
 
 const ExportAllGamesCard = observer(() => {
   const { configStore } = useDojoContext();
@@ -255,7 +256,7 @@ const ExportAllGamesCard = observer(() => {
   const allGames = useGetAllGamesQuery({});
 
   const onClick = async () => {
-    const games = (allGames.data?.dopewarsGameModels?.edges || [])
+    const games = (allGames.data?.[`${DW_GRAPHQL_MODEL_NS}GameModels`]?.edges || [])
       .map((i) => i?.node as Game)
       .map((i) => {
         return { ...i, player_name: shortString.decodeShortString(i.player_name?.value) };

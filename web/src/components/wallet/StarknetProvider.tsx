@@ -1,4 +1,4 @@
-import { DW_NS } from "@/dojo/hooks";
+import { DW_NS } from "@/dojo/constants";
 import { katanaLocalChain } from "@/dojo/setup/chains";
 import { DojoChainConfig, dojoContextConfig } from "@/dojo/setup/config";
 import { ControllerConnector } from "@cartridge/connector";
@@ -74,6 +74,7 @@ function getConnectorsForChain(selectedChain: DojoChainConfig, path: string) {
 const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig }) => {
   // console.log("cartridgeConnector", selectedChain.name);
   const paperAddress = selectedChain.paperAddress;
+
   const gameAddress = getContractByName(selectedChain.manifest, DW_NS, "game").address;
   const decideAddress = getContractByName(selectedChain.manifest, DW_NS, "decide").address;
   const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
