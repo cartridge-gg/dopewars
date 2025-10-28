@@ -22,6 +22,7 @@ pub mod decide {
     #[abi(embed_v0)]
     impl DecideImpl of super::IDecide<ContractState> {
         fn decide(self: @ContractState, token_id: u64, action: super::EncounterActions) {
+            // assert token ownership and pre_action
             let token_address = self._get_game_token_address();
             assert_token_ownership(token_address, token_id);
             pre_action(token_address, token_id);
@@ -59,7 +60,7 @@ pub mod decide {
                 game_loop::on_turn_end(ref game_store, ref randomizer, ref store);
             };
 
-            // Update token state
+            // Update token data
             post_action(token_address, token_id);
         }
     }

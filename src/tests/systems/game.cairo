@@ -27,11 +27,46 @@ mod tests {
     fn test_non_owner_cannot_create_game() {
         let setup = setup_world_with_mint();
         set_caller_address(setup.player_b);
-    let guest_loot_id = get_valid_guest_loot_id(setup.contracts.world);
+        let guest_loot_id = get_valid_guest_loot_id(setup.contracts.world);
         setup
             .contracts
             .game
-            .create_game(GameMode::Ranked, 'Player B', 1, TokenId::GuestLootId(guest_loot_id), setup.token_id);
+            .create_game(
+                GameMode::Ranked,
+                'Player B',
+                1,
+                TokenId::GuestLootId(guest_loot_id),
+                setup.token_id,
+            );
+    }
+
+    #[test]
+    #[should_panic(expected: 'game has started')]
+    #[fork("provable-dw")]
+    fn test_cannot_create_game_twice_with_same_token() {
+        let setup = setup_world_with_mint();
+        set_caller_address(setup.player_a);
+        let guest_loot_id = get_valid_guest_loot_id(setup.contracts.world);
+        setup
+            .contracts
+            .game
+            .create_game(
+                GameMode::Ranked,
+                'Player A',
+                1,
+                TokenId::GuestLootId(guest_loot_id),
+                setup.token_id,
+            );
+        setup
+            .contracts
+            .game
+            .create_game(
+                GameMode::Ranked,
+                'Player A',
+                1,
+                TokenId::GuestLootId(guest_loot_id),
+                setup.token_id,
+            );
     }
 
 

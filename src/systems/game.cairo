@@ -48,7 +48,7 @@ pub mod game {
     use rollyourown::{
         config::{locations::{Locations}}, events::{GameCreated},
         helpers::season_manager::{SeasonManagerTrait},
-        interfaces::{erc721::{IERC721ABIDispatcher, IERC721ABIDispatcherTrait}},
+        // interfaces::{erc721::{IERC721ABIDispatcher, IERC721ABIDispatcherTrait}},
         models::{game::{GameImpl, GameMode, TokenId}, game_token::{GameToken}},
         packing::{game_store::{GameStore, GameStoreImpl}, player::{PlayerImpl}},
         store::{StoreImpl, StoreTrait},
@@ -59,6 +59,7 @@ pub mod game {
         },
     };
     use starknet::get_caller_address;
+    use core::num::traits::Zero;
 
 
     #[abi(embed_v0)]
@@ -74,24 +75,29 @@ pub mod game {
             self.assert_not_paused();
             // assert(game_mode == GameMode::Noob || game_mode == GameMode::Ranked, 'invalid game
             // mode!');
-
+            
             let token_address = self._get_game_token_address();
+            
+            // assert token ownership and pre_action
             assert_token_ownership(token_address, minigame_token_id);
+            self.assert_game_not_started(minigame_token_id);
             pre_action(token_address, minigame_token_id);
 
             let mut world = self.world(@"dopewars");
             let mut store = StoreImpl::new(world);
 
-            let randomness_config = store.randomness_config();
             let player_id = get_caller_address();
+            let game_id = world.dispatcher.uuid();
+
+            // Prepare randomizer - local or vrf
             let game_context = core::poseidon::poseidon_hash_span(
-                array![player_id.into(), 'create_game'].span(),
+                array![player_id.into(), game_id.into(), 'create_game'].span(),
             );
+            let randomness_config = store.randomness_config();
             let mut randomizer = RandomnessHelperTrait::create_randomizer(
                 randomness_config, game_context,
             );
 
-            let game_id = world.dispatcher.uuid();
 
             // get season version
             let mut season_manager = SeasonManagerTrait::new(store);
@@ -136,7 +142,7 @@ pub mod game {
 
                     assert!(is_valid, "invalid guest loot id");
                 },
-                TokenId::LootId(loot_id) => {
+                TokenId::LootId(_loot_id) => {
                     // check if owner of loot_id
                     // let loot_dispatcher = IERC721ABIDispatcher {
                     //     contract_address: dope_world.dns_address(@"DopeLoot").unwrap(),
@@ -255,22 +261,24 @@ pub mod game {
             let game_store = GameStoreImpl::new(store, ref game, ref game_config, ref randomizer);
             game_store.save();
 
-            // store the GameToken mapping
             
             // @dev
+            // store the GameToken mapping
             // GameToken model is set for backwards compatibility and easy lookup for transferred games
             world.write_model(@GameToken { token_id: minigame_token_id, game_id, player_id });
 
             // emit GameCreated
             world.emit_event(@game_created);
 
-            // Initialize token state with game data
+            // Update token data
             let token_address = self._get_game_token_address();
             post_action(token_address, minigame_token_id);
         }
 
         fn end_game(self: @ContractState, token_id: u64, actions: Span<super::Actions>) {
             let token_address = self._get_game_token_address();
+            
+            // assert token ownership and pre_action
             assert_token_ownership(token_address, token_id);
             pre_action(token_address, token_id);
 
@@ -286,7 +294,7 @@ pub mod game {
             //save & on_game_over
             game_loop::on_game_over(ref game_store, ref store);
 
-            // post_action
+            // Update token data
             post_action(token_address, token_id);
         }
 
@@ -297,8 +305,9 @@ pub mod game {
             next_location: Locations,
             actions: Span<super::Actions>,
         ) {
-            // assert token ownership and pre_action
             let token_address = self._get_game_token_address();
+            
+            // assert token ownership and pre_action
             assert_token_ownership(token_address, token_id);
             pre_action(token_address, token_id);
 
@@ -319,6 +328,7 @@ pub mod game {
             let mut actions = actions;
             self.execute_actions(ref game_store, ref actions);
 
+            // Prepare randomizer - local or vrf
             let game_context = core::poseidon::poseidon_hash_span(
                 array![game.player_id.into(), game.game_id.into(), 'travel'].span(),
             );
@@ -348,6 +358,7 @@ pub mod game {
                 }
             }
 
+            // Update token data
             post_action(token_address, token_id);
         }
     }
@@ -369,14 +380,13 @@ pub mod game {
             minigame_dispatcher.token_address()
         }
 
-        fn assert_game_not_started(self: @ContractState, game_id: u32, player_id: starknet::ContractAddress) {
-            let store = StoreImpl::new(self.world(@"dopewars"));
-            let game = store.game(game_id, player_id);
-            assert!(
-                game.minigame_token_id == 0,
-                "DopeWars: Game {} has already started",
-                game_id,
-            );
+        fn assert_game_not_started(self: @ContractState, minigame_token_id: u64) {
+            let world = self.world(@"dopewars");
+            let mut store = StoreImpl::new(world);
+            let game_token = store.game_token(minigame_token_id);
+
+            assert(game_token.game_id == 0, 'game has started');
+            assert(game_token.player_id.is_zero(), 'game has started');
         }
 
         fn execute_actions(
