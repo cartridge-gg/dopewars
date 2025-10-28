@@ -257,7 +257,6 @@ const New = observer(() => {
 
       // mint game token
       const { tokenId: minigameTokenId } = await mintGameToken(name);
-      console.log("[gameModeName.tsx] minigame token id: ", minigameTokenId);
 
       if (!minigameTokenId) {
         setError("Failed to mint game token");

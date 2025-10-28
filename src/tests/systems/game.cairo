@@ -69,6 +69,24 @@ mod tests {
             );
     }
 
+    #[test]
+    #[fork("provable-dw")]
+    #[should_panic(expected: 'invalid game token')]
+    fn test_cannot_end_game_with_invalid_token() {
+        let setup = setup_world_with_mint();
+        set_caller_address(setup.player_a);
+        setup.contracts.game.end_game(0, array![].span());
+    }
+
+    #[test]
+    #[fork("provable-dw")]
+    #[should_panic(expected: 'invalid game token')]
+    fn test_cannot_travel_with_invalid_token() {
+        let setup = setup_world_with_mint();
+        set_caller_address(setup.player_a);
+        setup.contracts.game.travel(0, Locations::Bronx, array![].span());
+    }
+
 
     #[test]
     #[fork("provable-dw")]

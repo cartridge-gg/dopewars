@@ -93,9 +93,8 @@ pub mod game_token_system_v0 {
             let world = self.world(@"dopewars");
             let game_token: GameToken = world.read_model(token_id);
 
-            if game_token.game_id == 0 {
-                return 0;
-            }
+            assert(game_token.game_id != 0, 'game does not exist');
+            assert(game_token.player_id.is_non_zero(), 'game does not exist');
 
             let mut store = StoreImpl::new(world);
 

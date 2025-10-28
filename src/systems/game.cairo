@@ -284,6 +284,7 @@ pub mod game {
 
             let mut store = StoreImpl::new(self.world(@"dopewars"));
             let game = store.game_by_token_id(token_id);
+            assert(game.exists(), 'invalid game token');
 
             let mut game_store = GameStoreImpl::load(ref store, game.game_id, game.player_id);
 
@@ -313,6 +314,7 @@ pub mod game {
 
             let mut store = StoreImpl::new(self.world(@"dopewars"));
             let game = store.game_by_token_id(token_id);
+            assert(game.exists(), 'invalid game token');
 
             let randomness_config = store.randomness_config();
 
