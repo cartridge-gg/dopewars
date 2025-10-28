@@ -17,12 +17,14 @@ import { GameClass } from "../class/Game";
 import { PlayerStatus } from "../types";
 import { parseStruct } from "../utils";
 import { ConfigStoreClass } from "./config";
+import { DojoChainConfig } from "../setup/config";
 
 type GameStoreProps = {
   toriiClient: ToriiClient;
   client: GraphQLClient;
   configStore: ConfigStoreClass;
   router: NextRouter;
+  selectedChain: DojoChainConfig;
 };
 
 // export type GameWithTokenId = {
@@ -38,6 +40,7 @@ export class GameStoreClass {
   client: GraphQLClient;
   configStore: ConfigStoreClass;
   router: NextRouter;
+  selectedChain: DojoChainConfig;
 
   isInitialized = false;
   game: GameClass | null = null;
@@ -50,11 +53,12 @@ export class GameStoreClass {
 
   allGamesCreated: GameCreated[] = [];
 
-  constructor({ toriiClient, client, configStore, router }: GameStoreProps) {
+  constructor({ toriiClient, client, configStore, router, selectedChain }: GameStoreProps) {
     this.toriiClient = toriiClient;
     this.client = client;
     this.configStore = configStore;
     this.router = router;
+    this.selectedChain = selectedChain;
 
     makeObservable(this, {
       game: observable,
@@ -120,7 +124,7 @@ export class GameStoreClass {
           pattern_matching: "VariableLen",
         },
       },
-
+      [this.selectedChain.manifest.world.address],
       (entity: Entity) => this.onEntityUpdated(entity),
     );
     this.subscriptions.push(subEntities);
@@ -133,7 +137,7 @@ export class GameStoreClass {
           pattern_matching: "VariableLen",
         },
       },
-
+      [this.selectedChain.manifest.world.address],
       (entity: any) => this.onEventMessage(entity),
     );
     this.subscriptions.push(subEvent);
@@ -153,6 +157,7 @@ export class GameStoreClass {
   //////////////////////////////////////////////
   *loadGameEvents() {
     const entities: Entities = yield this.toriiClient.getEventMessages({
+      world_addresses:[this.selectedChain.manifest.world.address],
       clause: {
         Keys: {
           keys: [num.toHexString(this.gameInfos?.game_id), this.gameInfos?.player_id],
@@ -179,6 +184,7 @@ export class GameStoreClass {
 
   *loadGameInfos(gameId: string) {
     const entities: Entities = yield this.toriiClient.getEntities({
+      world_addresses:[this.selectedChain.manifest.world.address],
       clause: {
         Member: {
           member: "game_id",
@@ -222,6 +228,7 @@ export class GameStoreClass {
 
   *loadSeasonSettings(season_version: string) {
     const entities: Entities = yield this.toriiClient.getEntities({
+      world_addresses:[this.selectedChain.manifest.world.address],
       clause: {
         Keys: {
           keys: [num.toHexString(season_version)],
@@ -258,7 +265,7 @@ export class GameStoreClass {
     this.gameEvents!.addEvent(entity);
 
     const gameId = num.toHexString(this.gameInfos?.game_id);
-    if (this.gameEvents?.isGameOver && this.game!.player!.health > 0 ) {
+    if (this.gameEvents?.isGameOver && this.game!.player!.health > 0) {
       return this.router.push(`/${gameId}/end`);
     }
   }
@@ -301,6 +308,7 @@ export class GameStoreClass {
     if (loaded) return loaded;
 
     const entities: Entities = yield this.toriiClient.getEventMessages({
+      world_addresses:[this.selectedChain.manifest.world.address],
       clause: {
         Member: {
           member: "game_id",

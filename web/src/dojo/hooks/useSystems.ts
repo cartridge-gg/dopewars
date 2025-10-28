@@ -5,7 +5,17 @@ import { useToast } from "@/hooks/toast";
 import { DojoCall, getContractByName } from "@dojoengine/core";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useMemo, useState } from "react";
-import { AccountInterface, AllowArray, Call, CallData, GetTransactionReceiptResponse, num, RpcProvider, shortString, uint256 } from "starknet";
+import {
+  AccountInterface,
+  AllowArray,
+  Call,
+  CallData,
+  GetTransactionReceiptResponse,
+  num,
+  RpcProvider,
+  shortString,
+  uint256,
+} from "starknet";
 import { PendingCall, pendingCallToCairoEnum } from "../class/Game";
 import { EncountersAction, GameMode, Locations } from "../types";
 import { buildVrfCalls } from "../utils";
@@ -73,11 +83,7 @@ export const tryBetterErrorMsg = (msg: string): string => {
   return msg;
 };
 
-export const waitForTransaction = async (
-  account: AccountInterface,
-  txHash: string,
-  maxRetry = 5
-) => {
+export const waitForTransaction = async (account: AccountInterface, txHash: string, maxRetry = 5) => {
   let receipt = undefined;
   while (maxRetry > 0) {
     try {
@@ -95,7 +101,7 @@ export const waitForTransaction = async (
 
     maxRetry -= 1;
   }
-  return undefined
+  return undefined;
 };
 
 export const useSystems = (): SystemsInterface => {
@@ -150,7 +156,6 @@ export const useSystems = (): SystemsInterface => {
         tx = await dojoProvider.execute(account!, calls, DW_NS);
 
         receipt = await waitForTransaction(account!, tx.transaction_hash);
-        
       } catch (e: any) {
         setIsPending(false);
         // setError(e.toString());
@@ -333,6 +338,7 @@ export const useSystems = (): SystemsInterface => {
 
       const playerId = account!.address;
       const gameEntities = await toriiClient.getEntities({
+        world_addresses: [selectedChain.manifest.world.address],
         clause: {
           Keys: {
             keys: [Number(gameId).toString(), num.toHex64(playerId)],

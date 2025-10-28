@@ -104,9 +104,9 @@ const snMainnet: DojoChainConfig = {
 // keys must match chain.id
 export const dojoContextConfig = {
   // SN_MAIN: snMainnet,
+  KATANA: katanaLocal,
   SN_SEPOLIA: snSepolia,
   // WP_DOPEWARS: katanaSlotDopewars,
-  // KATANA: katanaLocal,
 };
 
 export const dojoChains = Object.values(dojoContextConfig);

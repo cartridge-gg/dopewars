@@ -70,6 +70,7 @@ export function parseModels(entities: Entities, modelName: string) {
 
 export function queryAllModels(models: string[], limit = 10_000): Query {
   return {
+    world_addresses:[],
     clause: undefined,
     pagination: {
       limit: 10_000,

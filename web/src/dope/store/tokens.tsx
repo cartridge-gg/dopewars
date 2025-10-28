@@ -106,6 +106,7 @@ export const createTokenStore: StateCreator<DopeState, [], [], TokenState> = (se
   //
   initDopeLootClaimState: async () => {
     const entities = await get().toriiClient!.getEntities({
+      world_addresses: [],
       clause: {
         Keys: {
           keys: [undefined],
@@ -179,7 +180,7 @@ export const createTokenStore: StateCreator<DopeState, [], [], TokenState> = (se
           pattern_matching: "FixedLen",
         },
       },
-
+      [],
       get().onEntityUpdated,
     );
 

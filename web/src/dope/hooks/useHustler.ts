@@ -4,18 +4,22 @@ import { defaultHustlerMetadata, HustlerBody, HustlerMetadata } from "../compone
 import { parseModels } from "../toriiUtils";
 import { feltToString } from "../helpers";
 import { num } from "starknet";
+import { useDojoContext } from "@/dojo/hooks";
 
 export const useHustler = (toriiClient: ToriiClient, tokenId: number) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hustlerBody, setHustlerBody] = useState<HustlerBody>({});
   const [hustlerMeta, setHustlerMeta] = useState<HustlerMetadata>(defaultHustlerMetadata);
 
+  const {
+    chains: { selectedChain },
+  } = useDojoContext();
   useEffect(() => {
     const initAsync = async () => {
       // setHustlerMeta(defaultHustlerMetadata);
 
-     
       const entities = await toriiClient.getEntities({
+        world_addresses: [selectedChain.manifest.world.address],
         clause: {
           Keys: {
             keys: [tokenId.toString() || "0"],
@@ -61,7 +65,7 @@ export const useHustler = (toriiClient: ToriiClient, tokenId: number) => {
     if (tokenId && !Number.isNaN(tokenId)) {
       initAsync();
     }
-  }, [tokenId]);
+  }, [tokenId, selectedChain]);
 
   return { hustlerBody, hustlerMeta, setHustlerBody, setHustlerMeta, isLoaded };
 };

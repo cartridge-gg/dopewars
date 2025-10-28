@@ -68,6 +68,7 @@ export const GlobalEvents = () => {
               pattern_matching: "VariableLen",
             },
           },
+          [selectedChain.manifest.world.address],
           onEventMessage,
         );
       }

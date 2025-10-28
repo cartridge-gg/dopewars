@@ -60,9 +60,11 @@ export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId: string): 
   const [allTradedDrug, setAllTradedDrug] = useState<TradeDrug[]>([]);
   const [allTravelEncounters, setAllTravelEncounters] = useState<TravelEncounter[]>([]);
   const [allTravelEncounterResults, setAllTravelEncounterResults] = useState<TravelEncounterResult[]>([]);
+  const { chains: {selectedChain}} = useDojoContext()
   useEffect(() => {
     const init = async () => {
       const entities = await toriiClient.getEventMessages({
+         world_addresses: [selectedChain.manifest.world.address],
         clause: {
           Keys: {
             keys: [undefined, num.toHex64(playerId)],
@@ -96,7 +98,7 @@ export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId: string): 
     if (toriiClient && Number(playerId) !== 0) {
       init();
     }
-  }, [toriiClient, playerId]);
+  }, [toriiClient, playerId, selectedChain]);
   return {
     allTradedDrug,
     allTravelEncounters: allTravelEncounters,

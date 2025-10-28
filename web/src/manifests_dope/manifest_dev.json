@@ -5358,8 +5358,8 @@
       ]
     },
     {
-      "address": "0x27d923e5bdd13849e71c6e55b7b53bfb190db609604635a59bcbb9583e8779e",
-      "class_hash": "0x68ffb80523bb826f83b18570049832cc3d37a2a158bfc9e9128919af54b2d5c",
+      "address": "0x1f1f111e69f5834e251d2a3d0cbe7a038aa6d592511234880c40e8a31e5f23c",
+      "class_hash": "0x1ebdde0d0c4db65d87e3f1ceb1efa99b5dba970886c3ea506c1fa3e6b4a5dfb",
       "abi": [
         {
           "type": "impl",
@@ -5486,7 +5486,23 @@
             },
             {
               "type": "function",
-              "name": "claim_from_forwarder",
+              "name": "claim_loot_from_forwarder",
+              "inputs": [
+                {
+                  "name": "recipient",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "leaf_data",
+                  "type": "core::array::Span::<core::felt252>"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "claim_og_from_forwarder",
               "inputs": [
                 {
                   "name": "recipient",
@@ -5774,7 +5790,8 @@
         "dojo_init",
         "pause",
         "unpause",
-        "claim_from_forwarder",
+        "claim_loot_from_forwarder",
+        "claim_og_from_forwarder",
         "release",
         "open",
         "toggle_open_restricted",

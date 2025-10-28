@@ -83,6 +83,7 @@ export const DojoContextProvider = observer(
         client: graphqlClient,
         configStore,
         router,
+        selectedChain
       });
     }, [graphqlClient, configStore, toriiClient]);
 
