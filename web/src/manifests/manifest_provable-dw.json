@@ -2460,7 +2460,7 @@
     },
     {
       "address": "0x51b986cd0c4abc33d28dab0d685edbdddda3537b5a2429199013477c0419d62",
-      "class_hash": "0x518920905c3258a2764a2a138302c0fd9da72363f00c07bddff15dbe09b0eaa",
+      "class_hash": "0x22e32e5067f462ccfcb82909e3e0a00f724e874aaed10f552ee8942b6a7fead",
       "abi": [
         {
           "type": "impl",

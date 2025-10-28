@@ -264,7 +264,13 @@ export class GameStoreClass {
   onEventMessage(key: string, entity: Entity) {
     if (key === "0x0") return;
     // console.log("onEventMessage", entity, update);
+    const wasGameOver = this.gameEvents?.isGameOver ?? false;
     this.gameEvents!.addEvent(entity);
+
+    if (!wasGameOver && this.gameEvents?.isGameOver) {
+      const gameId = num.toHexString(this.gameInfos?.game_id);
+      this.router.push(`/${gameId}/event/consequence`);
+    }
   }
 
   onEntityUpdated(key: string, entity: Entity) {
