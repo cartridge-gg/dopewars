@@ -7,10 +7,9 @@ use rollyourown::config::encounters::{
 use rollyourown::config::locations::LocationsRandomizableImpl;
 use rollyourown::config::settings::SeasonSettings;
 use rollyourown::events::{TravelEncounter, TravelEncounterResult};
-use rollyourown::helpers::game_owner::resolve_current_owner;
 use rollyourown::models::game::{GameMode, GameTrait};
 use rollyourown::packing::drugs_packed::{DrugsPackedImpl, DrugsPackedTrait, DrugsUnpacked};
-use rollyourown::packing::game_store::{GameStore, GameStoreImpl, GameStoreTrait};
+use rollyourown::packing::game_store::{GameStore, GameStoreTrait};
 use rollyourown::packing::items_packed::{ItemsPackedImpl, ItemsPackedTrait};
 use rollyourown::packing::player::{PlayerImpl, PlayerStatus};
 use rollyourown::packing::wanted_packed::WantedPackedImpl;
@@ -18,6 +17,7 @@ use rollyourown::store::StoreImpl;
 use rollyourown::systems::game::EncounterActions;
 use rollyourown::utils::math::{MathImpl, MathImplU8, MathTrait};
 use rollyourown::utils::random::{Random, RandomImpl, RandomTrait};
+use starknet::ContractAddress;
 
 
 #[derive(Copy, Drop, Serde, PartialEq, Introspect)]
@@ -139,6 +139,7 @@ pub fn decide(
     ref season_settings: SeasonSettings,
     ref randomizer: Random,
     action: EncounterActions,
+    owner: ContractAddress,
 ) -> bool {
     // get encounter
     let mut encounter = EncounterSpawnerImpl::get_encounter(ref game_store, ref season_settings);
@@ -174,9 +175,6 @@ pub fn decide(
         let bushido_store = BushidoStoreTrait::new(game_store.store.world);
 
         // get current owner of game
-        let owner = resolve_current_owner(
-            game_store.store.world, game_store.game.game_id, game_store.game.player_id,
-        );
         let owner_felt: felt252 = owner.into();
 
         if result.outcome == EncounterOutcomes::Victorious {

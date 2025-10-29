@@ -12,6 +12,7 @@ pub mod decide {
     use game_components_minigame::interface::{IMinigameDispatcher, IMinigameDispatcherTrait};
     use game_components_minigame::libs::{assert_token_ownership, post_action, pre_action};
     use rollyourown::models::game::GameImpl;
+    use rollyourown::helpers::game_owner::resolve_current_owner;
     use rollyourown::packing::game_store::GameStoreImpl;
     use rollyourown::packing::player::PlayerImpl;
     use rollyourown::store::{StoreImpl, StoreTrait};
@@ -31,6 +32,9 @@ pub mod decide {
             let mut store = StoreImpl::new(self.world(@"dopewars"));
             let game = store.game_by_token_id(token_id);
             assert(game.exists(), 'invalid game token');
+            let current_owner = resolve_current_owner(
+                store.world, game.game_id, game.player_id,
+            );
 
             let randomness_config = store.randomness_config();
 
@@ -49,7 +53,7 @@ pub mod decide {
 
             // resolve decision
             let is_dead = traveling::decide(
-                ref game_store, ref season_settings, ref randomizer, action,
+                ref game_store, ref season_settings, ref randomizer, action, current_owner,
             );
 
             // check if dead

@@ -59,8 +59,8 @@ pub mod game {
             randomness_helper::{RandomnessHelperTrait},
         },
     };
-    use starknet::get_caller_address;
-
+    use rollyourown::helpers::game_owner::resolve_current_owner;
+    use starknet::{ContractAddress, get_caller_address};
 
     #[abi(embed_v0)]
     impl GameActionsImpl of super::IGameActions<ContractState> {
@@ -283,12 +283,15 @@ pub mod game {
             let mut store = StoreImpl::new(self.world(@"dopewars"));
             let game = store.game_by_token_id(token_id);
             assert(game.exists(), 'invalid game token');
+            let current_owner = resolve_current_owner(
+                store.world, game.game_id, game.player_id,
+            );
 
             let mut game_store = GameStoreImpl::load(ref store, game.game_id, game.player_id);
 
             // execute actions (trades & shop)
             let mut actions = actions;
-            self.execute_actions(ref game_store, ref actions);
+            self.execute_actions(ref game_store, ref actions, current_owner);
 
             //save & on_game_over
             game_loop::on_game_over(ref game_store, ref store);
@@ -313,6 +316,9 @@ pub mod game {
             let mut store = StoreImpl::new(self.world(@"dopewars"));
             let game = store.game_by_token_id(token_id);
             assert(game.exists(), 'invalid game token');
+            let current_owner = resolve_current_owner(
+                store.world, game.game_id, game.player_id,
+            );
 
             let randomness_config = store.randomness_config();
 
@@ -326,7 +332,7 @@ pub mod game {
 
             // execute actions (trades & shop)
             let mut actions = actions;
-            self.execute_actions(ref game_store, ref actions);
+            self.execute_actions(ref game_store, ref actions, current_owner);
 
             // Prepare randomizer - local or vrf
             let game_context = core::poseidon::poseidon_hash_span(
@@ -392,7 +398,10 @@ pub mod game {
         }
 
         fn execute_actions(
-            self: @ContractState, ref game_store: GameStore, ref actions: Span<super::Actions>,
+            self: @ContractState,
+            ref game_store: GameStore,
+            ref actions: Span<super::Actions>,
+            owner: ContractAddress,
         ) {
             let mut has_shopped = false;
             let mut is_first_sell = true;
@@ -402,7 +411,7 @@ pub mod game {
                 match action {
                     super::Actions::Trade(trade_action) => {
                         trading::execute_trade(
-                            ref game_store, *trade_action, is_first_sell, is_first_buy,
+                            ref game_store, *trade_action, is_first_sell, is_first_buy, owner,
                         );
                         if *trade_action.direction == TradeDirection::Sell {
                             is_first_sell = false;
@@ -413,7 +422,7 @@ pub mod game {
                     },
                     super::Actions::Shop(shop_action) => {
                         assert(has_shopped == false, 'one upgrade by turn');
-                        shopping::execute_action(ref game_store, *shop_action);
+                        shopping::execute_action(ref game_store, *shop_action, owner);
                         has_shopped = true;
                     },
                 };

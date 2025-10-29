@@ -4,14 +4,14 @@ use rollyourown::achievements::achievements_v1::Tasks;
 use rollyourown::config::hustlers::ItemSlot;
 use rollyourown::config::locations::Locations;
 use rollyourown::events::UpgradeItem;
-use rollyourown::helpers::game_owner::resolve_current_owner;
 use rollyourown::models::game::{GameImpl, GameTrait};
-use rollyourown::packing::game_store::{GameStore, GameStoreImpl, GameStoreTrait};
+use rollyourown::packing::game_store::{GameStore, GameStoreTrait};
 use rollyourown::packing::items_packed::ItemsPackedImpl;
 use rollyourown::packing::player::PlayerImpl;
 use rollyourown::packing::wanted_packed::WantedPackedImpl;
-use rollyourown::store::StoreImpl;
 use rollyourown::utils::math::{MathImpl, MathTrait};
+use rollyourown::store::StoreImpl;
+use starknet::ContractAddress;
 use super::super::super::config::gear::GearItemConfigTrait;
 
 
@@ -20,7 +20,7 @@ pub struct Action {
     pub slot: ItemSlot,
 }
 
-pub fn execute_action(ref game_store: GameStore, action: Action) {
+pub fn execute_action(ref game_store: GameStore, action: Action, owner: ContractAddress) {
     // get wanted
     let wanted = if game_store.player.location == Locations::Home {
         0
@@ -75,11 +75,6 @@ pub fn execute_action(ref game_store: GameStore, action: Action) {
         },
     );
     
-    // get current owner of game
-    let owner = resolve_current_owner(
-        game_store.store.world, game_store.game.game_id, game_store.game.player_id,
-    );
-
     if game_store.game.is_ranked() && game_store.items.is_maxed_out() {
         let bushido_store = BushidoStoreTrait::new(game_store.store.world);
         bushido_store.progress(owner.into(), Tasks::STUFFED, 1, starknet::get_block_timestamp());

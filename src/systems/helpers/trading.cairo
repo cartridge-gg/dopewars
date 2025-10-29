@@ -3,7 +3,6 @@ use dojo::event::EventStorage;
 use rollyourown::achievements::achievements_v1::Tasks;
 use rollyourown::config::drugs::Drugs;
 use rollyourown::events::TradeDrug;
-use rollyourown::helpers::game_owner::resolve_current_owner;
 use rollyourown::models::game::{GameMode, GameTrait};
 use rollyourown::packing::drugs_packed::DrugsPackedImpl;
 use rollyourown::packing::game_store::{GameStore, GameStoreTrait};
@@ -12,6 +11,7 @@ use rollyourown::packing::markets_packed::MarketsPackedImpl;
 use rollyourown::packing::player::PlayerImpl;
 use rollyourown::store::{StoreImpl, StoreTrait};
 use rollyourown::utils::math::MathImplU8;
+use starknet::ContractAddress;
 
 
 #[derive(Copy, Drop, Serde, PartialEq)]
@@ -36,7 +36,11 @@ const MAX_TICK: usize = 63;
 
 
 pub fn execute_trade(
-    ref game_store: GameStore, trade: Trade, is_first_sell: bool, is_first_buy: bool,
+    ref game_store: GameStore,
+    trade: Trade,
+    is_first_sell: bool,
+    is_first_buy: bool,
+    owner: ContractAddress,
 ) {
     // check if can trade
     assert(game_store.can_trade(), 'player cannot trade');
@@ -45,12 +49,12 @@ pub fn execute_trade(
     assert(game_store.game.game_mode != GameMode::Warrior, 'warriors dont trade');
 
     match trade.direction {
-        TradeDirection::Sell => sell(ref game_store, trade, is_first_sell),
-        TradeDirection::Buy => buy(ref game_store, trade, is_first_buy),
+        TradeDirection::Sell => sell(ref game_store, trade, is_first_sell, owner),
+        TradeDirection::Buy => buy(ref game_store, trade, is_first_buy, owner),
     };
 }
 
-pub fn buy(ref game_store: GameStore, trade: Trade, is_first_buy: bool) {
+pub fn buy(ref game_store: GameStore, trade: Trade, is_first_buy: bool, owner: ContractAddress) {
     // check drug validity given player drug_level
     assert(game_store.player.can_trade_drug(trade.drug), 'u cant trade this drug');
 
@@ -85,9 +89,6 @@ pub fn buy(ref game_store: GameStore, trade: Trade, is_first_buy: bool) {
 
     // emit TradeDrug
     let mut store = game_store.store;
-    let owner = resolve_current_owner(
-        store.world, game_store.game.game_id, game_store.game.player_id,
-    );
     store
         .world
         .emit_event(
@@ -115,7 +116,12 @@ pub fn buy(ref game_store: GameStore, trade: Trade, is_first_buy: bool) {
 }
 
 
-pub fn sell(ref game_store: GameStore, trade: Trade, is_first_sell: bool) {
+pub fn sell(
+    ref game_store: GameStore,
+    trade: Trade,
+    is_first_sell: bool,
+    owner: ContractAddress,
+) {
     // check drug validity given player drug_level
     assert(game_store.player.can_trade_drug(trade.drug), 'u cant trade this drug');
 
@@ -141,10 +147,6 @@ pub fn sell(ref game_store: GameStore, trade: Trade, is_first_sell: bool) {
 
     // emit TradeDrug
     let mut store = game_store.store;
-    // get current owner of game
-    let owner = resolve_current_owner(
-        store.world, game_store.game.game_id, game_store.game.player_id,
-    );
     store
         .world
         .emit_event(
