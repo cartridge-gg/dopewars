@@ -18,19 +18,23 @@ pub fn resolve_current_owner_by_token(world: WorldStorage, token_id: u64) -> Con
     let store = StoreImpl::new(world);
     let game_token = store.game_token(token_id);
 
-    if game_token.game_id == 0 || game_token.player_id.is_zero() {
-        return game_token.player_id;
-    }
-
     let game_token_systems_address = world.dns_address(@"game_token_system_v0").unwrap();
 
     let minigame_dispatcher = IMinigameDispatcher { contract_address: game_token_systems_address };
     let token_address = minigame_dispatcher.token_address();
+    if token_address.is_zero() {
+        return game_token.player_id;
+    }
 
     let erc721_dispatcher = IERC721Dispatcher { contract_address: token_address };
     let current_owner = erc721_dispatcher.owner_of(token_id.into());
 
-    current_owner
+    if current_owner.is_zero() {
+        game_token.player_id
+    } else {
+        current_owner
+    }
+
 }
 
 fn resolve_current_owner_with_store(
