@@ -99,12 +99,16 @@ pub mod laundromat {
 
             if game_store.player.health == 1 {
                 bushido_store
-                    .progress(current_owner_felt, Tasks::SURVIVOR, 1, starknet::get_block_timestamp());
+                    .progress(
+                        current_owner_felt, Tasks::SURVIVOR, 1, starknet::get_block_timestamp(),
+                    );
             }
 
             if game_store.player.reputation == 100 {
                 bushido_store
-                    .progress(current_owner_felt, Tasks::FAMOUS, 1, starknet::get_block_timestamp());
+                    .progress(
+                        current_owner_felt, Tasks::FAMOUS, 1, starknet::get_block_timestamp(),
+                    );
             }
 
             if game.multiplier == MAX_MULTIPLIER {
@@ -334,7 +338,10 @@ pub mod laundromat {
                 if game.position == 1 {
                     bushido_store
                         .progress(
-                            current_owner.into(), Tasks::KINGPIN, 1, starknet::get_block_timestamp(),
+                            current_owner.into(),
+                            Tasks::KINGPIN,
+                            1,
+                            starknet::get_block_timestamp(),
                         );
                 }
             }

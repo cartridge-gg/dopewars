@@ -9,8 +9,8 @@ use rollyourown::packing::game_store::{GameStore, GameStoreTrait};
 use rollyourown::packing::items_packed::ItemsPackedImpl;
 use rollyourown::packing::player::PlayerImpl;
 use rollyourown::packing::wanted_packed::WantedPackedImpl;
-use rollyourown::utils::math::{MathImpl, MathTrait};
 use rollyourown::store::StoreImpl;
+use rollyourown::utils::math::{MathImpl, MathTrait};
 use starknet::ContractAddress;
 use super::super::super::config::gear::GearItemConfigTrait;
 
@@ -63,18 +63,18 @@ pub fn execute_action(ref game_store: GameStore, action: Action, owner: Contract
 
     // // emit event
     game_store
-    .store
-    .world
-    .emit_event(
-        @UpgradeItem {
-            game_id: game_store.game.game_id,
-            player_id: game_store.game.player_id,
-            turn: game_store.player.turn,
-            item_slot: action.slot.into(),
-            item_level: next_level,
-        },
-    );
-    
+        .store
+        .world
+        .emit_event(
+            @UpgradeItem {
+                game_id: game_store.game.game_id,
+                player_id: game_store.game.player_id,
+                turn: game_store.player.turn,
+                item_slot: action.slot.into(),
+                item_level: next_level,
+            },
+        );
+
     if game_store.game.is_ranked() && game_store.items.is_maxed_out() {
         let bushido_store = BushidoStoreTrait::new(game_store.store.world);
         bushido_store.progress(owner.into(), Tasks::STUFFED, 1, starknet::get_block_timestamp());

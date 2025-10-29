@@ -43,6 +43,7 @@ pub mod game {
     use rollyourown::dope_contracts::dope_hustlers::dope_hustlers_models::{
         HustlerBody, HustlerBodyParts, HustlerSlotOption, HustlerSlots,
     };
+    use rollyourown::helpers::game_owner::resolve_current_owner;
     // use dope_contracts::dope_hustlers::dope_hustlers_store::{HustlerStoreImpl,
     // HustlerStoreTrait};
     // use rollyourown::achievements::achievements_v1::Tasks;
@@ -59,7 +60,6 @@ pub mod game {
             randomness_helper::{RandomnessHelperTrait},
         },
     };
-    use rollyourown::helpers::game_owner::resolve_current_owner;
     use starknet::{ContractAddress, get_caller_address};
 
     #[abi(embed_v0)]
@@ -141,7 +141,7 @@ pub mod game {
 
                     assert!(is_valid, "invalid guest loot id");
                 },
-                TokenId::LootId(_loot_id) => {// check if owner of loot_id
+                TokenId::LootId(_loot_id) => { // check if owner of loot_id
                 // let loot_dispatcher = IERC721ABIDispatcher {
                 //     contract_address: dope_world.dns_address(@"DopeLoot").unwrap(),
                 // };
@@ -283,9 +283,7 @@ pub mod game {
             let mut store = StoreImpl::new(self.world(@"dopewars"));
             let game = store.game_by_token_id(token_id);
             assert(game.exists(), 'invalid game token');
-            let current_owner = resolve_current_owner(
-                store.world, game.game_id, game.player_id,
-            );
+            let current_owner = resolve_current_owner(store.world, game.game_id, game.player_id);
 
             let mut game_store = GameStoreImpl::load(ref store, game.game_id, game.player_id);
 
@@ -316,9 +314,7 @@ pub mod game {
             let mut store = StoreImpl::new(self.world(@"dopewars"));
             let game = store.game_by_token_id(token_id);
             assert(game.exists(), 'invalid game token');
-            let current_owner = resolve_current_owner(
-                store.world, game.game_id, game.player_id,
-            );
+            let current_owner = resolve_current_owner(store.world, game.game_id, game.player_id);
 
             let randomness_config = store.randomness_config();
 

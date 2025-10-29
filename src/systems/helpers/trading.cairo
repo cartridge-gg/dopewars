@@ -116,12 +116,7 @@ pub fn buy(ref game_store: GameStore, trade: Trade, is_first_buy: bool, owner: C
 }
 
 
-pub fn sell(
-    ref game_store: GameStore,
-    trade: Trade,
-    is_first_sell: bool,
-    owner: ContractAddress,
-) {
+pub fn sell(ref game_store: GameStore, trade: Trade, is_first_sell: bool, owner: ContractAddress) {
     // check drug validity given player drug_level
     assert(game_store.player.can_trade_drug(trade.drug), 'u cant trade this drug');
 

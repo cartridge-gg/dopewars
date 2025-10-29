@@ -34,7 +34,6 @@ pub fn resolve_current_owner_by_token(world: WorldStorage, token_id: u64) -> Con
     } else {
         current_owner
     }
-
 }
 
 fn resolve_current_owner_with_store(

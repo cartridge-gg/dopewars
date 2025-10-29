@@ -1,7 +1,7 @@
 mod tests {
     use dojo_snf_test::cheatcodes::set_caller_address;
-    use rollyourown::systems::laundromat::ILaundromatDispatcherTrait;
     use rollyourown::store::StoreImpl;
+    use rollyourown::systems::laundromat::ILaundromatDispatcherTrait;
     use rollyourown::tests::test_helpers::test_helpers::{
         mark_game_claimable, setup_and_transfer, setup_world_with_game,
     };
