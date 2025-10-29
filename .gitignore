@@ -8,5 +8,5 @@ deployment.md
 
 *.pem
 
-.snfoundry_cache
+.snfoundry_cache/
 AGENTS.md
