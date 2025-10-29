@@ -1,7 +1,3 @@
-// SPDX-License-Identifier: MIT
-
-// use starknet::ContractAddress;
-
 #[starknet::interface]
 pub trait IGameTokenSystems<T> {
     fn player_name(self: @T, token_id: u64) -> felt252;
@@ -38,7 +34,6 @@ pub mod game_token_system_v0 {
         #[substorage(v0)]
         src5: SRC5Component::Storage,
     }
-    
     #[event]
     #[derive(Drop, starknet::Event)]
     enum Event {
@@ -47,33 +42,35 @@ pub mod game_token_system_v0 {
         #[flat]
         SRC5Event: SRC5Component::Event,
     }
-    
+
     /// @title Dojo Init
     /// @notice Initializes the game token system
     /// @param creator_address: the address of the creator of the game
-    /// @param token_address: Denshokan address
+    /// @param denshokan_address: Denshokan address
     fn dojo_init(
-        ref self: ContractState, creator_address: ContractAddress, token_address: ContractAddress,
+        ref self: ContractState,
+        creator_address: ContractAddress,
+        denshokan_address: ContractAddress,
     ) {
         self
-        .minigame
-        .initializer(
-            creator_address,
-            "DopeWars",
-            "Roll Your Own - Dope Wars on StarkNet. Build your empire.",
-            "Cartridge/Dope DAO",
-            "Dope Wars",
-            "Strategy",
-            "https://raw.githubusercontent.com/cartridge-gg/dopewars/refs/heads/main/assets/icon.png",
-            Option::Some("#11ED83"), // color
-            Option::None, // client_url
-            Option::None, // renderer_address - TODO: Implement custom renderer
-            Option::None, // settings_address - TODO: Implement custom settings
-            Option::None, // objectives_address - TODO: Implement custom objectives
-            token_address,
-        );
+            .minigame
+            .initializer(
+                creator_address,
+                "DopeWars",
+                "Roll Your Own - Dope Wars on StarkNet. Build your empire.",
+                "Cartridge/Dope DAO",
+                "Dope Wars",
+                "Strategy",
+                "https://raw.githubusercontent.com/cartridge-gg/dopewars/refs/heads/main/assets/icon.png",
+                Option::Some("#11ED83"), // color
+                Option::None, // client_url
+                Option::None, // renderer_address - TODO: Implement custom renderer
+                Option::None, // settings_address - TODO: Implement custom settings
+                Option::None, // objectives_address - TODO: Implement custom objectives
+                denshokan_address,
+            );
     }
-    
+
     // ------------------------------------------ //
     // ------------ Game Token Systems ---------- //
     // ------------------------------------------ //
@@ -83,7 +80,7 @@ pub mod game_token_system_v0 {
             self.minigame.get_player_name(token_id)
         }
     }
-    
+
     // ------------------------------------------ //
     // ------------ Minigame Component ---------- //
     // ------------------------------------------ //
@@ -124,10 +121,9 @@ pub mod game_token_system_v0 {
             // Assert game belongs to current season
             if (game.season_version != current_season_version) {
                 return true;
-            };
+            }
 
             game.game_over
         }
     }
-
 }

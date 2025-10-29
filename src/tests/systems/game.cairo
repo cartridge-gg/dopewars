@@ -1,24 +1,37 @@
-
 mod tests {
-    use rollyourown::tests::test_helpers::test_helpers::{ 
-        Setup, setup_world_with_game, get_valid_guest_loot_id, setup_world_with_mint, setup_and_transfer
-    };
-    use rollyourown::systems::game::IGameActionsDispatcherTrait;
-    use rollyourown::models::game::{GameMode, TokenId};
-    use rollyourown::config::locations::Locations;
     use dojo_snf_test::cheatcodes::set_caller_address;
+    use rollyourown::config::locations::Locations;
+    use rollyourown::helpers::game_owner::resolve_current_owner;
+    use rollyourown::models::game::{GameMode, TokenId};
+    use rollyourown::store::{StoreImpl, StoreTrait};
+    use rollyourown::systems::game::IGameActionsDispatcherTrait;
+    use rollyourown::tests::test_helpers::test_helpers::{
+        get_valid_guest_loot_id, setup_and_transfer, setup_world_with_game, setup_world_with_mint,
+    };
 
     #[test]
     #[fork("provable-dw")]
     fn test_owner_can_create_game() {
         let setup = setup_world_with_mint();
-        set_caller_address(0x04E830A9dC3CA7AABecaC15D6b6f14c958bb57E28e62944F383581Fd5d0eF059.try_into().unwrap());
-        // start_cheat_account_contract_address(0x04E830A9dC3CA7AABecaC15D6b6f14c958bb57E28e62944F383581Fd5d0eF059.try_into().unwrap(), setup.contracts.game.contract_address);
+        set_caller_address(
+            0x04E830A9dC3CA7AABecaC15D6b6f14c958bb57E28e62944F383581Fd5d0eF059.try_into().unwrap(),
+        );
         let guest_loot_id = get_valid_guest_loot_id(setup.contracts.world);
         setup
             .contracts
             .game
-            .create_game(GameMode::Ranked, 'Player A', 1, TokenId::GuestLootId(guest_loot_id), setup.token_id);
+            .create_game(
+                GameMode::Ranked,
+                'Player A',
+                1,
+                TokenId::GuestLootId(guest_loot_id),
+                setup.token_id,
+            );
+
+        let mut store = StoreImpl::new(setup.contracts.world);
+        let game = store.game_by_token_id(setup.token_id);
+        let resolved = resolve_current_owner(setup.contracts.world, game.game_id, game.player_id);
+        assert(resolved == setup.player_a, 'resolve_current_owner mismatch');
     }
 
     #[test]
@@ -122,5 +135,4 @@ mod tests {
         set_caller_address(setup.player_b);
         setup.contracts.game.travel(setup.token_id, Locations::Bronx, array![].span());
     }
-
 }

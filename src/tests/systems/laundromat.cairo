@@ -1,8 +1,7 @@
 mod tests {
-    use rollyourown::tests::test_helpers::test_helpers::{ Setup, setup_world_with_game};
-    use rollyourown::systems::decide::IDecideDispatcherTrait;
-    use rollyourown::systems::laundromat::ILaundromatDispatcherTrait;
     use dojo_snf_test::cheatcodes::set_caller_address;
+    use rollyourown::systems::laundromat::ILaundromatDispatcherTrait;
+    use rollyourown::tests::test_helpers::test_helpers::setup_world_with_game;
 
 
     #[test]

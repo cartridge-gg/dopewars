@@ -12,9 +12,9 @@ pub trait ILaundromat<T> {
 
 #[dojo::contract]
 pub mod laundromat {
-    use dojo::world;
     use achievement::store::StoreTrait as BushidoStoreTrait;
     use dojo::event::EventStorage;
+    use dojo::world;
     use dojo::world::WorldStorageTrait;
     use game_components_minigame::interface::{IMinigameDispatcher, IMinigameDispatcherTrait};
     use game_components_minigame::libs::{assert_token_ownership, post_action};
@@ -29,11 +29,14 @@ pub mod laundromat {
     use rollyourown::achievements::achievements_v1::Tasks;
     use rollyourown::{
         constants::{ETHER, MAX_MULTIPLIER}, events::{Claimed, NewSeason},
-        helpers::season_manager::{SeasonManagerImpl, SeasonManagerTrait},
+        helpers::{
+            game_owner::resolve_current_owner_by_token,
+            season_manager::{SeasonManagerImpl, SeasonManagerTrait},
+        },
         interfaces::{paper::{IPaperDispatcher, IPaperDispatcherTrait}},
         // libraries::dopewars_items::{IDopewarsItemsDispatcherTrait,
         // IDopewarsItemsLibraryDispatcher},
-        models::{game::{Game, GameImpl, GameTrait// TokenId
+        models::{game::{Game, GameImpl, GameTrait // TokenId
         }, season::{SeasonImpl, SeasonTrait}},
         packing::game_store::{GameStoreImpl}, store::{StoreImpl, StoreTrait},
         utils::{
@@ -59,6 +62,8 @@ pub mod laundromat {
             let mut store = StoreImpl::new(world);
 
             let mut game = store.game_by_token_id(token_id);
+            let current_owner = resolve_current_owner_by_token(world, token_id);
+            let current_owner_felt: felt252 = current_owner.into();
             let season = store.season(game.season_version);
 
             // check if valid game
@@ -94,73 +99,71 @@ pub mod laundromat {
 
             if game_store.player.health == 1 {
                 bushido_store
-                    .progress(
-                        game.player_id.into(), Tasks::SURVIVOR, 1, starknet::get_block_timestamp(),
-                    );
+                    .progress(current_owner_felt, Tasks::SURVIVOR, 1, starknet::get_block_timestamp());
             }
 
             if game_store.player.reputation == 100 {
                 bushido_store
-                    .progress(game.player_id.into(), Tasks::FAMOUS, 1, starknet::get_block_timestamp());
+                    .progress(current_owner_felt, Tasks::FAMOUS, 1, starknet::get_block_timestamp());
             }
 
             if game.multiplier == MAX_MULTIPLIER {
                 bushido_store
                     .progress(
-                        game.player_id.into(), Tasks::HIGH_STAKES, 1, starknet::get_block_timestamp(),
+                        current_owner_felt, Tasks::HIGH_STAKES, 1, starknet::get_block_timestamp(),
                     );
             }
             // if let TokenId::HustlerId(huster_id) = game.token_id {
-        //     // if is_og(huster_id.into()) {
-        //     //     bushido_store
-        //     //         .progress(player_id.into(), Tasks::OG, 1,
-        //     starknet::get_block_timestamp());
-        //     // }
+            //     // if is_og(huster_id.into()) {
+            //     //     bushido_store
+            //     //         .progress(player_id.into(), Tasks::OG, 1,
+            //     starknet::get_block_timestamp());
+            //     // }
 
             //     let weapon_id: u256 = (*game.equipment_by_slot.at(0)).into();
-        //     let clothe_id: u256 = (*game.equipment_by_slot.at(1)).into();
-        //     let foot_id: u256 = (*game.equipment_by_slot.at(2)).into();
-        //     let vehicle_id: u256 = (*game.equipment_by_slot.at(3)).into();
+            //     let clothe_id: u256 = (*game.equipment_by_slot.at(1)).into();
+            //     let foot_id: u256 = (*game.equipment_by_slot.at(2)).into();
+            //     let vehicle_id: u256 = (*game.equipment_by_slot.at(3)).into();
 
             //     let weapon: GearItem = weapon_id.into();
-        //     let clothe: GearItem = clothe_id.into();
-        //     let foot: GearItem = foot_id.into();
-        //     let vehicle: GearItem = vehicle_id.into();
+            //     let clothe: GearItem = clothe_id.into();
+            //     let foot: GearItem = foot_id.into();
+            //     let vehicle: GearItem = vehicle_id.into();
 
             //     if weapon.suffix > 0
-        //         && weapon.suffix == clothe.suffix
-        //         && weapon.suffix == foot.suffix
-        //         && weapon.suffix == vehicle.suffix {
-        //         bushido_store
-        //             .progress(
-        //                 player_id.into(), Tasks::GEAR_FROM, 1,
-        //                 starknet::get_block_timestamp(),
-        //             );
-        //     }
+            //         && weapon.suffix == clothe.suffix
+            //         && weapon.suffix == foot.suffix
+            //         && weapon.suffix == vehicle.suffix {
+            //         bushido_store
+            //             .progress(
+            //                 player_id.into(), Tasks::GEAR_FROM, 1,
+            //                 starknet::get_block_timestamp(),
+            //             );
+            //     }
 
             //     let items_disp = IDopewarsItemsLibraryDispatcher {
-        //         class_hash: world.dns_class_hash(@"DopewarsItems_v0").unwrap(),
-        //     };
+            //         class_hash: world.dns_class_hash(@"DopewarsItems_v0").unwrap(),
+            //     };
 
             //     let weapon_tier = items_disp.get_item_tier(weapon.slot, weapon.item);
-        //     let clothe_tier = items_disp.get_item_tier(clothe.slot, clothe.item);
-        //     let foot_tier = items_disp.get_item_tier(foot.slot, foot.item);
-        //     let vehicle_tier = items_disp.get_item_tier(vehicle.slot, vehicle.item);
+            //     let clothe_tier = items_disp.get_item_tier(clothe.slot, clothe.item);
+            //     let foot_tier = items_disp.get_item_tier(foot.slot, foot.item);
+            //     let vehicle_tier = items_disp.get_item_tier(vehicle.slot, vehicle.item);
 
             //     if weapon_tier == clothe_tier
-        //         && weapon_tier == foot_tier
-        //         && weapon_tier == vehicle_tier {
-        //         let task = match weapon_tier {
-        //             0 => panic!("invalid tier"),
-        //             1 => Tasks::FULL_LATE,
-        //             2 => Tasks::FULL_MID,
-        //             3 => Tasks::FULL_EARLY,
-        //             _ => panic!("invalid tier"),
-        //         };
-        //         bushido_store
-        //             .progress(player_id.into(), task, 1, starknet::get_block_timestamp());
-        //     }
-        // }
+            //         && weapon_tier == foot_tier
+            //         && weapon_tier == vehicle_tier {
+            //         let task = match weapon_tier {
+            //             0 => panic!("invalid tier"),
+            //             1 => Tasks::FULL_LATE,
+            //             2 => Tasks::FULL_MID,
+            //             3 => Tasks::FULL_EARLY,
+            //             _ => panic!("invalid tier"),
+            //         };
+            //         bushido_store
+            //             .progress(player_id.into(), task, 1, starknet::get_block_timestamp());
+            //     }
+            // }
 
             // Update token state
             post_action(token_address, game.minigame_token_id);
@@ -257,6 +260,7 @@ pub mod laundromat {
             // Verify caller is player_id
             let caller = get_caller_address();
             assert(caller == player_id, 'caller must be player_id');
+            let expected_owner = player_id;
 
             let mut token_ids = token_ids;
 
@@ -282,6 +286,8 @@ pub mod laundromat {
                 assert_token_ownership(token_address, *token_id);
 
                 let mut game = store.game_by_token_id(*token_id);
+                let current_owner = resolve_current_owner_by_token(world, *token_id);
+                assert(current_owner == expected_owner, 'caller must be owner of token');
 
                 // retrieve Season SortedList
                 let list_id = game.season_version.into();
@@ -328,14 +334,14 @@ pub mod laundromat {
                 if game.position == 1 {
                     bushido_store
                         .progress(
-                            player_id.into(), Tasks::KINGPIN, 1, starknet::get_block_timestamp(),
+                            current_owner.into(), Tasks::KINGPIN, 1, starknet::get_block_timestamp(),
                         );
                 }
             }
 
             bushido_store
                 .progress(
-                    player_id.into(),
+                    expected_owner.into(),
                     Tasks::PAPER,
                     total_claimable.into(),
                     starknet::get_block_timestamp(),
@@ -347,7 +353,7 @@ pub mod laundromat {
 
             // transfer reward to player_id
             IPaperDispatcher { contract_address: paper_address }
-                .transfer(player_id, total_claimable);
+                .transfer(expected_owner, total_claimable);
             // // mint gear items
         // gear_dispatcher
         //     .mint_batch(player_id, gear_ids.span(), gear_ids_values.span(), array![].span());
@@ -414,5 +420,4 @@ pub mod laundromat {
             minigame_dispatcher.token_address()
         }
     }
-
 }

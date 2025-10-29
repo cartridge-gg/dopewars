@@ -227,12 +227,12 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
           <UnorderedList boxSize="full" variant="dotted" h="auto">
             {registeredGames && registeredGames.length > 0 ? (
               registeredGames.map((game: Game, index: number) => {
+                
                 // Check if player currently owns the token (not just if they are original owner)
                 const tokenId = Number(game.minigame_token_id);
-                // Use current ownership check if available, otherwise fall back to original owner check
-                const isOwn = isLoadingOwnedTokens
-                  ? BigInt(game.player_id) === BigInt(account?.address || 0)
-                  : ownedTokenIds.has(tokenId);
+                
+                // check if current owner of token
+                const isOwn = ownedTokenIds.has(tokenId);
                 const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
                 const avatarColor = isOwn ? "yellow" : "green";
                 const displayName = game.player_name ? `${game.player_name}${isOwn ? " (you)" : ""}` : "Anonymous";

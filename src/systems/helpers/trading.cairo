@@ -3,6 +3,7 @@ use dojo::event::EventStorage;
 use rollyourown::achievements::achievements_v1::Tasks;
 use rollyourown::config::drugs::Drugs;
 use rollyourown::events::TradeDrug;
+use rollyourown::helpers::game_owner::resolve_current_owner;
 use rollyourown::models::game::{GameMode, GameTrait};
 use rollyourown::packing::drugs_packed::DrugsPackedImpl;
 use rollyourown::packing::game_store::{GameStore, GameStoreTrait};
@@ -84,6 +85,9 @@ pub fn buy(ref game_store: GameStore, trade: Trade, is_first_buy: bool) {
 
     // emit TradeDrug
     let mut store = game_store.store;
+    let owner = resolve_current_owner(
+        store.world, game_store.game.game_id, game_store.game.player_id,
+    );
     store
         .world
         .emit_event(
@@ -104,12 +108,7 @@ pub fn buy(ref game_store: GameStore, trade: Trade, is_first_buy: bool) {
         if is_first_buy {
             if tick == MIN_TICK {
                 bushido_store
-                    .progress(
-                        game_store.game.player_id.into(),
-                        Tasks::BUY_LOW,
-                        1,
-                        starknet::get_block_timestamp(),
-                    );
+                    .progress(owner.into(), Tasks::BUY_LOW, 1, starknet::get_block_timestamp());
             };
         };
     }
@@ -142,6 +141,10 @@ pub fn sell(ref game_store: GameStore, trade: Trade, is_first_sell: bool) {
 
     // emit TradeDrug
     let mut store = game_store.store;
+    // get current owner of game
+    let owner = resolve_current_owner(
+        store.world, game_store.game.game_id, game_store.game.player_id,
+    );
     store
         .world
         .emit_event(
@@ -162,20 +165,12 @@ pub fn sell(ref game_store: GameStore, trade: Trade, is_first_sell: bool) {
         if is_first_sell {
             bushido_store
                 .progress(
-                    game_store.game.player_id.into(),
-                    Tasks::VOLUME,
-                    total.into(),
-                    starknet::get_block_timestamp(),
+                    owner.into(), Tasks::VOLUME, total.into(), starknet::get_block_timestamp(),
                 );
 
             if tick == MAX_TICK {
                 bushido_store
-                    .progress(
-                        game_store.game.player_id.into(),
-                        Tasks::SELL_HIGH,
-                        1,
-                        starknet::get_block_timestamp(),
-                    );
+                    .progress(owner.into(), Tasks::SELL_HIGH, 1, starknet::get_block_timestamp());
             };
         };
     }

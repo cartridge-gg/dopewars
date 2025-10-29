@@ -7,6 +7,7 @@ use rollyourown::config::encounters::{
 use rollyourown::config::locations::LocationsRandomizableImpl;
 use rollyourown::config::settings::SeasonSettings;
 use rollyourown::events::{TravelEncounter, TravelEncounterResult};
+use rollyourown::helpers::game_owner::resolve_current_owner;
 use rollyourown::models::game::{GameMode, GameTrait};
 use rollyourown::packing::drugs_packed::{DrugsPackedImpl, DrugsPackedTrait, DrugsUnpacked};
 use rollyourown::packing::game_store::{GameStore, GameStoreImpl, GameStoreTrait};
@@ -171,22 +172,28 @@ pub fn decide(
 
     if game_store.game.is_ranked() {
         let bushido_store = BushidoStoreTrait::new(game_store.store.world);
-        let player_id: felt252 = game_store.game.player_id.into();
+
+        // get current owner of game
+        let owner = resolve_current_owner(
+            game_store.store.world, game_store.game.game_id, game_store.game.player_id,
+        );
+        let owner_felt: felt252 = owner.into();
 
         if result.outcome == EncounterOutcomes::Victorious {
-            bushido_store.progress(player_id, Tasks::ENCOUNTER, 1, starknet::get_block_timestamp());
+            bushido_store
+                .progress(owner_felt, Tasks::ENCOUNTER, 1, starknet::get_block_timestamp());
 
             if encounter.encounter == Encounters::Cops {
                 if encounter.level == 6 {
                     bushido_store
-                        .progress(player_id, Tasks::BRAWLER_C, 1, starknet::get_block_timestamp());
+                        .progress(owner_felt, Tasks::BRAWLER_C, 1, starknet::get_block_timestamp());
                 }
             }
 
             if encounter.encounter == Encounters::Gang {
                 if encounter.level == 6 {
                     bushido_store
-                        .progress(player_id, Tasks::BRAWLER_G, 1, starknet::get_block_timestamp());
+                        .progress(owner_felt, Tasks::BRAWLER_G, 1, starknet::get_block_timestamp());
                 }
             }
         }

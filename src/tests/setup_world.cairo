@@ -1,30 +1,26 @@
 // Fork testing on Sepolia
 
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait, WorldStorage, WorldStorageTrait};
+use dojo::world::{WorldStorage, WorldStorageTrait};
 use dojo_snf_test::{
     ContractDef, ContractDefTrait, NamespaceDef, TestResource, WorldStorageTestTrait,
     spawn_test_world,
 };
-use rollyourown::config::ryo::RyoConfig;
-use rollyourown::events::{
-    Claimed, GameCreated, GameOver, HighVolatility, NewHighScore, NewSeason, TradeDrug,
-    TravelEncounter, TravelEncounterResult, Traveled, UpgradeItem,
-};
+// use rollyourown::config::ryo::RyoConfig;
+// use rollyourown::events::{
+//     Claimed, GameCreated, GameOver, HighVolatility, NewHighScore, NewSeason, TradeDrug,
+//     TravelEncounter, TravelEncounterResult, Traveled, UpgradeItem,
+// };
 // use rollyourown::models::game::Game;
 // use rollyourown::models::game_store_packed::GameStorePacked;
 // use rollyourown::models::game_token::GameToken;
 // use rollyourown::models::season::Season;
 use rollyourown::config::config::{IConfigDispatcher};
-use rollyourown::systems::decide::{IDecideDispatcher, IDecideDispatcherTrait, decide};
-use rollyourown::systems::devtools::{IDevtoolsDispatcher, IDevtoolsDispatcherTrait, devtools};
-use rollyourown::systems::game::{IGameActionsDispatcher, IGameActionsDispatcherTrait, game};
-use rollyourown::systems::game_token::contracts::{
-    IGameTokenSystemsDispatcher, IGameTokenSystemsDispatcherTrait, game_token_system_v0,
-};
-use rollyourown::systems::laundromat::{
-    ILaundromatDispatcher, ILaundromatDispatcherTrait, laundromat,
-};
-use rollyourown::systems::ryo::{IRyoDispatcher, IRyoDispatcherTrait, ryo};
+use rollyourown::systems::decide::IDecideDispatcher;
+use rollyourown::systems::devtools::IDevtoolsDispatcher;
+use rollyourown::systems::game::IGameActionsDispatcher;
+use rollyourown::systems::game_token::contracts::IGameTokenSystemsDispatcher;
+use rollyourown::systems::laundromat::ILaundromatDispatcher;
+use rollyourown::systems::ryo::IRyoDispatcher;
 
 
 fn NAMESPACE() -> ByteArray {
@@ -33,40 +29,23 @@ fn NAMESPACE() -> ByteArray {
 
 fn namespace_def() -> NamespaceDef {
     let mut resources = array![
-        TestResource::Model("Game"),
-        TestResource::Model("GameStorePacked"),
-        TestResource::Model("GameToken"),
-        TestResource::Model("RyoConfig"),
-        TestResource::Model("Season"),
-        TestResource::Model("DrugConfig"),
-        TestResource::Model("LocationConfig"),
-        TestResource::Model("HustlerBody"),
-        TestResource::Model("HustlerSlot"),
-        TestResource::Model("EncounterStatsConfig"),
-        TestResource::Model("GameConfig"),
-        TestResource::Model("RandomnessConfig"),
-        TestResource::Model("RyoAddress"),
-        TestResource::Model("SeasonSettings"),
-        TestResource::Model("SortedList"),
-        TestResource::Model("SortedListItem"),
-        TestResource::Contract("game"),
-        TestResource::Contract("decide"),
-        TestResource::Contract("laundromat"),
-        TestResource::Contract("config"),
-        TestResource::Contract("ryo"),
-        TestResource::Contract("devtools"),
-        TestResource::Contract("game_token_system_v0"),
-        TestResource::Event("GameCreated"),
-        TestResource::Event("Traveled"),
-        TestResource::Event("GameOver"),
-        TestResource::Event("TradeDrug"),
-        TestResource::Event("HighVolatility"),
-        TestResource::Event("UpgradeItem"),
-        TestResource::Event("TravelEncounter"),
-        TestResource::Event("TravelEncounterResult"),
-        TestResource::Event("NewSeason"),
-        TestResource::Event("NewHighScore"),
-        TestResource::Event("Claimed"),
+        TestResource::Model("Game"), TestResource::Model("GameStorePacked"),
+        TestResource::Model("GameToken"), TestResource::Model("RyoConfig"),
+        TestResource::Model("Season"), TestResource::Model("DrugConfig"),
+        TestResource::Model("LocationConfig"), TestResource::Model("HustlerBody"),
+        TestResource::Model("HustlerSlot"), TestResource::Model("EncounterStatsConfig"),
+        TestResource::Model("GameConfig"), TestResource::Model("RandomnessConfig"),
+        TestResource::Model("RyoAddress"), TestResource::Model("SeasonSettings"),
+        TestResource::Model("SortedList"), TestResource::Model("SortedListItem"),
+        TestResource::Contract("game"), TestResource::Contract("decide"),
+        TestResource::Contract("laundromat"), TestResource::Contract("config"),
+        TestResource::Contract("ryo"), TestResource::Contract("devtools"),
+        TestResource::Contract("game_token_system_v0"), TestResource::Event("GameCreated"),
+        TestResource::Event("Traveled"), TestResource::Event("GameOver"),
+        TestResource::Event("TradeDrug"), TestResource::Event("HighVolatility"),
+        TestResource::Event("UpgradeItem"), TestResource::Event("TravelEncounter"),
+        TestResource::Event("TravelEncounterResult"), TestResource::Event("NewSeason"),
+        TestResource::Event("NewHighScore"), TestResource::Event("Claimed"),
     ];
     NamespaceDef { namespace: NAMESPACE(), resources: resources.span() }
 }
@@ -81,7 +60,7 @@ fn contract_defs() -> Span<ContractDef> {
     game_token_init_calldata
         .append(
             // 0x02334dc9c950c74c3228e2a343d495ae36f0b4edf06767a679569e9f9de08776.try_into().unwrap(),
-            0x05a499a49f635d0a9379da557b3f13aeb74a1b2295944755575e6adb2b86f7dd.try_into().unwrap()
+            0x05a499a49f635d0a9379da557b3f13aeb74a1b2295944755575e6adb2b86f7dd.try_into().unwrap(),
         ); // denshokan_address
 
     let mut ryo_init_calldata: Array<felt252> = array![];
@@ -133,7 +112,7 @@ pub struct TestContracts {
     pub config: IConfigDispatcher,
 }
 
-pub fn deploy_world() -> TestContracts{
+pub fn deploy_world() -> TestContracts {
     let mut world = spawn_test_world([namespace_def()].span());
     world.sync_perms_and_inits(contract_defs());
 

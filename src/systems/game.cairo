@@ -34,6 +34,7 @@ pub trait IGameActions<T> {
 pub mod game {
     // use achievement::store::{StoreTrait as BushidoStoreTrait};
     // use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
+    use core::num::traits::Zero;
     use dojo::event::EventStorage;
     use dojo::model::ModelStorage;
     use dojo::world::{IWorldDispatcherTrait, WorldStorageTrait};
@@ -49,7 +50,7 @@ pub mod game {
         config::{locations::{Locations}}, events::{GameCreated},
         helpers::season_manager::{SeasonManagerTrait},
         // interfaces::{erc721::{IERC721ABIDispatcher, IERC721ABIDispatcherTrait}},
-        models::{game::{GameImpl, GameMode, TokenId}, game_token::{GameToken}},
+        models::{game::{GameImpl, GameMode, TokenId}, game_token::GameToken},
         packing::{game_store::{GameStore, GameStoreImpl}, player::{PlayerImpl}},
         store::{StoreImpl, StoreTrait},
         systems::{helpers::{game_loop, shopping, trading, trading::{TradeDirection}}},
@@ -59,7 +60,6 @@ pub mod game {
         },
     };
     use starknet::get_caller_address;
-    use core::num::traits::Zero;
 
 
     #[abi(embed_v0)]
@@ -75,9 +75,9 @@ pub mod game {
             self.assert_not_paused();
             // assert(game_mode == GameMode::Noob || game_mode == GameMode::Ranked, 'invalid game
             // mode!');
-            
+
             let token_address = self._get_game_token_address();
-            
+
             // assert token ownership and pre_action
             assert_token_ownership(token_address, minigame_token_id);
             self.assert_game_not_started(minigame_token_id);
@@ -97,7 +97,6 @@ pub mod game {
             let mut randomizer = RandomnessHelperTrait::create_randomizer(
                 randomness_config, game_context,
             );
-
 
             // get season version
             let mut season_manager = SeasonManagerTrait::new(store);
@@ -142,15 +141,14 @@ pub mod game {
 
                     assert!(is_valid, "invalid guest loot id");
                 },
-                TokenId::LootId(_loot_id) => {
-                    // check if owner of loot_id
-                    // let loot_dispatcher = IERC721ABIDispatcher {
-                    //     contract_address: dope_world.dns_address(@"DopeLoot").unwrap(),
-                    // };
-                    // assert(
-                    //     player_id == loot_dispatcher.owner_of(loot_id.into()),
-                    //     'caller is not loot owner',
-                    // );
+                TokenId::LootId(_loot_id) => {// check if owner of loot_id
+                // let loot_dispatcher = IERC721ABIDispatcher {
+                //     contract_address: dope_world.dns_address(@"DopeLoot").unwrap(),
+                // };
+                // assert(
+                //     player_id == loot_dispatcher.owner_of(loot_id.into()),
+                //     'caller is not loot owner',
+                // );
                 },
                 TokenId::HustlerId(hustler_id) => {
                     // check if owner of hustler_id
@@ -261,10 +259,10 @@ pub mod game {
             let game_store = GameStoreImpl::new(store, ref game, ref game_config, ref randomizer);
             game_store.save();
 
-            
             // @dev
             // store the GameToken mapping
-            // GameToken model is set for backwards compatibility and easy lookup for transferred games
+            // GameToken model is set for backwards compatibility and easy lookup for transferred
+            // games
             world.write_model(@GameToken { token_id: minigame_token_id, game_id, player_id });
 
             // emit GameCreated
@@ -277,7 +275,7 @@ pub mod game {
 
         fn end_game(self: @ContractState, token_id: u64, actions: Span<super::Actions>) {
             let token_address = self._get_game_token_address();
-            
+
             // assert token ownership and pre_action
             assert_token_ownership(token_address, token_id);
             pre_action(token_address, token_id);
@@ -307,7 +305,7 @@ pub mod game {
             actions: Span<super::Actions>,
         ) {
             let token_address = self._get_game_token_address();
-            
+
             // assert token ownership and pre_action
             assert_token_ownership(token_address, token_id);
             pre_action(token_address, token_id);
@@ -378,7 +376,9 @@ pub mod game {
         fn _get_game_token_address(self: @ContractState) -> starknet::ContractAddress {
             let world = self.world(@"dopewars");
             let (game_token_systems_address, _) = world.dns(@"game_token_system_v0").unwrap();
-            let minigame_dispatcher = IMinigameDispatcher { contract_address: game_token_systems_address };
+            let minigame_dispatcher = IMinigameDispatcher {
+                contract_address: game_token_systems_address,
+            };
             minigame_dispatcher.token_address()
         }
 

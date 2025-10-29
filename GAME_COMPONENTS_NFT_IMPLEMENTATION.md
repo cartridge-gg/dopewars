@@ -18,6 +18,7 @@
 - [Comparison with Death Mountain](#comparison-with-death-mountain)
 - [Implementation Details](#implementation-details)
 - [Data Flow](#data-flow)
+- [Client Handshake](#client-handshake)
 - [Testing and Verification](#testing-and-verification)
 - [Future Considerations](#future-considerations)
 - [References](#references)
@@ -33,6 +34,7 @@ DopeWars has integrated the `game-components` library to enable players to view 
 - Uses GameToken model to map NFT token_id to game state
 - Token ownership validation on all game actions
 - Token lifecycle management via pre_action/post_action
+- Gameplay entrypoints require a `minigame_token_id` minted through `game_token_system_v0`, triggering metadata hooks (`pre_action`/`post_action`) on every call
 - Employs default renderer for metadata generation (TODO: custom renderer with a more polished interface could be implemented)
 - Minimal changes to existing architecture
 
@@ -537,11 +539,6 @@ fn game_over(self: @ContractState, token_id: u64) -> bool {
 }
 ```
 
-**Note:** Unlike `score()` which returns `0` for non-existent games, `game_over()` asserts that the game exists. This is because:
-- A score of `0` is a valid game state (player has no cash yet)
-- A non-existent game shouldn't be queried for game-over status
-- Assertions provide clearer error messages for invalid queries
-
 ---
 
 ## Data Flow
@@ -635,6 +632,49 @@ fn game_over(self: @ContractState, token_id: u64) -> bool {
 
 ---
 
+## Client Handshake
+
+The runtime now enforces a token-gated handshake that every integrator must follow. Skipping a step
+results in reverts from the game systems.
+
+1. **Mint a minigame token first**  
+   Resolve the `game_token_system_v0` contract (see
+   `src/systems/game_token/contracts.cairo:33`) via world DNS and use the embedded dispatcher to
+   mint. The mint returns the `minigame_token_id` (`u64`) that represents the player session and is
+   backed by the SRC5-compliant token contract.
+
+   ```cairo
+   let dispatcher = IMinigameDispatcher { contract_address: game_token_system };
+   let minigame_token_id = dispatcher.mint_game(
+       Option::Some('Player A'),
+       Option::Some(0),
+       Option::None, Option::None, Option::None, Option::None,
+       Option::None, Option::None,
+       caller_address,
+       false
+   );
+   ```
+
+2. **Pass the token when creating the game**  
+   The `create_game` entrypoint in `src/systems/game.cairo:72` now accepts `minigame_token_id`. Supply
+   the id from step 1; the system verifies ownership with `assert_token_ownership` and checks that no
+   prior game state has been bound to that token.
+
+   ```cairo
+   game.create_game(game_mode, player_name, multiplier, token_id, minigame_token_id);
+   ```
+
+3. **Reuse the same token on every action**  
+   Follow-up calls (`travel`, `end_game`, `decide`, `laundromat`, etc.) all take the token id instead
+   of `(game_id, player_id)`. Each entrypoint invokes the minigame metadata hooks—`pre_action` before
+   game logic and `post_action` afterwards—so expect metadata refreshes after every successful action.
+
+This handshake keeps the GameToken mapping, the SRC5 metadata contract, and the Dojo world in sync.
+It also ensures ownership checks succeed if the NFT is transferred; whoever holds the token controls
+the game.
+
+---
+
 ## Testing and Verification
 
 ### Build Verification
@@ -651,20 +691,21 @@ After deploying contracts:
 
 1. **Verify game_token_systems is deployed**
    ```bash
-   sozo model list
+   sozo -P provable-dw inspect
    # Should include GameToken model
    ```
 
-2. **Create a test game**
-   ```bash
-   # Call create_game() and note the returned game_id
-   ```
-
-3. **Verify NFT was minted**
+2. **Mint and Verify NFT was minted**
    ```bash
    # Query FullTokenContract for token ownership
    # Player's wallet should show new NFT
    ```
+
+3. **Create a test game**
+   ```bash
+   # Call create_game() and note the returned game_id
+   ```
+
 
 4. **Check GameToken mapping**
    ```bash
@@ -717,89 +758,6 @@ Further enhancements are planned by implementing custom components from the `gam
   2. These can be used to define different game modes (e.g., "Ranked," "Casual") or specific goals (e.g., "Reach $1M cash").
   3. Deploy the contracts and link them in the `initializer`.
 
-### Full Architecture Refactor
-
-**Goal:** Enable game trading with single token_id key architecture (like Death Mountain)
-
-**What This Would Require:**
-
-1. **Refactor Game Model**
-   ```cairo
-   // Change from:
-   #[dojo::model]
-   pub struct Game {
-       #[key]
-       pub game_id: u32,
-       #[key]
-       pub player_id: ContractAddress,
-       // ...
-   }
-
-   // To:
-   #[dojo::model]
-   pub struct Game {
-       #[key]
-       pub token_id: u64,  // Single key
-       pub player_id: ContractAddress,  // Regular field (mutable)
-       // ...
-   }
-   ```
-
-2. **Rewrite All System Functions**
-   ```cairo
-   // Before: 50+ function signatures like this
-   fn travel(game_id: u32, next_location: Locations, ...)
-
-   // After: All need to change to
-   fn travel(token_id: u64, next_location: Locations, ...)
-   ```
-
-3. **Update All Queries**
-   ```cairo
-   // Before:
-   let game = world.game(game_id, player_id);
-
-   // After:
-   let game = world.game(token_id);
-   ```
-
-4. **Rewrite StoreImpl and All Helpers**
-   - All store methods expect (game_id, player_id)
-   - Would need complete rewrite
-
-5. **Add Transfer Hook**
-   ```cairo
-   fn on_nft_transfer(token_id: u64, from: Address, to: Address) {
-       let mut game = world.read_model(token_id);
-       game.player_id = to;
-       world.write_model(@game);
-   }
-   ```
-
-6. **Update Frontend**
-   - All queries, events, state management
-   - Rewrite game tracking logic
-
-7. **Data Migration**
-   - Migrate existing games to new model
-   - Or start fresh (lose existing data)
-
-
-**Comparison:**
-
-| Aspect | Phase 2.5 (Hybrid) | Phase 3 (Full Refactor) |
-|--------|-------------------|------------------------|
-| **Effort** | 1-2 weeks | 3-4 weeks |
-| **Risk** | Medium | Very High |
-| **Files Changed** | ~10 files | 50+ files |
-| **Breaking Changes** | Minimal | Everything breaks |
-| **Data Migration** | Not needed | Required |
-| **GameToken Model** | Keep & use | Delete |
-| **Transferable NFTs** | Yes | Yes |
-| **Architecture** | Hybrid (both IDs) | Clean (single ID) |
-
-
----
 
 ## References
 

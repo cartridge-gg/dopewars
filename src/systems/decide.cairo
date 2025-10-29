@@ -11,6 +11,7 @@ pub mod decide {
     use dojo::world::WorldStorageTrait;
     use game_components_minigame::interface::{IMinigameDispatcher, IMinigameDispatcherTrait};
     use game_components_minigame::libs::{assert_token_ownership, post_action, pre_action};
+    use rollyourown::models::game::GameImpl;
     use rollyourown::packing::game_store::GameStoreImpl;
     use rollyourown::packing::player::PlayerImpl;
     use rollyourown::store::{StoreImpl, StoreTrait};
@@ -18,7 +19,6 @@ pub mod decide {
     use rollyourown::utils::bytes16::Bytes16Impl;
     use rollyourown::utils::random::RandomImpl;
     use rollyourown::utils::randomness_helper::RandomnessHelperTrait;
-    use rollyourown::models::game::GameImpl;
 
     #[abi(embed_v0)]
     impl DecideImpl of super::IDecide<ContractState> {
@@ -34,7 +34,6 @@ pub mod decide {
 
             let randomness_config = store.randomness_config();
 
-            //
             let mut game_store = GameStoreImpl::load(ref store, game.game_id, game.player_id);
 
             // check player status
@@ -48,7 +47,7 @@ pub mod decide {
             );
             let mut season_settings = store.season_settings(game_store.game.season_version);
 
-            // // resolve decision
+            // resolve decision
             let is_dead = traveling::decide(
                 ref game_store, ref season_settings, ref randomizer, action,
             );
@@ -60,7 +59,7 @@ pub mod decide {
             } else {
                 // on_turn_end & save
                 game_loop::on_turn_end(ref game_store, ref randomizer, ref store);
-            };
+            }
 
             // Update token data
             post_action(token_address, token_id);
@@ -78,5 +77,4 @@ pub mod decide {
             minigame_dispatcher.token_address()
         }
     }
-
 }

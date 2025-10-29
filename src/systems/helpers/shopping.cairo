@@ -4,6 +4,7 @@ use rollyourown::achievements::achievements_v1::Tasks;
 use rollyourown::config::hustlers::ItemSlot;
 use rollyourown::config::locations::Locations;
 use rollyourown::events::UpgradeItem;
+use rollyourown::helpers::game_owner::resolve_current_owner;
 use rollyourown::models::game::{GameImpl, GameTrait};
 use rollyourown::packing::game_store::{GameStore, GameStoreImpl, GameStoreTrait};
 use rollyourown::packing::items_packed::ItemsPackedImpl;
@@ -62,27 +63,25 @@ pub fn execute_action(ref game_store: GameStore, action: Action) {
 
     // // emit event
     game_store
-        .store
-        .world
-        .emit_event(
-            @UpgradeItem {
-                game_id: game_store.game.game_id,
-                player_id: game_store.game.player_id,
-                turn: game_store.player.turn,
-                item_slot: action.slot.into(),
-                item_level: next_level,
-            },
-        );
+    .store
+    .world
+    .emit_event(
+        @UpgradeItem {
+            game_id: game_store.game.game_id,
+            player_id: game_store.game.player_id,
+            turn: game_store.player.turn,
+            item_slot: action.slot.into(),
+            item_level: next_level,
+        },
+    );
+    
+    // get current owner of game
+    let owner = resolve_current_owner(
+        game_store.store.world, game_store.game.game_id, game_store.game.player_id,
+    );
 
     if game_store.game.is_ranked() && game_store.items.is_maxed_out() {
         let bushido_store = BushidoStoreTrait::new(game_store.store.world);
-        bushido_store
-            .progress(
-                game_store.game.player_id.into(),
-                Tasks::STUFFED,
-                1,
-                starknet::get_block_timestamp(),
-            );
+        bushido_store.progress(owner.into(), Tasks::STUFFED, 1, starknet::get_block_timestamp());
     }
 }
-

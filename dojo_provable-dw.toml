@@ -43,19 +43,21 @@ skip_contracts = [
     "0x5a499a49f635d0a9379da557b3f13aeb74a1b2295944755575e6adb2b86f7dd", # token address (Denshokan address)
 ]
 
-# [writers]
-# "dopewars" = [
-#     "dopewars-config",
-#     "dopewars-laundromat",
-#     "dopewars-game",
-#     "dopewars-ryo",
-#     "dopewars-paper_mock",
-# ]
-
 [writers]
+"dopewars" = [
+    "dopewars-config",
+    "dopewars-laundromat",
+    "dopewars-game",
+    "dopewars-ryo",
+    "dopewars-paper_mock",
+    "dopewars-devtools",
+    "dopewars-game_token_system_v0",
+]
+
+# [writers]
 
 
-"dopewars" = ["dopewars-devtools"]
+# "dopewars" = ["dopewars-devtools"]
 
 
 "dopewars-ERC20BalanceEvent" = ["dopewars-paper_mock"]
@@ -72,7 +74,6 @@ skip_contracts = [
 "dopewars-EncounterStatsConfig" = ["dopewars-config"]
 
 "dopewars-Game" = ["dopewars-game", "dopewars-laundromat", "dopewars-decide"]
-"dopewars-GameToken" = ["dopewars-game", "dopewars-laundromat", "dopewars-decide", "dopewars-game_token_system_v0"]
 "dopewars-GameStorePacked" = ["dopewars-game", "dopewars-decide"]
 "dopewars-RyoConfig" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]
 "dopewars-Season" = ["dopewars-game", "dopewars-laundromat", "dopewars-ryo"]
@@ -85,6 +86,8 @@ skip_contracts = [
 "dopewars-SortedList" = ["dopewars-game", "dopewars-laundromat"]
 "dopewars-SortedListItem" = ["dopewars-game", "dopewars-laundromat"]
 "dopewars-RyoAddress" = ["dopewars-ryo"]
+
+"dopewars-GameToken" = ["dopewars-game", "dopewars-laundromat", "dopewars-decide", "dopewars-game_token_system_v0"]
 "dopewars-RandomnessConfig" = ["dopewars-ryo"]
 
 #

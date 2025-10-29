@@ -30,6 +30,7 @@ pub mod config {
 }
 
 pub mod helpers {
+    pub mod game_owner;
     pub mod season_manager;
 }
 
