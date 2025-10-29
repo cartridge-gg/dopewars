@@ -176,7 +176,7 @@ export class GameStoreClass {
       },
       no_hashed_keys: false,
       models: [],
-      historical: false,
+      historical: true,
     });
 
     if (entities.items.length === 0) return;

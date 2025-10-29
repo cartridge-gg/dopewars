@@ -4,9 +4,6 @@ rpc_url = "https://api.cartridge.gg/x/provable-dw/katana"
 account_address = "0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"
 private_key = "0xc5b2fcab997346f3ea1c00b002ecf6f382c5f9c9659a3894eb783c5320f912"
 world_address = "0x745ce531c48c0bdac80e6ae04abf0396668dab648127353939563defb6fa85a"
-# world_address="0x07c199e52347fad3214ccdc9cb65e8b467d0773936a21a4d4080e462e4f271b5"
-# account_address = "0x2af9427c5a277474c079a1283c880ee8a6f0f8fbf73ce969c08d88befec1bba"
-# private_key = "0x1800000000300000180000000000030000000000003006001800006600"
 
 [world]
 name = "Dope Wars"

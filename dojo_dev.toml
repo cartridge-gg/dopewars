@@ -27,8 +27,6 @@ skip_contracts = [
     # "dopewars-SlotMachine",
     # "dopewars-SlotMachineCombination",
     # "dopewars-chips",
-    "dopewars-HustlerBody",
-    "dopewars-HustlerSlot",
 ]
 
 [init_call_args]

@@ -48,6 +48,7 @@ trait IPaperMockFaucet<TState> {
 
 #[dojo::contract]
 mod paper_mock {
+    // use openzeppelin::token::erc20::ERC20HooksEmptyImpl;
     use dojo::event::EventStorage;
     use dojo::world::WorldStorageTrait;
     use openzeppelin::token::erc20::ERC20Component;
@@ -96,13 +97,11 @@ mod paper_mock {
     #[abi(embed_v0)]
     impl ERC20MetadataImpl of IERC20Metadata<ContractState> {
         fn name(self: @ContractState) -> ByteArray {
-            // self.erc20.name()
-            "fPaper"
+            self.erc20.name()
         }
 
         fn symbol(self: @ContractState) -> ByteArray {
-            // self.erc20.symbol()
-            "fPAPER"
+            self.erc20.symbol()
         }
 
         fn decimals(self: @ContractState) -> u8 {
