@@ -7,6 +7,7 @@ pub mod test_helpers {
     use rollyourown::helpers::season_manager::SeasonManagerTrait;
     use rollyourown::models::game::{GameMode, TokenId};
     use rollyourown::store::StoreImpl;
+    use rollyourown::utils::sorted_list::SortedListImpl;
     use rollyourown::systems::game::IGameActionsDispatcherTrait;
     use snforge_std::start_cheat_account_contract_address;
     use starknet::ContractAddress;
@@ -116,5 +117,24 @@ pub mod test_helpers {
         let new_owner = erc721_dispatcher.owner_of(setup.token_id.into());
         assert(new_owner == setup.player_b, 'Token transfer failed');
         setup
+    }
+
+    pub fn mark_game_claimable(world: WorldStorage, token_id: u64, claimable: u32) {
+        let mut store = StoreImpl::new(world);
+        let mut game = store.game_by_token_id(token_id);
+        game.game_over = true;
+        game.registered = true;
+        game.claimable = claimable;
+        game.position = 1;
+        store.set_game(@game);
+
+        let list_id = game.season_version.into();
+        let mut sorted_list = SortedListImpl::new(list_id);
+        sorted_list.locked = true;
+        sorted_list.processed = true;
+        sorted_list.size = 1;
+        sorted_list.process_max_size = 1;
+        sorted_list.process_size = 1;
+        SortedListImpl::set(sorted_list, ref store);
     }
 }

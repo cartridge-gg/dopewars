@@ -9,7 +9,7 @@ import { ClaimModal } from "./ClaimModal";
 
 export interface Claimable {
   totalClaimable: number;
-  gameIds: Array<number>;
+  tokenIds: Array<number>;
 }
 
 export const ClaimReward = () => {
@@ -22,16 +22,18 @@ export const ClaimReward = () => {
 
   const [claimable, setClaimable] = useState<Claimable>({
     totalClaimable: 0,
-    gameIds: [],
+    tokenIds: [],
   });
 
   useEffect(() => {
-    const gameIds = claimableData.map((i: any) => i.game_id);
+    const tokenIds = claimableData
+      .map((i: any) => Number(i.minigame_token_id || 0))
+      .filter((id: number) => Number.isFinite(id) && id > 0);
     const totalClaimable = claimableData.map((i: any) => i.claimable).reduce((p: number, c: number) => p + c, 0);
 
     setClaimable({
       totalClaimable,
-      gameIds,
+      tokenIds,
     });
   }, [claimableData]);
 

@@ -46,8 +46,8 @@ export const ClaimModal = ({
   const onClaim = async () => {
     if (!account?.address) return;
 
-    console.log(claimable.gameIds);
-    const { hash } = await claim(account?.address, claimable.gameIds);
+    console.log(claimable.tokenIds);
+    const { hash } = await claim(account?.address, claimable.tokenIds);
 
     if (hash != "") {
       onClose(true);
@@ -67,7 +67,7 @@ export const ClaimModal = ({
           <ModalBody py={6}>
             <VStack w="full" gap={6}>
               <Text textAlign="center" color="neon.500">
-                Well done hustler, {claimable.gameIds.length} game(s) are eligible for rewards!
+                Well done hustler, {claimable.tokenIds.length} game(s) are eligible for rewards!
               </Text>
 
               <TableContainer
