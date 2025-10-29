@@ -11,4 +11,4 @@ deployment.md
 .snfoundry_cache/
 .claude/
 AGENTS.md
-./scripts/start-dev-ssl.sh
+scripts/start-dev-ssl.sh
