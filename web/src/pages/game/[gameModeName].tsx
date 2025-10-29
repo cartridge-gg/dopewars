@@ -41,6 +41,7 @@ import { hash } from "starknet";
 import { getGearItem } from "@/dope/helpers";
 import { ControllerConnector } from "@cartridge/connector";
 import { useSwipeable } from "react-swipeable";
+import { USDC } from "@/hooks/useEkubo";
 
 export enum TokenIdType {
   GuestLootId,
@@ -432,8 +433,8 @@ const New = observer(() => {
                   <VStack gap={3}>
                     <Box
                       position="relative"
-                      width={["220px", "280px"]}
-                      height={["220px", "280px"]}
+                      w={["220px", "280px"]}
+                      h={["220px", "280px"]}
                       transform={["scale(1.7)", "scale(1.5)"]}
                       pointerEvents={"none"}
                     >
@@ -617,8 +618,8 @@ const New = observer(() => {
               <VStack w="full">
                 <Box
                   position="relative"
-                  width={["160px", "220px"]}
-                  height={["160px", "220px"]}
+                  width={["160px", "200px"]}
+                  height={["160px", "200px"]}
                   transform={["scale(1.7)", "scale(1.5)"]}
                   pointerEvents={"none"}
                 >
@@ -643,7 +644,7 @@ const New = observer(() => {
                 </Text>
               </VStack>
 
-              <Card p={3} w="300px">
+              <Card p={3} w="340px">
                 <HStack gap={6} fontSize="14px">
                   <VStack alignItems="center" minW="240px" w="full" gap={1}>
                     {account && (
@@ -723,7 +724,7 @@ const New = observer(() => {
                       )}
                     </HStack>
 
-                    {selectedChain.name === "MAINNET" && (
+                    {/* {true || selectedChain.name === "MAINNET" && ( */}
                       <HStack
                         w="full"
                         justifyContent="center"
@@ -732,9 +733,9 @@ const New = observer(() => {
                         borderTop="solid 1px"
                         borderColor="neon.700"
                       >
-                        <BuyPaper />
+                        <BuyPaper paperAmount={season.paper_fee * multiplier}/>
                       </HStack>
-                    )}
+                    {/* )} */}
                   </VStack>
                 </HStack>
               </Card>
