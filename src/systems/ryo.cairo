@@ -177,6 +177,11 @@ pub mod ryo {
             let mut ryo_addresses = store.ryo_addresses();
             ryo_addresses.vrf = vrf_address;
             store.save_ryo_addresses(@ryo_addresses);
+
+            let mut randomness_config = store.randomness_config();
+            randomness_config.use_vrf = !vrf_address.is_zero();
+            randomness_config.vrf_provider = vrf_address;
+            store.save_randomness_config(@randomness_config);
         }
 
         //
