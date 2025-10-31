@@ -389,56 +389,89 @@ export const useSystems = (): SystemsInterface => {
         },
       ];
 
-      // Note: We still need to query the game to check for loot_id for DopeLoot release
-      // But we need to get game_id first from token_id via GameToken model
-      const playerId = account?.address;
-
-      // TODO: Query GameToken to get game_id from token_id, then query Game
-      // For now, keeping the existing logic but it needs to be updated
-      const gameEntities = await toriiClient.getEntities({
-        clause: {
-          Keys: {
-            keys: [Number(tokenId).toString(), playerId],
-            models: ["dopewars-Game"],
-            pattern_matching: "FixedLen",
+      // Query GameToken to resolve the associated game before checking for loot release.
+      try {
+        const gameTokenEntities = await toriiClient.getEntities({
+          clause: {
+            Keys: {
+              keys: [Number(tokenId).toString()],
+              models: ["dopewars-GameToken"],
+              pattern_matching: "FixedLen",
+            },
           },
-        },
-        pagination: {
-          limit: 1,
-          cursor: undefined,
-          direction: "Forward",
-          order_by: [],
-        },
-        no_hashed_keys: true,
-        models: ["dopewars-Game"],
-        historical: false,
-      });
+          pagination: {
+            limit: 1,
+            cursor: undefined,
+            direction: "Forward",
+            order_by: [],
+          },
+          no_hashed_keys: true,
+          models: ["dopewars-GameToken"],
+          historical: false,
+        });
 
-      if (Object.keys(gameEntities).length > 0) {
-        // retrieve loot_id used with game_id
-        const game = parseModels(gameEntities, "dopewars-Game")[0];
+        if (gameTokenEntities.items.length > 0) {
+          const gameTokenModel = parseModels(gameTokenEntities, "dopewars-GameToken")[0] as {
+            game_id?: number;
+            player_id?: string;
+          };
 
-        let lootId = 0;
-        // @ts-ignore
-        if (game.token_id.activeVariant() === "LootId") {
-          // @ts-ignore
-          lootId = Number(game.token_id.unwrap());
-        }
+          const resolvedGameId = Number(gameTokenModel?.game_id);
+          const resolvedPlayerId = gameTokenModel?.player_id || account?.address;
 
-        if (lootId > 0) {
-          const isReleased = dopeLootClaimState[lootId]?.isReleased;
-          if (!isReleased) {
-            const lootIdU256 = uint256.bnToUint256(lootId);
-
-            calls.push({
-              //@ts-ignore
-              contractAddress: dopeLootClaimAddress,
-              entrypoint: "release",
-              // @ts-ignore
-              calldata: CallData.compile([lootIdU256.low, lootIdU256.high, gameId]),
+          if (!Number.isNaN(resolvedGameId) && resolvedPlayerId) {
+            const gameEntities = await toriiClient.getEntities({
+              clause: {
+                Member: {
+                  member: "game_id",
+                  model: "dopewars-Game",
+                  operator: "Eq",
+                  value: { Primitive: { U32: resolvedGameId } },
+                },
+              },
+              pagination: {
+                limit: 10,
+                cursor: undefined,
+                direction: "Forward",
+                order_by: [],
+              },
+              no_hashed_keys: true,
+              models: ["dopewars-Game"],
+              historical: false,
             });
+
+            if (gameEntities.items.length > 0) {
+              const games = parseModels(gameEntities, "dopewars-Game");
+              const game = games.find((g) => g.player_id === resolvedPlayerId) ?? games[0];
+
+              if (game) {
+                let lootId = 0;
+                // @ts-ignore
+                if (game.token_id.activeVariant() === "LootId") {
+                  // @ts-ignore
+                  lootId = Number(game.token_id.unwrap());
+                }
+
+                if (lootId > 0) {
+                  const isReleased = dopeLootClaimState[lootId]?.isReleased;
+                  if (!isReleased) {
+                    const lootIdU256 = uint256.bnToUint256(lootId);
+
+                    calls.push({
+                      //@ts-ignore
+                      contractAddress: dopeLootClaimAddress,
+                      entrypoint: "release",
+                      // @ts-ignore
+                      calldata: CallData.compile([lootIdU256.low, lootIdU256.high, resolvedGameId]),
+                    });
+                  }
+                }
+              }
+            }
           }
         }
+      } catch (error) {
+        console.error("[useSystems] Failed to resolve game for registerScore:", error);
       }
 
       // console.log(calls);
@@ -449,7 +482,7 @@ export const useSystems = (): SystemsInterface => {
         hash,
       };
     },
-    [executeAndReceipt],
+    [account?.address, dopeLootClaimAddress, dopeLootClaimState, executeAndReceipt, toriiClient],
   );
 
   const claim = useCallback(
