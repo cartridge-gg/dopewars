@@ -8,7 +8,7 @@ http_cors_origins = ["*"]
 [indexing]
 index_pending = true
 polling_interval = 1000
-max_concurrent_tasks = 2
+# max_concurrent_tasks = 2
 contracts = [
     "ERC721:0x02016df21843eb1fc84a862a2dc16f936346f00d6a5f7bde92eedeb2b5ba6d68", # dope_loot
     "ERC721:0x03217ebee55ce235b3c97fff8946fb7ce9b383d4deb09a775daedddf378ea996", # dope_hustlers

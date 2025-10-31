@@ -85,12 +85,6 @@ pub impl StoreImpl of StoreTrait {
         self.world.read_model((game_id, player_id))
     }
 
-    fn game_store_packed_by_token_id(self: @Store, token_id: u64) -> GameStorePacked {
-        let game_token = self.game_token(token_id);
-        self.game_store_packed(game_token.game_id, game_token.player_id)
-    }
-
-
     fn sorted_list(self: @Store, list_id: felt252) -> SortedList {
         self.world.read_model(list_id)
     }

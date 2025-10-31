@@ -187,7 +187,7 @@ Currently, game initialization state is hidden during the `join` phase, players 
   3. Domain logic (create, travel, decide, etc.).
   4. `post_action(token_address, token_id)` – updates cached metadata so wallets display fresh values without polling events.
   This contract with the renderer is consistent across all systems (`src/systems/game.cairo`, `src/systems/decide.cairo`, `src/systems/laundromat.cairo`).
-- **Store utilities.** `Store::game_by_token_id` and `Store::game_store_packed_by_token_id` centralize the mapping logic so individual systems stay lean and impossible-to-forget checks live in one place (`src/store.cairo:41` onwards).
+- **Store utilities.** `Store::game_by_token_id` centralizes the mapping logic so individual systems stay lean and impossible-to-forget checks live in one place (`src/store.cairo:41` onwards).
 
 #### Ownership Resolution and Guards
 - **Live owner resolution.** Because `player_id` records the wallet that *started* the session, every place where we emit events, award Bushido tasks, or pay out claims now calls `resolve_current_owner` (game data → ERC-721 owner) or `resolve_current_owner_by_token` (token ID → owner) (`src/helpers/game_owner.cairo`).
