@@ -25,6 +25,24 @@ type GameStoreProps = {
   router: NextRouter;
 };
 
+// Historical event models that need to be loaded for game state
+// Must match the historical_events in torii config files
+const HISTORICAL_EVENT_MODELS = [
+  "dopewars-GameCreated",
+  "dopewars-Traveled",
+  "dopewars-GameOver",
+  "dopewars-TradeDrug",
+  "dopewars-HighVolatility",
+  "dopewars-UpgradeItem",
+  "dopewars-TravelEncounter",
+  "dopewars-TravelEncounterResult",
+  "dopewars-NewSeason",
+  "dopewars-NewHighScore",
+  "dopewars-Claimed",
+  "dopewars-TrophyCreation",
+  "dopewars-TrophyProgression",
+] as const;
+
 // export type GameWithTokenId = {
 //   game_id: number;
 //   player_id: bigint;
@@ -91,13 +109,18 @@ export class GameStoreClass {
   *init(gameId: string) {
     // Wait for config store to be initialized before proceeding
     if (!this.configStore.isInitialized) {
-      console.log('Waiting for config store to initialize...');
-      throw new Error('Config store not initialized yet, will retry');
+      console.log("Waiting for config store to initialize...");
+      throw new Error("Config store not initialized yet, will retry");
     }
 
     yield this.loadGameInfos(gameId);
     yield this.loadSeasonSettings(this.gameInfos?.season_version);
     yield this.loadGameEvents();
+
+    // Ensure all required data is loaded before initializing game store
+    if (!this.gameInfos || !this.gameStorePacked || !this.seasonSettings || !this.gameConfig) {
+      throw new Error("Required game data is missing. Cannot initialize game store.");
+    }
 
     this.initGameStore();
 
@@ -160,33 +183,51 @@ export class GameStoreClass {
   }
   //////////////////////////////////////////////
   *loadGameEvents() {
-    const entities: Entities = yield this.toriiClient.getEventMessages({
-      clause: {
-        Keys: {
-          keys: [num.toHexString(this.gameInfos?.game_id), this.gameInfos?.player_id],
-          models: ["dopewars-*"],
-          pattern_matching: "VariableLen",
+    try {
+      // Fix for database schema error: Specify explicit event models instead of empty array
+      // The combination of empty models: [] + wildcard in Keys clause + historical: true
+      // causes the database to query event_model.model_id which doesn't exist
+      // Solution: Use explicit event models list (must match torii config historical_events)
+      const eventModels = [...HISTORICAL_EVENT_MODELS];
+
+      const entities: Entities = yield this.toriiClient.getEventMessages({
+        clause: {
+          Keys: {
+            keys: [num.toHexString(this.gameInfos?.game_id), this.gameInfos?.player_id],
+            models: eventModels,
+            pattern_matching: "VariableLen",
+          },
         },
-      },
-      pagination: {
-        limit: 10_000,
-        cursor: undefined,
-        direction: "Forward",
-        order_by: [],
-      },
-      no_hashed_keys: false,
-      models: [],
-      historical: true,
-    });
+        pagination: {
+          limit: 10_000,
+          cursor: undefined,
+          direction: "Forward",
+          order_by: [],
+        },
+        no_hashed_keys: false,
+        models: eventModels, // Explicit models list instead of empty array
+        historical: true,
+      });
 
-    if (entities.items.length === 0) return;
+      if (entities.items.length === 0) {
+        this.gameEvents = new EventClass(this.configStore, this.gameInfos!, []);
+        return;
+      }
 
-    this.gameEvents = new EventClass(this.configStore, this.gameInfos!, entities.items);
+      this.gameEvents = new EventClass(this.configStore, this.gameInfos!, entities.items);
+    } catch (error: any) {
+      // Log error but don't block game initialization
+      const errorMessage = error?.message || String(error);
+      console.warn(
+        `[GameStore] Failed to load game events for gameId: ${this.gameInfos?.game_id}. Error: ${errorMessage}. Continuing without events.`,
+      );
+      this.gameEvents = null;
+    }
   }
 
   *loadGameInfos(gameId: string) {
     // Convert gameId to decimal number, handling both hex (0x...) and decimal formats
-    const gameIdNumber = gameId.startsWith('0x') ? parseInt(gameId, 16) : parseInt(gameId, 10);
+    const gameIdNumber = gameId.startsWith("0x") ? parseInt(gameId, 16) : parseInt(gameId, 10);
     const entities: Entities = yield this.toriiClient.getEntities({
       clause: {
         Member: {
@@ -215,9 +256,13 @@ export class GameStoreClass {
     const gameInfos = parseModels(entities, "dopewars-Game")[0] as Game;
     const gameStorePacked = parseModels(entities, "dopewars-GameStorePacked")[0] as GameStorePacked;
 
-    if (!gameInfos || !gameStorePacked) return;
-   
-     // @ts-ignore
+    if (!gameInfos || !gameStorePacked) {
+      throw new Error(
+        `Game data not found for gameId: ${gameId}. The game may not exist or the indexer may not have synced yet.`,
+      );
+    }
+
+    // @ts-ignore
     gameInfos.game_mode = gameInfos.game_mode.activeVariant();
     gameInfos.equipment_by_slot = gameInfos.equipment_by_slot?.map((i: string) => Number(i));
     // @ts-ignore
@@ -228,7 +273,6 @@ export class GameStoreClass {
     this.gameInfos = gameInfos;
     this.gameStorePacked = gameStorePacked;
   }
-
 
   *loadSeasonSettings(season_version: string) {
     const entities: Entities = yield this.toriiClient.getEntities({
@@ -250,12 +294,16 @@ export class GameStoreClass {
       historical: false,
     });
 
-    if (!entities.items[0]) return;
+    if (!entities.items[0]) {
+      throw new Error(`Season settings not found for season_version: ${season_version}`);
+    }
 
     const seasonSettings = parseStruct(entities.items[0].models["dopewars-SeasonSettings"]) as SeasonSettings;
     const gameConfig = parseStruct(entities.items[0].models["dopewars-GameConfig"]) as GameConfig;
 
-    if (!gameConfig || !seasonSettings) return;
+    if (!gameConfig || !seasonSettings) {
+      throw new Error(`Game config or season settings missing for season_version: ${season_version}`);
+    }
 
     this.seasonSettings = seasonSettings;
     this.gameConfig = gameConfig;
@@ -264,8 +312,14 @@ export class GameStoreClass {
   onEventMessage(key: string, entity: Entity) {
     if (key === "0x0") return;
     // console.log("onEventMessage", entity, update);
+
+    // Initialize gameEvents if loadGameEvents failed
+    if (!this.gameEvents) {
+      this.gameEvents = new EventClass(this.configStore, this.gameInfos!, []);
+    }
+
     const wasGameOver = this.gameEvents?.isGameOver ?? false;
-    this.gameEvents!.addEvent(entity);
+    this.gameEvents.addEvent(entity);
 
     if (!wasGameOver && this.gameEvents?.isGameOver) {
       const gameId = num.toHexString(this.gameInfos?.game_id);
@@ -277,6 +331,7 @@ export class GameStoreClass {
     // console.log("onEntityUpdated", key, entity);
 
     const gameId = num.toHexString(this.gameInfos?.game_id);
+    const currentPath = this.router.asPath;
 
     const prevState = this.game?.player;
 
@@ -284,9 +339,20 @@ export class GameStoreClass {
       this.gameStorePacked = parseStruct(entity.models["dopewars-GameStorePacked"]);
       this.initGameStore();
 
+      // Don't redirect if already on the end page (e.g., when registering score)
+      const isOnEndPage = currentPath === `/${gameId}/end`;
+
       // if dead, handled in /event/consequence
       if (this.gameEvents?.isGameOver && this.game!.player!.health > 0) {
-        return this.router.push(`/${gameId}/end`);
+        if (!isOnEndPage) {
+          return this.router.push(`/${gameId}/end`);
+        }
+        return;
+      }
+
+      // Don't redirect from end page when game is over
+      if (this.game?.gameInfos.game_over && isOnEndPage) {
+        return;
       }
 
       if (this.game?.player.status === PlayerStatus.Normal) {
@@ -302,7 +368,10 @@ export class GameStoreClass {
         }
       } else {
         if (this.gameEvents?.isGameOver) {
-          this.router.push(`/${gameId}/event/consequence`);
+          // Only redirect to consequence if not already on end page
+          if (!isOnEndPage) {
+            this.router.push(`/${gameId}/event/consequence`);
+          }
         } else {
           this.router.push(`/${gameId}/event/decision`);
         }
