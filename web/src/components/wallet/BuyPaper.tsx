@@ -1,6 +1,6 @@
 import { Box, HStack, Link, Text, VStack } from "@chakra-ui/react";
 import { Ekubo } from "../icons/branding/Ekubo";
-import { PAPER, STRK, TokenInfos, USDC, useQuote } from "@/hooks/useEkubo";
+import { PAPER, STRK, TokenInfos, USDC, useEkubo } from "@/hooks/useEkubo";
 import { MonkeyIcon } from "../hustlers/Monkey";
 import { Button, Dropdown, DropdownOptionProps } from "../common";
 import { useEffect, useState } from "react";
@@ -15,7 +15,7 @@ const options = [
 export const BuyPaper = ({ paperAmount }: { paperAmount: number }) => {
   const [selectedOption, setSelectedOption] = useState<DropdownOptionProps>(options[0]);
 
-  const { value: usdcValue, ape: apeGame } = useQuote({
+  const { value: usdcValue, ape: apeGame } = useEkubo({
     amount: paperAmount,
     tokenIn: USDC,
     tokenOut: PAPER,
@@ -26,14 +26,14 @@ export const BuyPaper = ({ paperAmount }: { paperAmount: number }) => {
     value: paperValue,
     refetch: refetchUsdcToPaper,
     ape: apeUSDC,
-  } = useQuote({
+  } = useEkubo({
     amount: Math.floor(Number(selectedOption.value)),
     tokenIn: USDC,
     tokenOut: PAPER,
     isExactOutput: false,
   });
 
-  // const { value: dumpUsdcValue, ape: dumpPaper } = useQuote({
+  // const { value: dumpUsdcValue, ape: dumpPaper } = useEkubo({
   //   amount: paperAmount,
   //   tokenIn: PAPER,
   //   tokenOut: USDC,

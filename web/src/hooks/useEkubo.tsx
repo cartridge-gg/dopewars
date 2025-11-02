@@ -1,10 +1,9 @@
-// https://github.com/Provable-Games/death-mountain/blob/main/client/src/api/ekubo.ts
+// started from https://github.com/Provable-Games/death-mountain/blob/main/client/src/api/ekubo.ts
 
 import { waitForTransaction } from "@/dojo/hooks";
-import { useInterval } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useEffect, useState } from "react";
-import { Contract, num, uint256 } from "starknet";
+import { num, uint256 } from "starknet";
 import { formatUnits, parseUnits } from "viem";
 
 export const EKUBO_ROUTER_3_0_13 = "0x0199741822c2dc722f6f605204f35e56dbc23bceed54818168c4c49e4fb8737e";
@@ -61,33 +60,24 @@ interface RouteNode {
   skip_ahead: string;
 }
 
-interface TokenQuote {
-  tokenAddress: string;
-  minimumAmount: number;
-  quote?: SwapQuote;
-}
-
-interface RouterContract {
-  address: string;
-  populate: (method: string, params: any[]) => any;
-}
-
 interface SwapCall {
   contractAddress: string;
   entrypoint: string;
   calldata: string[];
 }
 
-export const useQuote = ({
+export const useEkubo = ({
   amount,
+  isExactOutput,
   tokenIn,
   tokenOut,
-  isExactOutput,
+  slippage = 10n // 1%
 }: {
   amount: number;
+  isExactOutput: boolean;
   tokenIn: TokenInfos;
   tokenOut: TokenInfos;
-  isExactOutput: boolean;
+  slippage?: bigint
 }) => {
   const { account } = useAccount();
   const [quote, setQuote] = useState<SwapQuote | undefined>();
@@ -102,7 +92,7 @@ export const useQuote = ({
         const value = isExactOutput ? quote.amountIn : quote.amountOut;
         setValue(`${value}`);
 
-        const calls = generateSwapCalls(EKUBO_ROUTER_3_0_3, quote);
+        const calls = generateSwapCalls(EKUBO_ROUTER_3_0_3, quote, slippage);
         setSwapCalls(calls);
 
         // console.log(isExactOutput, quote);
@@ -111,6 +101,7 @@ export const useQuote = ({
       .catch((e) => {
         console.log("error: ", e);
         setTimeout(refetch, 5_000);
+        setSwapCalls([]);
       });
   }, [amount, tokenIn, tokenOut, isExactOutput]);
 
@@ -179,11 +170,13 @@ export const getSwapQuote = async (
   };
 };
 
-export const generateSwapCalls = (routerAddress: string, swapQuote: SwapQuote): SwapCall[] => {
+export const generateSwapCalls = (routerAddress: string, swapQuote: SwapQuote, slippage: bigint): SwapCall[] => {
   const { tokenIn, tokenOut, splits, isExactOutput } = swapQuote;
 
   const token = isExactOutput ? tokenOut : tokenIn;
-  let minimumAmountIn = isExactOutput ? (swapQuote.scaledAmountIn * 102n) / 100n : swapQuote.scaledAmountIn;
+  let minimumAmountIn = isExactOutput
+    ? (swapQuote.scaledAmountIn * (1000n + slippage)) / 100n // exact output
+    : swapQuote.scaledAmountIn; // exact input
   minimumAmountIn = minimumAmountIn < 0n ? -minimumAmountIn : minimumAmountIn;
 
   const amountInU256 = uint256.bnToUint256(minimumAmountIn);
@@ -204,7 +197,11 @@ export const generateSwapCalls = (routerAddress: string, swapQuote: SwapQuote): 
     // return [transferCall, clearCall];
   }
 
-  const clearAmountOut = swapQuote.scaledAmountOut < 0n ? -swapQuote.scaledAmountOut : swapQuote.scaledAmountOut;
+  let clearAmountOut = isExactOutput
+    ? swapQuote.scaledAmountOut // exact output
+    : (swapQuote.scaledAmountOut * (1000n - slippage)) / 1000n; // exact input
+
+  clearAmountOut = clearAmountOut < 0n ? -clearAmountOut : clearAmountOut;
   const clearAmountOutU256 = uint256.bnToUint256(clearAmountOut);
 
   const clearProfitsCall: SwapCall = {
@@ -251,7 +248,7 @@ export const generateSwapCalls = (routerAddress: string, swapQuote: SwapQuote): 
           num.toHex(
             BigInt(split.amount_specified) < 0n ? -BigInt(split.amount_specified) : BigInt(split.amount_specified),
           ),
-          "0x1",
+          isExactOutput ? "0x1" : "0x0", // amount sign
         ],
       },
       clearProfitsCall,
@@ -293,7 +290,7 @@ export const generateSwapCalls = (routerAddress: string, swapQuote: SwapQuote): 
               num.toHex(
                 BigInt(split.amount_specified) < 0n ? -BigInt(split.amount_specified) : BigInt(split.amount_specified),
               ),
-              "0x1",
+              isExactOutput ? "0x1" : "0x0", // amount sign
             ]);
           }, []),
         ],

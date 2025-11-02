@@ -1,8 +1,8 @@
 import RegisterEntities from "@/components/RegisterEntities";
 import ConnectionError from "@/components/layout/ConnectionError";
 import { Loader } from "@/components/layout/Loader";
-import { StarknetProvider } from "@/components/wallet";
-import { Flex, VStack } from "@chakra-ui/react";
+import { BuyPaper, ConnectButton, StarknetProvider } from "@/components/wallet";
+import { Box, Flex, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";
 import { QueryClientProvider } from "react-query";
@@ -83,7 +83,7 @@ export const DojoContextProvider = observer(
         client: graphqlClient,
         configStore,
         router,
-        selectedChain
+        selectedChain,
       });
     }, [graphqlClient, configStore, toriiClient]);
 
@@ -155,7 +155,13 @@ export const DojoContextProvider = observer(
       >
         <StarknetProvider selectedChain={selectedChain}>
           {hasError ? (
-            <ConnectionError errors={errors} />
+            <>
+              {/* <Box w="200px">
+                <ConnectButton  />
+              </Box>
+              <BuyPaper paperAmount={1_000} /> */}
+              <ConnectionError errors={errors} />
+            </>
           ) : (
             <>
               <DopeProvider toriiClient={toriiClient}>

@@ -172,12 +172,8 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
       // },
     ],
     defaultChainId: `0x${selectedChain.chainConfig.id.toString(16)}`,
-    // url: selectedChain.keychain ? selectedChain.keychain : "https://x.cartridge.gg",
-    // rpc: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
-    // profileUrl: selectedChain.profileUrl ? selectedChain.profileUrl : undefined,
-    // namespace: selectedChain.namespace ? selectedChain.namespace : "dopewars",
     slot: selectedChain.slot ? selectedChain.slot : "ryo",
-    namespace: "dopewars",
+    namespace: selectedChain.namespace ? selectedChain.namespace : "dopewars_v0",
     tokens: {
       erc20: [
         // "ERC721:0x020dfc24de987d7d11f70a7306ae39b6ac71b178eaf19bf12e831b3522c14ebf"

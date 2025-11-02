@@ -58,7 +58,7 @@ slot_dopewars_katana = "slot d create -t pro --team cartridge dopewars katana --
 slot_dopewars_torii = "slot d create -t epic --team cartridge dopewars torii --version v1.7.3 --config ./torii_dopewars.toml"
 
 # slot sepolia 
-slot_sepolia_torii = "slot d create  -t pro --team cartridge ryosepolia2 torii --version v1.8.3 --config ./torii_ryosepolia2.toml"
+slot_sepolia_torii = "slot d create  -t pro --team cartridge ryosepolia2 torii --version v1.8.6 --config ./torii_ryosepolia2.toml"
 
 # slot ryomainnet
 # slot_ryomainnet_torii = "slot d create --tier rare ryomainnet torii -v v1.0.5 --config ./torii_mainnet.toml" 

@@ -2914,8 +2914,8 @@
       ]
     },
     {
-      "address": "0xa5633690cbde7e18519bab401f67778cf36136c8942547290955ec0d755dbe",
-      "class_hash": "0x1fd9c0626a680d03eabb7d7eaf4a971393f249c9c0daeef03d69205b6a4e945",
+      "address": "0x622e5cb8514dd504b66343adb58d86f48e910cd04e97ee94ae1b6cc901adf31",
+      "class_hash": "0x728a92dd50e600b6b9d1815eef397981eddf26f97f1683f8e3ac95b9ff4b41e",
       "abi": [
         {
           "type": "impl",
@@ -4095,7 +4095,7 @@
         "0x0",
         "0x0",
         "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a",
-        "1800",
+        "600",
         "180"
       ],
       "tag": "dopewars_v0-ryo",

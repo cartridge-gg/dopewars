@@ -1,8 +1,8 @@
 {
   "world": {
     "class_hash": "0x57994b6a75fad550ca18b41ee82e2110e158c59028c4478109a67965a0e5b1e",
-    "address": "0x481a7d7b499c8ba774ab492787e8f2678ff63d3ba33ab513b29a79e31f6c0b8",
-    "seed": "dope-0",
+    "address": "0x6bc05ce8b9d77bc18f9ce94aa33cdf3dc3f3c766cbc63c3d7cd9485e568cc85",
+    "seed": "dope-1",
     "name": "Dope World",
     "entrypoints": [
       "uuid",
@@ -1479,7 +1479,7 @@
   },
   "contracts": [
     {
-      "address": "0x58fdfee9eb065d1818a496c40a44287e6952d135c85240f8158bbffe644aae9",
+      "address": "0x3af1a3674dd9413b19811a2ac915b7353b22d707e8f30f62ec43950be77723d",
       "class_hash": "0x57ec3072e6784bbf48000f8a961f548c0288d24a34dfbd8e91dfbb1c66a3a5f",
       "abi": [
         {
@@ -2657,7 +2657,7 @@
       ]
     },
     {
-      "address": "0x267d2b80ea648f0232d7120f0798780b2d8ac5dc0cf6069f306ba63496f967f",
+      "address": "0x45fe5164095a52ccd46d5eb3729f4523056dd321d51d5965a1079d41efced6d",
       "class_hash": "0x2a7790ba070a37b1b3b2abd34fb105901feae448e117b919d578174f7eb125b",
       "abi": [
         {
@@ -4003,7 +4003,7 @@
       ]
     },
     {
-      "address": "0x5182bc9c96ff8eac81fc84d0ef27d87f3e9bc4ccde71bcd76f07e6fe0053a81",
+      "address": "0x3c5c5219717638f3501dcf5c3d0bb104a48d0ddb479aeb7b3e176ee8518de40",
       "class_hash": "0x1741ec521f448c65e1e2842ec524784cd2e2a16c3e143c3ed58fed52c0c10c7",
       "abi": [
         {
@@ -5358,8 +5358,8 @@
       ]
     },
     {
-      "address": "0x539ad2939056d89c125d75ce4bf9b2b8741f5f36ab4ec4297720b74067ce25a",
-      "class_hash": "0x68ffb80523bb826f83b18570049832cc3d37a2a158bfc9e9128919af54b2d5c",
+      "address": "0x3ce0fd868ca6ecbb8ee204591f0565eb364dd01098e86e46656b095c1cdb126",
+      "class_hash": "0x16d01973409e1d5efb606584ba3e3c6a9c7598391fb38a67b1fbe78061a481a",
       "abi": [
         {
           "type": "impl",
@@ -5486,7 +5486,23 @@
             },
             {
               "type": "function",
-              "name": "claim_from_forwarder",
+              "name": "claim_loot_from_forwarder",
+              "inputs": [
+                {
+                  "name": "recipient",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                },
+                {
+                  "name": "leaf_data",
+                  "type": "core::array::Span::<core::felt252>"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "claim_og_from_forwarder",
               "inputs": [
                 {
                   "name": "recipient",
@@ -5553,6 +5569,18 @@
                 {
                   "name": "forwarder_address",
                   "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "set_dopewars_namespace",
+              "inputs": [
+                {
+                  "name": "ns",
+                  "type": "core::byte_array::ByteArray"
                 }
               ],
               "outputs": [],
@@ -5774,11 +5802,13 @@
         "dojo_init",
         "pause",
         "unpause",
-        "claim_from_forwarder",
+        "claim_loot_from_forwarder",
+        "claim_og_from_forwarder",
         "release",
         "open",
         "toggle_open_restricted",
         "set_forwarder_address",
+        "set_dopewars_namespace",
         "upgrade"
       ]
     }

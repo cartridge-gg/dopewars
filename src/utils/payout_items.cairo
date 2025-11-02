@@ -1,8 +1,7 @@
 use dojo::world::WorldStorage;
-
 use dope_types::dope_gear::{GearStoreImpl, GearStoreTrait};
-use dope_types::dope_hustlers::{HustlerSlots};
-use dope_types::dope_hustlers::{HustlerStoreImpl, HustlerStoreTrait};
+use dope_types::dope_hustlers::{HustlerSlots, HustlerStoreImpl, HustlerStoreTrait};
+use crate::constants::ns_felt252;
 
 pub fn add_items_payout(
     ref dope_world: WorldStorage,
@@ -13,7 +12,9 @@ pub fn add_items_payout(
     position: u16,
 ) {
     // deterministic so we could display season rewards on front
-    let seed = core::poseidon::poseidon_hash_span(array![season.into(), position.into()].span());
+    let seed = core::poseidon::poseidon_hash_span(
+        array![ns_felt252(), season.into(), position.into()].span(),
+    );
 
     // rank 1,2,3  get a hustler
     if position < 4 {
@@ -52,10 +53,7 @@ pub fn add_items_payout(
         }
     } else if position == 2 { // set from XXX
         let mut slots = array![
-            HustlerSlots::Weapon,
-            HustlerSlots::Clothe,
-            HustlerSlots::Foot,
-            HustlerSlots::Vehicle,
+            HustlerSlots::Weapon, HustlerSlots::Clothe, HustlerSlots::Foot, HustlerSlots::Vehicle,
             HustlerSlots::Accessory,
         ];
         let mut maybe_suffix = Option::None;
@@ -83,10 +81,7 @@ pub fn add_items_payout(
         }
     } else if position == 3 { // full random
         let mut slots = array![
-            HustlerSlots::Weapon,
-            HustlerSlots::Clothe,
-            HustlerSlots::Foot,
-            HustlerSlots::Vehicle,
+            HustlerSlots::Weapon, HustlerSlots::Clothe, HustlerSlots::Foot, HustlerSlots::Vehicle,
             HustlerSlots::Accessory,
         ];
 

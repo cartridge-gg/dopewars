@@ -6,7 +6,7 @@ account_address = "0x1a23809dd875550157fe85f07c9a4f73963025966e6d3d1c3390806af9f
 keystore_path = "../../dev_accounts/dope_key"
 keystore_password = "dope_key"
 
-world_address = "0x0481a7d7b499c8ba774ab492787e8f2678ff63d3ba33ab513b29a79e31f6c0b8" # set when deployed
+world_address = "0x06bc05ce8b9d77bc18f9ce94aa33cdf3dc3f3c766cbc63c3d7cd9485e568cc85" # set when deployed
 world_block = 2553960
 
 [world]

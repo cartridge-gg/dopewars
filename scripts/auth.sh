@@ -17,11 +17,13 @@ LAUNDROMAT_ADDRESS=$(cat ./manifest_$PROFILE.json | jq -r '.contracts[] | select
 DOPE_HUSTLERS_ADDRESS=$(cat ./web/src/manifests_dope/manifest_$PROFILE.json | jq -r '.contracts[] | select(.tag == "dope-DopeHustlers" ).address')
 DOPE_GEAR_ADDRESS=$(cat ./web/src/manifests_dope/manifest_$PROFILE.json | jq -r '.contracts[] | select(.tag == "dope-DopeGear" ).address')
 
+echo "profile: $PROFILE"
+
 echo "emit items config"
 sozo -P $PROFILE execute dopewars_v0-config emit_items_config --wait
 
 echo "emit quests"
-sozo -P $PROFILE execute dopewars_v0-ryo update_quests
+sozo -P $PROFILE execute dopewars_v0-ryo update_quests --wait
 
 echo "grant minter role to laundromat for dope_hustlers"
 sozo -P $PROFILE execute $DOPE_HUSTLERS_ADDRESS grant_role sstr:MINTER_ROLE $LAUNDROMAT_ADDRESS --wait

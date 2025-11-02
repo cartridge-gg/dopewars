@@ -23,6 +23,7 @@ import { hash, shortString, uint256 } from "starknet";
 import { Layer } from "@/dope/components";
 import { Tooltip } from "@/components/common";
 import { useSwipeable } from "react-swipeable";
+import { DW_NS } from "@/dojo/constants";
 
 const renderer = ({
   days,
@@ -280,7 +281,9 @@ export const RewardDetails = observer(
     const suffixes = getComponentValuesBySlug("DopeGear", "Suffixes");
     const bodies = getComponentValuesBySlug("DopeHustlers", "Body");
 
-    const seed = uint256.bnToUint256(hash.computePoseidonHashOnElements([seasonVersion, position]));
+    const seed = uint256.bnToUint256(
+      hash.computePoseidonHashOnElements([shortString.encodeShortString(DW_NS), seasonVersion, position]),
+    );
 
     const rewards = useMemo(() => {
       const items: ComponentValueEvent[] = [];

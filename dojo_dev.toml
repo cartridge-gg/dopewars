@@ -29,7 +29,7 @@ skip_contracts = []
     "0x0",                                                              # paper address, 0x0 = use world.dns
     "0x0",                                                              # vrf address, 0x0 = use world.dns
     "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a", # treasury / multisig address
-    "1800",                                                             # season_duration: u32, 30 min
+    "600",                                                             # season_duration: u32, 30 min "1800",      
     "180",                                                              # season_time_limit: u16 3min
 ]
 
