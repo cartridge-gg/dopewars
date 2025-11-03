@@ -42,7 +42,9 @@ export const Psycadelic = observer(() => {
 
   useEffect(() => {
     let handle = undefined;
-    if (isPsySequence || (game && !gameInfos?.game_over && game?.player.health < 2)) {
+    const isEndPage = window.location.pathname.includes("/end");
+
+    if (isPsySequence || (game && !gameInfos?.game_over && game?.player.health < 2 && !isEndPage)) {
       oooo(interval);
       handle = setInterval(() => oooo(interval), interval);
     } else {

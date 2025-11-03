@@ -12,8 +12,12 @@ import manifestDopeSepolia from "../../manifests_dope/manifest_sepolia.json";
 
 import {
   default as manifestDopeDopewars,
-  default as manifestDopeMainnet,
 } from "../../manifests_dope/manifest_dopewars.json";
+
+import {
+  default as manifestDopeMainnet,
+} from "../../manifests_dope/manifest_mainnet.json";
+
 // import {
 //   manifestDev as manifestDopeDev,
 //   manifestDope as manifestDopeDope,
@@ -94,10 +98,10 @@ const snMainnet: DojoChainConfig = {
   name: "MAINNET",
   chainConfig: mainnet,
   rpcUrl: "https://api.cartridge.gg/x/starknet/mainnet",
-  toriiUrl: "https://api.cartridge.gg/x/ryomainnet/torii/graphql",
-  toriiWsUrl: "wss://api.cartridge.gg/x/ryomainnet/torii/graphql/ws",
+  toriiUrl: "https://api.cartridge.gg/x/ryomainnet3/torii/graphql",
+  toriiWsUrl: "wss://api.cartridge.gg/x/ryomainnet3/torii/graphql/ws",
   manifest: mergeManifests(manifestMainnet, [manifestDopeMainnet]),
-  slot: "ryomainnet",
+  slot: "ryomainnet3",
   paperAddress: PAPER_MAINNET,
   vrfProviderAddress: VRF_PROVIDER_MAINNET,
   vrfProviderSecret: undefined,
@@ -106,9 +110,9 @@ const snMainnet: DojoChainConfig = {
 
 // keys must match chain.id
 export const dojoContextConfig = {
-  // SN_MAIN: snMainnet,
-  KATANA: katanaLocal,
-  SN_SEPOLIA: snSepolia,
+  SN_MAIN: snMainnet,
+  // KATANA: katanaLocal,
+  // SN_SEPOLIA: snSepolia,
   // WP_DOPEWARS: katanaSlotDopewars,
 };
 

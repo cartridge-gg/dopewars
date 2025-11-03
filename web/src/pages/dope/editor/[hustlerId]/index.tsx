@@ -1,5 +1,5 @@
 import { Footer, Layout } from "@/components/layout";
-import { tryBetterErrorMsg, useDojoContext, useRouterContext } from "@/dojo/hooks";
+import { tryBetterErrorMsg, useDojoContext, useRouterContext, waitForTransaction } from "@/dojo/hooks";
 import { useToast } from "@/hooks/toast";
 import { IsMobile } from "@/utils/ui";
 import { Button, HStack, Box, Text, Flex } from "@chakra-ui/react";
@@ -181,10 +181,7 @@ export default function Editor() {
         },
       ]);
 
-      let txReceipt = await account.waitForTransaction(execution.transaction_hash, {
-        retryInterval: 200,
-        successStates: ["PRE_CONFIRMED", "ACCEPTED_ON_L2", "ACCEPTED_ON_L1"],
-      });
+      let txReceipt = await waitForTransaction(account, execution.transaction_hash);
 
       checkTxReceipt(txReceipt);
       setIsLoading(false);

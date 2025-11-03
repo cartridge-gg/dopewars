@@ -2,11 +2,11 @@
 [env]
 rpc_url = "https://api.cartridge.gg/x/starknet/mainnet"
 account_address = "0x0105820d3243890dae5351800d5edae42bd6c129f6a0dde9fe5ecfb8a1a9cbc3"
-keystore_path = "../../../../prod_accounts/dope_key"
+keystore_path = "../../prod_accounts/dope_key"
 keystore_password = "dope_key"
 
-world_address = "0x" # set when collections are deployed
-world_block = 0
+world_address = "0x06bc05ce8b9d77bc18f9ce94aa33cdf3dc3f3c766cbc63c3d7cd9485e568cc85"
+world_block = 3367770
 
 [world]
 name = "Dope Wars"
@@ -25,6 +25,7 @@ skip_contracts = [
     "dopewars_v0-devtools",
     "dopewars_v0-paper_mock",
     "dopewars_v0-vrf_provider_mock",
+    "dopewars_v0-ERC20BalanceEvent"
 ]
 
 [init_call_args]

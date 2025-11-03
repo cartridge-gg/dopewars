@@ -51,7 +51,7 @@ migrate = "PROFILE=dev && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vv
 migrate_dopewars = "PROFILE=dopewars && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 #
 migrate_sepolia = "PROFILE=sepolia && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
-# migrate_ryomainnet = "PROFILE=mainnet && sozo -P $PROFILE build && sozo -P $PROFILE migrate --fee eth --fee-estimate-multiplier 2 --keystore ../../../dopewars_key -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
+migrate_mainnet = "PROFILE=mainnet && sozo -P $PROFILE build && sozo -P $PROFILE migrate -vvv && scarb run copy_manifest $PROFILE && scarb run auth $PROFILE && sozo -P $PROFILE inspect"
 
 # slot dopewars
 slot_dopewars_katana = "slot d create -t pro --team cartridge dopewars katana --config ./katana_dopewars.toml"
@@ -59,6 +59,9 @@ slot_dopewars_torii = "slot d create -t epic --team cartridge dopewars torii --v
 
 # slot sepolia 
 slot_sepolia_torii = "slot d create  -t pro --team cartridge ryosepolia2 torii --version v1.8.6 --config ./torii_ryosepolia2.toml"
+
+# slot mainnet 
+slot_mainnet_torii = "slot d create -t legendary --team cartridge ryomainnet3 torii --version v1.8.6 --config ./torii_mainnet.toml"
 
 # slot ryomainnet
 # slot_ryomainnet_torii = "slot d create --tier rare ryomainnet torii -v v1.0.5 --config ./torii_mainnet.toml" 

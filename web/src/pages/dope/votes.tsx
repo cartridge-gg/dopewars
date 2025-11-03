@@ -93,7 +93,7 @@ export default function Dope() {
             alignItems="center"
             mt={6}
           >
-            <PaperIcon mr={2} /> <Text>GOUVERNANCE</Text>
+            <PaperIcon mr={2} /> <Text>GOVERNANCE</Text>
           </Link>
         </VStack>
       </ChildrenOrConnect>

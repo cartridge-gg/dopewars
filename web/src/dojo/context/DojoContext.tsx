@@ -17,6 +17,7 @@ import { UiStore } from "../stores/ui";
 import { useRouter } from "next/router";
 import { DopeProvider } from "@/dope/store";
 import { DojoContractResult, useDojoContract } from "../hooks";
+import { HustlerPreviewFromLoot } from "@/dope/components";
 
 export interface DojoContextType {
   chains: DojoChainsResult;
@@ -160,6 +161,9 @@ export const DojoContextProvider = observer(
                 <ConnectButton  />
               </Box>
               <BuyPaper paperAmount={1_000} /> */}
+              {/* <DopeProvider toriiClient={toriiClient}>
+                <HustlerPreviewFromLoot tokenId={420} />
+              </DopeProvider> */}
               <ConnectionError errors={errors} />
             </>
           ) : (

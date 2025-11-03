@@ -96,7 +96,6 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
           { entrypoint: "create_game" },
           { entrypoint: "travel" },
           { entrypoint: "end_game" },
-          { entrypoint: "travel" },
         ],
       },
       [decideAddress]: {
@@ -106,7 +105,7 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
         methods: [{ entrypoint: "register_score" }, { entrypoint: "claim" }, { entrypoint: "launder" }],
       },
       [dopeLootClaimAddress]: {
-        methods: [{ entrypoint: "release" }, { entrypoint: "claim" }, { entrypoint: "open" }],
+        methods: [{ entrypoint: "release" }, { entrypoint: "open" }],
       },
       [dopeGearAddress]: {
         methods: [{ entrypoint: "set_approval_for_all" }],
