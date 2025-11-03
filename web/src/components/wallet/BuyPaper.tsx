@@ -46,8 +46,7 @@ export const BuyPaper = ({ paperAmount }: { paperAmount: number }) => {
 
   return (
     <VStack alignItems="flex-start" w="full">
-      <HStack alignItems="center" justifyContent="flex-start">
-        <Ekubo />
+      <HStack alignItems="center" justifyContent="flex-start" w="full">
         <Link
           href={`https://app.ekubo.org/?outputCurrency=PAPER&amount=-${paperAmount}&inputCurrency=USDC`}
           target="_blank"
@@ -56,17 +55,27 @@ export const BuyPaper = ({ paperAmount }: { paperAmount: number }) => {
           alignItems="center"
           justifyContent="flex-start"
         >
-          <Text ml={1} fontSize="12px" textTransform="uppercase">
-            Buy {paperAmount} PAPER (${Math.abs(Number(usdcValue)).toFixed(2)}) on Ekubo
-          </Text>
+          <Ekubo />
         </Link>
-        <Link onClick={apeGame}>
+        <Text ml={1} fontSize="12px" textTransform="uppercase">
+          Buy {paperAmount} PAPER (${Math.abs(Number(usdcValue)).toFixed(2)}) on Ekubo
+        </Text>
+        <Box onClick={apeGame} marginLeft="auto">
           <MonkeyIcon cursor="pointer" />
-        </Link>
+        </Box>
       </HStack>
 
       <HStack alignItems="center" justifyContent="flex-start" w="full">
-        <Ekubo />
+        <Link
+          href={`https://app.ekubo.org/?outputCurrency=PAPER&amount=${selectedOption.value}&inputCurrency=USDC`}
+          target="_blank"
+          display="flex"
+          textDecoration="none"
+          alignItems="center"
+          justifyContent="flex-start"
+        >
+          <Ekubo />
+        </Link>
         <Text ml={1} fontSize="12px" textTransform="uppercase">
           Buy
         </Text>
@@ -75,9 +84,9 @@ export const BuyPaper = ({ paperAmount }: { paperAmount: number }) => {
           <span style={{ fontFamily: "monospace" }}>~</span>
           {Math.abs(Number(paperValue)).toFixed(0)} PAPER
         </Text>
-        <Link onClick={apeUSDC}>
+        <Box onClick={apeUSDC} marginLeft="auto">
           <MonkeyIcon cursor="pointer" />
-        </Link>
+        </Box>
       </HStack>
 
       {/* <HStack alignItems="center" justifyContent="flex-start">

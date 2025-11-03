@@ -1479,8 +1479,8 @@
   },
   "contracts": [
     {
-      "address": "0x58fdfee9eb065d1818a496c40a44287e6952d135c85240f8158bbffe644aae9",
-      "class_hash": "0x57ec3072e6784bbf48000f8a961f548c0288d24a34dfbd8e91dfbb1c66a3a5f",
+      "address": "0x30d87d480893027e621bd608b21e3b9efdadd23a705458083e94c028479bb0",
+      "class_hash": "0x2590f2eb6edbc47cf4266fa1891a1c7e716d33b53e63db137831fc8e253cb63",
       "abi": [
         {
           "type": "impl",
@@ -1637,14 +1637,14 @@
         },
         {
           "type": "function",
-          "name": "unsafe_transfer_from",
+          "name": "equip",
           "inputs": [
             {
               "name": "from",
               "type": "core::starknet::contract_address::ContractAddress"
             },
             {
-              "name": "to",
+              "name": "hustler_wallet",
               "type": "core::starknet::contract_address::ContractAddress"
             },
             {
@@ -2638,7 +2638,7 @@
         "unpause",
         "mint",
         "mint_batch",
-        "unsafe_transfer_from",
+        "equip",
         "unequip",
         "add_component",
         "add_component_libraries",
@@ -2657,8 +2657,8 @@
       ]
     },
     {
-      "address": "0x267d2b80ea648f0232d7120f0798780b2d8ac5dc0cf6069f306ba63496f967f",
-      "class_hash": "0x2a7790ba070a37b1b3b2abd34fb105901feae448e117b919d578174f7eb125b",
+      "address": "0x57fa07a7ba53b055afee628d1306edaeda056ce4f680bac8bad25d1e5375650",
+      "class_hash": "0x7014f07f5f0e55e062d274e30a90dbc965c469e8aaaa6bd68b4e822c7b0282d",
       "abi": [
         {
           "type": "impl",
@@ -4003,8 +4003,8 @@
       ]
     },
     {
-      "address": "0x5182bc9c96ff8eac81fc84d0ef27d87f3e9bc4ccde71bcd76f07e6fe0053a81",
-      "class_hash": "0x1741ec521f448c65e1e2842ec524784cd2e2a16c3e143c3ed58fed52c0c10c7",
+      "address": "0x7347c03891acbb8667a444fa82a4e66b0e8cea4c6c7949c13137aa151f1035d",
+      "class_hash": "0x49a1ab08b86c0e206abdc8c6978befab366addd1d1aee8762a7a54c0e8f4627",
       "abi": [
         {
           "type": "impl",

@@ -109,7 +109,7 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
         methods: [{ entrypoint: "release" }, { entrypoint: "claim" }, { entrypoint: "open" }],
       },
       [dopeGearAddress]: {
-        methods: [{ entrypoint: "mint" }, { entrypoint: "set_approval_for_all" }],
+        methods: [{ entrypoint: "set_approval_for_all" }],
       },
       [dopeHustlersAddress]: {
         methods: [
@@ -157,29 +157,19 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
     });
   }
 
-  console.log(policies);
+  // console.log(policies);
 
   return new ControllerConnector({
     chains: [
       {
         rpcUrl: selectedChain.rpcUrl ? selectedChain.rpcUrl : "http://localhost:5050",
       },
-      // {
-      //   rpcUrl: "https://api.cartridge.gg/x/starknet/sepolia",
-      // },
-      // {
-      //   rpcUrl: "https://api.cartridge.gg/x/starknet/mainnet",
-      // },
     ],
     defaultChainId: `0x${selectedChain.chainConfig.id.toString(16)}`,
     slot: selectedChain.slot ? selectedChain.slot : "ryo",
     namespace: selectedChain.namespace ? selectedChain.namespace : "dopewars_v0",
     tokens: {
-      erc20: [
-        // "ERC721:0x020dfc24de987d7d11f70a7306ae39b6ac71b178eaf19bf12e831b3522c14ebf"
-        // paperAddress
-        // "0x410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113",
-      ],
+      erc20: ["strk", "usdc"],
     },
     preset: "dope-wars",
     policies,

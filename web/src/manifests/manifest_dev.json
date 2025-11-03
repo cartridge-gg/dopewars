@@ -3610,8 +3610,8 @@
       ]
     },
     {
-      "address": "0x617e96bd3d6b99ebcf5f43a920535d9e8bea5549eb099062c895b35d0f418a",
-      "class_hash": "0x29182dd94bf2027925990eedc0431f6c44b5ad14e4d708a94ea132342df58f5",
+      "address": "0x2c2f10b2ee2bb47fbe5021661e1e3eb4801d644ff773b3cc82d30d3f8e6f273",
+      "class_hash": "0x79c8bce0f06bf4ae3e627d2e08e6ccf22008ee0751caabe888ff28d4bc7ee51",
       "abi": [
         {
           "type": "impl",

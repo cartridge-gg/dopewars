@@ -15,9 +15,9 @@ namespaces=["dopewars_v0", "dope"]
 contracts = [
     # "ERC20:0x07911f16dc122877dee96a1ec2cc1f8a6853096253568118047b5e1e0edba17c", # paper
     #
-    "ERC721:0x05182bc9c96ff8eac81fc84d0ef27d87f3e9bc4ccde71bcd76f07e6fe0053a81", # dope_loot
-    "ERC721:0x0267d2b80ea648f0232d7120f0798780b2d8ac5dc0cf6069f306ba63496f967f", # dope_hustlers
-    "ERC1155:0x058fdfee9eb065d1818a496c40a44287e6952d135c85240f8158bbffe644aae9", # dope_gear
+    "ERC721:0x07347c03891acbb8667a444fa82a4e66b0e8cea4c6c7949c13137aa151f1035d", # dope_loot
+    "ERC721:0x057fa07a7ba53b055afee628d1306edaeda056ce4f680bac8bad25d1e5375650", # dope_hustlers
+    "ERC1155:0x0030d87d480893027e621bd608b21e3b9efdadd23a705458083e94c028479bb0", # dope_gear
 ]
 
 [erc]
@@ -41,3 +41,4 @@ historical = [
     "dopewars_v0-TrophyCreation",
     "dopewars_v0-TrophyProgression",
 ]
+

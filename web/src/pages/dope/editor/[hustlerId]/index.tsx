@@ -174,6 +174,11 @@ export default function Editor() {
           entrypoint: "unequip",
           calldata: [uint256.bnToUint256(hustlerMeta.token_id), unequipSlotIds],
         },
+        {
+          contractAddress: dopeGearContractManifest.address,
+          entrypoint: "set_approval_for_all",
+          calldata: [dopeHustlersContractManifest.address, 0],
+        },
       ]);
 
       let txReceipt = await account.waitForTransaction(execution.transaction_hash, {

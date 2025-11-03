@@ -50,9 +50,9 @@ pub impl RyoConfigImpl of RyoConfigTrait {
             paper_reward_launderer: 100, // in ether  
             treasury_fee_pct: 10,
             treasury_balance: 0,
-            f2p_hustlers: true,
+            f2p_hustlers: false,
             play_with_loot: true,
-            play_with_hustlers: true,
+            play_with_hustlers: false,
         }
     }
 
