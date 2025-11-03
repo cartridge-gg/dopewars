@@ -1,6 +1,6 @@
 
 
-world_address = "0x0481a7d7b499c8ba774ab492787e8f2678ff63d3ba33ab513b29a79e31f6c0b8"
+world_address = "0x06bc05ce8b9d77bc18f9ce94aa33cdf3dc3f3c766cbc63c3d7cd9485e568cc85"
 
 [server]
 http_cors_origins = ["*"]
@@ -15,9 +15,9 @@ namespaces=["dopewars_v0", "dope"]
 contracts = [
     # "ERC20:0x07911f16dc122877dee96a1ec2cc1f8a6853096253568118047b5e1e0edba17c", # paper
     #
-    "ERC721:0x07347c03891acbb8667a444fa82a4e66b0e8cea4c6c7949c13137aa151f1035d", # dope_loot
-    "ERC721:0x057fa07a7ba53b055afee628d1306edaeda056ce4f680bac8bad25d1e5375650", # dope_hustlers
-    "ERC1155:0x0030d87d480893027e621bd608b21e3b9efdadd23a705458083e94c028479bb0", # dope_gear
+    "ERC721:0x07652ca415b80a906ae739574104d217e953963917bffeb1ce7d5704b6ed057d", # dope_loot
+    "ERC721:0x0351f9dfb30e7ef8f283c61360145295d22621ac197b7a0d1f9094b52d71c605", # dope_hustlers
+    "ERC1155:0x0107aefe535adad25d91f77744bb37eca24d997e8216517736f06bbaea22d214", # dope_gear
 ]
 
 [erc]

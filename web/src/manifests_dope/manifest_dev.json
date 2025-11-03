@@ -1,8 +1,8 @@
 {
   "world": {
     "class_hash": "0x57994b6a75fad550ca18b41ee82e2110e158c59028c4478109a67965a0e5b1e",
-    "address": "0x481a7d7b499c8ba774ab492787e8f2678ff63d3ba33ab513b29a79e31f6c0b8",
-    "seed": "dope-0",
+    "address": "0x6bc05ce8b9d77bc18f9ce94aa33cdf3dc3f3c766cbc63c3d7cd9485e568cc85",
+    "seed": "dope-1",
     "name": "Dope World",
     "entrypoints": [
       "uuid",
@@ -1479,7 +1479,7 @@
   },
   "contracts": [
     {
-      "address": "0x30d87d480893027e621bd608b21e3b9efdadd23a705458083e94c028479bb0",
+      "address": "0x107aefe535adad25d91f77744bb37eca24d997e8216517736f06bbaea22d214",
       "class_hash": "0x2590f2eb6edbc47cf4266fa1891a1c7e716d33b53e63db137831fc8e253cb63",
       "abi": [
         {
@@ -2657,7 +2657,7 @@
       ]
     },
     {
-      "address": "0x57fa07a7ba53b055afee628d1306edaeda056ce4f680bac8bad25d1e5375650",
+      "address": "0x351f9dfb30e7ef8f283c61360145295d22621ac197b7a0d1f9094b52d71c605",
       "class_hash": "0x7014f07f5f0e55e062d274e30a90dbc965c469e8aaaa6bd68b4e822c7b0282d",
       "abi": [
         {
@@ -4003,7 +4003,7 @@
       ]
     },
     {
-      "address": "0x7347c03891acbb8667a444fa82a4e66b0e8cea4c6c7949c13137aa151f1035d",
+      "address": "0x7652ca415b80a906ae739574104d217e953963917bffeb1ce7d5704b6ed057d",
       "class_hash": "0x49a1ab08b86c0e206abdc8c6978befab366addd1d1aee8762a7a54c0e8f4627",
       "abi": [
         {
@@ -5358,7 +5358,7 @@
       ]
     },
     {
-      "address": "0x7efcba2fde526e57f343490bc2393d60e2f55f3d8e31afcbf9307dfaae2815b",
+      "address": "0x3ce0fd868ca6ecbb8ee204591f0565eb364dd01098e86e46656b095c1cdb126",
       "class_hash": "0x16d01973409e1d5efb606584ba3e3c6a9c7598391fb38a67b1fbe78061a481a",
       "abi": [
         {
