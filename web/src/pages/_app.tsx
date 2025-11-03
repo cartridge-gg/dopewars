@@ -16,6 +16,7 @@ import theme from "../theme";
 import { enableStaticRendering } from "mobx-react-lite";
 import { SeasonDetailsModal } from "@/components/pages/home/SeasonDetailsModal";
 import { GlobalEvents } from "@/components/layout/GlobalEvents";
+import ConnectionError from "@/components/layout/ConnectionError";
 enableStaticRendering(typeof window === "undefined");
 
 // import "@/dope/dist/style.css";
@@ -54,9 +55,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Psycadelic />
           <Component {...pageProps} />
           <SpeedInsights />
-          {/* <Debug /> */}
-
-          {/* Common modales */}
+        
           <LoadingModal />
           <ConnectModal />
           <AccountDetailsModal />

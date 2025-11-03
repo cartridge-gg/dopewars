@@ -26,6 +26,7 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@metamask/sdk": "^0.32.1",
+    "@metamask/sdk": "^0.32.1",
     "@next/bundle-analyzer": "^14.1.4",
     "@rainbow-me/rainbowkit": "^2.2.2",
     "@solana/web3.js": "^1.98.0",
