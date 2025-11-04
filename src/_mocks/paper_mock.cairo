@@ -2,7 +2,7 @@ use dojo::world::IWorldDispatcher;
 use starknet::{ClassHash, ContractAddress};
 
 #[starknet::interface]
-trait IPaperMock<TState> {
+pub trait IPaperMock<TState> {
     // IWorldProvider
     fn world(self: @TState) -> IWorldDispatcher;
 
@@ -40,14 +40,14 @@ trait IPaperMock<TState> {
 
 
 #[starknet::interface]
-trait IPaperMockFaucet<TState> {
+pub trait IPaperMockFaucet<TState> {
     fn faucet(ref self: TState);
     fn faucetTo(ref self: TState, recipient: ContractAddress);
 }
 
 
 #[dojo::contract]
-mod paper_mock {
+pub mod paper_mock {
     // use openzeppelin::token::erc20::ERC20HooksEmptyImpl;
     use dojo::event::EventStorage;
     use dojo::world::WorldStorageTrait;

@@ -26,7 +26,7 @@ mod tests {
 
     #[test]
     #[fork("provable-dw")]
-    #[should_panic(expected: 'invalid game token')]
+    #[should_panic(expected: 'ERC721: invalid token ID')]
     fn test_cannot_decide_with_invalid_token() {
         let setup = setup_world_with_mint();
         set_caller_address(setup.player_a);

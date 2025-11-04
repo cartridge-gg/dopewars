@@ -1,6 +1,6 @@
 #[cfg(test)]
 pub mod test_helpers {
-    use dojo::world::WorldStorage;
+    use dojo::world::{WorldStorage};
     use dojo_snf_test::cheatcodes::set_caller_address;
     use game_components_minigame::interface::{IMinigameDispatcher, IMinigameDispatcherTrait};
     use openzeppelin_token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
@@ -9,6 +9,7 @@ pub mod test_helpers {
     use rollyourown::store::StoreImpl;
     use rollyourown::systems::game::IGameActionsDispatcherTrait;
     use rollyourown::utils::sorted_list::SortedListImpl;
+    use rollyourown::_mocks::paper_mock::{IPaperMockDispatcherTrait, IPaperMockFaucetDispatcher, IPaperMockFaucetDispatcherTrait};
     use snforge_std::start_cheat_account_contract_address;
     use starknet::ContractAddress;
     use crate::tests::setup_world::{TestContracts, deploy_world};
@@ -65,6 +66,17 @@ pub mod test_helpers {
         start_cheat_account_contract_address(PLAYER_A, contracts.decide.contract_address);
         start_cheat_account_contract_address(PLAYER_B, contracts.decide.contract_address);
 
+        const ETHER: u256 = 1_000_000_000_000_000_000;
+
+        let paper_faucet = IPaperMockFaucetDispatcher { contract_address: contracts.paper_mock.contract_address };
+        paper_faucet.faucetTo(PLAYER_A);
+        paper_faucet.faucetTo(PLAYER_B);
+
+        let paper_dispatcher = contracts.paper_mock;
+        paper_dispatcher.approve(contracts.game.contract_address, 100_000 * ETHER);
+        paper_dispatcher.approve(contracts.laundromat.contract_address, 100_000 * ETHER);
+        
+
         let minigame_dispatcher: IMinigameDispatcher = IMinigameDispatcher {
             contract_address: contracts.game_token.contract_address,
         };
@@ -88,6 +100,15 @@ pub mod test_helpers {
     pub fn setup_world_with_game() -> Setup {
         let setup = setup_world_with_mint();
         set_caller_address(setup.player_a);
+        
+        const ETHER: u256 = 1_000_000_000_000_000_000;
+        let paper_dispatcher = setup.contracts.paper_mock;
+        let game_address = setup.contracts.game.contract_address;
+        let laundromat_address = setup.contracts.laundromat.contract_address;
+        
+        paper_dispatcher.approve(game_address, 100_000_000 * ETHER);
+        paper_dispatcher.approve(laundromat_address, 100_000_000 * ETHER);
+        
         let guest_loot_id = get_valid_guest_loot_id(setup.contracts.world);
         setup
             .contracts
