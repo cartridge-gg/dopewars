@@ -1,6 +1,6 @@
 import { Box, Container, Flex, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { Header } from "./Header";
 
 import { Pending } from "./Pending";
@@ -55,7 +55,8 @@ export const Layout = ({
             {children}
           </RightPanel>
         </Container>
-        <Box maxH="30px" h="full" display={["none", "block"]} bg="neon.900" zIndex={1} />
+        {/* wat dat ? */}
+        {/* <Box maxH="16px" h="full" display={["none", "block"]} bg="neon.900" zIndex={1} /> */}
       </Flex>
       {/* <CrtEffect /> */}
       <Pending />

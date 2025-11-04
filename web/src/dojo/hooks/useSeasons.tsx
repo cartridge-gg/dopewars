@@ -1,13 +1,14 @@
 import {
-  Dopewars_Season as Season,
-  Dopewars_SeasonEdge as SeasonEdge,
-  Dopewars_SeasonSettings as SeasonSettings,
-  Dopewars_SeasonSettingsEdge as SeasonSettingsEdge,
-  Dopewars_SortedList as SortedList,
-  Dopewars_SortedListEdge as SortedListEdge,
+  Dopewars_V0_Season as Season,
+  Dopewars_V0_SeasonEdge as SeasonEdge,
+  Dopewars_V0_SeasonSettings as SeasonSettings,
+  Dopewars_V0_SeasonSettingsEdge as SeasonSettingsEdge,
+  Dopewars_V0_SortedList as SortedList,
+  Dopewars_V0_SortedListEdge as SortedListEdge,
   useSeasonsQuery,
 } from "@/generated/graphql";
 import { useEffect, useMemo, useState } from "react";
+import { DW_GRAPHQL_MODEL_NS } from "../constants";
 
 export interface SeasonInfos {
   season: Season;
@@ -27,9 +28,9 @@ export const useSeasons = (): SeasonsInterface => {
   const seasons = useMemo(() => {
     if (!data) return [];
 
-    const seasonEdges = data?.dopewarsSeasonModels?.edges as SeasonEdge[];
-    const sortedListEdges = data?.dopewarsSortedListModels?.edges as SortedListEdge[];
-    const seasonSettingsEdges = data?.dopewarsSeasonSettingsModels?.edges as SeasonSettingsEdge[];
+    const seasonEdges = data?.[`${DW_GRAPHQL_MODEL_NS}SeasonModels`]?.edges as SeasonEdge[];
+    const sortedListEdges = data?.[`${DW_GRAPHQL_MODEL_NS}SortedListModels`]?.edges as SortedListEdge[];
+    const seasonSettingsEdges = data?.[`${DW_GRAPHQL_MODEL_NS}SeasonSettingsModels`]?.edges as SeasonSettingsEdge[];
 
     return seasonEdges.flatMap((i: SeasonEdge) => {
       const season = i.node as Season;

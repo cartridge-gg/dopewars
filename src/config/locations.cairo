@@ -1,28 +1,24 @@
-//
-//
-//
-
 use dojo::model::{ModelStorage};
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use rollyourown::traits::{Enumerable, Randomizable};
 use rollyourown::utils::random::{Random, RandomImpl};
 
 use rollyourown::{
-    utils::{introspect::{Bytes31IntrospectionImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait,}},
-    store::{Store, StoreImpl, StoreTrait}
+    store::{Store, StoreImpl},
+    utils::{bytes16::{Bytes16, Bytes16Impl}, introspect::{Bytes31IntrospectionImpl}},
 };
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
-struct LocationConfig {
+pub struct LocationConfig {
     #[key]
-    location: Locations,
-    location_id: u8,
-    name: Bytes16,
+    pub location: Locations,
+    pub location_id: u8,
+    pub name: Bytes16,
 }
 
-#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
-enum Locations {
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked, DojoStore, Default)]
+pub enum Locations {
+    #[default]
     Home,
     Queens,
     Bronx,
@@ -36,7 +32,7 @@ enum Locations {
 //
 //
 
-impl LocationsEnumerableImpl of Enumerable<Locations> {
+pub impl LocationsEnumerableImpl of Enumerable<Locations> {
     fn all() -> Span<Locations> {
         array![
             Locations::Queens,
@@ -44,7 +40,7 @@ impl LocationsEnumerableImpl of Enumerable<Locations> {
             Locations::Brooklyn,
             Locations::Jersey,
             Locations::Central,
-            Locations::Coney
+            Locations::Coney,
         ]
             .span()
     }
@@ -54,7 +50,7 @@ impl LocationsEnumerableImpl of Enumerable<Locations> {
 //
 //
 
-impl LocationsRandomizableImpl of Randomizable<Locations> {
+pub impl LocationsRandomizableImpl of Randomizable<Locations> {
     fn random(ref randomizer: Random) -> Locations {
         let locations = LocationsEnumerableImpl::all();
         let index = randomizer.between::<u32>(0, locations.len().into());
@@ -66,7 +62,7 @@ impl LocationsRandomizableImpl of Randomizable<Locations> {
 //
 //
 
-impl LocationsIntoFelt252 of Into<Locations, felt252> {
+pub impl LocationsIntoFelt252 of Into<Locations, felt252> {
     fn into(self: Locations) -> felt252 {
         match self {
             Locations::Home => 'Home',
@@ -80,7 +76,7 @@ impl LocationsIntoFelt252 of Into<Locations, felt252> {
     }
 }
 
-impl LocationsIntoU8 of Into<Locations, u8> {
+pub impl LocationsIntoU8 of Into<Locations, u8> {
     fn into(self: Locations) -> u8 {
         match self {
             Locations::Home => 0,
@@ -95,7 +91,7 @@ impl LocationsIntoU8 of Into<Locations, u8> {
 }
 
 
-impl U8IntoLocations of Into<u8, Locations> {
+pub impl U8IntoLocations of Into<u8, Locations> {
     fn into(self: u8) -> Locations {
         let self252: felt252 = self.into();
         match self252 {
@@ -110,15 +106,17 @@ impl U8IntoLocations of Into<u8, Locations> {
         }
     }
 }
-fn initialize_location_config(ref store: Store) {
+
+pub fn initialize_location_config(ref store: Store) {
     store
         .world
         .write_model(
             @LocationConfig {
                 location: Locations::Home,
-                location_id: Locations::Home.into(),
-                name: Bytes16Impl::from('Home')
-            }
+                // location_id: Locations::Home.into(),
+                location_id: LocationsIntoU8::into(Locations::Home),
+                name: Bytes16Impl::from('Home'),
+            },
         );
 
     store
@@ -126,9 +124,10 @@ fn initialize_location_config(ref store: Store) {
         .write_model(
             @LocationConfig {
                 location: Locations::Queens,
-                location_id: Locations::Queens.into(),
-                name: Bytes16Impl::from('Queens')
-            }
+                // location_id: Locations::Queens.into(),
+                location_id: LocationsIntoU8::into(Locations::Queens),
+                name: Bytes16Impl::from('Queens'),
+            },
         );
 
     store
@@ -136,9 +135,10 @@ fn initialize_location_config(ref store: Store) {
         .write_model(
             @LocationConfig {
                 location: Locations::Bronx,
-                location_id: Locations::Bronx.into(),
-                name: Bytes16Impl::from('The Bronx')
-            }
+                // location_id: Locations::Bronx.into(),
+                location_id: LocationsIntoU8::into(Locations::Bronx),
+                name: Bytes16Impl::from('The Bronx'),
+            },
         );
 
     store
@@ -146,9 +146,10 @@ fn initialize_location_config(ref store: Store) {
         .write_model(
             @LocationConfig {
                 location: Locations::Brooklyn,
-                location_id: Locations::Brooklyn.into(),
-                name: Bytes16Impl::from('Brooklyn')
-            }
+                // location_id: Locations::Brooklyn.into(),
+                location_id: LocationsIntoU8::into(Locations::Brooklyn),
+                name: Bytes16Impl::from('Brooklyn'),
+            },
         );
 
     store
@@ -156,9 +157,10 @@ fn initialize_location_config(ref store: Store) {
         .write_model(
             @LocationConfig {
                 location: Locations::Jersey,
-                location_id: Locations::Jersey.into(),
-                name: Bytes16Impl::from('Jersey City')
-            }
+                // location_id: Locations::Jersey.into(),
+                location_id: LocationsIntoU8::into(Locations::Jersey),
+                name: Bytes16Impl::from('Jersey City'),
+            },
         );
 
     store
@@ -166,9 +168,10 @@ fn initialize_location_config(ref store: Store) {
         .write_model(
             @LocationConfig {
                 location: Locations::Central,
-                location_id: Locations::Central.into(),
-                name: Bytes16Impl::from('Central Park')
-            }
+                // location_id: Locations::Central.into(),
+                location_id: LocationsIntoU8::into(Locations::Central),
+                name: Bytes16Impl::from('Central Park'),
+            },
         );
 
     store
@@ -176,9 +179,10 @@ fn initialize_location_config(ref store: Store) {
         .write_model(
             @LocationConfig {
                 location: Locations::Coney,
-                location_id: Locations::Coney.into(),
-                name: Bytes16Impl::from('Coney Island')
-            }
+                // location_id: Locations::Coney.into(),
+                location_id: LocationsIntoU8::into(Locations::Coney),
+                name: Bytes16Impl::from('Coney Island'),
+            },
         );
 }
 

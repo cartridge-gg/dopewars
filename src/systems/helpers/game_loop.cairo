@@ -1,29 +1,20 @@
 use dojo::event::EventStorage;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    models::game::{Game},
-    utils::{
-        random::{Random}, events::{RawEventEmitterTrait, RawEventEmitterImpl},
-        math::{MathImpl, MathTrait}
-    },
-    store::{Store, StoreImpl, StoreTrait},
-    config::{locations::{Locations}, settings::{SeasonSettings}},
+    config::{locations::{Locations}, settings::{SeasonSettings}}, events::{GameOver, Traveled},
     packing::{
+        drugs_packed::{DrugsPackedTrait},
         game_store::{GameStore, GameStoreImpl, GameStorePackerImpl},
-        wanted_packed::{WantedPacked, WantedPackedImpl, WantedPackedTrait},
-        markets_packed::MarketsPackedTrait, player::{Player, PlayerImpl},
-        drugs_packed::{DrugsPackedTrait}
+        markets_packed::MarketsPackedTrait, player::{PlayerImpl}, wanted_packed::{WantedPackedImpl},
     },
-    events::{GameOver, Traveled}, systems::helpers::{traveling},
-    helpers::season_manager::{SeasonManager, SeasonManagerTrait}
+    store::{Store, StoreImpl, StoreTrait}, systems::helpers::{traveling},
+    utils::{math::{MathImpl, MathTrait}, random::{Random}},
 };
-use starknet::ContractAddress;
 
 
 // -> (is_dead, has_encounter)
-fn on_travel(
-    ref game_store: GameStore, ref season_settings: SeasonSettings, ref randomizer: Random
+pub fn on_travel(
+    ref game_store: GameStore, ref season_settings: SeasonSettings, ref randomizer: Random,
 ) -> (bool, bool) {
     // update wanted
     game_store.update_wanted();
@@ -37,7 +28,7 @@ fn on_travel(
 }
 
 
-fn on_turn_end(ref game_store: GameStore, ref randomizer: Random, ref store: Store) -> bool {
+pub fn on_turn_end(ref game_store: GameStore, ref randomizer: Random, ref store: Store) -> bool {
     // update locations
     game_store.player.prev_location = game_store.player.location;
     game_store.player.location = game_store.player.next_location;
@@ -74,7 +65,7 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random, ref store: Sto
                     turn: game_store.player.turn,
                     from_location_id: game_store.player.prev_location.into(),
                     to_location_id: game_store.player.location.into(),
-                }
+                },
             );
     }
 
@@ -91,7 +82,7 @@ fn on_turn_end(ref game_store: GameStore, ref randomizer: Random, ref store: Sto
 }
 
 
-fn on_game_over(ref game_store: GameStore, ref store: Store) {
+pub fn on_game_over(ref game_store: GameStore, ref store: Store) {
     assert(game_store.game.game_over == false, 'already game_over');
 
     // save
@@ -112,12 +103,12 @@ fn on_game_over(ref game_store: GameStore, ref store: Store) {
                 player_id: game_store.game.player_id,
                 season_version: game_store.game.season_version,
                 player_name: game_store.game.player_name.into(),
-                hustler_id: game_store.game.hustler_id,
+                token_id: game_store.game.token_id,
                 turn: game_store.player.turn,
                 cash: game_store.player.cash,
                 health: game_store.player.health,
                 reputation: game_store.player.reputation,
-            }
+            },
         );
 }
 

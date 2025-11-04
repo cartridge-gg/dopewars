@@ -1,52 +1,48 @@
-use core::traits::TryInto;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-
 use rollyourown::{
-    models::{game_store_packed::{GameStorePacked}, game::{Game, GameMode, GameImpl}},
     config::{
-        game::{GameConfig}, drugs::{Drugs, DrugsEnumerableImpl, DrugConfig},
+        drugs::{Drugs, DrugsEnumerableImpl}, game::{GameConfig},
         locations::{Locations, LocationsEnumerableImpl},
-        settings::{SeasonSettings, SeasonSettingsTrait, DrugsMode}
+        settings::{SeasonSettings, SeasonSettingsTrait},
     },
+    models::{game::{Game, GameImpl}, game_store_packed::{GameStorePacked}},
     packing::{
-        game_store_layout::{
-            GameStoreLayout, GameStoreLayoutEnumerableImpl, GameStoreLayoutPackableImpl
-        },
         drugs_packed::{DrugsPacked, DrugsPackedImpl},
-        wanted_packed::{WantedPacked, WantedPackedImpl},
-        markets_packed::{MarketsPacked, MarketsPackedImpl},
+        game_store_layout::{
+            GameStoreLayout, GameStoreLayoutEnumerableImpl, GameStoreLayoutPackableImpl,
+        },
         items_packed::{ItemsPacked, ItemsPackedImpl},
-        player::{Player, PlayerStatus, PlayerImpl, PlayerPackerImpl, PlayerUnpackerImpl},
+        markets_packed::{MarketsPacked, MarketsPackedImpl},
+        player::{Player, PlayerImpl, PlayerPackerImpl, PlayerStatus, PlayerUnpackerImpl},
+        wanted_packed::{WantedPacked, WantedPackedImpl},
     },
-    store::{Store, StoreImpl, StoreTrait},
+    store::{Store, StoreImpl, StoreTrait}, traits::{Packer},
     utils::{
-        bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl}, math::{MathTrait, MathImplU8},
-        random::{Random, RandomImpl,}
+        bits::{BitsDefaultImpl, BitsImpl, BitsTrait}, math::{MathImplU8, MathTrait},
+        random::{Random, RandomImpl},
     },
-    traits::{Packable, Packer}
 };
 use starknet::ContractAddress;
 
 
 #[derive(Copy, Drop)]
-struct GameStore {
-    store: Store,
-    game: Game,
-    game_config: Option<GameConfig>,
-    season_settings: Option<SeasonSettings>,
+pub struct GameStore {
+    pub store: Store,
+    pub game: Game,
+    pub game_config: Option<GameConfig>,
+    pub season_settings: Option<SeasonSettings>,
     //
-    markets: MarketsPacked,
-    items: ItemsPacked,
-    drugs: DrugsPacked,
-    wanted: WantedPacked,
-    player: Player,
+    pub markets: MarketsPacked,
+    pub items: ItemsPacked,
+    pub drugs: DrugsPacked,
+    pub wanted: WantedPacked,
+    pub player: Player,
 }
 
 // init new game state
 #[generate_trait]
-impl GameStoreImpl of GameStoreTrait {
+pub impl GameStoreImpl of GameStoreTrait {
     fn new(
-        store: Store, ref game: Game, ref game_config: GameConfig, ref randomizer: Random
+        store: Store, ref game: Game, ref game_config: GameConfig, ref randomizer: Random,
     ) -> GameStore {
         GameStore {
             store,
@@ -55,7 +51,7 @@ impl GameStoreImpl of GameStoreTrait {
             season_settings: Option::None,
             //
             markets: MarketsPackedImpl::new(randomizer.next().into()),
-            items: ItemsPackedImpl::new(@store, game.hustler_id),
+            items: ItemsPackedImpl::new(@store, game),
             drugs: DrugsPackedImpl::new(),
             wanted: WantedPackedImpl::new(randomizer.next().into()),
             player: PlayerImpl::new(ref game_config),
@@ -70,10 +66,10 @@ impl GameStoreImpl of GameStoreTrait {
             season_settings: Option::None,
             //
             markets: MarketsPacked { packed: 0 },
-            items: ItemsPackedImpl::new(@store, 0),
+            items: ItemsPackedImpl::new(@store, game),
             drugs: DrugsPacked { packed: 0 },
             wanted: WantedPacked { packed: 0 },
-            player: PlayerImpl::empty()
+            player: PlayerImpl::empty(),
         }
     }
 
@@ -83,6 +79,7 @@ impl GameStoreImpl of GameStoreTrait {
 
     fn load(ref store: Store, game_id: u32, player_id: ContractAddress) -> GameStore {
         let mut game = store.game(game_id, player_id);
+        // let mut game_with_token_id = store.game_with_token_id(game_id, player_id);
         let game_store_packed = store.game_store_packed(game_id, player_id);
         game_store_packed.unpack(ref store, ref game)
     }
@@ -122,12 +119,15 @@ impl GameStoreImpl of GameStoreTrait {
     // Markets
     //
 
-    fn get_drug_price(ref self: GameStore, location: Locations, drug: Drugs) -> usize {
+    fn get_tick_and_drug_price(
+        ref self: GameStore, location: Locations, drug: Drugs,
+    ) -> (usize, usize) {
         let season_settings = self.season_settings();
         let drug_config = self.store.drug_config(season_settings.drugs_mode, drug);
         let tick = self.markets.get_tick(location, drug);
 
-        tick * drug_config.step.into() + drug_config.base.into()
+        let price = tick * drug_config.step.into() + drug_config.base.into();
+        (tick, price)
     }
 
     //
@@ -218,7 +218,7 @@ impl GameStoreImpl of GameStoreTrait {
                         self.wanted.set(*location, value.sub_capped(1, 0));
                     }
                 },
-                Option::None => { break; }
+                Option::None => { break; },
             }
         }
     }
@@ -226,7 +226,7 @@ impl GameStoreImpl of GameStoreTrait {
 
 
 // pack
-impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
+pub impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
     fn pack(self: GameStore) -> GameStorePacked {
         let mut bits = BitsDefaultImpl::default();
         let mut layout = GameStoreLayoutEnumerableImpl::all();
@@ -260,7 +260,7 @@ impl GameStorePackerImpl of Packer<GameStore, GameStorePacked> {
 
 // unpack
 #[generate_trait]
-impl GameStoreUnpackerImpl of GameStoreUnpackerTrait {
+pub impl GameStoreUnpackerImpl of GameStoreUnpackerTrait {
     fn unpack(self: GameStorePacked, ref store: Store, ref game: Game) -> GameStore {
         let mut game_store = GameStoreImpl::empty(store, ref game);
         let mut layout = GameStoreLayoutEnumerableImpl::all();
@@ -272,8 +272,7 @@ impl GameStoreUnpackerImpl of GameStoreUnpackerTrait {
             match *item {
                 GameStoreLayout::Markets => { game_store.markets = MarketsPacked { packed }; },
                 GameStoreLayout::Items => {
-                    game_store
-                        .items = ItemsPacked { store: @store, hustler_id: game.hustler_id, packed };
+                    game_store.items = ItemsPacked { store: @store, game, packed };
                 },
                 GameStoreLayout::Drugs => { game_store.drugs = DrugsPacked { packed }; },
                 GameStoreLayout::Wanted => { game_store.wanted = WantedPacked { packed }; },

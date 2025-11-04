@@ -55,6 +55,20 @@ const defaultChatMessages: ChatEventType[] = [
     text: "Shinobi was Mugged",
     type: "action",
   },
+   {
+    text: "PersonQ",
+    type: "message",
+    user: {
+      avatar: "PersonQ",
+    },
+  },
+   {
+    text: "PersonP",
+    type: "message",
+    user: {
+      avatar: "PersonP",
+    },
+  },
 ];
 
 export default function Chat() {

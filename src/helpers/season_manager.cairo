@@ -1,40 +1,23 @@
 use dojo::event::EventStorage;
-use dojo::world::{WorldStorage, IWorldDispatcher};
+use dojo::world::WorldStorageTrait;
 
 use rollyourown::{
-    config::{
-        ryo::{RyoConfig, RyoConfigTrait}, ryo_address::{RyoAddress},
-        settings::{SeasonSettingsImpl, SeasonSettings, SeasonSettingsTrait}
-    },
-    models::{season::{Season, SeasonImpl, SeasonTrait}}, packing::game_store::{GameStore},
-    interfaces::{
-        paper::{IPaperDispatcher, IPaperDispatcherTrait},
-        chips::{IChips, IChipsDispatcher, IChipsDispatcherTrait}
-    },
-    constants::{ETHER},
-    utils::{
-        math::{MathImpl, MathTrait}, random::{Random, RandomTrait},
-        events::{RawEventEmitterTrait, RawEventEmitterImpl}
-    },
-    store::{Store, StoreImpl, StoreTrait}, events::NewHighScore
+    config::{ryo::{RyoConfigTrait}, settings::{SeasonSettingsImpl, SeasonSettingsTrait}},
+    constants::{ETHER, MAX_MULTIPLIER}, events::NewHighScore,
+    interfaces::{paper::{IPaperDispatcher, IPaperDispatcherTrait}},
+    models::{season::{SeasonImpl, SeasonTrait}}, packing::game_store::{GameStore},
+    store::{Store, StoreImpl, StoreTrait}, utils::{math::{MathImpl, MathTrait}, random::{Random}},
 };
-use starknet::{get_caller_address, get_contract_address};
+use starknet::{get_caller_address};
 
 #[derive(Drop, Copy)]
-struct SeasonManager {
+pub struct SeasonManager {
     store: Store,
 }
 
-trait SeasonManagerTrait {
-    fn new(store: Store) -> SeasonManager;
-    fn get_current_version(ref self: SeasonManager) -> u16;
-    fn get_next_version_timestamp(ref self: SeasonManager) -> u64;
-    fn new_season(ref self: SeasonManager, ref randomizer: Random, version: u16);
-    fn on_game_start(ref self: SeasonManager);
-    fn on_register_score(ref self: SeasonManager, ref game_store: GameStore) -> bool;
-}
 
-impl SeasonManagerImpl of SeasonManagerTrait {
+#[generate_trait]
+pub impl SeasonManagerImpl of SeasonManagerTrait {
     fn new(store: Store) -> SeasonManager {
         SeasonManager { store }
     }
@@ -45,7 +28,7 @@ impl SeasonManagerImpl of SeasonManagerTrait {
     }
 
     fn get_next_version_timestamp(ref self: SeasonManager) -> u64 {
-        let current_timestamp = starknet::info::get_block_timestamp();
+        let current_timestamp = starknet::get_block_timestamp();
         let ryo_config = self.store.ryo_config();
 
         current_timestamp + ryo_config.season_duration.into()
@@ -64,7 +47,7 @@ impl SeasonManagerImpl of SeasonManagerTrait {
         store.save_game_config(@game_config);
     }
 
-    fn on_game_start(ref self: SeasonManager) {
+    fn on_game_start(ref self: SeasonManager, multiplier: u8) {
         let mut store = self.store;
         let mut ryo_config = store.ryo_config();
 
@@ -76,8 +59,11 @@ impl SeasonManagerImpl of SeasonManagerTrait {
         // check if enought time for a game before season end
         assert(season.can_create_game(), 'not enought time for a game');
 
+        // check multiplier
+        assert(multiplier > 0 && multiplier <= MAX_MULTIPLIER, 'invalid multiplier');
+
         // get paper_fee
-        let paper_fee: u32 = season.paper_fee.into();
+        let paper_fee: u32 = season.paper_fee.into() * multiplier.into();
         let paper_fee_eth: u256 = paper_fee.into() * ETHER;
 
         // calc treasury share
@@ -94,11 +80,12 @@ impl SeasonManagerImpl of SeasonManagerTrait {
 
         // retrieve paper_address & laundromat_address
         let ryo_addresses = store.ryo_addresses();
+        let laundromat_address = store.world.dns_address(@"laundromat").unwrap();
 
         // transfer paper_fee_ether from user to laundromat ( user approved game contract to spend
         // paper before)
         IPaperDispatcher { contract_address: ryo_addresses.paper }
-            .transfer_from(get_caller_address(), ryo_addresses.laundromat, paper_fee_eth);
+            .transfer_from(get_caller_address(), laundromat_address, paper_fee_eth);
     }
 
     fn on_register_score(ref self: SeasonManager, ref game_store: GameStore) -> bool {
@@ -127,11 +114,11 @@ impl SeasonManagerImpl of SeasonManagerTrait {
                         player_id: game_store.game.player_id,
                         season_version: game_store.game.season_version,
                         player_name: game_store.game.player_name.into(),
-                        hustler_id: game_store.game.hustler_id,
+                        token_id: game_store.game.token_id,
                         cash: game_store.player.cash,
                         health: game_store.player.health,
                         reputation: game_store.player.reputation,
-                    }
+                    },
                 );
 
             true

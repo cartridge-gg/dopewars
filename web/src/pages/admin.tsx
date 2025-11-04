@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout";
 import { ChildrenOrConnect, PaperFaucet, TokenBalance } from "@/components/wallet";
-import { useDojoContext, useRouterContext, useSeasonByVersion, useSystems } from "@/dojo/hooks";
+import {  useDojoContext, useRouterContext, useSeasonByVersion, useSystems } from "@/dojo/hooks";
 import {
   Button,
   Card,
@@ -20,22 +20,15 @@ import {
 } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
-
 import { Wallet } from "@/components/icons/archive";
 import { DrugTable } from "@/components/pages/admin/DrugTable";
 import { EncounterTable } from "@/components/pages/admin/EncounterTable";
 import { GameConfigTable } from "@/components/pages/admin/GameConfigTable";
-import { GameLayoutTable } from "@/components/pages/admin/GameLayoutTable";
-import { HustlerItemBaseTable } from "@/components/pages/admin/HustlerItemBaseTable";
-import { HustlerItemTiersTable } from "@/components/pages/admin/HustlerItemTiersTable";
-import { PlayerLayoutTable } from "@/components/pages/admin/PlayerLayoutTable";
 import { useEffect, useState } from "react";
-import { Dropdown } from "@/components/common";
 // import { RyoConfigTable } from "@/components/pages/admin/RyoConfigTable";
-import { Bag, Clock, CopsIcon, DollarBag, Flipflop, PaperIcon } from "@/components/icons";
+import { Bag, Clock, CopsIcon, DollarBag, Flipflop, GangIcon, PaperIcon } from "@/components/icons";
 import { formatCash } from "@/utils/ui";
-import { Ludes } from "@/components/icons/drugs";
-import { Dopewars_Game as Game, Dopewars_GameEdge as GameEdge, useGetAllGamesQuery } from "@/generated/graphql";
+import { Dopewars_V0_Game as Game, Dopewars_V0_GameEdge as GameEdge, useGetAllGamesQuery } from "@/generated/graphql";
 import { shortString } from "starknet";
 
 const Admin = () => {
@@ -51,8 +44,7 @@ const Admin = () => {
           <Tab>SEASON</Tab>
           <Tab>GAME</Tab>
           <Tab>DRUGS</Tab>
-          <Tab>ITEMS</Tab>
-          <Tab>ITEMS TIERS</Tab>
+
           <Tab>ENCOUNTERS</Tab>
           {/* <Tab>LAYOUTS</Tab> */}
 
@@ -70,6 +62,7 @@ const Admin = () => {
               <RyoPauseCard />
               <TreasuryClaimCard />
               <ExportAllGamesCard />
+              <RyoTokenIdCard />
             </Flex>
           </TabPanel>
 
@@ -111,22 +104,6 @@ const Admin = () => {
           <TabPanel p={0}>
             <Card w="full">
               <CardBody>
-                <HustlerItemBaseTable />
-              </CardBody>
-            </Card>
-          </TabPanel>
-
-          <TabPanel p={0}>
-            <Card w="full">
-              <CardBody>
-                <HustlerItemTiersTable />
-              </CardBody>
-            </Card>
-          </TabPanel>
-
-          <TabPanel p={0}>
-            <Card w="full">
-              <CardBody>
                 <EncounterTable />
               </CardBody>
             </Card>
@@ -159,7 +136,10 @@ export default observer(Admin);
 const RyoAddressCard = observer(() => {
   const {
     configStore: { config },
+    chains: { selectedChain },
   } = useDojoContext();
+
+  const laundromatAddress = getContractByName(selectedChain.manifest, DW_NS, "laundromat").address;
 
   return (
     <Card p={1}>
@@ -180,8 +160,8 @@ const RyoAddressCard = observer(() => {
           </HStack>
           <HStack>
             <Text w="100px">LAUNDROMAT</Text>
-            <Text fontFamily="monospace">{config?.ryoAddress.laundromat}</Text>
-            <TokenBalance address={config?.ryoAddress.laundromat} token={config?.ryoAddress.paper} icon={PaperIcon} />
+            <Text fontFamily="monospace">{laundromatAddress}</Text>
+            <TokenBalance address={laundromatAddress} token={config?.ryoAddress.paper} icon={PaperIcon} />
           </HStack>
         </VStack>
       </CardBody>
@@ -266,6 +246,8 @@ const RyoPauseCard = observer(() => {
 });
 
 import jsonToCsvExport from "json-to-csv-export";
+import { getContractByName } from "@dojoengine/core";
+import { DW_GRAPHQL_MODEL_NS, DW_NS } from "@/dojo/constants";
 
 const ExportAllGamesCard = observer(() => {
   const { configStore } = useDojoContext();
@@ -274,7 +256,7 @@ const ExportAllGamesCard = observer(() => {
   const allGames = useGetAllGamesQuery({});
 
   const onClick = async () => {
-    const games = (allGames.data?.dopewarsGameModels?.edges || [])
+    const games = (allGames.data?.[`${DW_GRAPHQL_MODEL_NS}GameModels`]?.edges || [])
       .map((i) => i?.node as Game)
       .map((i) => {
         return { ...i, player_name: shortString.decodeShortString(i.player_name?.value) };
@@ -482,6 +464,87 @@ const RyoSuperchargeCard = observer(() => {
               <PaperFaucet />
             </HStack>
           </VStack>
+        </VStack>
+      </CardBody>
+      <CardFooter></CardFooter>
+    </Card>
+  );
+});
+
+const RyoTokenIdCard = observer(() => {
+  const {
+    chains: { selectedChain },
+  } = useDojoContext();
+  const { configStore } = useDojoContext();
+  const { config } = configStore;
+
+  const ryoAddress = getContractByName(selectedChain.manifest, DW_NS, "ryo").address;
+  const { setPaused, isPending, executeAndReceipt } = useSystems();
+
+  const onToggleSeasonHustlers = async () => {
+    const { hash, isError } = await executeAndReceipt({
+      contractAddress: ryoAddress,
+      entrypoint: "toggle_f2p_hustlers",
+      calldata: [],
+    });
+    setTimeout(() => {
+      configStore.init();
+    }, 1_000);
+  };
+  const onTogglePlayWithLoot = async () => {
+    const { hash, isError } = await executeAndReceipt({
+      contractAddress: ryoAddress,
+      entrypoint: "toggle_play_with_loot",
+      calldata: [],
+    });
+    setTimeout(() => {
+      configStore.init();
+    }, 1_000);
+  };
+  const onTogglePlayWithHustlers = async () => {
+    const { hash, isError } = await executeAndReceipt({
+      contractAddress: ryoAddress,
+      entrypoint: "toggle_play_with_hustlers",
+      calldata: [],
+    });
+    setTimeout(() => {
+      configStore.init();
+    }, 1_000);
+  };
+
+  return (
+    <Card p={1}>
+      <CardHeader textAlign="left" borderBottom="solid 1px" borderColor="neon.500" mb={3}>
+        <GangIcon /> PLAYABLE TOKENS
+      </CardHeader>
+      <CardBody>
+        <VStack alignItems="flex-start">
+          <HStack justifyContent="space-between" w="full">
+            <Text>SEASON HUSTLERS: {config?.ryo.f2p_hustlers ? "ON" : "OFF"}</Text>
+            <ChildrenOrConnect>
+              <Button isLoading={isPending} onClick={onToggleSeasonHustlers}>
+                Toggle
+              </Button>
+            </ChildrenOrConnect>
+          </HStack>
+
+          <HStack justifyContent="space-between" w="full">
+            <Text>LOOT: {config?.ryo.play_with_loot ? "ON" : "OFF"}</Text>
+            <ChildrenOrConnect>
+              <Button isLoading={isPending} onClick={onTogglePlayWithLoot}>
+                Toggle
+              </Button>
+            </ChildrenOrConnect>
+          </HStack>
+
+          <HStack justifyContent="space-between" w="full">
+            <Text>HUSTLERS: {config?.ryo.play_with_hustlers ? "ON" : "OFF"}</Text>
+            <ChildrenOrConnect>
+              <Button isLoading={isPending} onClick={onTogglePlayWithHustlers}>
+                Toggle
+              </Button>
+            </ChildrenOrConnect>
+          </HStack>
         </VStack>
       </CardBody>
       <CardFooter></CardFooter>

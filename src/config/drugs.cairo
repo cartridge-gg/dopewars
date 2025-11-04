@@ -1,14 +1,12 @@
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-
 use rollyourown::{
-    traits::{Enumerable}, utils::introspect::{Bytes31IntrospectionImpl},
-    utils::{bytes16::{Bytes16, Bytes16Impl, Bytes16Trait,}}, config::settings::{DrugsMode},
-    store::{Store, StoreImpl, StoreTrait},
+    config::settings::{DrugsMode}, store::{Store, StoreImpl, StoreTrait}, traits::{Enumerable},
+    utils::introspect::{Bytes31IntrospectionImpl}, utils::{bytes16::{Bytes16, Bytes16Impl}},
 };
 
 
-#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
-enum Drugs {
+#[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked, DojoStore, Default)]
+pub enum Drugs {
+    #[default]
     Ludes,
     Speed,
     Weed,
@@ -21,16 +19,16 @@ enum Drugs {
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
-struct DrugConfig {
+pub struct DrugConfig {
     #[key]
-    drugs_mode: DrugsMode,
+    pub drugs_mode: DrugsMode,
     #[key]
-    drug: Drugs,
-    drug_id: u8,
-    base: u16,
-    step: u16,
-    weight: u16,
-    name: Bytes16,
+    pub drug: Drugs,
+    pub drug_id: u8,
+    pub base: u16,
+    pub step: u16,
+    pub weight: u16,
+    pub name: Bytes16,
 }
 
 
@@ -38,7 +36,7 @@ struct DrugConfig {
 //
 //
 
-impl DrugsEnumerableImpl of Enumerable<Drugs> {
+pub impl DrugsEnumerableImpl of Enumerable<Drugs> {
     #[inline(always)]
     fn all() -> Span<Drugs> {
         let mut items = array![
@@ -49,7 +47,7 @@ impl DrugsEnumerableImpl of Enumerable<Drugs> {
             Drugs::Acid,
             Drugs::Ketamine,
             Drugs::Heroin,
-            Drugs::Cocaine
+            Drugs::Cocaine,
         ];
         items.span()
     }
@@ -59,7 +57,7 @@ impl DrugsEnumerableImpl of Enumerable<Drugs> {
 //
 //
 
-impl DrugsIntoFelt252 of Into<Drugs, felt252> {
+pub impl DrugsIntoFelt252 of Into<Drugs, felt252> {
     fn into(self: Drugs) -> felt252 {
         match self {
             Drugs::Ludes => 'Ludes',
@@ -74,7 +72,7 @@ impl DrugsIntoFelt252 of Into<Drugs, felt252> {
     }
 }
 
-impl DrugsIntoU8 of Into<Drugs, u8> {
+pub impl DrugsIntoU8 of Into<Drugs, u8> {
     fn into(self: Drugs) -> u8 {
         match self {
             Drugs::Ludes => 0,
@@ -89,7 +87,7 @@ impl DrugsIntoU8 of Into<Drugs, u8> {
     }
 }
 
-impl U8IntoDrugs of Into<u8, Drugs> {
+pub impl U8IntoDrugs of Into<u8, Drugs> {
     fn into(self: u8) -> Drugs {
         let self252: felt252 = self.into();
         match self252 {
@@ -111,7 +109,7 @@ impl U8IntoDrugs of Into<u8, Drugs> {
 //
 //
 
-fn initialize_drug_config_normal(ref store: Store) {
+pub fn initialize_drug_config_normal(ref store: Store) {
     store
         .save_drug_config(
             @DrugConfig {
@@ -121,8 +119,8 @@ fn initialize_drug_config_normal(ref store: Store) {
                 base: 24,
                 step: 2,
                 weight: 10,
-                name: Bytes16Impl::from('Ludes')
-            }
+                name: Bytes16Impl::from('Ludes'),
+            },
         );
 
     store
@@ -134,8 +132,8 @@ fn initialize_drug_config_normal(ref store: Store) {
                 base: 150,
                 step: 8,
                 weight: 14,
-                name: Bytes16Impl::from('Speed')
-            }
+                name: Bytes16Impl::from('Speed'),
+            },
         );
 
     store
@@ -147,8 +145,8 @@ fn initialize_drug_config_normal(ref store: Store) {
                 base: 402,
                 step: 16,
                 weight: 19,
-                name: Bytes16Impl::from('Weed')
-            }
+                name: Bytes16Impl::from('Weed'),
+            },
         );
 
     store
@@ -160,8 +158,8 @@ fn initialize_drug_config_normal(ref store: Store) {
                 base: 906,
                 step: 32,
                 weight: 27,
-                name: Bytes16Impl::from('Shrooms')
-            }
+                name: Bytes16Impl::from('Shrooms'),
+            },
         );
 
     store
@@ -173,8 +171,8 @@ fn initialize_drug_config_normal(ref store: Store) {
                 base: 1914,
                 step: 64,
                 weight: 37,
-                name: Bytes16Impl::from('Acid')
-            }
+                name: Bytes16Impl::from('Acid'),
+            },
         );
 
     store
@@ -186,8 +184,8 @@ fn initialize_drug_config_normal(ref store: Store) {
                 base: 3930,
                 step: 128,
                 weight: 52,
-                name: Bytes16Impl::from('Ketamine')
-            }
+                name: Bytes16Impl::from('Ketamine'),
+            },
         );
 
     store
@@ -199,8 +197,8 @@ fn initialize_drug_config_normal(ref store: Store) {
                 base: 7962,
                 step: 256,
                 weight: 72,
-                name: Bytes16Impl::from('Heroin')
-            }
+                name: Bytes16Impl::from('Heroin'),
+            },
         );
 
     store
@@ -212,12 +210,12 @@ fn initialize_drug_config_normal(ref store: Store) {
                 base: 16026,
                 step: 512,
                 weight: 100,
-                name: Bytes16Impl::from('Cocaine')
-            }
+                name: Bytes16Impl::from('Cocaine'),
+            },
         );
 }
 
-fn initialize_drug_config_cheap(ref store: Store) {
+pub fn initialize_drug_config_cheap(ref store: Store) {
     store
         .save_drug_config(
             @DrugConfig {
@@ -227,8 +225,8 @@ fn initialize_drug_config_cheap(ref store: Store) {
                 base: 18,
                 step: 1,
                 weight: 5,
-                name: Bytes16Impl::from('Ludes')
-            }
+                name: Bytes16Impl::from('Ludes'),
+            },
         );
 
     store
@@ -240,8 +238,8 @@ fn initialize_drug_config_cheap(ref store: Store) {
                 base: 85,
                 step: 6,
                 weight: 10,
-                name: Bytes16Impl::from('Speed')
-            }
+                name: Bytes16Impl::from('Speed'),
+            },
         );
 
     store
@@ -253,8 +251,8 @@ fn initialize_drug_config_cheap(ref store: Store) {
                 base: 290,
                 step: 18,
                 weight: 15,
-                name: Bytes16Impl::from('Weed')
-            }
+                name: Bytes16Impl::from('Weed'),
+            },
         );
 
     store
@@ -266,8 +264,8 @@ fn initialize_drug_config_cheap(ref store: Store) {
                 base: 980,
                 step: 54,
                 weight: 25,
-                name: Bytes16Impl::from('Shrooms')
-            }
+                name: Bytes16Impl::from('Shrooms'),
+            },
         );
 
     store
@@ -279,8 +277,8 @@ fn initialize_drug_config_cheap(ref store: Store) {
                 base: 2900,
                 step: 111,
                 weight: 30,
-                name: Bytes16Impl::from('Acid')
-            }
+                name: Bytes16Impl::from('Acid'),
+            },
         );
 
     store
@@ -292,8 +290,8 @@ fn initialize_drug_config_cheap(ref store: Store) {
                 base: 6800,
                 step: 186,
                 weight: 45,
-                name: Bytes16Impl::from('Ketamine')
-            }
+                name: Bytes16Impl::from('Ketamine'),
+            },
         );
 
     store
@@ -305,8 +303,8 @@ fn initialize_drug_config_cheap(ref store: Store) {
                 base: 13500,
                 step: 231,
                 weight: 65,
-                name: Bytes16Impl::from('Heroin')
-            }
+                name: Bytes16Impl::from('Heroin'),
+            },
         );
 
     store
@@ -318,12 +316,12 @@ fn initialize_drug_config_cheap(ref store: Store) {
                 base: 19800,
                 step: 284,
                 weight: 100,
-                name: Bytes16Impl::from('Cocaine')
-            }
+                name: Bytes16Impl::from('Cocaine'),
+            },
         );
 }
 
-fn initialize_drug_config_expensive(ref store: Store) {
+pub fn initialize_drug_config_expensive(ref store: Store) {
     store
         .save_drug_config(
             @DrugConfig {
@@ -333,8 +331,8 @@ fn initialize_drug_config_expensive(ref store: Store) {
                 base: 25,
                 step: 1,
                 weight: 12,
-                name: Bytes16Impl::from('Ludes')
-            }
+                name: Bytes16Impl::from('Ludes'),
+            },
         );
 
     store
@@ -346,8 +344,8 @@ fn initialize_drug_config_expensive(ref store: Store) {
                 base: 76,
                 step: 3,
                 weight: 17,
-                name: Bytes16Impl::from('Speed')
-            }
+                name: Bytes16Impl::from('Speed'),
+            },
         );
 
     store
@@ -359,8 +357,8 @@ fn initialize_drug_config_expensive(ref store: Store) {
                 base: 218,
                 step: 10,
                 weight: 23,
-                name: Bytes16Impl::from('Weed')
-            }
+                name: Bytes16Impl::from('Weed'),
+            },
         );
 
     store
@@ -372,8 +370,8 @@ fn initialize_drug_config_expensive(ref store: Store) {
                 base: 796,
                 step: 28,
                 weight: 31,
-                name: Bytes16Impl::from('Shrooms')
-            }
+                name: Bytes16Impl::from('Shrooms'),
+            },
         );
 
     store
@@ -385,8 +383,8 @@ fn initialize_drug_config_expensive(ref store: Store) {
                 base: 1989,
                 step: 56,
                 weight: 41,
-                name: Bytes16Impl::from('Acid')
-            }
+                name: Bytes16Impl::from('Acid'),
+            },
         );
 
     store
@@ -398,8 +396,8 @@ fn initialize_drug_config_expensive(ref store: Store) {
                 base: 4467,
                 step: 109,
                 weight: 58,
-                name: Bytes16Impl::from('Ketamine')
-            }
+                name: Bytes16Impl::from('Ketamine'),
+            },
         );
 
     store
@@ -411,8 +409,8 @@ fn initialize_drug_config_expensive(ref store: Store) {
                 base: 7934,
                 step: 186,
                 weight: 76,
-                name: Bytes16Impl::from('Heroin')
-            }
+                name: Bytes16Impl::from('Heroin'),
+            },
         );
 
     store
@@ -424,7 +422,7 @@ fn initialize_drug_config_expensive(ref store: Store) {
                 base: 17220,
                 step: 333,
                 weight: 100,
-                name: Bytes16Impl::from('Cocaine')
-            }
+                name: Bytes16Impl::from('Cocaine'),
+            },
         );
 }

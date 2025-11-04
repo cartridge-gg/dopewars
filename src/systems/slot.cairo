@@ -32,7 +32,7 @@ pub fn is_XXW(values: (u8, u8, u8)) -> Option<u8> {
     let (r, y, _) = values;
     match r == y {
         true => Option::Some(r),
-        false => Option::None
+        false => Option::None,
     }
 }
 
@@ -40,7 +40,7 @@ pub fn is_XWX(values: (u8, u8, u8)) -> Option<u8> {
     let (r, _, o) = values;
     match r == o {
         true => Option::Some(r),
-        false => Option::None
+        false => Option::None,
     }
 }
 
@@ -48,7 +48,7 @@ pub fn is_WXX(values: (u8, u8, u8)) -> Option<u8> {
     let (_, y, o) = values;
     match y == o {
         true => Option::Some(y),
-        false => Option::None
+        false => Option::None,
     }
 }
 
@@ -97,18 +97,18 @@ pub fn check_combinations(values: (u8, u8, u8)) -> Option<(felt252, (u8, u8, u8)
 
     match is_XXW(values) {
         Option::Some(v) => { return Option::Some(('2 of a kind', values, get_XX_payout(v))); },
-        Option::None => {}
-    };
+        Option::None => {},
+    }
 
     match is_XWX(values) {
         Option::Some(v) => { return Option::Some(('2 of a kind', values, get_XX_payout(v))); },
-        Option::None => {}
-    };
+        Option::None => {},
+    }
 
     match is_WXX(values) {
         Option::Some(v) => { return Option::Some(('2 of a kind', values, get_XX_payout(v))); },
-        Option::None => {}
-    };
+        Option::None => {},
+    }
 
     Option::None
 }
@@ -162,7 +162,7 @@ impl SlotMachineImpl of SlotMachineTrait {
         if let Option::Some((_, _, payout)) = result {
             // earn credits
             self.credits += payout;
-        };
+        }
 
         result
     }
@@ -186,10 +186,9 @@ trait ISlotMachine<T> {
 mod slotmachine {
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::world::IWorldDispatcherTrait;
-    use rollyourown::{store::{Store, StoreImpl, StoreTrait},};
-    use starknet::ContractAddress;
-    use starknet::get_caller_address;
-
+    use rollyourown::constants::ns;
+    use rollyourown::store::{Store, StoreImpl, StoreTrait};
+    use starknet::{ContractAddress, get_caller_address};
     use super::{SlotMachine, SlotMachineImpl, SlotMachineTrait};
 
     // Event message
@@ -208,7 +207,7 @@ mod slotmachine {
     impl SlotMachineImp of super::ISlotMachine<ContractState> {
         fn roll(ref self: ContractState, game_id: u32) {
             // TODO: checks
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
 
             let ryo_addresses = store.ryo_addresses();
             let player_id = get_caller_address();

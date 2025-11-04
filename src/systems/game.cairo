@@ -1,10 +1,7 @@
-use dojo::meta::introspect::Introspect;
-
-use rollyourown::{
-    config::{locations::{Locations}, hustlers::{ItemSlot}}, packing::game_store::{GameMode},
-    systems::helpers::{trading, shopping}, packing::game_store::{GameStore, GameStoreImpl}
-};
-use starknet::ContractAddress;
+use rollyourown::config::locations::Locations;
+use rollyourown::models::game::{GameMode, TokenId};
+use rollyourown::packing::game_store::GameStoreImpl;
+use rollyourown::systems::helpers::{shopping, trading};
 
 #[derive(Copy, Drop, Serde)]
 pub enum Actions {
@@ -21,46 +18,51 @@ pub enum EncounterActions {
 
 #[starknet::interface]
 trait IGameActions<T> {
-    fn create_game(self: @T, game_mode: GameMode, hustler_id: u16, player_name: felt252);
+    fn create_game(
+        self: @T, game_mode: GameMode, player_name: felt252, multiplier: u8, token_id: TokenId,
+    );
     fn end_game(self: @T, game_id: u32, actions: Span<Actions>);
     fn travel(self: @T, game_id: u32, next_location: Locations, actions: Span<Actions>);
-    fn decide(self: @T, game_id: u32, action: EncounterActions);
 }
 
 #[dojo::contract]
 mod game {
+    use achievement::store::StoreTrait as BushidoStoreTrait;
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
-    use dojo::world::IWorldDispatcherTrait;
+    use dojo::world::{IWorldDispatcherTrait, WorldStorageTrait};
+    use dope_types::dope_hustlers::{HustlerSlots, HustlerStoreImpl, HustlerStoreTrait};
+    use rollyourown::achievements::achievements_v1::Tasks;
+    use rollyourown::config::locations::Locations;
+    use rollyourown::constants::ns;
+    use rollyourown::events::GameCreated;
+    use rollyourown::helpers::season_manager::SeasonManagerTrait;
+    use rollyourown::interfaces::erc721::{IERC721ABIDispatcher, IERC721ABIDispatcherTrait};
+    use rollyourown::models::game::{GameImpl, GameMode, TokenId};
+    use rollyourown::packing::game_store::{GameStore, GameStoreImpl};
+    use rollyourown::packing::player::PlayerImpl;
+    use rollyourown::store::{StoreImpl, StoreTrait};
+    use rollyourown::systems::helpers::trading::TradeDirection;
+    use rollyourown::systems::helpers::{game_loop, shopping, trading};
+    use rollyourown::utils::bytes16::Bytes16Impl;
+    use rollyourown::utils::random::RandomImpl;
+    use starknet::get_caller_address;
 
-    use rollyourown::{
-        config::{
-            drugs::{Drugs}, locations::{Locations}, game::{GameConfig}, ryo::{RyoConfig},
-            ryo_address::{RyoAddress}, encounters::{Encounters}
-        },
-        models::{game_store_packed::GameStorePacked, game::{Game, GameImpl}, season::{Season}},
-        packing::{game_store::{GameStore, GameStoreImpl, GameMode}, player::{Player, PlayerImpl},},
-        systems::{
-            helpers::{trading, shopping, traveling, traveling::EncounterOutcomes, game_loop},
-            game::EncounterActions
-        },
-        helpers::season_manager::{SeasonManagerTrait},
-        utils::{random::{Random, RandomImpl}, bytes16::{Bytes16, Bytes16Impl, Bytes16Trait},},
-        interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
-        store::{Store, StoreImpl, StoreTrait}, events::{GameCreated}
-    };
-    use starknet::{ContractAddress, get_caller_address, get_contract_address};
 
     #[abi(embed_v0)]
     impl GameActionsImpl of super::IGameActions<ContractState> {
         fn create_game(
-            self: @ContractState, game_mode: GameMode, hustler_id: u16, player_name: felt252
+            self: @ContractState,
+            game_mode: GameMode,
+            player_name: felt252,
+            multiplier: u8,
+            token_id: TokenId,
         ) {
             self.assert_not_paused();
             // assert(game_mode == GameMode::Noob || game_mode == GameMode::Ranked, 'invalid game
             // mode!');
 
-            let mut world = self.world(@"dopewars");
+            let mut world = self.world(@ns());
             let mut store = StoreImpl::new(world);
 
             let ryo_addresses = store.ryo_addresses();
@@ -77,14 +79,110 @@ mod game {
 
             // if RANKED
             if game_mode == GameMode::Ranked {
-                // pay paper_fee
-                season_manager.on_game_start();
+                // pay paper_fee * multiplier
+                season_manager.on_game_start(multiplier);
+            }
+
+            let mut dope_world = self.world(@"dope");
+
+            let mut game_created = GameCreated {
+                game_id,
+                player_id,
+                game_mode,
+                player_name,
+                multiplier,
+                token_id,
+                hustler_equipment: array![].span(),
+                hustler_body: array![].span(),
+            };
+
+            match token_id {
+                TokenId::GuestLootId(guest_loot_id) => {
+                    // check if enabled
+                    assert!(store.ryo_config().f2p_hustlers, "f2p hustlers are disabled");
+
+                    // check one of the availble guest_loot_id for season
+                    let mut i: u32 = 0;
+                    let mut is_valid = false;
+                    while i < 8 {
+                        let hash: u256 = core::poseidon::poseidon_hash_span(
+                            array![season_version.into(), i.into()].span(),
+                        )
+                            .into();
+                        let id: felt252 = ((hash % 8000) + 1).try_into().unwrap();
+                        if guest_loot_id == id {
+                            is_valid = true;
+                            break;
+                        }
+                        i += 1;
+                    }
+
+                    assert!(is_valid, "invalid guest loot id");
+                },
+                TokenId::LootId(loot_id) => {
+                    // check if enabled
+                    assert!(store.ryo_config().play_with_loot, "play_with_loot is disabled");
+
+                    // check if owner of loot_id
+                    let loot_dispatcher = IERC721ABIDispatcher {
+                        contract_address: dope_world.dns_address(@"DopeLoot").unwrap(),
+                    };
+                    assert(
+                        player_id == loot_dispatcher.owner_of(loot_id.into()),
+                        'caller is not loot owner',
+                    );
+                },
+                TokenId::HustlerId(hustler_id) => {
+                    // check if enabled
+                    assert!(
+                        store.ryo_config().play_with_hustlers, "play_with_hustlers is disabled",
+                    );
+
+                    // check if owner of hustler_id
+                    let erc721_dispatcher = IERC721ABIDispatcher {
+                        contract_address: dope_world.dns_address(@"DopeHustlers").unwrap(),
+                    };
+
+                    assert(
+                        player_id == erc721_dispatcher.owner_of(hustler_id.into()),
+                        'caller is not hustler owner',
+                    );
+
+                    let mut hustler_store = HustlerStoreImpl::new(dope_world);
+
+                    game_created
+                        .hustler_equipment = hustler_store
+                        .hustler_slot_full(hustler_id.into());
+
+                    game_created.hustler_body = hustler_store.hustler_body_full(hustler_id.into());
+
+                    let accessory = hustler_store
+                        .hustler_slot(hustler_id.into(), HustlerSlots::Accessory);
+
+                    let bushido_store = BushidoStoreTrait::new(world);
+                    if accessory.gear_item_id.is_some() {
+                        bushido_store
+                            .progress(
+                                player_id.into(),
+                                Tasks::ELEGANT,
+                                1,
+                                starknet::get_block_timestamp(),
+                            );
+                    };
+                },
             }
 
             // create game
             let mut game_config = store.game_config(season_version);
             let mut game = GameImpl::new(
-                game_id, player_id, season_version, game_mode, player_name, hustler_id
+                dope_world,
+                game_id,
+                player_id,
+                season_version,
+                game_mode,
+                player_name,
+                multiplier,
+                token_id,
             );
 
             // save Game
@@ -95,16 +193,13 @@ mod game {
             game_store.save();
 
             // emit GameCreated
-            world
-                .emit_event(
-                    @GameCreated { game_id, player_id, game_mode, player_name, hustler_id }
-                );
+            world.emit_event(@game_created);
         }
 
         fn end_game(self: @ContractState, game_id: u32, actions: Span<super::Actions>) {
             let player_id = get_caller_address();
 
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
 
             // execute actions (trades & shop)
@@ -122,7 +217,7 @@ mod game {
             next_location: Locations,
             actions: Span<super::Actions>,
         ) {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
 
             let ryo_addresses = store.ryo_addresses();
             let player_id = get_caller_address();
@@ -148,7 +243,7 @@ mod game {
 
             // traveling
             let (is_dead, has_encounter) = game_loop::on_travel(
-                ref game_store, ref season_settings, ref randomizer
+                ref game_store, ref season_settings, ref randomizer,
             );
 
             // check if dead
@@ -165,38 +260,6 @@ mod game {
                 }
             }
         }
-
-        fn decide(self: @ContractState, game_id: u32, action: super::EncounterActions,) {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
-
-            let ryo_addresses = store.ryo_addresses();
-            let player_id = get_caller_address();
-            let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
-                .consume_random(Source::Nonce(player_id));
-
-            //
-            let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
-
-            // check player status
-            assert(game_store.player.can_decide(), 'player cannot decide');
-
-            let mut randomizer = RandomImpl::new(random);
-            let mut season_settings = store.season_settings(game_store.game.season_version);
-
-            // // resolve decision
-            let is_dead = traveling::decide(
-                ref game_store, ref season_settings, ref randomizer, action
-            );
-
-            // check if dead
-            if is_dead {
-                // save & gameover RIP
-                game_loop::on_game_over(ref game_store, ref store);
-            } else {
-                // on_turn_end & save
-                game_loop::on_turn_end(ref game_store, ref randomizer, ref store);
-            };
-        }
     }
 
 
@@ -204,20 +267,30 @@ mod game {
     impl InternalImpl of InternalTrait {
         // #[inline(always)]
         fn assert_not_paused(self: @ContractState) {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             let ryo_config = store.ryo_config();
             assert(!ryo_config.paused, 'game is paused');
         }
 
         fn execute_actions(
-            self: @ContractState, ref game_store: GameStore, ref actions: Span<super::Actions>
+            self: @ContractState, ref game_store: GameStore, ref actions: Span<super::Actions>,
         ) {
             let mut has_shopped = false;
+            let mut is_first_sell = true;
+            let mut is_first_buy = true;
 
             while let Option::Some(action) = actions.pop_front() {
                 match action {
                     super::Actions::Trade(trade_action) => {
-                        trading::execute_trade(ref game_store, *trade_action);
+                        trading::execute_trade(
+                            ref game_store, *trade_action, is_first_sell, is_first_buy,
+                        );
+                        if *trade_action.direction == TradeDirection::Sell {
+                            is_first_sell = false;
+                        }
+                        if *trade_action.direction == TradeDirection::Buy {
+                            is_first_sell = false;
+                        };
                     },
                     super::Actions::Shop(shop_action) => {
                         assert(has_shopped == false, 'one upgrade by turn');

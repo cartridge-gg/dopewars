@@ -1,32 +1,27 @@
-use core::traits::TryInto;
-use dojo::world::{IWorld, IWorldDispatcher, IWorldDispatcherTrait};
-
 use rollyourown::{
-    models::game::{Game}, traits::{Enumerable, Packable, Packer},
-    config::{locations::Locations, game::{GameConfig}, drugs::{Drugs}},
-    utils::{
-        bits::{Bits, BitsImpl, BitsTrait, BitsDefaultImpl}, random::{Random, RandomImpl},
-        events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathImpl, MathTrait}
-    },
+    config::{drugs::{Drugs}, game::{GameConfig}, locations::Locations},
     packing::{
-        game_store::{GameStore, GameStoreTrait},
+        drugs_packed::{DrugsPackedImpl}, game_store::{GameStore, GameStoreTrait},
+        markets_packed::{MarketsPackedImpl, MarketsPackedTrait},
         player_layout::{PlayerLayout, PlayerLayoutEnumerableImpl, PlayerLayoutPackableImpl},
-        drugs_packed::{DrugsPacked, DrugsPackedImpl},
-        markets_packed::{MarketsPacked, MarketsPackedImpl, MarketsPackedTrait}
+    },
+    traits::{Packable, Packer},
+    utils::{
+        bits::{BitsDefaultImpl, BitsImpl, BitsTrait}, math::{MathImpl, MathTrait},
+        random::{Random, RandomImpl},
     },
 };
-use starknet::ContractAddress;
 
 
 // TODO : move
 #[derive(Copy, Drop, Serde, PartialEq, IntrospectPacked)]
-enum PlayerStatus {
+pub enum PlayerStatus {
     Normal,
     BeingArrested,
     BeingMugged,
 }
 
-impl PlayerStatusIntoFelt252 of Into<PlayerStatus, felt252> {
+pub impl PlayerStatusIntoFelt252 of Into<PlayerStatus, felt252> {
     fn into(self: PlayerStatus) -> felt252 {
         match self {
             PlayerStatus::Normal => 'Normal',
@@ -36,7 +31,7 @@ impl PlayerStatusIntoFelt252 of Into<PlayerStatus, felt252> {
     }
 }
 
-impl PlayerStatusIntoU8 of Into<PlayerStatus, u8> {
+pub impl PlayerStatusIntoU8 of Into<PlayerStatus, u8> {
     fn into(self: PlayerStatus) -> u8 {
         match self {
             PlayerStatus::Normal => 0,
@@ -46,7 +41,7 @@ impl PlayerStatusIntoU8 of Into<PlayerStatus, u8> {
     }
 }
 
-impl U8IntoPlayerStatus of Into<u8, PlayerStatus> {
+pub impl U8IntoPlayerStatus of Into<u8, PlayerStatus> {
     fn into(self: u8) -> PlayerStatus {
         let self252: felt252 = self.into();
         match self252 {
@@ -63,22 +58,22 @@ impl U8IntoPlayerStatus of Into<u8, PlayerStatus> {
 //
 
 #[derive(Copy, Drop, Serde)]
-struct Player {
-    cash: u32,
-    health: u8,
-    turn: u8,
-    status: PlayerStatus,
-    prev_location: Locations,
-    location: Locations,
-    next_location: Locations,
-    drug_level: u8,
-    reputation: u8,
-    traded_million: bool,
+pub struct Player {
+    pub cash: u32,
+    pub health: u8,
+    pub turn: u8,
+    pub status: PlayerStatus,
+    pub prev_location: Locations,
+    pub location: Locations,
+    pub next_location: Locations,
+    pub drug_level: u8,
+    pub reputation: u8,
+    pub traded_million: bool // TODO: remove or find another use ?
 }
 
 
 #[generate_trait]
-impl PlayerImpl of PlayerTrait {
+pub impl PlayerImpl of PlayerTrait {
     fn new(ref game_config: GameConfig) -> Player {
         // create initial player state with game_config
         Player {
@@ -132,10 +127,10 @@ impl PlayerImpl of PlayerTrait {
         self.health = self.health.sub_capped(amount, 0);
     }
 
-    fn level_up_drug(ref self: Player, ref game_store: GameStore, ref randomizer: Random,) {
+    fn level_up_drug(ref self: Player, ref game_store: GameStore, ref randomizer: Random) {
         // level up each rep_drug_step capped to 4
         let mut drug_level: u8 = MathImpl::min(
-            self.reputation / game_store.game_config().rep_drug_step, 4
+            self.reputation / game_store.game_config().rep_drug_step, 4,
         );
 
         // check if already the right level
@@ -177,7 +172,7 @@ impl PlayerImpl of PlayerTrait {
 //
 
 // pack
-impl PlayerPackerImpl of Packer<Player, felt252> {
+pub impl PlayerPackerImpl of Packer<Player, felt252> {
     fn pack(self: Player) -> felt252 {
         let mut bits = BitsDefaultImpl::default();
         let mut layout = PlayerLayoutEnumerableImpl::all();
@@ -216,7 +211,7 @@ impl PlayerPackerImpl of Packer<Player, felt252> {
 
 // unpack
 #[generate_trait]
-impl PlayerUnpackerImpl of PlayerUnpackerTrait {
+pub impl PlayerUnpackerImpl of PlayerUnpackerTrait {
     fn unpack(self: felt252) -> Player {
         let mut player = PlayerImpl::empty();
         let mut layout = PlayerLayoutEnumerableImpl::all();

@@ -1,30 +1,50 @@
-import { Dopewars_Game as Game, World__ModelEdge, useHallOfFameQuery } from "@/generated/graphql";
 import { useEffect, useMemo } from "react";
 import { useDojoContext } from "./useDojoContext";
+import { useSql } from "./useSql";
+import { shortString } from "starknet";
+import { DW_NS } from "../constants";
 
 type HallOfFameResult = ReturnType<typeof useHallOfFame>;
+
+const sqlQuery = () => `SELECT season_version,
+game_id,
+player_id,
+"player_name.value",
+final_score,
+claimable,
+position,
+token_id,
+"token_id.guestlootid",
+"token_id.lootid",
+"token_id.hustlerid"
+FROM "${DW_NS}-Game" 
+WHERE position = 1
+ORDER BY season_version DESC
+LIMIT 1000;`;
 
 export const useHallOfFame = () => {
   const {
     chains: { selectedChain },
   } = useDojoContext();
 
-  const { data, isFetching, isRefetching, isError, refetch } = useHallOfFameQuery({});
-
-  useEffect(() => {
-    refetch();
-  }, [selectedChain.toriiUrl, refetch]);
+  const { data, isFetched, isFetching, refetch } = useSql(sqlQuery());
 
   const hallOfFame = useMemo(() => {
-    if (isError || isFetching || isRefetching || !data) return [];
+    if (!data) return [];
 
-    const edges = data.dopewarsGameModels?.edges as World__ModelEdge[];
-    return edges.map((i: World__ModelEdge) => i.node as Game);
-  }, [data, isFetching, isRefetching, isError]);
+    return (data || []).map((i: any) => {
+      return {
+        ...i,
+        player_name: shortString.decodeShortString(BigInt(i["player_name.value"]).toString()),
+        token_id_type: i.token_id,
+        token_id: Number(i[`token_id.${i.token_id}`]),
+      };
+    });
+  }, [data]);
 
   return {
     hallOfFame,
-    isFetchingHallOfFame: isFetching || isRefetching,
+    isFetchingHallOfFame: isFetching,
     refetchHallOfFame: refetch,
   };
 };

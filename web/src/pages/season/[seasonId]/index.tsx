@@ -16,6 +16,7 @@ import {
 } from "@/components/icons";
 import { Cocaine } from "@/components/icons/drugs";
 import { Layout } from "@/components/layout";
+import { HustlerAvatarIcon } from "@/components/pages/profile/HustlerAvatarIcon";
 import {
   cashModeColor,
   cashModeColorKeys,
@@ -40,9 +41,9 @@ import {
   useSystems,
 } from "@/dojo/hooks";
 import {
-  Dopewars_Game as Game,
-  Dopewars_SeasonSettings as SeasonSettings,
-  Dopewars_SortedList as SortedList,
+  Dopewars_V0_Game as Game,
+  Dopewars_V0_SeasonSettings as SeasonSettings,
+  Dopewars_V0_SortedList as SortedList,
 } from "@/generated/graphql";
 
 import { useToast } from "@/hooks/toast";
@@ -83,10 +84,6 @@ export default function SeasonIndex() {
   const { registeredGames, isFetched, refetch: refetchRegisteredGames } = useRegisteredGamesBySeason(seasonId || 0);
   const { season, seasonSettings, sortedList } = useSeasonByVersion(seasonId || 0);
 
-  useEffect(() => {
-    refetchRegisteredGames();
-  }, [refetchRegisteredGames]);
-
   if (!season || !seasonSettings) return null;
 
   return (
@@ -121,15 +118,7 @@ const SeasonLeftPanel = ({
   sortedList?: SortedList;
 }) => {
   return (
-    <VStack
-      flex={1}
-      w="full"
-      h="full"
-      // justifyContent="center"
-      alignItems="center"
-      marginBottom={["30px", "50px"]}
-      gap={0}
-    >
+    <VStack flex={1} w="full" h="full" alignItems="center" marginBottom={["30px", "50px"]} gap={0}>
       <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
         SEASON {seasonId}
       </Text>
@@ -138,11 +127,6 @@ const SeasonLeftPanel = ({
       </Heading>
 
       <VStack>
-        {/* <Card w="full" p={3} alignItems="center">
-          <Text>Total entrants {sortedList?.size || 0}</Text>
-          {sortedList?.locked && <Text>Total paid {sortedList?.process_size}</Text>}
-        </Card> */}
-
         <SeasonSettingsTable settings={seasonSettings} />
       </VStack>
     </VStack>
@@ -269,8 +253,14 @@ export const GamesTable = ({ games }: { games: Game[] }) => {
                 <Td isNumeric>{game.position > 0 ? game.position : idx + 1}</Td>
                 <Td>
                   <HStack>
-                    <HustlerIcon hustler={game.hustler_id as Hustlers} color={color} />
-                    <Text>{shortString.decodeShortString(num.toHexString(BigInt(game.player_name?.value)))}</Text>
+                    <HustlerAvatarIcon
+                      gameId={game.game_id}
+                      // @ts-ignore
+                      tokenIdType={game?.token_id_type}
+                      // @ts-ignore
+                      tokenId={game?.token_id}
+                    />
+                    <Text>{game.player_name as string}</Text>
                   </HStack>
                 </Td>
                 <Td isNumeric>{formatCashHeader(game.final_score)}</Td>

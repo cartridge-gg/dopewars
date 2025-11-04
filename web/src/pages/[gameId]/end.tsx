@@ -1,6 +1,7 @@
 import { PaperCashIcon, Roll, Trophy, Warning } from "@/components/icons";
 import { Layout } from "@/components/layout";
 import {
+  Box,
   Card,
   Divider,
   HStack,
@@ -18,7 +19,6 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Button } from "@/components/common";
-import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import ShareButton from "@/components/pages/profile/ShareButton";
 import {
   useDojoContext,
@@ -32,9 +32,11 @@ import { formatCash } from "@/utils/ui";
 import { observer } from "mobx-react-lite";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { num, shortString } from "starknet";
-import { Dopewars_Game as Game } from "@/generated/graphql";
+import { Dopewars_V0_Game as Game } from "@/generated/graphql";
 import { useToast } from "@/hooks/toast";
 import { ChildrenOrConnect } from "@/components/wallet";
+import { HustlerAvatarIcon } from "@/components/pages/profile/HustlerAvatarIcon";
+import { useAccount } from "@starknet-react/core";
 
 const End = () => {
   const gameStore = useGameStore();
@@ -59,10 +61,10 @@ const End = () => {
 
   const { season, sortedList, refetch: refetchSeason } = useSeasonByVersion(game?.gameInfos.season_version);
 
-  useEffect(() => {
-    refetchSeason();
-    refetchRegisteredGame();
-  }, [refetchSeason, refetchRegisteredGame]);
+  // useEffect(() => {
+  //   refetchSeason();
+  //   refetchRegisteredGame();
+  // }, [refetchSeason, refetchRegisteredGame]);
 
   useEffect(() => {
     if (game) {
@@ -97,20 +99,21 @@ const End = () => {
       const prevGameId = prev ? prev.game_id : 0;
       const prevPlayerId = prev ? prev.player_id : 0;
 
-      const { hash } = await registerScore(gameInfos?.game_id!, prevGameId, prevPlayerId);
+      const { hash, isError } = await registerScore(gameInfos?.game_id!, prevGameId, prevPlayerId);
 
-      if (hash !== "") {
+      if (!isError) {
         toast({
           message: `Registered!`,
           duration: 5_000,
           isError: false,
         });
-        await rpcProvider.waitForTransaction(hash, {
-          retryInterval: 200,
-        });
-        setTimeout(() => {
-          gameStore.init(gameInfos?.game_id!);
-        }, 1_000);
+
+        setTimeout(async () => {
+          await gameStore.init(gameInfos?.game_id!);
+          setTimeout(() => {
+            refetchRegisteredGame();
+          }, 1_000);
+        }, 1_500);
       }
     } catch (e: any) {
       console.log(e);
@@ -159,8 +162,16 @@ const End = () => {
           <VStack flex="1">
             <StatsItem
               text={shortString.decodeShortString(num.toHexString(BigInt(game?.gameInfos.player_name?.value)))}
-              icon={<HustlerIcon hustler={game?.gameInfos.hustler_id as Hustlers} w="24px" h="24px" />}
+              icon={
+                <HustlerAvatarIcon
+                  gameId={gameInfos.game_id}
+                  // @ts-ignore
+                  tokenIdType={gameInfos?.token_id_type}
+                  tokenId={Number(gameInfos?.token_id)}
+                />
+              }
             />
+
             {game?.gameInfos.game_mode == "Ranked" && (
               <>
                 <Divider borderColor="neon.600" />

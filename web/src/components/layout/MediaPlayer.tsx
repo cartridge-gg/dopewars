@@ -58,7 +58,6 @@ const ClickFeedback = ({
 export const MediaPlayer = () => {
   const mediaStore = useMediaStore();
   const songTitle = mediaStore.medias[mediaStore.currentIndex]?.name || "LOADING ...";
-  const height = "48px";
 
   useEffect(() => {
     const init = async () => {
@@ -71,7 +70,7 @@ export const MediaPlayer = () => {
     <VStack w="auto">
       <Flex
         w="320px"
-        h={height}
+        h={["40px", "48px"]}
         direction="row"
         alignItems="normal"
         className={mediaStore.isPlaying ? "mediaplayer-playing" : "mediaplayer-paused"}
@@ -88,7 +87,7 @@ export const MediaPlayer = () => {
         <Box
           className="mediaplayer-status"
           w="180px"
-          h={height}
+          h={["40px", "48px"]}
           display="flex"
           flexDirection="row"
           flexShrink={0}
@@ -113,7 +112,7 @@ export const MediaPlayer = () => {
 
         <Flex
           className="mediaplayer-commands"
-          h={height}
+          h={["40px", "48px"]}
           alignItems="center"
           justifyContent="center"
           flexShrink={0}

@@ -1,5 +1,5 @@
 import { Gem } from "@/components/icons";
-import { MakeItRain } from "@/components/layout";
+import { HeaderButton, MakeItRain } from "@/components/layout";
 import { useClaimable } from "@/dojo/hooks";
 import { IsMobile } from "@/utils/ui";
 import { Button } from "@chakra-ui/react";
@@ -15,7 +15,7 @@ export interface Claimable {
 export const ClaimReward = () => {
   const { account } = useAccount();
 
-  const { claimable: claimableData, refetchClaimable } = useClaimable(account?.address || "0x0");
+  const { claimable: claimableData, refetch: refetchClaimable } = useClaimable(account?.address || "0x0");
 
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);
   const [isRainning, setIsRainning] = useState(false);
@@ -26,8 +26,8 @@ export const ClaimReward = () => {
   });
 
   useEffect(() => {
-    const gameIds = claimableData.map((i) => i.game_id);
-    const totalClaimable = claimableData.map((i) => i.claimable).reduce((p, c) => p + c, 0);
+    const gameIds = claimableData.map((i: any) => i.game_id);
+    const totalClaimable = claimableData.map((i: any) => i.claimable).reduce((p: number, c: number) => p + c, 0);
 
     setClaimable({
       totalClaimable,
@@ -58,7 +58,7 @@ export const ClaimReward = () => {
       {claimable.totalClaimable > 0 && (
         <>
           <Button
-            h="48px"
+            h={["40px", "48px"]}
             variant="pixelated"
             bg="yellow.600"
             borderColor="yellow.600"
@@ -68,7 +68,7 @@ export const ClaimReward = () => {
             }}
             onClick={() => setIsClaimModalOpen(true)}
           >
-            <Gem /> {!isMobile ? "Claim" : ""}
+            <Gem /> {!isMobile ? "CLAIM" : ""}
           </Button>
           <ClaimModal claimable={claimable} claimableData={claimableData} isOpen={isClaimModalOpen} onClose={onClose} />
         </>

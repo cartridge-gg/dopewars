@@ -1,10 +1,8 @@
 import { LoadingModal, MakeItRain, QuitGameModal, RefreshGameModal } from "@/components/layout";
 import { AccountDetailsModal, ConnectModal } from "@/components/wallet";
-import { DeployingModal } from "@/components/wallet/DeployingModal";
 import { DojoContextProvider } from "@/dojo/context/DojoContext";
-import { useAutoBurner } from "@/dojo/hooks/useAutoBurner";
 import { dojoContextConfig } from "@/dojo/setup/config";
-import useKonamiCode, { starkpimpSequence } from "@/hooks/useKonamiCode";
+import useKonamiCode, { psySequence, starkpimpSequence } from "@/hooks/useKonamiCode";
 import Fonts from "@/theme/fonts";
 import GlobalStyles from "@/theme/global";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -21,8 +19,13 @@ import { GlobalEvents } from "@/components/layout/GlobalEvents";
 import ConnectionError from "@/components/layout/ConnectionError";
 enableStaticRendering(typeof window === "undefined");
 
+// import "@/dope/dist/style.css";
+import { Toaster } from "react-hot-toast";
+import { Psycadelic } from "@/components/common/Psycadelic";
+
 export default function App({ Component, pageProps }: AppProps) {
   const { setSequence, isRightSequence, setIsRightSequence } = useKonamiCode(starkpimpSequence);
+
 
   useEffect(() => {
     if (isRightSequence) {
@@ -34,12 +37,11 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, [isRightSequence, setIsRightSequence, setSequence]);
 
-  useAutoBurner();
 
   return (
     <>
       <ChakraProvider theme={theme}>
-        {/* <DojoContextProvider dojoContextConfig={dojoContextConfig}> */}
+        <DojoContextProvider dojoContextConfig={dojoContextConfig}>
           <Fonts />
           <GlobalStyles />
           <NextHead>
@@ -49,21 +51,27 @@ export default function App({ Component, pageProps }: AppProps) {
               content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
             />
           </NextHead>
-          <ConnectionError errors={[]}/>
-          {/* {isRightSequence && <MakeItRain />}
+          {isRightSequence && <MakeItRain />}
+          <Psycadelic />
           <Component {...pageProps} />
           <SpeedInsights />
         
           <LoadingModal />
-          <DeployingModal />
           <ConnectModal />
           <AccountDetailsModal />
           <QuitGameModal />
           <RefreshGameModal />
           <SeasonDetailsModal />
 
-          <GlobalEvents /> */}
-        {/* </DojoContextProvider> */}
+          <GlobalEvents />
+
+          <Toaster
+            gutter={0}
+            containerStyle={{
+              inset: 0,
+            }}
+          />
+        </DojoContextProvider>
       </ChakraProvider>
     </>
   );

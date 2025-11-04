@@ -1,20 +1,44 @@
-allowed_origins = ["*"]
-world_address = "0x04f3dccb47477c087ad9c76b8067b8aadded57f8df7f2d7543e6066bcb25332c"
-index_pending = true
+
+
+world_address = "0x06bc05ce8b9d77bc18f9ce94aa33cdf3dc3f3c766cbc63c3d7cd9485e568cc85"
+
+[server]
+http_cors_origins = ["*"]
+
+
+[indexing]
+pending = true
 polling_interval = 1000
-historical_events = [
-    "dopewars-GameCreated",
-    "dopewars-Traveled",
-    "dopewars-GameOver",
-    "dopewars-TradeDrug",
-    "dopewars-HighVolatility",
-    "dopewars-UpgradeItem",
-    "dopewars-TravelEncounter",
-    "dopewars-TravelEncounterResult",
-    "dopewars-NewSeason",
-    "dopewars-NewHighScore",
-    "dopewars-Claimed",
-    # bushido 
-    "dopewars-TrophyCreation",
-    "dopewars-TrophyProgression",
+namespaces=["dopewars_v0", "dope"]
+
+# max_concurrent_tasks = 2
+contracts = [
+    # "ERC20:0x07911f16dc122877dee96a1ec2cc1f8a6853096253568118047b5e1e0edba17c", # paper
+    #
+    "ERC721:0x07652ca415b80a906ae739574104d217e953963917bffeb1ce7d5704b6ed057d", # dope_loot
+    "ERC721:0x0351f9dfb30e7ef8f283c61360145295d22621ac197b7a0d1f9094b52d71c605", # dope_hustlers
+    "ERC1155:0x0107aefe535adad25d91f77744bb37eca24d997e8216517736f06bbaea22d214", # dope_gear
 ]
+
+[erc]
+max_metadata_tasks=100
+
+
+[sql]
+historical = [
+    "dopewars_v0-GameCreated",
+    "dopewars_v0-Traveled",
+    "dopewars_v0-GameOver",
+    "dopewars_v0-TradeDrug",
+    "dopewars_v0-HighVolatility",
+    "dopewars_v0-UpgradeItem",
+    "dopewars_v0-TravelEncounter",
+    "dopewars_v0-TravelEncounterResult",
+    "dopewars_v0-NewSeason",
+    "dopewars_v0-NewHighScore",
+    "dopewars_v0-Claimed",
+    # bushido 
+    "dopewars_v0-TrophyCreation",
+    "dopewars_v0-TrophyProgression",
+]
+

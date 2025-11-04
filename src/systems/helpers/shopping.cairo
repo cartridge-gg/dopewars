@@ -1,28 +1,26 @@
-use bushido_trophy::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
+use achievement::store::{StoreTrait as BushidoStoreTrait};
 use dojo::event::EventStorage;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::elements::quests::{types::{Quest, QuestTrait}};
+use rollyourown::achievements::achievements_v1::Tasks;
 use rollyourown::packing::game_store::GameStoreTrait;
 
 use rollyourown::{
-    models::game::{Game, GameImpl, GameTrait},
-    config::{hustlers::{HustlerItemConfig, HustlerImpl, ItemSlot}, locations::{Locations},},
+    config::{hustlers::{ItemSlot}, locations::{Locations}}, events::{UpgradeItem},
+    models::game::{GameImpl, GameTrait},
     packing::{
-        game_store::{GameStore, GameStoreImpl}, player::{PlayerImpl},
-        wanted_packed::{WantedPacked, WantedPackedImpl}, items_packed::{ItemsPackedImpl}
+        game_store::{GameStore, GameStoreImpl}, items_packed::{ItemsPackedImpl},
+        player::{PlayerImpl}, wanted_packed::{WantedPackedImpl},
     },
-    store::{Store, StoreImpl, StoreTrait},
-    utils::{events::{RawEventEmitterTrait, RawEventEmitterImpl}, math::{MathImpl, MathTrait}},
-    events::{UpgradeItem}
+    store::{StoreImpl}, utils::{math::{MathImpl, MathTrait}},
 };
+use super::super::super::config::gear::GearItemConfigTrait;
 
 
 #[derive(Copy, Drop, Serde)]
-struct Action {
-    slot: ItemSlot,
+pub struct Action {
+    pub slot: ItemSlot,
 }
 
-fn execute_action(ref game_store: GameStore, action: Action) {
+pub fn execute_action(ref game_store: GameStore, action: Action) {
     // get wanted
     let wanted = if game_store.player.location == Locations::Home {
         0
@@ -43,17 +41,13 @@ fn execute_action(ref game_store: GameStore, action: Action) {
     let level: u8 = current_item.level.into();
     let next_level = level + 1;
 
-    // get hustler
-    let hustler = HustlerImpl::get(@game_store.store, game_store.game.hustler_id);
-
-    // get next item
-    let next_item = hustler.get_item_config(action.slot, next_level);
+    let next_item = current_item.next_level_config();
 
     // check can buy
-    assert(game_store.player.cash >= next_item.tier.cost, 'too poor');
+    assert(game_store.player.cash >= *next_item.cost, 'too poor');
 
     // pay item
-    game_store.player.cash -= next_item.tier.cost;
+    game_store.player.cash -= *next_item.cost;
 
     // gibe item to customer
     game_store.items.upgrade_item(action.slot);
@@ -78,15 +72,17 @@ fn execute_action(ref game_store: GameStore, action: Action) {
                 turn: game_store.player.turn,
                 item_slot: action.slot.into(),
                 item_level: next_level,
-            }
+            },
         );
 
     if game_store.game.is_ranked() && game_store.items.is_maxed_out() {
-        let quest_id = Quest::Stuffed.identifier(0);
         let bushido_store = BushidoStoreTrait::new(game_store.store.world);
         bushido_store
             .progress(
-                game_store.game.player_id.into(), quest_id, 1, starknet::get_block_timestamp()
+                game_store.game.player_id.into(),
+                Tasks::STUFFED,
+                1,
+                starknet::get_block_timestamp(),
             );
     }
 }

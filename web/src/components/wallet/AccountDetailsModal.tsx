@@ -12,9 +12,9 @@ export const AccountDetailsModal = observer(() => {
   const { config } = useConfigStore();
 
   const { disconnect } = useDisconnect();
-  const { account } = useAccount();
+  const { account, address } = useAccount();
   const { uiStore } = useDojoContext();
-  const { username, isController } = useControllerUsername();
+  const { username, isController } = useControllerUsername(address as string);
 
   const onClose = () => {
     uiStore.closeAccountDetails();

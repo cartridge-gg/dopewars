@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Contract, TypedContractV2 } from "starknet";
+import { Contract, ProviderInterface, TypedContractV2 } from "starknet";
 import { ABI as paperAbi } from "../abis/paperAbi";
 import { useDojoContext } from "./useDojoContext";
 
@@ -21,9 +21,11 @@ export const useTokenBalance = ({
   const contract = useMemo(() => {
     if (!token || !dojoProvider) return undefined;
 
-    const contract: TypedContractV2<typeof paperAbi> = new Contract(paperAbi, token!, dojoProvider.provider).typedv2(
-      paperAbi,
-    );
+    const contract: TypedContractV2<typeof paperAbi> = new Contract({
+      abi: paperAbi,
+      address: token!,
+      providerOrAccount: dojoProvider.provider as unknown as ProviderInterface,
+    }).typedv2(paperAbi);
     return contract;
   }, [dojoProvider, token]);
 

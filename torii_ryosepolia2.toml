@@ -1,24 +1,44 @@
 rpc = "https://api.cartridge.gg/x/starknet/sepolia"
 
-world_address = "0x0191249cc14cd1c84f80a0e7be0661b0788f5e01a51786664e15c5693e787a5d"
-allowed_origins = ["*"]
-index_pending = true
-polling_interval = 1000
-historical_events = [
-    "dopewars-GameCreated",
-    "dopewars-Traveled",
-    "dopewars-GameOver",
-    "dopewars-TradeDrug",
-    "dopewars-HighVolatility",
-    "dopewars-UpgradeItem",
-    "dopewars-TravelEncounter",
-    "dopewars-TravelEncounterResult",
-    "dopewars-NewSeason",
-    "dopewars-NewHighScore",
-    "dopewars-Claimed",
-    # bushido 
-    "dopewars-TrophyCreation",
-    "dopewars-TrophyProgression",
+world_address = "0x06bc05ce8b9d77bc18f9ce94aa33cdf3dc3f3c766cbc63c3d7cd9485e568cc85" # set when deployed
+world_block = 2553960
+
+[server]
+http_cors_origins = ["*"]
+
+
+[indexing]
+pending = true
+polling_interval = 500
+namespaces=["dopewars_v0", "dope"]
+
+# max_concurrent_tasks = 2
+contracts = [
+    # "ERC20:0x07911f16dc122877dee96a1ec2cc1f8a6853096253568118047b5e1e0edba17c", # paper
+    #
+    "ERC721:0x03c5c5219717638f3501dcf5c3d0bb104a48d0ddb479aeb7b3e176ee8518de40", # dope_loot
+    "ERC721:0x045fe5164095a52ccd46d5eb3729f4523056dd321d51d5965a1079d41efced6d", # dope_hustlers
+    "ERC1155:0x03af1a3674dd9413b19811a2ac915b7353b22d707e8f30f62ec43950be77723d", # dope_gear
 ]
 
-contracts = []
+[erc]
+max_metadata_tasks=100
+
+
+[sql]
+historical = [
+    "dopewars_v0-GameCreated",
+    "dopewars_v0-Traveled",
+    "dopewars_v0-GameOver",
+    "dopewars_v0-TradeDrug",
+    "dopewars_v0-HighVolatility",
+    "dopewars_v0-UpgradeItem",
+    "dopewars_v0-TravelEncounter",
+    "dopewars_v0-TravelEncounterResult",
+    "dopewars_v0-NewSeason",
+    "dopewars_v0-NewHighScore",
+    "dopewars_v0-Claimed",
+    # bushido 
+    "dopewars_v0-TrophyCreation",
+    "dopewars_v0-TrophyProgression",
+]

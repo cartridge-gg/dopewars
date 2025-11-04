@@ -1,11 +1,13 @@
 import { Layout } from "@/components/layout";
-import { useSystems } from "@/dojo/hooks";
+import { useSystems, waitForTransaction } from "@/dojo/hooks";
 import { useToast } from "@/hooks/toast";
 import { Button, HStack, Input, VStack } from "@chakra-ui/react";
+import { useAccount } from "@starknet-react/core";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function LeaderboardPage() {
   const { toast } = useToast();
+  const { account } = useAccount();
 
   const { failingTx, createFakeGame, createNewSeason } = useSystems();
 
@@ -22,7 +24,10 @@ export default function LeaderboardPage() {
   };
 
   const onCreateFakeGame = async () => {
-    const res = await createFakeGame(valueRef.current);
+    const { hash } = await createFakeGame(valueRef.current);
+    await waitForTransaction(account!,hash);
+    
+
     toast({ message: "created fake game Ser" });
   };
 
@@ -39,7 +44,7 @@ export default function LeaderboardPage() {
 
   useEffect(() => {
     if (running && !handleRef.current) {
-      handleRef.current = setInterval(() => update(), 2600);
+      handleRef.current = setInterval(() => update(), 1_000);
     } else {
       if (!running) {
         clearInterval(handleRef.current);

@@ -1,59 +1,49 @@
-use starknet::ContractAddress;
-
 #[starknet::interface]
 trait IDevtools<T> {
     fn failing_tx(self: @T);
     fn create_fake_game(self: @T, final_score: u32);
-    fn create_new_season(self: @T,);
+    fn create_new_season(self: @T);
 }
 
 // use with katana --chain_id != 'KATANA'
 
 #[dojo::contract]
 mod devtools {
-    use core::traits::Into;
-    use core::traits::TryInto;
+    use core::traits::{Into, TryInto};
     use dojo::world::IWorldDispatcherTrait;
-    use rollyourown::config::config::config::InternalTrait;
-
-    use rollyourown::{
-        models::{season::{Season}, game::{Game}, game_store_packed::{GameStorePacked}},
-        utils::{
-            events::{RawEventEmitterTrait, RawEventEmitterImpl}, random::{RandomImpl},
-            bytes16::{Bytes16, Bytes16Impl, Bytes16Trait},
-            sorted_list::{SortedListItem, SortedListImpl, SortedListTrait},
-        },
-        helpers::season_manager::{SeasonManager, SeasonManagerTrait},
-        packing::game_store::{GameMode, GameStoreImpl, GameStorePackerImpl},
-        store::{Store, StoreImpl, StoreTrait}
-    };
-    use starknet::ContractAddress;
-    use starknet::contract_address::Felt252TryIntoContractAddress;
+    use rollyourown::constants::ns;
+    use rollyourown::helpers::season_manager::SeasonManagerTrait;
+    use rollyourown::models::game::{Game, GameMode, TokenId};
+    use rollyourown::packing::game_store::{GameStoreImpl, GameStorePackerImpl};
+    use rollyourown::store::{StoreImpl, StoreTrait};
+    use rollyourown::utils::bytes16::Bytes16Impl;
+    use rollyourown::utils::random::RandomImpl;
+    use rollyourown::utils::sorted_list::{SortedListImpl, SortedListTrait};
     use starknet::get_caller_address;
-    use starknet::info::get_tx_info;
-
     use super::IDevtools;
 
 
     #[abi(embed_v0)]
     impl DevtoolsImpl of IDevtools<ContractState> {
         fn create_fake_game(self: @ContractState, final_score: u32) {
-            let world = self.world_dispatcher();
-            let game_id = world.uuid();
+            let world = self.world(@ns());
+            let game_id = world.dispatcher.uuid();
             let player_id = get_caller_address();
 
+            let mut store = StoreImpl::new(world);
             // get season version & pay paper_fee
-            let season_manager = SeasonManagerTrait::new(self.s());
+            let mut season_manager = SeasonManagerTrait::new(store);
             let season_version = season_manager.get_current_version();
 
-            let mut randomizer = RandomImpl::new('devtools');
+            let mut randomizer = RandomImpl::new(starknet::get_tx_info().unbox().transaction_hash);
             let rand_score: u32 = if final_score > 0 {
                 final_score
             } else {
                 randomizer.between::<u32>(0, 100_000)
             };
 
-            let rand_hustler_id = randomizer.between::<u16>(0, 3);
+            let multiplier = randomizer.between::<u8>(1, 10);
+            let loot_id = randomizer.between::<u32>(1, 8000);
 
             let mut game = Game {
                 game_id,
@@ -63,7 +53,7 @@ mod devtools {
                 game_mode: GameMode::Ranked,
                 //
                 player_name: Bytes16Impl::from('fake'),
-                hustler_id: rand_hustler_id,
+                multiplier,
                 //
                 game_over: true,
                 final_score: 0,
@@ -71,38 +61,44 @@ mod devtools {
                 claimed: false,
                 claimable: 0,
                 position: 0,
+                token_id: TokenId::LootId(loot_id.into()),
+                equipment_by_slot: array![0, 0, 0, 0].span(),
             };
 
-            let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
+            let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
             game_store.player.cash = rand_score;
 
             // save Game & GameStorePacked
-            self.s().set_game(@game);
+            store.set_game(@game);
             game_store.save();
 
             // simulate register_score
 
             // register final_score
-            let mut game_store = GameStoreImpl::load(self.s(), game_id, player_id);
+            let mut game_store = GameStoreImpl::load(ref store, game_id, player_id);
             game.final_score = game_store.player.cash;
             game.registered = true;
-            self.s().set_game(@game);
+            store.set_game(@game);
 
             // retrieve Season Sorted List   TODO: check season_version / status
             let list_id = game.season_version.into();
-            let mut sorted_list = SortedListImpl::get(world, list_id);
+            let mut sorted_list = SortedListImpl::get(@store, list_id);
 
             // add to Game to sorted_list
-            sorted_list.add(world, game, (0, 0.try_into().unwrap()));
+            sorted_list.add(ref store, game, (0, 0.try_into().unwrap()));
         }
 
-        fn create_new_season(self: @ContractState,) {
-            let mut ryo_config = self.s().ryo_config();
+        fn create_new_season(self: @ContractState) {
+            let world = self.world(@ns());
+
+            let mut store = StoreImpl::new(world);
+
+            let mut ryo_config = store.ryo_config();
             ryo_config.season_version += 1;
-            self.s().save_ryo_config(@ryo_config);
+            store.save_ryo_config(@ryo_config);
 
             let mut randomizer = RandomImpl::new('devtools');
-            let season_manager = SeasonManagerTrait::new(self.s());
+            let mut season_manager = SeasonManagerTrait::new(store);
             season_manager.new_season(ref randomizer, ryo_config.season_version);
         }
 

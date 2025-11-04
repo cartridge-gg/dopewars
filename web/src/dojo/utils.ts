@@ -9,7 +9,7 @@ enum Source {
   Nonce = 0x0,
   Salt = 0x1,
 }
-
+ 
 export const buildVrfCalls = async ({
   account,
   call,
@@ -40,8 +40,9 @@ export const buildVrfCalls = async ({
       account.address,
     );
 
-    const nonce = await account.getStorageAt(vrfProviderAddress, nonceStorageSlot, BlockTag.PENDING);
-    const seed = hash.computePoseidonHashOnElements([nonce, call.contractAddress, chainId]);
+    const nonce = await account.getStorageAt(vrfProviderAddress, nonceStorageSlot, BlockTag.PRE_CONFIRMED);
+  
+    const seed = hash.computePoseidonHashOnElements([nonce, account.address, call.contractAddress, chainId]);
 
     const vrf = (await import("../lib/stark-vrf/pkg")).StarkVRF.new(vrfProviderSecret);
     const proof = vrf.prove(vrfProviderSecret, seed);

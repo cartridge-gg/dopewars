@@ -1,6 +1,4 @@
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-
-use rollyourown::{config::ryo::{RyoConfig}};
+use rollyourown::config::ryo::RyoConfig;
 use starknet::ContractAddress;
 
 #[starknet::interface]
@@ -22,27 +20,30 @@ trait IRyo<T> {
     fn paused(self: @T) -> bool;
     fn paper_fee(self: @T) -> u16;
     fn season_duration(self: @T) -> u32;
+
+    fn toggle_f2p_hustlers(ref self: T);
+    fn f2p_hustlers(ref self: T) -> bool;
+
+    fn toggle_play_with_loot(ref self: T);
+    fn play_with_loot(ref self: T) -> bool;
+
+    fn toggle_play_with_hustlers(ref self: T);
+    fn play_with_hustlers(ref self: T) -> bool;
 }
 
 #[dojo::contract]
 mod ryo {
-    use bushido_trophy::components::achievable::AchievableComponent;
-    use core::traits::Into;
-
-    use dojo::world::{IWorldDispatcherTrait, WorldStorage, WorldStorageTrait};
-    use rollyourown::elements::trophies::types::{Trophy, TrophyTrait, TROPHY_COUNT};
-
-    use rollyourown::{
-        interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
-        config::{ryo::{RyoConfig, RyoConfigImpl}, ryo_address::{RyoAddress},},
-        models::{season::Season,}, utils::random::{RandomImpl},
-        helpers::season_manager::{SeasonManager, SeasonManagerTrait},
-        store::{Store, StoreImpl, StoreTrait},
-    };
-    use starknet::ContractAddress;
-    use starknet::contract_address::Felt252TryIntoContractAddress;
-    use starknet::info::get_tx_info;
-    use starknet::{get_caller_address, get_contract_address};
+    use achievement::components::achievable::AchievableComponent;
+    use core::num::traits::Zero;
+    use dojo::world::{IWorldDispatcherTrait, WorldStorageTrait};
+    use rollyourown::achievements::achievements_v1::AchievementImpl;
+    use rollyourown::config::ryo::{RyoConfig, RyoConfigImpl};
+    use rollyourown::constants::ns;
+    use rollyourown::helpers::season_manager::SeasonManagerTrait;
+    use rollyourown::store::{StoreImpl, StoreTrait};
+    use rollyourown::utils::random::RandomImpl;
+    use starknet::{ContractAddress, get_caller_address};
+    use dojo::utils::selector_from_names;
 
     component!(path: AchievableComponent, storage: achievable, event: AchievableEvent);
     impl AchievableInternalImpl = AchievableComponent::InternalImpl<ContractState>;
@@ -67,11 +68,13 @@ mod ryo {
         paper_address: ContractAddress,
         vrf_address: ContractAddress,
         treasury_address: ContractAddress,
+        season_duration: u32,
+        season_time_limit: u16,
     ) {
         // consume first ID = 0
         let _ = self.world_dispatcher().uuid();
 
-        let world = self.world(@"dopewars");
+        let world = self.world(@ns());
         let mut store = StoreImpl::new(world);
 
         let mut ryo_config = store.ryo_config();
@@ -79,7 +82,7 @@ mod ryo {
         assert(ryo_config.initialized == false, 'Already initialized');
 
         // initial config
-        ryo_config = RyoConfigImpl::build_initial_ryo_config();
+        ryo_config = RyoConfigImpl::build_initial_ryo_config(season_duration, season_time_limit);
         // save
         store.save_ryo_config(@ryo_config);
 
@@ -100,11 +103,8 @@ mod ryo {
             vrf_address
         };
 
-        let (laundromat_address, _) = world.dns(@"laundromat").unwrap();
-
         ryo_addresses.paper = paper_address;
         ryo_addresses.treasury = treasury_address;
-        ryo_addresses.laundromat = laundromat_address; // could be removed
         ryo_addresses.vrf = vrf_address;
 
         // save
@@ -115,9 +115,10 @@ mod ryo {
         let mut season_manager = SeasonManagerTrait::new(store);
         season_manager.new_season(ref randomizer, ryo_config.season_version);
         //
-        //
-        //
-        self.update_quests();
+    //
+    //
+
+        // self.update_quests();
     }
 
 
@@ -127,35 +128,14 @@ mod ryo {
             self.assert_caller_is_owner();
 
             // [Event] Emit all Trophy events
-            let world = self.world(@"dopewars");
-            let mut trophy_id: u8 = 1;
-            while trophy_id <= TROPHY_COUNT {
-                let trophy: Trophy = trophy_id.into();
-                self
-                    .achievable
-                    .create(
-                        world,
-                        id: trophy.identifier(),
-                        hidden: trophy.hidden(),
-                        index: trophy.index(),
-                        points: trophy.points(),
-                        start: trophy.start(),
-                        end: trophy.end(),
-                        group: trophy.group(),
-                        icon: trophy.icon(),
-                        title: trophy.title(),
-                        description: trophy.description(),
-                        tasks: trophy.tasks(),
-                        data: trophy.data(),
-                    );
-                trophy_id += 1;
-            }
+            let world = self.world(@ns());
+            AchievementImpl::declare_all(world);
         }
 
         fn set_paused(self: @ContractState, paused: bool) {
             self.assert_caller_is_owner();
 
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             let mut ryo_config = store.ryo_config();
 
             ryo_config.paused = paused;
@@ -165,7 +145,7 @@ mod ryo {
         fn update_ryo_config(self: @ContractState, ryo_config: RyoConfig) {
             self.assert_caller_is_owner();
 
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             let mut new_ryo_config = store.ryo_config();
 
             new_ryo_config.season_duration = ryo_config.season_duration;
@@ -180,7 +160,7 @@ mod ryo {
         fn set_paper(self: @ContractState, paper_address: ContractAddress) {
             self.assert_caller_is_owner();
 
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             let mut ryo_addresses = store.ryo_addresses();
             ryo_addresses.paper = paper_address;
             store.save_ryo_addresses(@ryo_addresses);
@@ -189,7 +169,7 @@ mod ryo {
         fn set_treasury(self: @ContractState, treasury_address: ContractAddress) {
             self.assert_caller_is_owner();
 
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             let mut ryo_addresses = store.ryo_addresses();
             ryo_addresses.treasury = treasury_address;
             store.save_ryo_addresses(@ryo_addresses);
@@ -198,50 +178,95 @@ mod ryo {
         fn set_vrf(self: @ContractState, vrf_address: ContractAddress) {
             self.assert_caller_is_owner();
 
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             let mut ryo_addresses = store.ryo_addresses();
             ryo_addresses.vrf = vrf_address;
             store.save_ryo_addresses(@ryo_addresses);
         }
+
+        fn toggle_f2p_hustlers(ref self: ContractState) {
+            self.assert_caller_is_owner();
+
+            let mut store = StoreImpl::new(self.world(@ns()));
+            let mut new_ryo_config = store.ryo_config();
+
+            new_ryo_config.f2p_hustlers = !new_ryo_config.f2p_hustlers;
+            store.save_ryo_config(@new_ryo_config);
+        }
+
+        fn toggle_play_with_loot(ref self: ContractState) {
+            self.assert_caller_is_owner();
+
+            let mut store = StoreImpl::new(self.world(@ns()));
+            let mut new_ryo_config = store.ryo_config();
+
+            new_ryo_config.play_with_loot = !new_ryo_config.play_with_loot;
+            store.save_ryo_config(@new_ryo_config);
+        }
+
+        fn toggle_play_with_hustlers(ref self: ContractState) {
+            self.assert_caller_is_owner();
+
+            let mut store = StoreImpl::new(self.world(@ns()));
+            let mut new_ryo_config = store.ryo_config();
+
+            new_ryo_config.play_with_hustlers = !new_ryo_config.play_with_hustlers;
+            store.save_ryo_config(@new_ryo_config);
+        }
+
 
         //
         // getters
         //
 
         fn paper(self: @ContractState) -> ContractAddress {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             store.ryo_addresses().paper
         }
 
         fn treasury(self: @ContractState) -> ContractAddress {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             store.ryo_addresses().treasury
         }
 
         fn vrf(self: @ContractState) -> ContractAddress {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             store.ryo_addresses().vrf
         }
 
         fn laundromat(self: @ContractState) -> ContractAddress {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
-            store.ryo_addresses().laundromat
+            let world = self.world(@ns());
+            world.dns_address(@"laundromat").unwrap()
         }
 
-
         fn paused(self: @ContractState) -> bool {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             store.ryo_config().paused
         }
 
         fn paper_fee(self: @ContractState) -> u16 {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             store.ryo_config().paper_fee
         }
 
         fn season_duration(self: @ContractState) -> u32 {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             store.ryo_config().season_duration
+        }
+
+        fn f2p_hustlers(ref self: ContractState) -> bool {
+            let mut store = StoreImpl::new(self.world(@ns()));
+            store.ryo_config().f2p_hustlers
+        }
+
+        fn play_with_loot(ref self: ContractState) -> bool {
+            let mut store = StoreImpl::new(self.world(@ns()));
+            store.ryo_config().play_with_loot
+        }
+
+        fn play_with_hustlers(ref self: ContractState) -> bool {
+            let mut store = StoreImpl::new(self.world(@ns()));
+            store.ryo_config().play_with_hustlers
         }
     }
 
@@ -249,13 +274,14 @@ mod ryo {
     impl RyoInternalImpl of RyoInternalTrait {
         #[inline(always)]
         fn assert_caller_is_owner(self: @ContractState) {
-            let account_contract_address = get_tx_info().unbox().account_contract_address;
+            let caller_address = get_caller_address();
+            let selector = selector_from_names(@ns(), @"ryo");
             assert(
                 self
-                    .world(@"dopewars")
+                    .world(@ns())
                     .dispatcher
-                    .is_owner(selector_from_tag!("dopewars-ryo"), account_contract_address),
-                'not owner'
+                    .is_owner(selector, caller_address),
+                'not owner',
             );
         }
     }

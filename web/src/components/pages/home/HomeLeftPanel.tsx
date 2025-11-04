@@ -94,7 +94,7 @@ export const HomeLeftPanel = () => {
         my="auto"
         flex={["auto", "1"]}
         position="relative"
-        maxH={["80px", "800px"]}
+        maxH={["70px", "800px"]}
         overflow="hidden"
         overflowY="auto"
         sx={{
@@ -111,7 +111,7 @@ export const HomeLeftPanel = () => {
               src={"/images/landing/main.png"}
               opacity={0.25}
               width="100%"
-              height="194px"
+              height="174px"
               objectFit={"cover"}
               objectPosition={"top"}
               display={["block", "none"]}

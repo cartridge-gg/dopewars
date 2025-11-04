@@ -1,18 +1,14 @@
-use dojo::world::IWorldDispatcher;
-use rollyourown::{
-    utils::random::{Random, RandomImpl}, models::game::{Game}, store::{Store, StoreImpl, StoreTrait}
-};
-use starknet::ContractAddress;
+use rollyourown::{store::{StoreImpl}, utils::random::{Random, RandomImpl}};
 
-trait Enumerable<T> {
+pub trait Enumerable<T> {
     fn all() -> Span<T>;
 }
 
-trait Randomizable<T> {
+pub trait Randomizable<T> {
     fn random(ref randomizer: Random) -> T;
 }
 
-impl RandomizableImpl<T, +Copy<T>, +Enumerable<T>> of Randomizable<T> {
+pub impl RandomizableImpl<T, +Copy<T>, +Enumerable<T>> of Randomizable<T> {
     fn random(ref randomizer: Random) -> T {
         let items = Enumerable::<T>::all();
         let index = randomizer.between::<u32>(0, items.len().into());
@@ -23,13 +19,13 @@ impl RandomizableImpl<T, +Copy<T>, +Enumerable<T>> of Randomizable<T> {
 
 //
 
-trait Packable<T, +Enumerable<T>> {
+pub trait Packable<T, +Enumerable<T>> {
     #[inline(always)] // is it correct ? compiler dont complains
     fn bits(self: @T) -> u8;
     fn idx(self: @T) -> u8;
 }
 
-trait Packer<Unpacked, Packed> {
+pub trait Packer<Unpacked, Packed> {
     fn pack(self: Unpacked) -> Packed;
 }
 

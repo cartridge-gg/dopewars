@@ -1,0 +1,43 @@
+
+rpc = "https://api.cartridge.gg/x/dopewars/katana"
+
+world_address = "0x03b95b1b1d3d504d0b841294cec694e6d088192fc22c0ac2e083ff2df2e844b7"
+
+[server]
+http_cors_origins = ["*"]
+
+
+[indexing]
+pending = true
+polling_interval = 250
+namespaces=["dopewars_v0", "dope"]
+
+# max_concurrent_tasks = 2
+contracts = [
+    "ERC20:0x020dfc24de987d7d11f70a7306ae39b6ac71b178eaf19bf12e831b3522c14ebf", # paper
+    #
+    "ERC721:0x0372d82484c119b2e11556d4d50e3917c9c42b162306623756c064ade0339d8c", # dope_loot
+    "ERC721:0x03e7678c6ebf9dd50a65d8d3e477600e0114b1e4cc38094579c92bdd65a7ad89", # dope_hustlers
+    "ERC1155:0x01569adb1f06d93049e049c2c0500fbde25404ee4b662752fd48d40de6bc44f2", # dope_gear
+]
+
+[erc]
+max_metadata_tasks=100
+
+[sql]
+historical = [
+    "dopewars_v0-GameCreated",
+    "dopewars_v0-Traveled",
+    "dopewars_v0-GameOver",
+    "dopewars_v0-TradeDrug",
+    "dopewars_v0-HighVolatility",
+    "dopewars_v0-UpgradeItem",
+    "dopewars_v0-TravelEncounter",
+    "dopewars_v0-TravelEncounterResult",
+    "dopewars_v0-NewSeason",
+    "dopewars_v0-NewHighScore",
+    "dopewars_v0-Claimed",
+    # bushido 
+    "dopewars_v0-TrophyCreation",
+    "dopewars_v0-TrophyProgression",
+]

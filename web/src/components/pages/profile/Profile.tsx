@@ -1,11 +1,11 @@
 import { Button } from "@/components/common";
 import { useGameStore, useRouterContext } from "@/dojo/hooks";
 import { headerButtonStyles } from "@/theme/styles";
-import { Box, HStack, MenuItem, Text } from "@chakra-ui/react";
+import { HStack, MenuItem, Text } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { useState } from "react";
-import { HustlerIcon, Hustlers } from "../../hustlers";
 import { num, shortString } from "starknet";
+import { HustlerAvatarIcon } from "./HustlerAvatarIcon";
 
 export const ProfileLink = () => {
   const { router, gameId } = useRouterContext();
@@ -28,7 +28,12 @@ export const ProfileLink = () => {
   return (
     <>
       <Button cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={onClick}>
-        <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
+        <HustlerAvatarIcon
+          gameId={gameInfos.game_id}
+          // @ts-ignore
+          tokenIdType={gameInfos?.token_id_type}
+          tokenId={Number(gameInfos?.token_id)}
+        />
       </Button>
     </>
   );
@@ -54,8 +59,13 @@ export const ProfileLinkMobile = () => {
 
   return (
     <>
-      <MenuItem h="48px" borderRadius={0} onClick={onClick} /*justifyContent="center"*/>
-        <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
+      <MenuItem h="48px" borderRadius={0} onClick={onClick}>
+        <HustlerAvatarIcon
+          gameId={gameInfos.game_id}
+          // @ts-ignore
+          tokenIdType={gameInfos?.token_id_type}
+          tokenId={Number(gameInfos?.token_id)}
+        />
         <Text ml="10px">{shortString.decodeShortString(num.toHexString(BigInt(gameInfos.player_name?.value)))}</Text>
       </MenuItem>
     </>
@@ -78,10 +88,15 @@ export const ProfileLinkDrawer = () => {
     }
   };
 
-  if (!account || !gameInfos /*|| !gameEvents*/) return null;
+  if (!account || !gameInfos) return null;
   return (
-    <HStack borderRadius={0} onClick={onClick} /*justifyContent="center"*/>
-      <HustlerIcon hustler={gameInfos.hustler_id as Hustlers} />
+    <HStack borderRadius={0} onClick={onClick}>
+      <HustlerAvatarIcon
+        gameId={gameInfos.game_id}
+        // @ts-ignore
+        tokenIdType={gameInfos?.token_id_type}
+        tokenId={Number(gameInfos?.token_id)}
+      />
       <Text ml="4px">{shortString.decodeShortString(num.toHexString(BigInt(gameInfos.player_name?.value)))}</Text>
     </HStack>
   );

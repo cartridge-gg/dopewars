@@ -1,5 +1,5 @@
 import { Button } from "@/components/common";
-import { CopsIcon, GangIcon } from "@/components/icons";
+import { Cigarette, CopsIcon, GangIcon } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import {
   GameOver,
@@ -11,10 +11,9 @@ import {
 } from "@/components/layout/GlobalEvents";
 import { HustlerProfile } from "@/components/pages/profile/HustlerProfile";
 import { Loadout } from "@/components/pages/profile/Loadout";
-import { Inventory } from "@/components/player";
+import { Inventory, PowerMeter } from "@/components/player";
 import { DojoEvent } from "@/dojo/class/Events";
 import { GameClass } from "@/dojo/class/Game";
-import { encountersActionName, encountersActionNameKeys, outcomeNames, outcomeNamesKeys } from "@/dojo/helpers";
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { EncounterOutcomes, EncountersAction, ItemSlot } from "@/dojo/types";
 import { formatCash } from "@/utils/ui";
@@ -35,6 +34,7 @@ import {
   UnorderedList,
   VStack,
 } from "@chakra-ui/react";
+import { getGearItem } from "@/dope/helpers";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
@@ -154,7 +154,11 @@ const Logs = () => {
       }
       isSinglePanel={true}
     >
-      <VStack w="full" h={["100%", "calc(100% - 120px)"]}>
+      <VStack
+        w="full"
+        h={["100%", "calc(100% - 120px)"]}
+        // overflowX="hidden"
+      >
         <Flex w="full" direction={["column", "row"]} gap={[0, "80px"]} h={["auto", "100%"]}>
           <CustomLeftPanel />
 
@@ -213,6 +217,7 @@ const CustomLeftPanel = () => {
       alignItems="center"
       marginBottom={["30px", "50px"]}
       gap={0}
+      overflowX={"hidden"}
     >
       <Heading
         fontSize={["30px", "48px"]}
@@ -231,6 +236,11 @@ const CustomLeftPanel = () => {
       </Box>
 
       <HustlerProfile />
+
+      <HStack justifyContent={"space-between"} mt={6}>
+        <Text color="yellow.400">STAKE x{game?.gameInfos.multiplier}</Text>
+        <PowerMeter basePower={0} maxPower={10} power={game?.gameInfos.multiplier} />
+      </HStack>
     </VStack>
   );
 };
@@ -284,7 +294,7 @@ function renderTradeDrug(game: GameClass, log: TradeDrug, key: string) {
     <Line
       key={key}
       icon={drug.icon}
-      text={`${action} ${drug.name}`}
+      text={`${action} ${drug.name} at ${formatCash(log.price)}`}
       quantity={log.quantity}
       total={`${sign} ${formatCash(totalPrice)}`}
     />
@@ -292,33 +302,16 @@ function renderTradeDrug(game: GameClass, log: TradeDrug, key: string) {
 }
 
 function renderUpgradeItem(game: GameClass, log: UpgradeItem, key: string) {
-  let item_id = 0;
-  switch (log.item_slot) {
-    case ItemSlot.Weapon:
-      item_id = game.items.hustlerConfig.weapon.base.id;
-      break;
-    case ItemSlot.Clothes:
-      item_id = game.items.hustlerConfig.clothes.base.id;
-      break;
-    case ItemSlot.Feet:
-      item_id = game.items.hustlerConfig.feet.base.id;
-      break;
-    case ItemSlot.Transport:
-      item_id = game.items.hustlerConfig.transport.base.id;
-      break;
-    default:
-      item_id = 0;
-      break;
-  }
-
-  const item = game.configStore.getHustlerItemByIds(item_id, log.item_slot, log.item_level);
+  let gear_item = game.configStore.getGearItemFull(
+    getGearItem(BigInt(game.gameInfos.equipment_by_slot ? game.gameInfos.equipment_by_slot[log.item_slot] : 0)),
+  );
 
   return (
     <Line
       key={key}
-      icon={item.icon}
-      text={`Bought ${item.upgradeName}`}
-      total={`- ${formatCash(item.tier.cost)}`}
+      icon={Cigarette}
+      text={`Upgraded ${gear_item.name}`}
+      total={`- ${formatCash(gear_item.levels[log.item_level].cost)}`}
       color="yellow.400"
       iconColor="yellow.400"
     />
@@ -380,7 +373,7 @@ const Line = ({
   return (
     <ListItem w="full" py="6px" borderBottom="solid 1px" mt="6px" fontSize={["12px", "16px"]}>
       <HStack w="full">
-        <HStack flex="4" color={color}>
+        <HStack flex="6" color={color}>
           <Box w="30px">{icon && icon({ boxSize: "24px", color: iconColor })}</Box>
           <Text>{text}</Text>
         </HStack>

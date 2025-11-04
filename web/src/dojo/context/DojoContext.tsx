@@ -1,14 +1,8 @@
 import RegisterEntities from "@/components/RegisterEntities";
 import ConnectionError from "@/components/layout/ConnectionError";
 import { Loader } from "@/components/layout/Loader";
-import { StarknetProvider } from "@/components/wallet";
-import { Flex, VStack } from "@chakra-ui/react";
-import {
-  BurnerManager,
-  PredeployedManager,
-  useBurnerWindowObject,
-  usePredeployedWindowObject,
-} from "@dojoengine/create-burner";
+import { BuyPaper, ConnectButton, StarknetProvider } from "@/components/wallet";
+import { Box, Flex, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";
 import { QueryClientProvider } from "react-query";
@@ -21,14 +15,14 @@ import { ConfigStoreClass } from "../stores/config";
 import { GameStoreClass } from "../stores/game";
 import { UiStore } from "../stores/ui";
 import { useRouter } from "next/router";
+import { DopeProvider } from "@/dope/store";
+import { DojoContractResult, useDojoContract } from "../hooks";
+import { HustlerPreviewFromLoot } from "@/dope/components";
 
 export interface DojoContextType {
   chains: DojoChainsResult;
   clients: DojoClientsResult;
-  masterAccount?: AccountInterface;
-  burnerManager?: BurnerManager;
-  isPrefundingPaper: boolean;
-  predeployedManager?: PredeployedManager;
+  contracts: DojoContractResult;
   configStore: ConfigStoreClass;
   gameStore: GameStoreClass;
   uiStore: UiStore;
@@ -51,8 +45,6 @@ export const DojoContextProvider = observer(
       error: undefined,
     });
 
-    const [isPrefundingPaper, setIsPrefundingPaper] = useState(false);
-
     const defaultChain =
       process.env.NODE_ENV === "production"
         ? Object.values(dojoContextConfig)[0]
@@ -74,61 +66,7 @@ export const DojoContextProvider = observer(
 
     const { dojoProvider, queryClient, graphqlClient, rpcProvider, toriiClient } = useDojoClients(selectedChain);
 
-    const masterAccount = useMemo(() => {
-      if (selectedChain.masterAddress && selectedChain.masterPrivateKey) {
-        return new Account(rpcProvider, selectedChain.masterAddress, selectedChain.masterPrivateKey, "1");
-      }
-      return undefined;
-    }, [rpcProvider, selectedChain.masterAddress, selectedChain.masterPrivateKey]);
-
-    const burnerManager = useMemo(() => {
-      if (!masterAccount) return undefined;
-
-      const manager = new BurnerManager({
-        masterAccount: masterAccount!,
-        accountClassHash: selectedChain.accountClassHash!,
-        rpcProvider: rpcProvider,
-        feeTokenAddress: selectedChain.chainConfig.nativeCurrency.address,
-      });
-
-      const afterDeploy = async ({ account, deployTx }: { account: Account; deployTx: string }) => {
-        setIsPrefundingPaper(true);
-        try {
-          const receipt = await account!.waitForTransaction(deployTx, {
-            retryInterval: 500,
-          });
-          await paperFaucet({ account, paperAddress: configStore.config?.ryoAddress.paper });
-        } catch (e: any) {
-          console.log("fail afterDeploy");
-        }
-        setIsPrefundingPaper(false);
-      };
-
-      manager.setAfterDeployingCallback(afterDeploy);
-
-      return manager;
-    }, [masterAccount, selectedChain.accountClassHash, rpcProvider]);
-
-    const predeployedManager = useMemo(() => {
-      if (!selectedChain.predeployedAccounts || selectedChain.predeployedAccounts.length === 0) return undefined;
-
-      return new PredeployedManager({
-        rpcProvider: rpcProvider,
-        predeployedAccounts: selectedChain.predeployedAccounts,
-      });
-    }, [rpcProvider, selectedChain.predeployedAccounts]);
-
-    const {
-      isInitialized: burnerSWOIsInitialized,
-      isError: burnerSWOIsError,
-      error: burnerSWOError,
-    } = useBurnerWindowObject(burnerManager);
-
-    const {
-      isInitialized: predeployedSWOIsInitialized,
-      isError: predeployedSWOIsError,
-      error: predeployedSWOError,
-    } = usePredeployedWindowObject(predeployedManager);
+    const { getDojoContract, getDojoContractManifest, getContractTagByAddress } = useDojoContract(selectedChain);
 
     const configStore = useMemo(() => {
       return new ConfigStoreClass({
@@ -146,6 +84,7 @@ export const DojoContextProvider = observer(
         client: graphqlClient,
         configStore,
         router,
+        selectedChain,
       });
     }, [graphqlClient, configStore, toriiClient]);
 
@@ -163,7 +102,7 @@ export const DojoContextProvider = observer(
           setConfigStoreState({
             isInitialized: false,
             isError: true,
-            error: "failed to init configStore",
+            error: `failed to init configStore: ${e}`,
           });
         }
       };
@@ -172,13 +111,9 @@ export const DojoContextProvider = observer(
 
     const uiStore = new UiStore();
 
-    const isInitialized =
-      burnerSWOIsInitialized &&
-      predeployedSWOIsInitialized &&
-      configStoreState.isInitialized &&
-      toriiClient !== undefined;
-    const hasError = burnerSWOIsError || predeployedSWOIsError || configStoreState.isError;
-    const errors = hasError ? [burnerSWOError, predeployedSWOError, configStoreState.error] : [];
+    const isInitialized = configStoreState.isInitialized && toriiClient !== undefined;
+    const hasError = configStoreState.isError;
+    const errors = hasError ? [configStoreState.error] : [];
 
     // console.log("isInitialized", isInitialized);
     // console.log("hasError", hasError);
@@ -209,10 +144,11 @@ export const DojoContextProvider = observer(
             rpcProvider,
             toriiClient,
           },
-          burnerManager,
-          isPrefundingPaper,
-          predeployedManager,
-          masterAccount,
+          contracts: {
+            getDojoContract,
+            getDojoContractManifest,
+            getContractTagByAddress,
+          },
           configStore,
           gameStore,
           uiStore,
@@ -220,13 +156,24 @@ export const DojoContextProvider = observer(
       >
         <StarknetProvider selectedChain={selectedChain}>
           {hasError ? (
-            <ConnectionError errors={errors} />
+            <>
+              {/* <Box w="200px">
+                <ConnectButton  />
+              </Box>
+              <BuyPaper paperAmount={1_000} /> */}
+              {/* <DopeProvider toriiClient={toriiClient}>
+                <HustlerPreviewFromLoot tokenId={420} />
+              </DopeProvider> */}
+              <ConnectionError errors={errors} />
+            </>
           ) : (
             <>
-              <QueryClientProvider client={queryClient}>
-                <RegisterEntities />
-                {children}
-              </QueryClientProvider>
+              <DopeProvider toriiClient={toriiClient}>
+                <QueryClientProvider client={queryClient}>
+                  <RegisterEntities />
+                  {children}
+                </QueryClientProvider>
+              </DopeProvider>
             </>
           )}
         </StarknetProvider>

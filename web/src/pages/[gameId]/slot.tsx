@@ -175,90 +175,93 @@ export default function Slot() {
   const [subscriptionEvents, setSubscriptionEvents] = useState<Subscription>();
 
   useEffect(() => {
-    const init = async () => {
-      if (!gameId) return;
+    // const init = async () => {
+    //   if (!gameId) return;
 
-      setIsRolling(true);
+    //   setIsRolling(true);
 
-      const entities = await toriiClient.getEntities({
-        // clause: {
-        //   Member: {
-        //     member: "game_id",
-        //     model: "dopewars-SlotMachine",
-        //     operator: "Eq",
-        //     value: {
-        //       Primitive: { U32: Number(gameId) },
-        //     },
-        //   },
-        // },
-        clause: {
-          Keys: {
-            keys: [Number(gameId).toString()],
-            models: ["dopewars-SlotMachine"],
-            pattern_matching: "FixedLen",
-          },
-        },
-        limit: 1,
-        offset: 0,
-        dont_include_hashed_keys: false,
-      });
+    //   const entities = await toriiClient.getEntities({
+    //     // clause: {
+    //     //   Member: {
+    //     //     member: "game_id",
+    //     //     model: "dopewars_v0-SlotMachine",
+    //     //     operator: "Eq",
+    //     //     value: {
+    //     //       Primitive: { U32: Number(gameId) },
+    //     //     },
+    //     //   },
+    //     // },
+    //     clause: {
+    //       Keys: {
+    //         keys: [Number(gameId).toString()],
+    //         models: ["dopewars_v0-SlotMachine"],
+    //         pattern_matching: "FixedLen",
+    //       },
+    //     },
+    //     limit: 1,
+    //     offset: 0,
+    //     dont_include_hashed_keys: false,
+    //     entity_models:[],
+    //     // entity_models:["dopewars_v0-SlotMachine"],
+    //     entity_updated_after:0,
+    //     order_by:[]
+    //   }, false);
 
-      console.log(entities);
+    //   console.log(entities);
 
-      if (Object.keys(entities).length === 0) {
-        // ???
-      } else {
-        const machine = entities[Object.keys(entities)[0]]["dopewars-SlotMachine"] as Model;
-        setCredits(Number(machine.credits.value));
-        const newOffsets = [
-          Number(machine.offset_r.value),
-          Number(machine.offset_y.value),
-          Number(machine.offset_o.value),
-        ];
-        offsets.current = newOffsets;
+    //   if (Object.keys(entities).length === 0) {
+    //     // ???
+    //   } else {
+    //     const machine = entities[Object.keys(entities)[0]]["dopewars_v0-SlotMachine"] as Model;
+    //     setCredits(Number(machine.credits.value));
+    //     const newOffsets = [
+    //       Number(machine.offset_r.value),
+    //       Number(machine.offset_y.value),
+    //       Number(machine.offset_o.value),
+    //     ];
+    //     offsets.current = newOffsets;
 
-        setIsRolling(false);
-      }
+    //     setIsRolling(false);
+    //   }
 
-      if (!subscription) {
-        // subscribe to changes
-        const sub = await toriiClient.onEntityUpdated(
-          [
-            {
-              Keys: {
-                keys: [gameId],
-                models: ["dopewars-SlotMachine"],
-                pattern_matching: "FixedLen",
-              },
-            },
-          ],
-          onEntityUpdated,
-        );
-        setSubscription(sub);
-      }
+    //   if (!subscription) {
+    //     // subscribe to changes
+    //     const sub = await toriiClient.onEntityUpdated(
+    //       [
+    //         {
+    //           Keys: {
+    //             keys: [gameId],
+    //             models: ["dopewars_v0-SlotMachine"],
+    //             pattern_matching: "FixedLen",
+    //           },
+    //         },
+    //       ],
+    //       onEntityUpdated,
+    //     );
+    //     setSubscription(sub);
+    //   }
 
-      if (!subscriptionEvents) {
-        // subscribe to changes
-        const subEvents = await toriiClient.onEventMessageUpdated(
-          [
-            {
-              Keys: {
-                keys: [account?.address],
-                models: ["dopewars-SlotMachineCombination"],
-                pattern_matching: "FixedLen",
-              },
-            },
-          ],
-          false,
-          onEventMessageUpdated,
-        );
-        setSubscriptionEvents(subEvents);
-      }
+    //   if (!subscriptionEvents) {
+    //     // subscribe to changes
+    //     const subEvents = await toriiClient.onEventMessageUpdated(
+    //       [
+    //         {
+    //           Keys: {
+    //             keys: [account?.address],
+    //             models: ["dopewars_v0-SlotMachineCombination"],
+    //             pattern_matching: "FixedLen",
+    //           },
+    //         },
+    //       ],
+    //       onEventMessageUpdated,
+    //     );
+    //     setSubscriptionEvents(subEvents);
+    //   }
 
-      setIsRolling(false);
-    };
+    //   setIsRolling(false);
+    // };
 
-    init();
+    // init();
 
     return () => {
       if (subscription) subscription.cancel();
@@ -269,7 +272,7 @@ export default function Slot() {
   const onEventMessageUpdated = useCallback(
     async (entity: string, update: any) => {
       console.log("onEventMessageUpdated", entity, update);
-      const combination = update["dopewars-SlotMachineCombination"] as Model;
+      const combination = update["dopewars_v0-SlotMachineCombination"] as Model;
       if (!combination) return;
 
       const name = shortString.decodeShortString(combination.name.value!.toString());
@@ -290,7 +293,7 @@ export default function Slot() {
   const onEntityUpdated = useCallback(
     async (entity: string, update: any) => {
       console.log("onEntityUpdated");
-      const machine = update["dopewars-SlotMachine"] as Model;
+      const machine = update["dopewars_v0-SlotMachine"] as Model;
       if (!machine) return;
       const newOffsets = [
         Number(machine.offset_r.value),
@@ -638,4 +641,3 @@ export default function Slot() {
     </Layout>
   );
 }
-

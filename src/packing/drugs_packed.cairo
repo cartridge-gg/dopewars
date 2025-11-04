@@ -1,27 +1,23 @@
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-
 use rollyourown::{
-    config::{drugs::{Drugs}},
-    utils::bits::{Bits, BitsImpl, BitsDefaultImpl, BitsTrait, BitsMathImpl},
-    models::game::{Game, GameMode, GameImpl},
+    config::{drugs::{Drugs}}, models::game::{GameImpl},
+    utils::bits::{BitsDefaultImpl, BitsImpl, BitsMathImpl, BitsTrait},
 };
-use starknet::ContractAddress;
 
 // 16 bits : 3 bits for Drugs, 13 bits for quantity
 #[derive(Copy, Drop, Serde)]
-struct DrugsPacked {
-    packed: felt252
+pub struct DrugsPacked {
+    pub packed: felt252,
 }
 
 #[derive(Copy, Drop)]
-struct DrugsUnpacked {
-    drug: Drugs,
-    quantity: u32,
+pub struct DrugsUnpacked {
+    pub drug: Drugs,
+    pub quantity: u32,
 }
 
 
 #[generate_trait]
-impl DrugsPackedImpl of DrugsPackedTrait {
+pub impl DrugsPackedImpl of DrugsPackedTrait {
     fn new() -> DrugsPacked {
         DrugsPacked { packed: 0 }
     }

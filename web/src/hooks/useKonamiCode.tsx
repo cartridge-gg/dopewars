@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export const konamiSequence = [
   "ArrowUp",
@@ -14,12 +14,16 @@ export const konamiSequence = [
 ];
 
 export const starkpimpSequence = ["s", "t", "a", "r", "k", "p", "i", "m", "p"];
+export const psySequence = ["p", "s", "y"];
 
-export default function useKonamiCode(codeSequence = konamiSequence, callback = () => {}) {
+const useKonamiCode = (codeSequence = konamiSequence, callback = () => {}) => {
   const [isRightSequence, setIsRightSequence] = useState(false);
-  const [sequence, setSequence] = useState<string[]>([]);
+  const [sequence, setSequence] = useState<string[]>(new Array());
 
-  const onKeyDown = (event: KeyboardEvent) => setSequence([...sequence, event.key]);
+  const onKeyDown = useCallback(
+    (event: KeyboardEvent) => setSequence([...sequence, event.key]),
+    [setSequence, sequence],
+  );
 
   useEffect(() => {
     sequence.forEach((key, i) => {
@@ -36,8 +40,12 @@ export default function useKonamiCode(codeSequence = konamiSequence, callback = 
 
   useEffect(() => {
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  });
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [onKeyDown]);
 
   return { sequence, setSequence, isRightSequence, setIsRightSequence };
-}
+};
+
+export default useKonamiCode;

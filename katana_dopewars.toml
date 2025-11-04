@@ -1,0 +1,32 @@
+block_time = 2000
+
+
+[server]
+http_addr = "0.0.0.0"
+http_port = 5050
+http_cors_origins = "*"
+max_call_gas = 100000000000 # 100B
+max_connections = 100
+
+
+[dev]
+seed = "0"
+dev = true
+no_fee = true
+# total_accounts = 2
+total_accounts = 30
+
+
+[starknet]
+env.invoke_max_steps = 4200000000
+
+
+
+# [gpo]
+# l1_strk_gas_price = "20000000000000"
+# l1_eth_gas_price = "2000000000"
+
+# l1_strk_data_gas_price = "1000000"
+# l1_eth_data_gas_price = "100"
+
+

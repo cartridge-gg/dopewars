@@ -12,32 +12,39 @@ trait ILaundromat<T> {
 
 #[dojo::contract]
 mod laundromat {
-    use bushido_trophy::store::{Store as BushidoStore, StoreTrait as BushidoStoreTrait};
+    use achievement::store::StoreTrait as BushidoStoreTrait;
     use cartridge_vrf::{IVrfProviderDispatcher, IVrfProviderDispatcherTrait, Source};
     use dojo::event::EventStorage;
-    use dojo::world::IWorldDispatcherTrait;
-    use rollyourown::elements::quests::{types::{Quest, QuestTrait}};
-
-    use rollyourown::{
-        config::{ryo::{RyoConfig}, ryo_address::{RyoAddress},},
-        models::{season::{Season, SeasonImpl, SeasonTrait}, game::{Game, GameImpl, GameTrait}},
-        helpers::season_manager::{SeasonManagerImpl, SeasonManagerTrait},
-        interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait}, constants::{ETHER},
-        store::{Store, StoreImpl, StoreTrait},
-        utils::{
-            sorted_list::{SortedListItem, SortedListImpl, SortedListTrait},
-            payout_structure::{get_payout, get_payed_count}, random::{RandomImpl},
-        },
-        packing::game_store::{GameStore, GameStoreImpl}, events::{NewSeason, Claimed}
+    use dojo::world::WorldStorageTrait;
+    use dope_types::dope_gear::{GearItem, IDopeGearABIDispatcher, IDopeGearABIDispatcherTrait};
+    use dope_types::dope_hustlers::{IDopeHustlersABIDispatcher, IDopeHustlersABIDispatcherTrait};
+    use dope_types::helpers::is_og;
+    use rollyourown::achievements::achievements_v1::Tasks;
+    use rollyourown::constants::{ETHER, MAX_MULTIPLIER, ns};
+    use rollyourown::events::{Claimed, NewSeason};
+    use rollyourown::helpers::season_manager::{SeasonManagerImpl, SeasonManagerTrait};
+    use rollyourown::interfaces::paper::{IPaperDispatcher, IPaperDispatcherTrait};
+    use rollyourown::libraries::dopewars_items::{
+        IDopewarsItemsDispatcherTrait, IDopewarsItemsLibraryDispatcher,
     };
+    use rollyourown::models::game::{Game, GameImpl, GameTrait, TokenId};
+    use rollyourown::models::season::{SeasonImpl, SeasonTrait};
+    use rollyourown::packing::game_store::GameStoreImpl;
+    use rollyourown::store::{StoreImpl, StoreTrait};
+    use rollyourown::utils::payout_items::add_items_payout;
+    use rollyourown::utils::payout_structure::get_payed_count;
+    use rollyourown::utils::random::RandomImpl;
+    use rollyourown::utils::sorted_list::{SortedListImpl, SortedListTrait};
     use starknet::{ContractAddress, get_caller_address, get_contract_address};
+
 
     #[abi(embed_v0)]
     impl LaundromatImpl of super::ILaundromat<ContractState> {
         fn register_score(
-            self: @ContractState, game_id: u32, prev_game_id: u32, prev_player_id: ContractAddress
+            self: @ContractState, game_id: u32, prev_game_id: u32, prev_player_id: ContractAddress,
         ) {
-            let world = self.world(@"dopewars");
+            let world = self.world(@ns());
+
             let mut store = StoreImpl::new(world);
 
             let player_id = get_caller_address();
@@ -75,18 +82,79 @@ mod laundromat {
 
             // quests
             let bushido_store = BushidoStoreTrait::new(world);
-            let quest_id = Quest::Hustler.identifier(0);
-            bushido_store.progress(player_id.into(), quest_id, 1, starknet::get_block_timestamp());
+
+            if game_store.player.health == 1 {
+                bushido_store
+                    .progress(
+                        player_id.into(), Tasks::SURVIVOR, 1, starknet::get_block_timestamp(),
+                    );
+            }
 
             if game_store.player.reputation == 100 {
-                let quest_id = Quest::Famous.identifier(0);
                 bushido_store
-                    .progress(player_id.into(), quest_id, 1, starknet::get_block_timestamp());
+                    .progress(player_id.into(), Tasks::FAMOUS, 1, starknet::get_block_timestamp());
+            }
+
+            if game.multiplier == MAX_MULTIPLIER {
+                bushido_store
+                    .progress(
+                        player_id.into(), Tasks::HIGH_STAKES, 1, starknet::get_block_timestamp(),
+                    );
+            }
+
+            if let TokenId::HustlerId(huster_id) = game.token_id {
+                if is_og(huster_id.into()) {
+                    bushido_store
+                        .progress(player_id.into(), Tasks::OG, 1, starknet::get_block_timestamp());
+                }
+
+                let weapon_id: u256 = (*game.equipment_by_slot.at(0)).into();
+                let clothe_id: u256 = (*game.equipment_by_slot.at(1)).into();
+                let foot_id: u256 = (*game.equipment_by_slot.at(2)).into();
+                let vehicle_id: u256 = (*game.equipment_by_slot.at(3)).into();
+
+                let weapon: GearItem = weapon_id.into();
+                let clothe: GearItem = clothe_id.into();
+                let foot: GearItem = foot_id.into();
+                let vehicle: GearItem = vehicle_id.into();
+
+                if weapon.suffix > 0
+                    && weapon.suffix == clothe.suffix
+                    && weapon.suffix == foot.suffix
+                    && weapon.suffix == vehicle.suffix {
+                    bushido_store
+                        .progress(
+                            player_id.into(), Tasks::GEAR_FROM, 1, starknet::get_block_timestamp(),
+                        );
+                }
+
+                let items_disp = IDopewarsItemsLibraryDispatcher {
+                    class_hash: world.dns_class_hash(@"DopewarsItems_v0").unwrap(),
+                };
+
+                let weapon_tier = items_disp.get_item_tier(weapon.slot, weapon.item);
+                let clothe_tier = items_disp.get_item_tier(clothe.slot, clothe.item);
+                let foot_tier = items_disp.get_item_tier(foot.slot, foot.item);
+                let vehicle_tier = items_disp.get_item_tier(vehicle.slot, vehicle.item);
+
+                if weapon_tier == clothe_tier
+                    && weapon_tier == foot_tier
+                    && weapon_tier == vehicle_tier {
+                    let task = match weapon_tier {
+                        0 => panic!("invalid tier"),
+                        1 => Tasks::FULL_LATE,
+                        2 => Tasks::FULL_MID,
+                        3 => Tasks::FULL_EARLY,
+                        _ => panic!("invalid tier"),
+                    };
+                    bushido_store
+                        .progress(player_id.into(), task, 1, starknet::get_block_timestamp());
+                }
             }
         }
 
         fn launder(self: @ContractState, season_version: u16) {
-            let world = self.world(@"dopewars");
+            let world = self.world(@ns());
             let mut store = StoreImpl::new(world);
 
             let ryo_addresses = store.ryo_addresses();
@@ -94,7 +162,9 @@ mod laundromat {
             let random = IVrfProviderDispatcher { contract_address: ryo_addresses.vrf }
                 .consume_random(Source::Nonce(player_id));
 
-            let process_batch_size = 10; // around 276k steps / 10
+            // around 276k steps / 10
+            // almost free now, compute all in one
+            let process_batch_size = 100;
 
             let season = store.season(season_version);
 
@@ -109,10 +179,12 @@ mod laundromat {
             let list_id = season_version.into();
             let mut sorted_list = SortedListImpl::get(@store, list_id);
 
-            // set process_max_size && lock list
+            // set process_max_size & total_stake_mul then lock list
             if !sorted_list.locked {
                 let process_max_size = get_payed_count(sorted_list.size);
-                sorted_list.lock(ref store, process_max_size);
+                let stake_adj_paper_balance = sorted_list
+                    .calc_stake_adj_paper_balance::<Game>(ref store, process_max_size);
+                sorted_list.lock(ref store, process_max_size, stake_adj_paper_balance);
             }
 
             // if not process, process batch_size items
@@ -143,13 +215,13 @@ mod laundromat {
                         .emit_event(
                             @NewSeason {
                                 key: ryo_config.season_version,
-                                season_version: ryo_config.season_version
-                            }
+                                season_version: ryo_config.season_version,
+                            },
                         );
                 } else {
                     assert(false, 'launder already ended');
                 }
-            };
+            }
 
             // retrieve paper address
             let paper_address = store.ryo_addresses().paper;
@@ -158,21 +230,31 @@ mod laundromat {
             // reward launderer with some clean paper
             IPaperDispatcher { contract_address: paper_address }
                 .transfer(get_caller_address(), paper_reward_launderer);
-
-            let quest_id = Quest::Launderer.identifier(0);
-            let bushido_store = BushidoStoreTrait::new(world);
-            bushido_store.progress(player_id.into(), quest_id, 1, starknet::get_block_timestamp());
         }
 
-        fn claim(self: @ContractState, player_id: ContractAddress, game_ids: Span<u32>,) {
-            let world = self.world(@"dopewars");
+        fn claim(self: @ContractState, player_id: ContractAddress, game_ids: Span<u32>) {
+            let world = self.world(@ns());
+            let mut dope_world = self.world(@"dope");
+
             let mut store = StoreImpl::new(world);
 
             let mut game_ids = game_ids;
 
-            // check max batch size
-            assert(game_ids.len() <= 10, 'too much game_ids');
+            // // check max batch size
+            // assert(game_ids.len() <= 10, 'too much game_ids');
 
+            let mut gear_ids: Array<u256> = array![];
+            let mut gear_ids_values: Array<u256> = array![];
+            let mut hustler_count = 0;
+
+            let hustler_dispatcher = IDopeHustlersABIDispatcher {
+                contract_address: dope_world.dns_address(@"DopeHustlers").unwrap(),
+            };
+            let gear_dispatcher = IDopeGearABIDispatcher {
+                contract_address: dope_world.dns_address(@"DopeGear").unwrap(),
+            };
+
+            let bushido_store = BushidoStoreTrait::new(world);
             let mut total_claimable = 0;
 
             while let Option::Some(game_id) = game_ids.pop_front() {
@@ -197,8 +279,17 @@ mod laundromat {
                 game.claimed = true;
                 store.set_game(@game);
 
+                // add items rewards ids
+                add_items_payout(
+                    ref dope_world,
+                    ref gear_ids,
+                    ref gear_ids_values,
+                    ref hustler_count,
+                    game.season_version,
+                    game.position,
+                );
+
                 // emit Claimed event
-                // emit NewSeason
                 store
                     .world
                     .emit_event(
@@ -207,18 +298,25 @@ mod laundromat {
                             player_id,
                             season_version: game.season_version,
                             paper: game.claimable,
-                            rank: game.position
-                        }
+                            rank: game.position,
+                        },
                     );
 
                 if game.position == 1 {
-                    //
-                    let quest_id = Quest::Kingpin.identifier(0);
-                    let bushido_store = BushidoStoreTrait::new(world);
                     bushido_store
-                        .progress(player_id.into(), quest_id, 1, starknet::get_block_timestamp());
+                        .progress(
+                            player_id.into(), Tasks::KINGPIN, 1, starknet::get_block_timestamp(),
+                        );
                 }
-            };
+            }
+
+            bushido_store
+                .progress(
+                    player_id.into(),
+                    Tasks::PAPER,
+                    total_claimable.into(),
+                    starknet::get_block_timestamp(),
+                );
 
             // retrieve paper address
             let paper_address = store.ryo_addresses().paper;
@@ -227,10 +325,20 @@ mod laundromat {
             // transfer reward to player_id
             IPaperDispatcher { contract_address: paper_address }
                 .transfer(player_id, total_claimable);
+
+            // mint gear items
+            gear_dispatcher
+                .mint_batch(player_id, gear_ids.span(), gear_ids_values.span(), array![].span());
+
+            // mint hustlers
+            while hustler_count > 0 {
+                hustler_dispatcher.mint_hustler_to(player_id);
+                hustler_count -= 1;
+            }
         }
 
         fn claim_treasury(self: @ContractState) {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             let mut ryo_config = store.ryo_config();
 
             assert(ryo_config.treasury_balance > 0, 'nothin to claim');
@@ -249,7 +357,7 @@ mod laundromat {
         }
 
         fn supercharge_jackpot(self: @ContractState, season_version: u16, amount_eth: u32) {
-            let mut store = StoreImpl::new(self.world(@"dopewars"));
+            let mut store = StoreImpl::new(self.world(@ns()));
             // retrieve season
             let mut season = store.season(season_version);
 

@@ -3,6 +3,7 @@ import { useAccount } from "@starknet-react/core";
 import { useCallback, useState } from "react";
 import { Account, Contract, TypedContractV2 } from "starknet";
 import { ABI as paperAbi } from "../abis/paperAbi";
+import { waitForTransaction } from "./useSystems";
 
 export interface FaucetExecuteResult {
   hash: string;
@@ -28,9 +29,11 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
 
     let tx, receipt;
     try {
-      const contract: TypedContractV2<typeof paperAbi> = new Contract(paperAbi, tokenAddress!, account!).typedv2(
-        paperAbi,
-      );
+      const contract: TypedContractV2<typeof paperAbi> = new Contract({
+        abi: paperAbi,
+        address: tokenAddress!,
+        providerOrAccount: account!,
+      }).typedv2(paperAbi);
 
       tx = await contract.invoke("faucet", [], { parseRequest: false });
       // tx = await contract.faucet();
@@ -42,9 +45,7 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
         isError: false,
       });
 
-      receipt = await account!.waitForTransaction(tx.transaction_hash, {
-        retryInterval: 500,
-      });
+      receipt = await waitForTransaction(account!, tx.transaction_hash);
     } catch (e: any) {
       console.log(e);
       setIsPending(false);
@@ -72,11 +73,13 @@ export const useFaucet = (tokenAddress?: string): FaucetInterface => {
 };
 
 export const paperFaucet = async ({ account, paperAddress }: { account: Account; paperAddress: string }) => {
-  const contract: TypedContractV2<typeof paperAbi> = new Contract(paperAbi, paperAddress!, account!).typedv2(paperAbi);
+  const contract: TypedContractV2<typeof paperAbi> = new Contract({
+    abi: paperAbi,
+    address: paperAddress!,
+    providerOrAccount: account!,
+  }).typedv2(paperAbi);
 
   const tx = await contract.invoke("faucet", [], { parseRequest: false });
 
-  const receipt = await account!.waitForTransaction(tx.transaction_hash, {
-    retryInterval: 500,
-  });
+  const receipt = await waitForTransaction(account!, tx.transaction_hash);;
 };

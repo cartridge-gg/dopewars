@@ -1,18 +1,17 @@
 query Config {
   # RyoAddress
-  dopewarsRyoAddressModels(limit: 1) {
+  dopewarsV0RyoAddressModels(limit: 1) {
     edges {
       node {
         key
         paper
         treasury
-        laundromat
       }
     }
   }
 
   # Ryo
-  dopewarsRyoConfigModels(limit: 1) {
+  dopewarsV0RyoConfigModels(limit: 1) {
     edges {
       node {
         key
@@ -25,12 +24,15 @@ query Config {
         paper_reward_launderer
         treasury_fee_pct
         treasury_balance
+        f2p_hustlers
+        play_with_loot
+        play_with_hustlers
       }
     }
   }
 
   # Drugs
-  dopewarsDrugConfigModels(limit: 24, order: { field: DRUG_ID, direction: ASC }) {
+  dopewarsV0DrugConfigModels(limit: 24, order: { field: DRUG_ID, direction: ASC }) {
     edges {
       node {
         drugs_mode
@@ -47,7 +49,7 @@ query Config {
   }
 
   # Locations
-  dopewarsLocationConfigModels(order: { field: LOCATION_ID, direction: ASC }) {
+  dopewarsV0LocationConfigModels(order: { field: LOCATION_ID, direction: ASC }) {
     edges {
       node {
         location
@@ -59,33 +61,33 @@ query Config {
     }
   }
 
-  # HustlerItemBaseConfig
-  dopewarsHustlerItemBaseConfigModels {
-    edges {
-      node {
-        slot
-        id
-        slot_id
-        name
-        initial_tier
-      }
-    }
-  }
+  # # HustlerItemBaseConfig
+  # dopewarsV0HustlerItemBaseConfigModels {
+  #   edges {
+  #     node {
+  #       slot
+  #       id
+  #       slot_id
+  #       name
+  #       initial_tier
+  #     }
+  #   }
+  # }
 
-  # HustlerItemTiersConfig
-  dopewarsHustlerItemTiersConfigModels(limit: 24) {
-    edges {
-      node {
-        slot
-        slot_id
-        tier
-        cost
-        stat
-      }
-    }
-  }
+  # # HustlerItemTiersConfig
+  # dopewarsV0HustlerItemTiersConfigModels(limit: 24) {
+  #   edges {
+  #     node {
+  #       slot
+  #       slot_id
+  #       tier
+  #       cost
+  #       stat
+  #     }
+  #   }
+  # }
 
-  dopewarsEncounterStatsConfigModels(limit: 100) {
+  dopewarsV0EncounterStatsConfigModels(limit: 100) {
     edges {
       node {
         encounters_mode
@@ -101,10 +103,48 @@ query Config {
       }
     }
   }
+
+  # DopewarsItemTierModels
+  dopewarsV0DopewarsItemTierModels(limit: 1000) {
+    edges {
+      node {
+        slot_id
+        item_id
+        tier
+      }
+    }
+  }
+
+  # DopewarsItemTierConfigModels
+  dopewarsV0DopewarsItemTierConfigModels(limit: 1000) {
+    edges {
+      node {
+        slot_id
+        tier
+        levels {
+          stat
+          cost
+        }
+      }
+    }
+  }
+
+  dopeComponentValueEventModels(where: { collection_idEQ: "0x446f706547656172" }, limit: 1000) {
+    edges {
+      node {
+        collection_id
+        component_slug
+        component_id
+        component_slug
+        id
+        value
+      }
+    }
+  }
 }
 
 query GameConfig($version: u16) {
-  dopewarsGameConfigModels(where: { season_version: $version }) {
+  dopewarsV0GameConfigModels(where: { season_version: $version }) {
     edges {
       node {
         season_version
@@ -123,7 +163,7 @@ query GameConfig($version: u16) {
 }
 
 query AllGameConfig {
-  dopewarsGameConfigModels(limit: 420) {
+  dopewarsV0GameConfigModels(limit: 420) {
     edges {
       node {
         season_version

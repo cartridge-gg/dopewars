@@ -1,22 +1,20 @@
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use starknet::ContractAddress;
-use starknet::get_contract_address;
+use core::num::traits::Zero;
 
 #[derive(Copy, Drop, Serde)]
-struct Random {
+pub struct Random {
     seed: felt252,
     nonce: usize,
 }
 
 #[generate_trait]
-impl RandomImpl of RandomTrait {
+pub impl RandomImpl of RandomTrait {
     fn new(seed: felt252) -> Random {
         Random { seed, nonce: 0 }
     }
 
     fn next(ref self: Random) -> felt252 {
         self.nonce += 1;
-        poseidon::poseidon_hash_span(array![self.seed, self.nonce.into()].span())
+        core::poseidon::poseidon_hash_span(array![self.seed, self.nonce.into()].span())
     }
 
     fn bool(ref self: Random) -> bool {
@@ -39,16 +37,16 @@ impl RandomImpl of RandomTrait {
         +Into<T, u256>,
         +TryInto<u128, T>,
         +PartialOrd<T>,
-        +Zeroable<T>,
+        +Zero<T>,
         +Copy<T>,
-        +Drop<T>
+        +Drop<T>,
     >(
-        ref self: Random, min: T, max: T
+        ref self: Random, min: T, max: T,
     ) -> T {
         let seed: u256 = self.next().into();
 
         if min >= max {
-            return Zeroable::zero();
+            return Zero::zero();
         };
 
         let range: u128 = max.into() - min.into();

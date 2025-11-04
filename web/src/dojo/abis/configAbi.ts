@@ -11,7 +11,7 @@ export const ABI = [
   },
   {
     "type": "impl",
-    "name": "config__DeployedContractImpl",
+    "name": "DojoDeployedContractImpl",
     "interface_name": "dojo::meta::interface::IDeployedResource"
   },
   {
@@ -95,128 +95,6 @@ export const ABI = [
   },
   {
     "type": "enum",
-    "name": "rollyourown::config::hustlers::ItemSlot",
-    "variants": [
-      {
-        "name": "Weapon",
-        "type": "()"
-      },
-      {
-        "name": "Clothes",
-        "type": "()"
-      },
-      {
-        "name": "Feet",
-        "type": "()"
-      },
-      {
-        "name": "Transport",
-        "type": "()"
-      }
-    ]
-  },
-  {
-    "type": "struct",
-    "name": "rollyourown::config::hustlers::HustlerItemBaseConfig",
-    "members": [
-      {
-        "name": "slot",
-        "type": "rollyourown::config::hustlers::ItemSlot"
-      },
-      {
-        "name": "id",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "slot_id",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "name",
-        "type": "core::felt252"
-      },
-      {
-        "name": "initial_tier",
-        "type": "core::integer::u8"
-      }
-    ]
-  },
-  {
-    "type": "struct",
-    "name": "rollyourown::config::hustlers::HustlerItemTiersConfig",
-    "members": [
-      {
-        "name": "slot",
-        "type": "rollyourown::config::hustlers::ItemSlot"
-      },
-      {
-        "name": "tier",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "slot_id",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "cost",
-        "type": "core::integer::u32"
-      },
-      {
-        "name": "stat",
-        "type": "core::integer::u32"
-      }
-    ]
-  },
-  {
-    "type": "struct",
-    "name": "rollyourown::config::hustlers::HustlerItemConfig",
-    "members": [
-      {
-        "name": "slot",
-        "type": "rollyourown::config::hustlers::ItemSlot"
-      },
-      {
-        "name": "level",
-        "type": "core::integer::u8"
-      },
-      {
-        "name": "base",
-        "type": "rollyourown::config::hustlers::HustlerItemBaseConfig"
-      },
-      {
-        "name": "tier",
-        "type": "rollyourown::config::hustlers::HustlerItemTiersConfig"
-      }
-    ]
-  },
-  {
-    "type": "struct",
-    "name": "rollyourown::config::hustlers::HustlerConfig",
-    "members": [
-      {
-        "name": "hustler_id",
-        "type": "core::integer::u16"
-      },
-      {
-        "name": "weapon",
-        "type": "rollyourown::config::hustlers::HustlerItemConfig"
-      },
-      {
-        "name": "clothes",
-        "type": "rollyourown::config::hustlers::HustlerItemConfig"
-      },
-      {
-        "name": "feet",
-        "type": "rollyourown::config::hustlers::HustlerItemConfig"
-      },
-      {
-        "name": "transport",
-        "type": "rollyourown::config::hustlers::HustlerItemConfig"
-      }
-    ]
-  },
-  {
-    "type": "enum",
     "name": "core::bool",
     "variants": [
       {
@@ -272,6 +150,18 @@ export const ABI = [
       {
         "name": "treasury_balance",
         "type": "core::integer::u32"
+      },
+      {
+        "name": "f2p_hustlers",
+        "type": "core::bool"
+      },
+      {
+        "name": "play_with_loot",
+        "type": "core::bool"
+      },
+      {
+        "name": "play_with_hustlers",
+        "type": "core::bool"
       }
     ]
   },
@@ -514,10 +404,6 @@ export const ABI = [
         "type": "rollyourown::config::config::LayoutsConfig"
       },
       {
-        "name": "hustlers",
-        "type": "core::array::Array::<rollyourown::config::hustlers::HustlerConfig>"
-      },
-      {
         "name": "ryo_config",
         "type": "rollyourown::config::ryo::RyoConfig"
       },
@@ -540,6 +426,13 @@ export const ABI = [
             "type": "rollyourown::config::config::Config"
           }
         ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "emit_items_config",
+        "inputs": [],
+        "outputs": [],
         "state_mutability": "view"
       }
     ]

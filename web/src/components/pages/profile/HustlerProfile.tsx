@@ -5,89 +5,42 @@ import { ItemSlot } from "@/dojo/types";
 import { useToast } from "@/hooks/toast";
 import { Box, Button, HStack, VStack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ShareButton from "./ShareButton";
+import { HustlerPreviewFromLoot, HustlerPreviewFromHustler } from "@/dope/components";
+import { HustlerAvatarIcon } from "./HustlerAvatarIcon";
+import { HustlerPreviewFromGame } from "./HustlerPreviewFromGame";
 
 export const HustlerProfile = observer(() => {
   const { gameId } = useRouterContext();
-  const { game, gameInfos } = useGameStore();
+  const { game, gameInfos, gameEvents } = useGameStore();
   const configStore = useConfigStore();
-  const [hustlerStats, setHustlerStats] = useState<any>();
   const { toast } = useToast();
 
-  useEffect(() => {
-    const hustler = configStore?.getHustlerById(gameInfos?.hustler_id);
-    if (!hustler) return;
-
-    const stats = {
-      [ItemSlot.Weapon]: {
-        //name: shortString.decodeShortString(hustler.weapon.base.name),
-        name: hustler.weapon.base.name,
-        initialTier: Number(hustler.weapon.base.initial_tier),
-      },
-      [ItemSlot.Clothes]: {
-        // name: shortString.decodeShortString(hustler.clothes.base.name),
-        name: hustler.clothes.base.name,
-        initialTier: Number(hustler.clothes.base.initial_tier),
-      },
-      [ItemSlot.Feet]: {
-        // name: shortString.decodeShortString(hustler.feet.base.name),
-        name: hustler.feet.base.name,
-        initialTier: Number(hustler.feet.base.initial_tier),
-      },
-      [ItemSlot.Transport]: {
-        // name: shortString.decodeShortString(hustler.transport.base.name),
-        name: hustler.transport.base.name,
-        initialTier: Number(hustler.transport.base.initial_tier),
-      },
-    };
-
-    setHustlerStats(stats);
-  }, [configStore, gameInfos?.hustler_id]);
-
-  if (!configStore || !hustlerStats || !game) return null;
+  if (!configStore || !game) return null;
 
   return (
     <VStack w="full" gap={6}>
       <HStack w="full" p="20px" justifyContent="center" gap={6}>
-        <Box alignItems="center" h={["190px", "300px"]} w="150px" position="relative" zIndex={99}>
-          <Hustler hustler={gameInfos?.hustler_id as Hustlers} w="150px" h={["190px", "300px"]} />
-          {/* <OG id={97} /> */}
+        <Box
+          alignItems="center"
+          h={["190px", "260px"]}
+          w={["190px", "260px"]}
+          position="relative"
+          transform={"scale(2)"}
+          zIndex={99}
+          pointerEvents="none"
+          overflow="hidden"
+        >
+          {/* @ts-ignore */}
+          {gameInfos && (gameInfos.token_id_type === "LootId" || gameInfos.token_id_type === "GuestLootId") && (
+            <HustlerPreviewFromLoot tokenId={Number(gameInfos.token_id)} renderMode={1} />
+          )}
+          {/* @ts-ignore */}
+          {gameInfos && gameInfos.token_id_type === "HustlerId" && (
+            <HustlerPreviewFromGame gameId={gameInfos.game_id} tokenId={Number(gameInfos.token_id)} renderMode={1} />
+          )}
         </Box>
-
-        <VStack gap={3}>
-          <PowerMeter
-            basePower={hustlerStats[ItemSlot.Weapon].initialTier}
-            maxPower={hustlerStats[ItemSlot.Weapon].initialTier + 3}
-            power={hustlerStats[ItemSlot.Weapon].initialTier + game?.items.attack.level}
-            displayedPower={6}
-            text="ATK"
-          />
-
-          <PowerMeter
-            basePower={hustlerStats[ItemSlot.Clothes].initialTier}
-            maxPower={hustlerStats[ItemSlot.Clothes].initialTier + 3}
-            power={hustlerStats[ItemSlot.Clothes].initialTier + game?.items.defense.level}
-            displayedPower={6}
-            text="DEF"
-          />
-
-          <PowerMeter
-            basePower={hustlerStats[ItemSlot.Feet].initialTier}
-            maxPower={hustlerStats[ItemSlot.Feet].initialTier + 3}
-            power={hustlerStats[ItemSlot.Feet].initialTier + game?.items.speed.level}
-            displayedPower={6}
-            text="SPD"
-          />
-
-          <PowerMeter
-            basePower={hustlerStats[ItemSlot.Transport].initialTier}
-            maxPower={hustlerStats[ItemSlot.Transport].initialTier + 3}
-            power={hustlerStats[ItemSlot.Transport].initialTier + game?.items.transport.level}
-            displayedPower={6}
-            text="INV"
-          />
-        </VStack>
       </HStack>
 
       {/* <Card>

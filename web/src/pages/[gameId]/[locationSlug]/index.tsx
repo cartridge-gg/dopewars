@@ -1,4 +1,5 @@
 import { Button } from "@/components/common";
+import { Cigarette } from "@/components/icons";
 import { WeightIcon } from "@/components/icons/Weigth";
 import { Footer, Layout } from "@/components/layout";
 import { Inventory } from "@/components/player";
@@ -7,6 +8,7 @@ import { getRandomGreeting } from "@/dojo/helpers";
 import { useConfigStore, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { DrugConfigFull } from "@/dojo/stores/config";
 import { DrugMarket } from "@/dojo/types";
+import { useToast } from "@/hooks/toast";
 import { formatCash } from "@/utils/ui";
 import {
   Box,
@@ -30,6 +32,7 @@ import { useEffect, useState } from "react";
 const Location = observer(() => {
   const { router, gameId, location } = useRouterContext();
   const { account } = useAccount();
+  const { toast } = useToast();
 
   const configStore = useConfigStore();
   const { game, gameInfos, gameConfig, gameEvents } = useGameStore();
@@ -82,6 +85,14 @@ const Location = observer(() => {
               px={["auto", "20px"]}
               isLoading={isPending}
               onClick={async () => {
+                if (game.drugs.quantity > 0 && isLastDay) {
+                  toast({
+                    message: "better sell this drugs before...",
+                    icon: Cigarette,
+                  });
+
+                  return;
+                }
                 if (isLastDay) {
                   try {
                     await endGame(gameId, game.getPendingCalls());
@@ -110,7 +121,7 @@ const Location = observer(() => {
             {prices.map((drug, index) => {
               const drugConfig = configStore.getDrug(game.seasonSettings.drugs_mode, drug.drug)!;
 
-              const freeSpace = game.items.transport.tier.stat - game.drugs.quantity * (game.drugs?.drug?.weight || 0);
+              const freeSpace = game.items.transport.stat - game.drugs.quantity * (game.drugs?.drug?.weight || 0);
               const hasFreeSpace = freeSpace >= drug.weight;
               const hasMinCash = game.player.cash >= drug.price;
 

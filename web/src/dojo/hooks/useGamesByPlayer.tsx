@@ -1,8 +1,8 @@
 import {
-  Dopewars_Game as Game,
-  Dopewars_GameConfig as GameConfig,
-  Dopewars_GameStorePacked as GameStorePacked,
-  Dopewars_SeasonSettings as SeasonSettings,
+  Dopewars_V0_Game as Game,
+  Dopewars_V0_GameConfig as GameConfig,
+  Dopewars_V0_GameStorePacked as GameStorePacked,
+  Dopewars_V0_SeasonSettings as SeasonSettings,
   World__EntityEdge,
   useAllGameConfigQuery,
   useAllSeasonSettingsQuery,
@@ -11,11 +11,12 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { GameClass } from "../class/Game";
 import { useDojoContext } from "./useDojoContext";
-import { Hustlers } from "@/components/hustlers";
 import { Drugs } from "../types";
 import { Entities, ToriiClient } from "@dojoengine/torii-client";
 import { DojoEvent, EventClass } from "../class/Events";
 import { TradeDrug, TravelEncounter, TravelEncounterResult } from "@/components/layout/GlobalEvents";
+import { num } from "starknet";
+import { DW_GRAPHQL_MODEL_NS, DW_NS } from "../constants";
 
 export type PlayerStats = {
   totalGamesPlayed: number;
@@ -23,16 +24,7 @@ export type PlayerStats = {
   payRate: string;
   totalPaperClaimed: number;
   bestRanking: string;
-  gamesByHustler: {
-    [Hustlers.Dragon]: number;
-    [Hustlers.Monkey]: number;
-    [Hustlers.Rabbit]: number;
-  };
-  mostPlayedHustler: {
-    [Hustlers.Dragon]: boolean;
-    [Hustlers.Monkey]: boolean;
-    [Hustlers.Rabbit]: boolean;
-  };
+
   totalCopsEncounter: number;
   totalGangEncounter: number;
   totalFight: number;
@@ -69,26 +61,33 @@ export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId: string): 
   const [allTradedDrug, setAllTradedDrug] = useState<TradeDrug[]>([]);
   const [allTravelEncounters, setAllTravelEncounters] = useState<TravelEncounter[]>([]);
   const [allTravelEncounterResults, setAllTravelEncounterResults] = useState<TravelEncounterResult[]>([]);
+  const {
+    chains: { selectedChain },
+  } = useDojoContext();
   useEffect(() => {
     const init = async () => {
-      const entities: Entities = await toriiClient.getEventMessages(
-        {
-          clause: {
-            Keys: {
-              keys: [undefined, playerId],
-              models: ["dopewars-TradeDrug", "dopewars-TravelEncounter", "dopewars-TravelEncounterResult"],
-              pattern_matching: "FixedLen",
-            },
+      const entities = await toriiClient.getEventMessages({
+        world_addresses: [selectedChain.manifest.world.address],
+        clause: {
+          Keys: {
+            keys: [undefined, num.toHex64(playerId)],
+            models: [`${DW_NS}-TradeDrug`, `${DW_NS}-TravelEncounter`, `${DW_NS}-TravelEncounterResult`],
+            pattern_matching: "FixedLen",
           },
-          limit: 10000,
-          offset: 0,
-          dont_include_hashed_keys: true,
         },
-        true,
-      );
+        pagination: {
+          limit: 10_000,
+          cursor: undefined,
+          direction: "Forward",
+          order_by: [],
+        },
+        no_hashed_keys: true,
+        models: [`${DW_NS}-TradeDrug`, `${DW_NS}-TravelEncounter`, `${DW_NS}-TravelEncounterResult`],
+        historical: true,
+      });
 
-      //  console.log(entities);
-      const allEvents = Object.values(entities).flatMap((entity) => EventClass.parseEntity(entity));
+      console.log(entities);
+      const allEvents = EventClass.parseEntities(entities.items);
 
       setAllTradedDrug(allEvents.filter((i) => i.eventName === "TradeDrug").map((i) => i.event as TradeDrug));
       setAllTravelEncounters(
@@ -102,7 +101,7 @@ export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId: string): 
     if (toriiClient && Number(playerId) !== 0) {
       init();
     }
-  }, [toriiClient, playerId]);
+  }, [toriiClient, playerId, selectedChain]);
   return {
     allTradedDrug,
     allTravelEncounters: allTravelEncounters,
@@ -130,19 +129,24 @@ export const useGamesByPlayer = (toriiClient: ToriiClient, playerIdRaw: string):
     const nodes = (edges || []).map((i) => i.node);
 
     const games = nodes.flatMap((i) => {
-      const gameInfos = (i!.models || []).find((i) => i?.__typename === "dopewars_Game") as Game;
+      const gameInfos = (i!.models || []).find((i) => i?.__typename === `${DW_NS}_Game`) as Game;
       const gameStorePacked = (i!.models || []).find(
-        (i) => i?.__typename === "dopewars_GameStorePacked",
+        (i) => i?.__typename === `${DW_NS}_GameStorePacked`,
       ) as GameStorePacked;
 
       if (!gameInfos || !gameStorePacked) return [];
       if (gameInfos.season_version === 0) return [];
 
-      const seasonSettings = allSeasonSettings?.dopewarsSeasonSettingsModels?.edges?.find(
+      // @ts-ignore
+      gameInfos.token_id_type = gameInfos.token_id?.option;
+      // @ts-ignore
+      gameInfos.token_id = Number(gameInfos.token_id![gameInfos.token_id?.option as keyof typeof gameInfos.token_id]);
+
+      const seasonSettings = allSeasonSettings?.[`${DW_GRAPHQL_MODEL_NS}SeasonSettingsModels`]?.edges?.find(
         (i) => i?.node?.season_version === gameInfos.season_version,
       )?.node as SeasonSettings;
 
-      const gameConfig = allGameConfig?.dopewarsGameConfigModels?.edges?.find(
+      const gameConfig = allGameConfig?.[`${DW_GRAPHQL_MODEL_NS}GameConfigModels`]?.edges?.find(
         (i) => i?.node?.season_version === gameInfos.season_version,
       )?.node as GameConfig;
 
@@ -174,12 +178,6 @@ export const useGamesByPlayer = (toriiClient: ToriiClient, playerIdRaw: string):
       .sort((a, b) => a - b);
     const bestRanking = orderedRanks.length > 0 ? orderedRanks[0] : "Noob";
 
-    const dragonGames = games.filter((i: GameClass) => i.gameInfos.hustler_id === 0).length;
-    const monkeyGames = games.filter((i: GameClass) => i.gameInfos.hustler_id === 1).length;
-    const rabbitGames = games.filter((i: GameClass) => i.gameInfos.hustler_id === 2).length;
-
-    const maxPlayed = Math.max(dragonGames, monkeyGames, rabbitGames);
-
     const totalCopsEncounter = allTravelEncounters.filter((i) => i.encounter === "Cops").length || 0;
     const totalGangEncounter = allTravelEncounters.filter((i) => i.encounter === "Gang").length || 0;
     const totalFight = allTravelEncounterResults.filter((i) => i.action === "Fight").length || 0;
@@ -195,16 +193,7 @@ export const useGamesByPlayer = (toriiClient: ToriiClient, playerIdRaw: string):
       payRate,
       totalPaperClaimed,
       bestRanking,
-      gamesByHustler: {
-        [Hustlers.Dragon]: dragonGames,
-        [Hustlers.Monkey]: monkeyGames,
-        [Hustlers.Rabbit]: rabbitGames,
-      },
-      mostPlayedHustler: {
-        [Hustlers.Dragon]: dragonGames === maxPlayed,
-        [Hustlers.Monkey]: monkeyGames === maxPlayed,
-        [Hustlers.Rabbit]: rabbitGames === maxPlayed,
-      },
+
       totalCopsEncounter,
       totalGangEncounter,
       totalFight,

@@ -1,27 +1,31 @@
-import { Subscription } from "@dojoengine/torii-client";
-import { useEffect, useRef } from "react";
 import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
-import { useToast } from "@/hooks/toast";
-import { useAccount } from "@starknet-react/core";
-import { HustlerIcon, Hustlers } from "../hustlers";
-import { formatCashHeader } from "@/utils/ui";
-import { PaperIcon, Siren, Truck } from "../icons";
-import { playSound, Sounds } from "@/hooks/sound";
 import { parseStruct } from "@/dojo/utils";
-import { num, shortString } from "starknet";
+import { parseModels } from "@/dope/toriiUtils";
+import { Dopewars_V0_Game as Game } from "@/generated/graphql";
+import { playSound, Sounds } from "@/hooks/sound";
+import { useToast } from "@/hooks/toast";
+import { formatCashHeader } from "@/utils/ui";
+import { Entity, Subscription } from "@dojoengine/torii-client";
+import { useAccount } from "@starknet-react/core";
+import { useEffect, useRef } from "react";
+import { CairoOption, num, shortString } from "starknet";
+import { PaperIcon, Siren, Truck } from "../icons";
+import { HustlerAvatarIcon } from "../pages/profile/HustlerAvatarIcon";
+import { DW_NS } from "@/dojo/constants";
 
 export const GlobalEvents = () => {
   const { toast } = useToast();
 
   const { account } = useAccount();
   const { router } = useRouterContext();
-  const { game, gameEvents } = useGameStore();
+  const gameStore = useGameStore();
+  const { game, gameEvents } = gameStore;
   const {
     chains: { selectedChain },
     clients: { toriiClient },
   } = useDojoContext();
 
-  const subscription = useRef<Subscription>();
+  const subscription = useRef<Subscription | undefined>(undefined);
   const accountAddress = useRef(0n);
 
   useEffect(() => {
@@ -51,37 +55,21 @@ export const GlobalEvents = () => {
     const init = async () => {
       if (!subscription.current) {
         subscription.current = await toriiClient.onEventMessageUpdated(
-          [
-            {
-              Keys: {
-                keys: [undefined, undefined],
-                models: ["dopewars-GameCreated"],
-                pattern_matching: "FixedLen",
-              },
+          {
+            Keys: {
+              keys: [undefined],
+              models: [
+                `${DW_NS}-GameCreated`,
+                `${DW_NS}-NewSeason`,
+                `${DW_NS}-NewHighScore`,
+                `${DW_NS}-GameOver`,
+                `${DW_NS}-TrophyProgression`,
+                `dope-DopeLootReleasedEvent`,
+              ],
+              pattern_matching: "VariableLen",
             },
-            {
-              Keys: {
-                keys: [undefined],
-                models: ["dopewars-NewSeason"],
-                pattern_matching: "FixedLen",
-              },
-            },
-            {
-              Keys: {
-                keys: [undefined, undefined, undefined],
-                models: ["dopewars-NewHighScore"],
-                pattern_matching: "FixedLen",
-              },
-            },
-            {
-              Keys: {
-                keys: [undefined, undefined, undefined],
-                models: ["dopewars-GameOver"],
-                pattern_matching: "FixedLen",
-              },
-            },
-          ],
-          true,
+          },
+          [selectedChain.manifest.world.address],
           onEventMessage,
         );
       }
@@ -97,15 +85,29 @@ export const GlobalEvents = () => {
     };
   }, [selectedChain, accountAddress.current]);
 
-  const onEventMessage = (entity: any, update: any) => {
-    // console.log("globalEvents::onEventMessage", entity, update);
+  const onEventMessage = async (entity: Entity) => {
+    if (entity.models[`${DW_NS}-GameCreated`]) {
+      // const gameCreated = parseStruct(entity.models[`${DW_NS}-GameCreated`]) as GameCreated;
 
-    if (update["dopewars-GameCreated"]) {
-      const gameCreated = parseStruct(update["dopewars-GameCreated"]) as GameCreated;
+      const gameCreated = parseModels({ items: [entity], next_cursor: "" }, `${DW_NS}-GameCreated`)[0] as GameCreated;
       gameCreated.player_name = shortString.decodeShortString(num.toHexString(BigInt(gameCreated.player_name)));
+
+      // @ts-ignore
+      gameCreated.game_mode = gameCreated.game_mode.activeVariant();
+      // @ts-ignore
+      gameCreated.token_id_type = gameCreated.token_id.activeVariant();
+      // @ts-ignore
+      gameCreated.token_id = Number(gameCreated.token_id.unwrap());
+
       if (BigInt(gameCreated.player_id) !== accountAddress.current) {
         toast({
-          icon: () => <HustlerIcon hustler={gameCreated.hustler_id as Hustlers} />,
+          icon: () => (
+            <HustlerAvatarIcon
+              gameId={gameCreated.game_id}
+              tokenIdType={gameCreated.token_id_type}
+              tokenId={Number(gameCreated.token_id)}
+            />
+          ),
           message:
             gameCreated.game_mode === "Ranked"
               ? `${gameCreated.player_name} is ready to hustle...`
@@ -116,8 +118,8 @@ export const GlobalEvents = () => {
       }
     }
 
-    if (update["dopewars-NewSeason"]) {
-      const newSeason = parseStruct(update["dopewars-NewSeason"]) as NewSeason;
+    if (entity.models[`${DW_NS}-NewSeason`]) {
+      const newSeason = parseStruct(entity.models[`${DW_NS}-NewSeason`]) as NewSeason;
       playSound(Sounds.Uzi);
       toast({
         icon: () => <PaperIcon width="16px" height="16px" />,
@@ -125,31 +127,71 @@ export const GlobalEvents = () => {
       });
     }
 
-    if (update["dopewars-NewHighScore"]) {
-      const newHighScore = parseStruct(update["dopewars-NewHighScore"]) as NewHighScore;
+    if (entity.models[`${DW_NS}-NewHighScore`]) {
+      const newHighScore = parseStruct(entity.models[`${DW_NS}-NewHighScore`]) as NewHighScore;
       newHighScore.player_name = shortString.decodeShortString(num.toHexString(BigInt(newHighScore.player_name)));
+
+      const game = (await gameStore.getGameCreated(newHighScore.game_id)) as unknown as Game;
+
       toast({
-        icon: () => <HustlerIcon hustler={newHighScore.hustler_id as Hustlers} />,
+        icon: () => (
+          <HustlerAvatarIcon
+            gameId={newHighScore.game_id}
+            ///@ts-ignore
+            tokenIdType={game.token_id_type}
+            tokenId={Number(game.token_id)}
+          />
+        ),
         message: `${newHighScore.player_name} rules with ${formatCashHeader(newHighScore.cash)}!`,
       });
     }
 
-    if (update["dopewars-GameOver"]) {
-      const gameOver = parseStruct(update["dopewars-GameOver"]) as GameOver;
+    if (entity.models[`${DW_NS}-GameOver`]) {
+      const gameOver = parseStruct(entity.models[`${DW_NS}-GameOver`]) as GameOver;
       gameOver.player_name = shortString.decodeShortString(num.toHexString(BigInt(gameOver.player_name)));
       if (BigInt(gameOver.player_id) !== accountAddress.current) {
         if (gameOver.health === 0) {
           playSound(Sounds.Magnum357);
         }
+        const game = (await gameStore.getGameCreated(gameOver.game_id)) as unknown as Game;
         toast({
-          icon: () => <HustlerIcon hustler={gameOver.hustler_id as Hustlers} />,
+          icon: () => (
+            <HustlerAvatarIcon
+              gameId={gameOver.game_id}
+              ///@ts-ignore
+              tokenIdType={game.token_id_type}
+              tokenId={Number(game.token_id)}
+            />
+          ),
           message: gameOver.health === 0 ? `RIP ${gameOver.player_name}!` : `${gameOver.player_name} survived!`,
         });
       }
     }
+
+    if (entity.models["dope-DopeLootReleasedEvent"]) {
+      const released = parseStruct(entity.models["dope-DopeLootReleasedEvent"]) as DopeLootReleasedEvent;
+      const id = Number(released.id);
+      toast({
+        icon: () => <HustlerAvatarIcon gameId={0} tokenIdType={"LootId"} tokenId={id} />,
+        message: `#${id} has been released!`,
+      });
+    }
+
+    // uncomment to check TrophyProgression
+    // if (entity.models[`${DW_NS}-TrophyProgression"]) {
+    //   const progression = parseStruct(entity.models[`${DW_NS}-TrophyProgression"]);
+    //   progression.task_id = shortString.decodeShortString(progression.task_id);
+    //   progression.count = Number(progression.count);
+    //   if (BigInt(progression.player_id) === accountAddress.current) {
+    //     console.log("TrophyProgression", progression.task_id, progression.count);
+    //   }
+    //   toast({
+    //     message: `TrophyProgression: ${progression.task_id} ${progression.count}`,
+    //   });
+    // }
   };
 
-  return <></>;
+  return null;
 };
 
 export interface GameCreated {
@@ -157,7 +199,11 @@ export interface GameCreated {
   player_id: string;
   game_mode: string;
   player_name: string;
-  hustler_id: number;
+  multiplier: number;
+  token_id_type: string;
+  token_id: bigint;
+  hustler_equipment: { slot: string; gear_item_id: CairoOption<number> }[];
+  hustler_body: { slot: string; value: number }[];
 }
 
 export interface Traveled {
@@ -178,7 +224,8 @@ export interface NewHighScore {
   player_id: string;
   season_version: number;
   player_name: string;
-  hustler_id: number;
+  token_id_type: string;
+  token_id: bigint;
   cash: number;
   health: number;
   reputation: number;
@@ -189,7 +236,8 @@ export interface GameOver {
   player_id: string;
   season_version: number;
   player_name: string;
-  hustler_id: number;
+  token_id_type: string;
+  token_id: bigint;
   turn: number;
   cash: number;
   health: number;
@@ -253,4 +301,9 @@ export interface UpgradeItem {
   turn: number;
   item_slot: number;
   item_level: number;
+}
+
+export interface DopeLootReleasedEvent {
+  id: bigint;
+  address: string;
 }

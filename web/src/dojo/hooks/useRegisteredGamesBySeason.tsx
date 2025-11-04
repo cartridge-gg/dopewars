@@ -1,10 +1,13 @@
 import {
-  Dopewars_Game as Game,
-  Dopewars_GameEdge as GameEdge,
+  Dopewars_V0_Game as Game,
+  Dopewars_V0_GameEdge as GameEdge,
   useGameByIdQuery,
   useRegisteredGamesBySeasonQuery,
 } from "@/generated/graphql";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSql } from "./useSql";
+import { shortString } from "starknet";
+import { DW_NS } from "../constants";
 
 interface RegisteredGamesBySeasonInterface {
   registeredGames: Game[];
@@ -13,14 +16,44 @@ interface RegisteredGamesBySeasonInterface {
   refetch: any;
 }
 
+const sqlQuery = (season_version: string) => `SELECT season_version,
+game_id,
+player_id,
+"player_name.value",
+final_score,
+registered,
+claimed,
+claimable,
+position,
+multiplier,
+token_id,
+"token_id.guestlootid",
+"token_id.lootid",
+"token_id.hustlerid"
+FROM "${DW_NS}-Game" 
+where season_version = ${season_version} and registered = true
+ORDER BY final_score DESC
+LIMIT 1000;`;
+
 export const useRegisteredGamesBySeason = (version: number): RegisteredGamesBySeasonInterface => {
-  const { data, isFetched, isFetching, refetch } = useRegisteredGamesBySeasonQuery({
-    version,
-  });
+  // const { data, isFetched, isFetching, refetch } = useRegisteredGamesBySeasonQuery({
+  //   version,
+  // });
+
+  const { data, isFetched, isFetching, refetch } = useSql(sqlQuery((version || 0).toString()));
 
   const registeredGames = useMemo(() => {
-    const edges = data?.dopewarsGameModels?.edges as GameEdge[];
-    const games = edges?.length > 0 ? edges.map((i) => i.node as Game) : [];
+    // const edges = data?.dopewarsGameModels?.edges as GameEdge[];
+    // const games = edges?.length > 0 ? edges.map((i) => i.node as Game) : [];
+    const games = (data || []).map((i: any) => {
+      return {
+        ...i,
+        player_name: shortString.decodeShortString(BigInt(i["player_name.value"]).toString()),
+        token_id_type: i.token_id,
+        token_id: Number(i[`token_id.${i.token_id}`]),
+      };
+    });
+
     return games.sort((a: Game, b: Game) => {
       const bPos = b.position > 0 ? (9999 - b.position) * 1_000_000_000 : 0;
       const aPos = a.position > 0 ? (9999 - a.position) * 1_000_000_000 : 0;

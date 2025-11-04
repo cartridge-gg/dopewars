@@ -1,9 +1,9 @@
 import {
-  Dopewars_GameConfig as GameConfig,
-  Dopewars_Season as Season,
-  Dopewars_SeasonSettings as SeasonSettings,
+  Dopewars_V0_GameConfig as GameConfig,
+  Dopewars_V0_Season as Season,
+  Dopewars_V0_SeasonSettings as SeasonSettings,
 } from "./../../generated/graphql";
-import { Dopewars_Game as Game, Dopewars_GameStorePacked as GameStorePacked } from "@/generated/graphql";
+import { Dopewars_V0_Game as Game, Dopewars_V0_GameStorePacked as GameStorePacked } from "@/generated/graphql";
 import { computed, makeObservable, observable } from "mobx";
 import { CairoCustomEnum } from "starknet";
 import { ConfigStoreClass } from "../stores/config";

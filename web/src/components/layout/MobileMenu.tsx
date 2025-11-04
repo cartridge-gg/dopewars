@@ -3,8 +3,6 @@ import { Menu, MenuItem, Popover, PopoverBody, PopoverContent, PopoverTrigger, S
 import { Cigarette, Dots, Home } from "../icons";
 import { ProfileLinkMobile } from "../pages/profile/Profile";
 import { ChainSelector, ConnectButtonMobile } from "../wallet";
-import { Burners } from "../wallet/Burners";
-import { Predeployed } from "../wallet/Predeployed";
 import { HeaderButton } from "./HeaderButton";
 import { MediaPlayer } from "./MediaPlayer";
 
@@ -15,7 +13,7 @@ export const MobileMenu = ({ ...props }: StyleProps) => {
     <>
       <Popover placement="bottom-end">
         <PopoverTrigger>
-          <HeaderButton w="48px">
+          <HeaderButton h={["40px", "48px"]}>
             <Dots />
           </HeaderButton>
         </PopoverTrigger>
@@ -31,8 +29,6 @@ export const MobileMenu = ({ ...props }: StyleProps) => {
               {!isRyoDotGame && (
                 <MenuItem>
                   <ChainSelector canChange={!gameId} />
-                  {"   "}
-                  <Burners /> <Predeployed />
                 </MenuItem>
               )}
 

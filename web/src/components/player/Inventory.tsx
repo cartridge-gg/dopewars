@@ -1,17 +1,11 @@
-import { reputationRanks, reputationRanksKeys, statName } from "@/dojo/helpers";
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
-import { HustlerItemConfigFull } from "@/dojo/stores/config";
-import { Card, Divider, HStack, Progress, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
+import { Card, HStack, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
-import { Tooltip } from "../common";
-import { Alert, Cigarette, DynamicReputation, PawnshopIcon } from "../icons";
+import { Alert, PawnshopIcon } from "../icons";
 import colors from "@/theme/colors";
-
 import { Sounds, playSound } from "@/hooks/sound";
 import { useAccount } from "@starknet-react/core";
 import { WeightIcon } from "../icons/Weigth";
-import { Reputation } from "../icons/items/Reputation";
-import { PowerMeter } from "./PowerMeter";
 import { ReputationIndicator } from "./ReputationIndicator";
 
 const blinkAnim = keyframes`  
@@ -54,7 +48,7 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
                 ? game?.drugs.quantity *
                   configStore.getDrug(game.seasonSettings.drugs_mode, game.drugs.drug?.drug)!.weight
                 : 0}
-              /{game.items.transport!.tier.stat}
+              /{game.items.transport!.stat}
             </Text>
           </HStack>
 
@@ -103,50 +97,6 @@ export const Inventory = observer(({ hidePawnshop = false, ...props }: StyleProp
           </Card>
         </VStack>
       )}
-
-      {/*
-      <HStack w="full" flexWrap="wrap" justify="space-between">
-        <Card h="40px" px="20px" justify="center">
-          <HStack gap="10px" justify="flex-end">
-            <PlayerItem item={game.items.attack!} />
-            <VerticalDivider />
-            <PlayerItem item={game.items.defense!} />
-            <VerticalDivider />
-            <PlayerItem item={game.items.speed!} />
-            <VerticalDivider />
-            <PlayerItem item={game.items.transport!} />
-          </HStack>
-        </Card> 
-      </HStack>
-      */}
     </VStack>
   );
 });
-
-const PlayerItem = ({ item, ...props }: { item: HustlerItemConfigFull }) => {
-  if (!item) return null;
-
-  //const stat = item.slot === ItemSlot.Transport ? item.tier.stat / 100 : item.tier.stat;
-  return (
-    <HStack gap="10px" {...props}>
-      <Tooltip
-        title={`${item.base.name}`}
-        text={`${item.upgradeName} (+${item.tier.stat} ${statName[item.slot]})`}
-        color="yellow.400"
-      >
-        <HStack>
-          <>
-            {item.icon &&
-              item.icon({
-                boxSize: "26",
-              })}
-          </>
-        </HStack>
-      </Tooltip>
-    </HStack>
-  );
-};
-
-const VerticalDivider = () => {
-  return <Divider h="10px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />;
-};

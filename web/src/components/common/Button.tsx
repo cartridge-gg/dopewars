@@ -1,6 +1,7 @@
 import { Sounds, playSound } from "@/hooks/sound";
 import { ButtonProps, Button as ChakraButton, StyleProps, Text } from "@chakra-ui/react";
 import { ReactNode } from "react";
+import { SmallLoader } from "../layout/Loader";
 
 // Can't seem to set first-letter css correctly on button in chakra theme
 // so we do it here on text...
@@ -15,6 +16,7 @@ export const Button = ({
   ButtonProps) => (
   <ChakraButton
     {...props}
+    spinner={<SmallLoader />}
     onMouseEnter={() => {
       hoverSound && playSound(hoverSound, 0.3);
     }}

@@ -1,5 +1,7 @@
 target
 abis
 
-genesis
-genesis.json
+.DS_Store
+
+checklist.md
+deployment.md

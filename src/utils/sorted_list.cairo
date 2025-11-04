@@ -1,73 +1,98 @@
+use core::num::traits::Zero;
 use core::traits::TryInto;
-use debug::PrintTrait;
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use rollyourown::{
-    models::{game::Game, season::Season}, utils::payout_structure::{get_payout},
-    store::{Store, StoreImpl, StoreTrait}
+    models::{game::Game}, store::{Store, StoreImpl, StoreTrait},
+    utils::payout_structure::{get_payout},
 };
 use starknet::ContractAddress;
 
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
-struct SortedList {
+pub struct SortedList {
     #[key]
-    list_id: felt252,
-    size: u32,
-    locked: bool,
-    processed: bool,
-    process_max_size: u32, // max number of item to process
-    process_size: u32, // number of item processed
-    process_cursor_k0: u32,
-    process_cursor_k1: ContractAddress,
+    pub list_id: felt252,
+    pub size: u32,
+    pub locked: bool,
+    pub processed: bool,
+    pub process_max_size: u32, // max number of item to process
+    pub process_size: u32, // number of item processed
+    pub process_cursor_k0: u32,
+    pub process_cursor_k1: ContractAddress,
+    pub stake_adj_paper_balance: u32,
 }
 
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
-struct SortedListItem {
+pub struct SortedListItem {
     #[key]
-    list_id: felt252,
+    pub list_id: felt252,
     #[key]
-    item_k0: u32,
+    pub item_k0: u32,
     #[key]
-    item_k1: ContractAddress,
+    pub item_k1: ContractAddress,
     //
-    next_k0: u32,
-    next_k1: ContractAddress,
+    pub next_k0: u32,
+    pub next_k1: ContractAddress,
 }
 
 
-trait SortableItem<T> {
+pub trait SortableItem<T> {
     fn get_keys(self: T) -> (u32, ContractAddress);
     fn get_value(self: T) -> u32;
     fn get_by_keys(store: @Store, keys: (u32, ContractAddress)) -> T;
     // fn get_position(self: T) -> u16;
     fn set_position(
-        ref self: T, ref store: Store, position: u16, entrants: u32, paper_balance: u32
+        ref self: T,
+        ref store: Store,
+        position: u16,
+        entrants: u32,
+        paper_balance: u32,
+        stake_adj_paper_balance: u32,
     );
+    fn get_multiplier(self: T) -> u32;
 }
 
 
-impl SortableItemGameImpl of SortableItem<Game> {
+pub impl SortableItemGameImpl of SortableItem<Game> {
     fn get_keys(self: Game) -> (u32, ContractAddress) {
         (self.game_id, self.player_id)
     }
     fn get_value(self: Game) -> u32 {
         self.final_score
     }
+    fn get_multiplier(self: Game) -> u32 {
+        self.multiplier.into()
+    }
     fn get_by_keys(store: @Store, keys: (u32, ContractAddress)) -> Game {
         // get!(world, keys, Game)
         let (game_id, player_id) = keys;
         store.game(game_id, player_id)
     }
+
     fn set_position(
-        ref self: Game, ref store: Store, position: u16, entrants: u32, paper_balance: u32
+        ref self: Game,
+        ref store: Store,
+        position: u16,
+        entrants: u32,
+        paper_balance: u32,
+        stake_adj_paper_balance: u32,
     ) {
         // calc payout for this game
-        let payout = get_payout(position.into(), entrants, paper_balance);
+        let payout = get_payout(position.into(), entrants, paper_balance, false);
+        // adjust with multipliers
+        let claimable: u64 = if stake_adj_paper_balance > 0 {
+            payout.into()
+                * self.multiplier.into()
+                * paper_balance.into()
+                / stake_adj_paper_balance.into()
+        } else {
+            0
+        };
+
         self.position = position;
-        self.claimable = payout;
+        self.claimable = claimable.try_into().unwrap();
         // set!(world, (self));
         store.set_game(@self)
     }
@@ -75,7 +100,7 @@ impl SortableItemGameImpl of SortableItem<Game> {
 
 
 #[generate_trait]
-impl SortedListImpl of SortedListTrait {
+pub impl SortedListImpl of SortedListTrait {
     fn new(list_id: felt252) -> SortedList {
         // TODO check if exists ?
         SortedList {
@@ -87,6 +112,7 @@ impl SortedListImpl of SortedListTrait {
             process_size: 0,
             process_cursor_k0: Self::root(),
             process_cursor_k1: Into::<u32, felt252>::into(Self::root()).try_into().unwrap(),
+            stake_adj_paper_balance: 0,
         }
     }
 
@@ -117,7 +143,7 @@ impl SortedListImpl of SortedListTrait {
         let (item_k0, item_k1) = item.get_keys();
         let item_value = item.get_value();
 
-        assert(item_k0 != Self::root() && Zeroable::is_non_zero(item_k1), 'reserved root value');
+        assert(item_k0 != Self::root() && item_k1.is_non_zero(), 'reserved root value');
 
         let (prev_k0, prev_k1) = self.find_prev_keys::<T>(ref store, item_value, prev_item_keys);
         // let mut prev = get!(world, (self.list_id, prev_k0, prev_k1), (SortedListItem));
@@ -157,9 +183,9 @@ impl SortedListImpl of SortedListTrait {
         let mut curr_item = SortableItem::<T>::get_by_keys(@store, (curr.item_k0, curr.item_k1));
         let mut next_item = SortableItem::<T>::get_by_keys(@store, (next.item_k0, next.item_k1));
 
-        if ((curr.item_k0 == Self::root() && Zeroable::is_zero(curr.item_k1))
+        if ((curr.item_k0 == Self::root() && curr.item_k1.is_zero())
             || curr_item.get_value() >= item_value)
-            && ((next.item_k0 == Self::root() && Zeroable::is_zero(next.item_k1))
+            && ((next.item_k0 == Self::root() && next.item_k1.is_zero())
                 || next_item.get_value() < item_value) {
             true
         } else {
@@ -192,11 +218,14 @@ impl SortedListImpl of SortedListTrait {
     //
     //
 
-    fn lock(ref self: SortedList, ref store: Store, process_max_size: u32) {
+    fn lock(
+        ref self: SortedList, ref store: Store, process_max_size: u32, stake_adj_paper_balance: u32,
+    ) {
         assert(!self.locked, 'list already locked');
         assert(process_max_size > 0, 'invalid process_max_size');
 
         self.process_max_size = process_max_size;
+        self.stake_adj_paper_balance = stake_adj_paper_balance;
         self.locked = true;
         //self.set(world);
         Self::set(self, ref store);
@@ -207,7 +236,7 @@ impl SortedListImpl of SortedListTrait {
     //
 
     fn process<T, +SortableItem<T>, +Drop<T>, +Copy<T>>(
-        ref self: SortedList, ref store: Store, batch_size: u8
+        ref self: SortedList, ref store: Store, batch_size: u8,
     ) {
         assert(self.locked, 'list must be locked');
         assert(!self.processed, 'list already processed');
@@ -216,6 +245,7 @@ impl SortedListImpl of SortedListTrait {
         let season = store.season(self.list_id.try_into().unwrap());
         let paper_balance = season.paper_balance;
         let entrants = self.size;
+        let stake_adj_paper_balance = self.stake_adj_paper_balance;
 
         let curr_k0 = self.process_cursor_k0;
         let curr_k1 = self.process_cursor_k1;
@@ -230,7 +260,7 @@ impl SortedListImpl of SortedListTrait {
         let mut i = 0;
 
         loop {
-            if curr.next_k0 == Self::root() && Zeroable::is_zero(curr.next_k1) {
+            if curr.next_k0 == Self::root() && curr.next_k1.is_zero() {
                 self.processed = true;
                 break;
             }
@@ -247,7 +277,10 @@ impl SortedListImpl of SortedListTrait {
             curr = store.sorted_list_item(self.list_id, curr.next_k0, curr.next_k1);
             curr_item = SortableItem::<T>::get_by_keys(@store, (curr.item_k0, curr.item_k1));
             curr_position += 1;
-            curr_item.set_position(ref store, curr_position, entrants, paper_balance);
+            curr_item
+                .set_position(
+                    ref store, curr_position, entrants, paper_balance, stake_adj_paper_balance,
+                );
 
             self.process_size += 1;
 
@@ -259,6 +292,43 @@ impl SortedListImpl of SortedListTrait {
 
         // self.set(world);
         Self::set(self, ref store);
+    }
+
+    //
+
+    fn calc_stake_adj_paper_balance<T, +SortableItem<T>, +Drop<T>, +Copy<T>>(
+        ref self: SortedList, ref store: Store, total_payed: u32,
+    ) -> u32 {
+        let entrants = self.size;
+        let season = store.season(self.list_id.try_into().unwrap());
+        let paper_balance = season.paper_balance;
+
+        let curr_k0 = Self::root();
+        let curr_k1 = Into::<u32, felt252>::into(Self::root()).try_into().unwrap();
+
+        let mut curr = store.sorted_list_item(self.list_id, curr_k0, curr_k1);
+        let mut curr_item = SortableItem::<T>::get_by_keys(@store, (curr.item_k0, curr.item_k1));
+        let mut stake_adj_paper_balance: u32 = 0;
+
+        let mut i = 0;
+
+        while i < total_payed {
+            curr = store.sorted_list_item(self.list_id, curr.next_k0, curr.next_k1);
+            curr_item = SortableItem::<T>::get_by_keys(@store, (curr.item_k0, curr.item_k1));
+
+            // to adjust payout we will divide by stake_adj_paper_balance so we round it up
+            let payout = get_payout((i + 1).into(), entrants, paper_balance, true);
+            stake_adj_paper_balance += payout * curr_item.get_multiplier();
+
+            // println!(
+            //     "{} - {} - {} - {}", i, payout, curr_item.get_multiplier(),
+            //     stake_adj_paper_balance,
+            // );
+
+            i += 1;
+        };
+
+        stake_adj_paper_balance
     }
 
     fn print(self: SortedList) {

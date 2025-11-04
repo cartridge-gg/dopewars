@@ -1,49 +1,58 @@
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use rollyourown::{models::{season::{Season, SeasonImpl, SeasonTrait}}};
-use starknet::ContractAddress;
-use starknet::info::get_block_timestamp;
+use rollyourown::models::season::{Season, SeasonImpl};
+use starknet::get_block_timestamp;
 
 const TWO_MIN: u16 = 120;
-const ONE_HOUR: u16 = 3600;
-const HALF_HOUR: u16 = 1800;
+// const ONE_HOUR: u16 = 3600;
+// const HALF_HOUR: u16 = 1800;
 //
-// const HALF_HOUR: u32 = 1800;
+const HALF_HOUR: u32 = 1800;
+const ONE_HOUR: u32 = 3600;
+const HALF_DAY: u32 = 43_200;
 const ONE_DAY: u32 = 86_400;
 const ONE_WEEK: u32 = 604_800;
 
+const TEMP_VALUE: u32 = 1200;
+
 #[derive(IntrospectPacked, Copy, Drop, Serde)]
 #[dojo::model]
-struct RyoConfig {
+pub struct RyoConfig {
     #[key]
-    key: u8,
-    initialized: bool,
-    paused: bool,
+    pub key: u8,
+    pub initialized: bool,
+    pub paused: bool,
     //
-    season_version: u16,
-    season_duration: u32,
-    season_time_limit: u16,
+    pub season_version: u16,
+    pub season_duration: u32,
+    pub season_time_limit: u16,
     //
-    paper_fee: u16,
-    paper_reward_launderer: u16,
-    treasury_fee_pct: u8,
-    treasury_balance: u32,
+    pub paper_fee: u16,
+    pub paper_reward_launderer: u16,
+    pub treasury_fee_pct: u8,
+    pub treasury_balance: u32,
+    //
+    pub f2p_hustlers: bool,
+    pub play_with_loot: bool,
+    pub play_with_hustlers: bool,
 }
 
 
 #[generate_trait]
-impl RyoConfigImpl of RyoConfigTrait {
-    fn build_initial_ryo_config() -> RyoConfig {
+pub impl RyoConfigImpl of RyoConfigTrait {
+    fn build_initial_ryo_config(season_duration: u32, season_time_limit: u16) -> RyoConfig {
         RyoConfig {
             key: 0,
             initialized: true,
             paused: false,
             season_version: 1,
-            season_duration: ONE_DAY, // ONE_HOUR, 
-            season_time_limit: HALF_HOUR, // TWENTY_MIN,
+            season_duration, 
+            season_time_limit,
             paper_fee: 1000, // in ether
             paper_reward_launderer: 100, // in ether  
-            treasury_fee_pct: 5,
+            treasury_fee_pct: 10,
             treasury_balance: 0,
+            f2p_hustlers: true,
+            play_with_loot: true,
+            play_with_hustlers: false,
         }
     }
 

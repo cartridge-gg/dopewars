@@ -186,7 +186,7 @@ const QuantitySelector = observer(
         const maxBuyable = Math.floor(game.player.cash / market.price);
 
         // free space
-        const freeSpace = game.items.transport.tier.stat - game.drugs.quantity * drug.weight;
+        const freeSpace = game.items.transport.stat - game.drugs.quantity * drug.weight;
         const maxCarryable = Math.floor(freeSpace / drug.weight);
 
         setMax(Math.min(maxBuyable, maxCarryable));

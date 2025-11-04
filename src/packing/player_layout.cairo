@@ -1,7 +1,7 @@
-use rollyourown::{traits::{Enumerable, Packable},};
+use rollyourown::{traits::{Enumerable, Packable}};
 
 #[derive(Copy, Drop, Serde, PartialEq)]
-enum PlayerLayout {
+pub enum PlayerLayout {
     Cash,
     Health,
     Turn,
@@ -13,7 +13,7 @@ enum PlayerLayout {
     Reputation,
 }
 
-impl PlayerLayoutIntoBytes31Impl of Into<PlayerLayout, bytes31> {
+pub impl PlayerLayoutIntoBytes31Impl of Into<PlayerLayout, bytes31> {
     fn into(self: PlayerLayout) -> bytes31 {
         let value = match self {
             PlayerLayout::Cash => 'Cash',
@@ -33,7 +33,7 @@ impl PlayerLayoutIntoBytes31Impl of Into<PlayerLayout, bytes31> {
 
 // Enumerable
 
-impl PlayerLayoutEnumerableImpl of Enumerable<PlayerLayout> {
+pub impl PlayerLayoutEnumerableImpl of Enumerable<PlayerLayout> {
     fn all() -> Span<PlayerLayout> {
         let items = array![
             PlayerLayout::Cash,
@@ -52,7 +52,7 @@ impl PlayerLayoutEnumerableImpl of Enumerable<PlayerLayout> {
 
 // Packable
 
-impl PlayerLayoutPackableImpl of Packable<PlayerLayout> {
+pub impl PlayerLayoutPackableImpl of Packable<PlayerLayout> {
     fn bits(self: @PlayerLayout) -> u8 {
         match *self {
             PlayerLayout::Cash => 30, // max 1,073,741,824

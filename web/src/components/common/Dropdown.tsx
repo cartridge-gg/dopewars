@@ -1,8 +1,8 @@
 import { HStack, Spacer, StyleProps, Text, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { ArrowInput } from "../icons";
 
-interface DropdownOptionProps {
+export interface DropdownOptionProps {
   label?: string;
   text: string;
   value: number | string;
@@ -10,12 +10,12 @@ interface DropdownOptionProps {
 
 interface DropdownProps {
   options: DropdownOptionProps[];
-  value: DropdownOptionProps;
+  selectedOption: DropdownOptionProps;
+  setSelectedOption: Dispatch<SetStateAction<DropdownOptionProps>>;
 }
 
-export const Dropdown = ({ options, value, ...props }: DropdownProps & StyleProps) => {
+export const Dropdown = ({ options, selectedOption, setSelectedOption, ...props }: DropdownProps & StyleProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(value);
 
   const toggleOpen = () => setIsOpen(!isOpen);
 
@@ -33,7 +33,7 @@ export const Dropdown = ({ options, value, ...props }: DropdownProps & StyleProp
         <ArrowInput direction="down" size="md" />
       </HStack>
       {isOpen && (
-        <VStack position="absolute" w="full" p="4px" backgroundColor="neon.700">
+        <VStack position="absolute" w="full" p="4px" backgroundColor="neon.700" zIndex={999}>
           <VStack w="full" gap="2px" backgroundColor="neon.600">
             {/* Selected option */}
             {options.map(

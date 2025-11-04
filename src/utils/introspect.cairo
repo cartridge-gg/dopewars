@@ -1,9 +1,9 @@
 use dojo::meta::Layout;
-use dojo::meta::introspect::{Enum, Member, Ty, Introspect};
+use dojo::meta::introspect::{Introspect, Ty};
 
 use rollyourown::utils::bytes16::Bytes16;
 
-impl Bytes31IntrospectionImpl of Introspect<bytes31> {
+pub impl Bytes31IntrospectionImpl of Introspect<bytes31> {
     #[inline(always)]
     fn size() -> Option<usize> {
         Option::Some(1)
@@ -21,7 +21,7 @@ impl Bytes31IntrospectionImpl of Introspect<bytes31> {
 }
 
 
-impl Bytes16IntrospectionImpl of Introspect<Bytes16> {
+pub impl Bytes16IntrospectionImpl of Introspect<Bytes16> {
     #[inline(always)]
     fn size() -> Option<usize> {
         Option::Some(1)

@@ -1,23 +1,25 @@
 import { Button } from "@/components/common";
-import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { CopsIcon, GangIcon } from "@/components/icons";
 import { Kevlar, Knife, Shoes } from "@/components/icons/items";
 import { Footer, Layout } from "@/components/layout";
 import { TravelEncounter } from "@/components/layout/GlobalEvents";
+import { EncounterPreview } from "@/components/pages/encounter/EncounterPreview";
+import { HustlerPreviewFromGame } from "@/components/pages/profile/HustlerPreviewFromGame";
 import { HustlerStats } from "@/components/pages/profile/HustlerStats";
 import { CashIndicator, HealthIndicator } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
-import { copsRanks, copsRanksKeys, gangRanks, gangRanksKeys } from "@/dojo/helpers";
+import { copsRanks, copsRanksKeys, gangRanks, gangRanksKeys, weaponIdToSound } from "@/dojo/helpers";
 import { useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { Encounters, EncountersAction, PlayerStatus } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
-import colors from "@/theme/colors";
 import { formatCash, formatCashHeader } from "@/utils/ui";
-import { Box, Card, Divider, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
+import { Box, Card, Divider, Flex, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
+import { HustlerPreviewFromLoot } from "@/dope/components";
 import { observer } from "mobx-react-lite";
 import React, { useEffect, useState } from "react";
 import { num, shortString } from "starknet";
+import { HustlerAvatarIcon } from "@/components/pages/profile/HustlerAvatarIcon";
 
 const Decision = observer(() => {
   const { router, gameId } = useRouterContext();
@@ -39,11 +41,10 @@ const Decision = observer(() => {
   useEffect(() => {
     if (game && gameEvents) {
       const encounterEvent = gameEvents?.lastEncounter?.event as TravelEncounter;
-
-      // console.log("***** DECISION");
-      // console.log("gameEvents?.lastEncounter", encounterEvent);
-
       setEncounterEvent(encounterEvent);
+    }
+    if (game && game.player.health === 0) {
+      router.push(`/${gameId}/event/consequence`);
     }
   }, [isPending, game, gameEvents, gameEvents?.lastEncounter]);
 
@@ -99,26 +100,12 @@ const Decision = observer(() => {
         playSound(Sounds.Run);
         break;
       case EncountersAction.Fight:
-        switch (gameInfos?.hustler_id) {
-          case 0:
-            playSound(Sounds.Uzi);
-            break;
-          case 1:
-            playSound(Sounds.Chains);
-            break;
-          case 2:
-            playSound(Sounds.Punch);
-            break;
-          default:
-            playSound(Sounds.Punch);
-            break;
-        }
+        playSound(weaponIdToSound(game?.items.attack.id || 0));
+
         break;
     }
 
     const { hash } = await decide(gameId!, action);
-
-
   };
 
   if (!game || !router.isReady || isRedirecting || !encounterEvent) {
@@ -191,6 +178,7 @@ const Decision = observer(() => {
           mb={0}
           w="full"
         />
+
         <Box minH="100px" />
       </VStack>
     </Layout>
@@ -214,12 +202,19 @@ const Encounter = observer(
     encounterEvent: TravelEncounter;
   } & StyleProps) => {
     const { gameInfos } = useGameStore();
-
     const [imgUrl, setImgUrl] = useState<string | undefined>("");
+
+    const [playerStatus, setPlayerStatus] = useState(PlayerStatus.Normal);
+
+    useEffect(() => {
+      if (game && playerStatus === PlayerStatus.Normal) {
+        setPlayerStatus(game.player.status);
+      }
+    }, [game]);
 
     useEffect(() => {
       let url = "";
-      if (game.player.status === PlayerStatus.BeingArrested) {
+      if (playerStatus === PlayerStatus.BeingArrested) {
         url = `/images/events/cops/${encounterEvent.level}.gif`;
       } else {
         url = `/images/events/gang/${encounterEvent.level}.gif`;
@@ -233,7 +228,7 @@ const Encounter = observer(
       } else {
         setImgUrl(url);
       }
-    }, [encounterEvent /*game.player.status*/]);
+    }, [encounterEvent, playerStatus]);
 
     return (
       <VStack {...props}>
@@ -254,14 +249,9 @@ const Encounter = observer(
           position="relative"
           gap={[2, 12]}
         >
-          <Image
-            src={imgUrl}
-            alt="adverse event"
-            // mt={[0, "100px"]}
-            maxH={["30vh", "calc(100dvh - 300px)"]}
-            w="auto"
-            h={[150, 300]}
-          />
+          <HStack position="relative">
+            <Image src={imgUrl} alt="adverse event" maxH={["30vh", "calc(100dvh - 300px)"]} w="auto" h={[150, 300]} />
+          </HStack>
 
           <VStack w="320px" gap={[0, 3]}>
             <Card alignItems="center" w="full" justify="center">
@@ -297,8 +287,16 @@ const Encounter = observer(
               <VStack w="full" gap={0}>
                 <HStack w="full" px="10px" py="6px" justifyContent="space-between">
                   <HStack w="full" justifyContent="center">
-                    <HustlerIcon hustler={gameInfos?.hustler_id as Hustlers} color={colors.yellow["400"].toString()} />
-                    <Text>{shortString.decodeShortString(num.toHexString(BigInt(game.gameInfos.player_name?.value)))}</Text>
+                    <HustlerAvatarIcon
+                      gameId={gameInfos?.game_id}
+                      // @ts-ignore
+                      tokenId={gameInfos?.token_id}
+                      // @ts-ignore
+                      tokenIdType={gameInfos.token_id_type}
+                    />
+                    <Text>
+                      {shortString.decodeShortString(num.toHexString(BigInt(game.gameInfos.player_name?.value)))}
+                    </Text>
                   </HStack>
 
                   <Divider h="26px" orientation="vertical" borderWidth="1px" borderColor="neon.600" />
@@ -352,12 +350,31 @@ export const EncounterStats = observer(({ encounterEvent }: { encounterEvent: Tr
   );
 });
 
-// /// TODO: move this in a relevant place
-// function getEncounterNPCMaxHealth(level: number, turn: number) {
-//   // Calculate initial health based on level and turn.
-//   let health = level * 8 + turn;
-//   // Ensure health does not exceed 100.
-//   health = Math.min(health, 100);
-
-//   return health;
-// }
+// HUSTLERS ENCOUNTERS VERSION
+// <Box w="170px" h="160px" maxH={["30vh", "calc(100dvh - 300px)"]} transform={["", "scale(2)"]}>
+//           {/* @ts-ignore */}
+//           {gameInfos && (gameInfos.token_id_type === "LootId" || gameInfos.token_id_type === "GuestLootId") && (
+//             <HustlerPreviewFromLoot tokenId={Number(gameInfos.token_id)} renderMode={0} />
+//           )}
+//           {/* @ts-ignore */}
+//           {gameInfos && gameInfos.token_id_type === "HustlerId" && (
+//             <HustlerPreviewFromGame
+//               gameId={gameInfos?.game_id}
+//               tokenId={Number(gameInfos.token_id)}
+//               renderMode={0}
+//             />
+//           )}
+//         </Box>
+//         <Box
+//           w="170px"
+//           h="160px"
+//           maxH={["30vh", "calc(100dvh - 300px)"]}
+//           transform={["rotateY(180deg)", "scale(2) rotateY(170deg)"]}
+//         >
+//           <EncounterPreview
+//             playerStatus={playerStatus}
+//             level={encounterEvent.level}
+//             gameId={gameInfos?.game_id}
+//             turn={encounterEvent.turn}
+//           />
+//         </Box>

@@ -1,33 +1,40 @@
 import { Button } from "@/components/common";
 import { Footer, Layout } from "@/components/layout";
+import { DopeGearItem } from "@/components/pages/profile/DopeGearItem";
+import { TierIndicator } from "@/components/player";
 import { statName } from "@/dojo/helpers";
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
-import { HustlerItemConfigFull } from "@/dojo/stores/config";
+import { GearItemFull } from "@/dojo/stores/config";
+import { ItemSlot } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
 import { IsMobile, formatCash } from "@/utils/ui";
-import { HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
-import { useAccount } from "@starknet-react/core";
+import { Box, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { getGearItem } from "@/dope/helpers";
 import { observer } from "mobx-react-lite";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 const PawnShop = observer(() => {
   const { router, gameId } = useRouterContext();
-
-  const { account } = useAccount();
   const configStore = useConfigStore();
   const { config } = configStore;
-  const { game, gameConfig } = useGameStore();
+  const { game, gameConfig, gameInfos } = useGameStore();
 
   const toaster = useToast();
 
-  const [selectedShopItem, setSelectedShopItem] = useState<HustlerItemConfigFull | undefined>(undefined);
+  const [selectedShopItemsSlot, setSelectedShopItemSlot] = useState<ItemSlot | undefined>(undefined);
 
-  const selectItem = (shopItem: HustlerItemConfigFull) => {
-    if (selectedShopItem === shopItem) {
-      setSelectedShopItem(undefined);
+  const gearItems = useMemo(() => {
+    return (gameInfos?.equipment_by_slot || []).map((i) => {
+      return configStore.getGearItemFull(getGearItem(BigInt(i)));
+    });
+  }, [gameInfos, configStore]);
+
+  const selectItem = (shopItemSlot: ItemSlot) => {
+    if (selectedShopItemsSlot === shopItemSlot) {
+      setSelectedShopItemSlot(undefined);
     } else {
-      setSelectedShopItem(shopItem);
+      setSelectedShopItemSlot(shopItemSlot);
     }
   };
 
@@ -40,15 +47,18 @@ const PawnShop = observer(() => {
   };
 
   const buy = async () => {
-    if (!game || !selectedShopItem) return;
-    if (game.player!.cash < selectedShopItem.tier.cost) return;
+    if (!game || selectedShopItemsSlot === undefined) return;
 
+    let selectedItem = gearItems![selectedShopItemsSlot as keyof typeof gearItems] as unknown as GearItemFull;
+    let cost = selectedItem.levels[game.items.levelByItemSlot[selectedShopItemsSlot] + 1].cost;
+    let slot = selectedShopItemsSlot;
+
+    if (game.player!.cash < cost) return;
     playSound(Sounds.Trade);
-    game.pushCall({ slot: selectedShopItem.slot as number, cost: selectedShopItem?.tier.cost });
-
+    game.pushCall({ slot, cost });
     toaster.toast({
-      message: `${selectedShopItem.upgradeName} equiped! +${gameConfig!.rep_buy_item} REP!`,
-      icon: selectedShopItem.icon,
+      message: `${selectedItem.name} upgraded! +${gameConfig!.rep_buy_item} REP!`,
+      // icon: selectedShopItem.icon,
     });
     onBack();
   };
@@ -72,7 +82,7 @@ const PawnShop = observer(() => {
           <Button
             w="full"
             px={["auto", "20px"]}
-            isDisabled={!selectedShopItem || selectedShopItem.tier.cost > game.player.cash}
+            isDisabled={!gearItems![selectedShopItemsSlot as keyof typeof gearItems]}
             onClick={buy}
           >
             Buy
@@ -88,40 +98,48 @@ const PawnShop = observer(() => {
         </VStack>
 
         <SimpleGrid columns={1} w="full" margin="auto" gap={["10px", "16px"]} fontSize={["16px", "20px"]} pr="8px">
-          {game.items.attackUpgrade && (
+          {game.items.attackLevel < 3 && (
             <ShopItem
               title="Weapon Upgrade"
-              item={game.items.attackUpgrade}
-              onClick={() => setSelectedShopItem(game.items.attackUpgrade)}
-              isActive={selectedShopItem === game.items.attackUpgrade}
-              isDisabled={game.items.attackUpgrade?.tier.cost > game.player.cash}
+              item={gearItems![ItemSlot.Weapon]}
+              slot={ItemSlot.Weapon}
+              level={game.items.attackLevel}
+              onClick={() => setSelectedShopItemSlot(ItemSlot.Weapon)}
+              isActive={selectedShopItemsSlot === ItemSlot.Weapon}
+              isDisabled={gearItems![ItemSlot.Weapon].levels[game.items.attackLevel + 1].cost > game.player.cash}
             />
           )}
-          {game.items.defenseUpgrade && (
+          {game.items.defenseLevel < 3 && (
             <ShopItem
               title="Clothes Upgrade"
-              item={game.items.defenseUpgrade}
-              onClick={() => setSelectedShopItem(game.items.defenseUpgrade)}
-              isActive={selectedShopItem === game.items.defenseUpgrade}
-              isDisabled={game.items.defenseUpgrade?.tier.cost > game.player.cash}
+              item={gearItems![ItemSlot.Clothes]}
+              slot={ItemSlot.Clothes}
+              level={game.items.defenseLevel}
+              onClick={() => setSelectedShopItemSlot(ItemSlot.Clothes)}
+              isActive={selectedShopItemsSlot === ItemSlot.Clothes}
+              isDisabled={gearItems![ItemSlot.Clothes].levels[game.items.defenseLevel + 1].cost > game.player.cash}
             />
           )}
-          {game.items.speedUpgrade && (
+          {game.items.speedLevel < 3 && (
             <ShopItem
               title="Feet Upgrade"
-              item={game.items.speedUpgrade}
-              onClick={() => setSelectedShopItem(game.items.speedUpgrade)}
-              isActive={selectedShopItem === game.items.speedUpgrade}
-              isDisabled={game.items.speedUpgrade?.tier.cost > game.player.cash}
+              item={gearItems![ItemSlot.Feet]}
+              slot={ItemSlot.Feet}
+              level={game.items.speedLevel}
+              onClick={() => setSelectedShopItemSlot(ItemSlot.Feet)}
+              isActive={selectedShopItemsSlot === ItemSlot.Feet}
+              isDisabled={gearItems![ItemSlot.Feet].levels[game.items.speedLevel + 1].cost > game.player.cash}
             />
           )}
-          {game.items.transportUpgrade && (
+          {game.items.transportLevel < 3 && (
             <ShopItem
               title="Transport Upgrade"
-              item={game.items.transportUpgrade}
-              onClick={() => setSelectedShopItem(game.items.transportUpgrade)}
-              isActive={selectedShopItem === game.items.transportUpgrade}
-              isDisabled={game.items.transportUpgrade?.tier.cost > game.player.cash}
+              item={gearItems![ItemSlot.Transport]}
+              slot={ItemSlot.Transport}
+              level={game.items.transportLevel}
+              onClick={() => setSelectedShopItemSlot(ItemSlot.Transport)}
+              isActive={selectedShopItemsSlot === ItemSlot.Transport}
+              isDisabled={gearItems![ItemSlot.Transport].levels[game.items.transportLevel + 1].cost > game.player.cash}
             />
           )}
         </SimpleGrid>
@@ -135,12 +153,16 @@ const ShopItem = observer(
   ({
     title,
     item,
+    slot,
+    level,
     onClick,
     isActive,
     isDisabled,
   }: {
     title: string;
-    item: HustlerItemConfigFull;
+    item: GearItemFull;
+    slot: ItemSlot;
+    level: number;
     onClick: VoidFunction;
     isActive: boolean;
     isDisabled: boolean;
@@ -158,27 +180,41 @@ const ShopItem = observer(
         isActive={isActive}
         isDisabled={isDisabled}
       >
-        <HStack w="full" gap="20px">
-          {item.icon({ width: isMobile ? "32px" : "40px", height: isMobile ? "32px" : "40px" })}
-
-          <HStack w="full" justify="space-between">
-            <VStack w="full" alignItems="flex-start">
+        <HStack w="full" gap={3}>
+          {/* {item.icon({ width: isMobile ? "32px" : "40px", height: isMobile ? "32px" : "40px" })} */}
+          <Box flexShrink={0}>
+            <DopeGearItem itemSlot={slot} id={item.gearItem.item} />
+          </Box>
+          <VStack w="full" alignItems="flex-start" gap={1}>
+            <HStack w="full" justify="space-between" alignItems={"center"}>
               <Text textStyle="subheading" fontSize={["9px", "11px"]} opacity="0.5">
                 {title}
               </Text>
-              <Text textStyle="heading" textTransform="uppercase" fontSize={["16px", "18px"]}>
-                {/* {item.base.name} */}
-                {item.upgradeName}
-              </Text>
-            </VStack>
+              <TierIndicator tier={item.tier} />
+            </HStack>
 
-            <VStack w="full" alignItems="flex-end">
-              <Text fontSize={["14px", "16px"]} opacity="0.5">
-                +{item.tier.stat} {statName[item.slot]}
+            <HStack w="full" justify="space-between" alignItems={"center"}>
+              <Text textStyle="heading" textTransform="uppercase" fontSize={["14px", "16px"]}>
+                {item.name}
               </Text>
-              <Text fontSize={["16px", "18px"]}>{formatCash(item.tier.cost)}</Text>
-            </VStack>
-          </HStack>
+              <Text fontSize={["12px", "14px"]} opacity="0.5">
+                <span
+                // style={{ textDecoration: "line-through" }}
+                >
+                  {item.levels[level].stat}
+                </span>
+                {" -> "}
+                {item.levels[level + 1].stat} {statName[slot]}
+              </Text>
+            </HStack>
+
+            <HStack w="full" justify="space-between" alignItems={"center"}>
+              <Text textStyle="subheading" fontSize={["7px", "9px"]}>
+                LVL {level + 1}
+              </Text>
+              <Text fontSize={["14px", "16px"]}>{formatCash(item.levels[level + 1].cost)}</Text>
+            </HStack>
+          </VStack>
         </HStack>
       </Button>
     );

@@ -10,8 +10,6 @@ import { useAccount } from "@starknet-react/core";
 
 export default function SeasonIndex() {
   const { router, seasonId } = useRouterContext();
-  const { account } = useAccount();
-
   const { seasons, refetch } = useSeasons();
 
   return (
@@ -38,7 +36,7 @@ export const SeasonsTable = ({ seasons }: { seasons: SeasonInfos[] }) => {
   const { account } = useAccount();
   const { router } = useRouterContext();
   return (
-    <TableContainer position="relative" w="full" maxH="calc(100dvh - 300px)" overflow="hidden" overflowY="auto">
+    <TableContainer position="relative" w="full" maxH="calc(100dvh - 200px)" overflow="hidden" overflowY="auto">
       <Table size="sm">
         <Thead position="sticky" top="0" bg="neon.900">
           <Tr>

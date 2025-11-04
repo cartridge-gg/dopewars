@@ -4,7 +4,7 @@ import { Loader } from "@/components/layout/Loader";
 import { useConfigStore, useDojoContext, useRouterContext } from "@/dojo/hooks";
 import { useGameById } from "@/dojo/hooks/useGameById";
 import { useHallOfFame } from "@/dojo/hooks/useHallOfFame";
-import { Dopewars_Game as Game } from "@/generated/graphql";
+import { Dopewars_V0_Game as Game } from "@/generated/graphql";
 import colors from "@/theme/colors";
 import { formatCash } from "@/utils/ui";
 import { Card, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
@@ -12,6 +12,7 @@ import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useCallback, useMemo } from "react";
 import { AccountInterface, num, shortString } from "starknet";
+import { HustlerAvatarIcon } from "../profile/HustlerAvatarIcon";
 
 export const HallOfFame = observer(() => {
   const { config } = useConfigStore();
@@ -26,7 +27,7 @@ export const HallOfFame = observer(() => {
     <>
       <VStack
         boxSize="full"
-        maxH={["calc(100dvh - 350px)", "calc(100dvh - 480px)"]}
+        maxH={["calc(100dvh - 320px)", "calc(100dvh - 380px)"]}
         sx={{
           overflowY: "scroll",
         }}
@@ -37,7 +38,7 @@ export const HallOfFame = observer(() => {
         {isFetchingHallOfFame && <Loader />}
         {!isFetchingHallOfFame && (
           <SimpleGrid columns={[1, 2]} w="full" gap={4}>
-            {hallOfFame.map((i, index) => {
+            {hallOfFame.map((i: any, index: number) => {
               return <HallOfFameEntry game={i} key={index} account={account} />;
             })}
           </SimpleGrid>
@@ -55,29 +56,35 @@ const HallOfFameEntry = ({ game, account }: { game: Game; account: AccountInterf
     return account?.address === game?.player_id;
   }, [account, game?.player_id]);
 
-  const onClick = useCallback(() => {
-    router.push(`/0x${game.game_id.toString(16)}/logs`);
-  }, [game.game_id, router]);
-
   const color = isSelf ? colors.yellow["400"].toString() : colors.neon["400"].toString();
 
   return (
-    <Card position="relative" h="100px" p={2} color={color}>
+    <Card
+      position="relative"
+      h="100px"
+      p={2}
+      color={color}
+      cursor="pointer"
+      onClick={() => router.push(`/0x${game.game_id.toString(16)}/logs`)}
+    >
       <VStack h="100%" justifyContent="space-between" gap={0}>
         {game && (
           <HStack w="full" gap={3}>
-            <HustlerIcon
-              hustler={game?.hustler_id}
-              color={color}
+            <HustlerAvatarIcon
+              gameId={game.game_id}
+              // @ts-ignore
+              tokenIdType={game.token_id_type}
+              // @ts-ignore
+              tokenId={game.token_id}
               width="48px"
               height="48px"
-              cursor="pointer"
-              onClick={onClick}
+              display="flex"
+              flexShrink={0}
             />
 
             <VStack w="full" alignItems="flex-start" gap={1}>
               <Text>
-                {shortString.decodeShortString(num.toHexString(BigInt(game?.player_name?.value)))} {isSelf && "(you)"}
+                {game?.player_name as string} {isSelf && "(you)"}
               </Text>
               <Text>{formatCash(game.final_score)}</Text>
             </VStack>

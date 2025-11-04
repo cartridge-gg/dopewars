@@ -19,17 +19,16 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { ReactNode, useRef } from "react";
-import { Cigarette, Clock, Close, Dots, Home, PaperIcon, Refresh } from "../icons";
+import { Cigarette, Clock, Close, Dots, GangIcon, Home, PaperIcon, Refresh } from "../icons";
 import { Calendar } from "../icons/archive";
 import { HeaderButton, MediaPlayer } from ".";
 import { ChainSelector, ConnectButton, TokenBalance } from "../wallet";
-import { Burners } from "../wallet/Burners";
-import { Predeployed } from "../wallet/Predeployed";
 
 import { ProfileLinkDrawer } from "../pages/profile/Profile";
 import { useAccount } from "@starknet-react/core";
 
 import colors from "@/theme/colors";
+import { HustlerIcon, Hustlers } from "../hustlers";
 
 const slideAnim = keyframes`  
   0% {transform: translateX(0); color: ${colors.neon["500"]};}
@@ -51,17 +50,16 @@ const DrawerMenu = () => {
   const { uiStore } = useDojoContext();
   return (
     <>
-      <HeaderButton ref={btnRef} onClick={onOpen} w="48px">
+      <HeaderButton ref={btnRef} onClick={onOpen} h={["40px", "48px"]} w={["40px", "48px"]}>
         <Dots />
       </HeaderButton>
-      <Drawer isOpen={isOpen} placement="right" size="xs" onClose={onClose} finalFocusRef={btnRef} trapFocus={false}>
+      <Drawer isOpen={isOpen} placement="right" size="xs" onClose={onClose} trapFocus={false}>
         <DrawerOverlay onClick={onClose} />
         <DrawerContent minW="340px" overflowX="hidden">
           <DrawerHeader borderBottom="solid 2px" borderColor="neon.900" pb={2}>
             <Heading
               color="neon.500"
               fontWeight="normal"
-              // textAlign="center"
               position="relative"
               left="100%"
               animation={`${slideAnim} .6s ease-out 0.1s 1 normal forwards`}
@@ -94,8 +92,7 @@ const DrawerMenu = () => {
                       <ConnectButton />
                       {process.env.NODE_ENV !== "production" && (
                         <>
-                          <ChainSelector canChange={!gameId} /> <Burners />
-                          <Predeployed />
+                          <ChainSelector canChange={!gameId} />
                         </>
                       )}
                     </HStack>
@@ -121,10 +118,6 @@ const DrawerMenu = () => {
 
                       <DrawerListItem>
                         <ProfileLinkDrawer />
-                        {/* <HStack w="full">
-                          <HustlerIcon hustler={game.gameInfos.hustler_id as Hustlers} />
-                          <Text> {shortString.decodeShortString(game.gameInfos.player_name?.value)} </Text>
-                        </HStack> */}
                       </DrawerListItem>
 
                       <DrawerListItem
@@ -164,6 +157,30 @@ const DrawerMenu = () => {
                     }}
                   >
                     <Calendar mr={2} /> SEASONS
+                  </DrawerListItem>
+
+                  <DrawerListItem
+                    onClick={() => {
+                      router.push("/gear");
+                    }}
+                  >
+                    <Cigarette mr={2} /> GEAR
+                  </DrawerListItem>
+
+                  <DrawerListItem
+                    onClick={() => {
+                      router.push("/dope");
+                    }}
+                  >
+                    <HustlerIcon hustler={Hustlers.Dragon} mr={2} /> MY DOPE
+                  </DrawerListItem>
+
+                  <DrawerListItem
+                    onClick={() => {
+                      router.push("/dope/votes");
+                    }}
+                  >
+                    <GangIcon mr={2} /> MY VOTES
                   </DrawerListItem>
 
                   {/* DEV */}

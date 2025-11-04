@@ -1,11 +1,10 @@
 import { DojoProvider } from "@dojoengine/core";
+import { ToriiClient } from "@dojoengine/torii-client";
 import { GraphQLClient } from "graphql-request";
-import { createClient } from "graphql-ws";
 import { useEffect, useMemo, useState } from "react";
 import { QueryClient } from "react-query";
 import { RpcProvider } from "starknet";
 import { DojoChainConfig } from "../setup/config";
-import { ToriiClient } from "@dojoengine/torii-client";
 
 export type DojoClientsResult = ReturnType<typeof useDojoClients>;
 
@@ -45,11 +44,8 @@ export const useDojoClients = (selectedChain: DojoChainConfig) => {
 
   useEffect(() => {
     const initAsync = async () => {
-      const torii = await import("@dojoengine/torii-client");
-      const client = await torii.createClient({
-        rpcUrl: selectedChain.rpcUrl!,
+      const client = await new ToriiClient({
         toriiUrl: selectedChain.toriiUrl.replace("/graphql", ""),
-        relayUrl: "",
         worldAddress: selectedChain.manifest.world.address || "",
       });
 

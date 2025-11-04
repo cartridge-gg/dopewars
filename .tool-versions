@@ -1,1 +1,5 @@
-scarb 2.8.4
+scarb 2.12.2
+starkli 0.4.2
+sozo 1.7.2
+torii 1.8.6
+katana 1.7.0

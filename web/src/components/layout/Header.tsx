@@ -1,28 +1,38 @@
-import { MediaPlayer } from "@/components/layout";
+import { HeaderButton, MediaPlayer } from "@/components/layout";
 import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { initSoundStore } from "@/hooks/sound";
 import { headerStyles } from "@/theme/styles";
 import { IsMobile, formatCashHeader } from "@/utils/ui";
-import { Box, Divider, Flex, HStack } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, HStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { ClaimReward } from "../pages/home";
 import { ProfileLink } from "../pages/profile/Profile";
 import { CashIndicator, DayIndicator, HealthIndicator } from "../player";
 import { ConnectButton } from "../wallet/ConnectButton";
 
 import DrawerMenu from "./DrawerMenu";
+import { Cigarette, ExternalLink } from "../icons";
+import { ControllerConnector } from "@cartridge/connector";
 
 export const Header = observer(() => {
   const isMobile = IsMobile();
 
-  const { gameId } = useRouterContext();
-
-  const { account } = useAccount();
-
-  const { uiStore } = useDojoContext();
+  const { router, gameId, } = useRouterContext();
+  const { account, connector } = useAccount();
+  const {
+    uiStore,
+    chains: { selectedChain },
+  } = useDojoContext();
   const { game, gameConfig } = useGameStore();
+
+  const {isMainnet, isSepolia} = useMemo(() => {
+    return {
+      isMainnet: selectedChain.chainConfig.network ==="mainnet",
+      isSepolia: selectedChain.chainConfig.network ==="sepolia",
+    }
+  }, [selectedChain]);
 
   useEffect(() => {
     const init = async () => {
@@ -38,31 +48,39 @@ export const Header = observer(() => {
       spacing="10px"
       zIndex="overlay"
       align="flex-start"
-      py={["0", "20px"]}
+      py={["0", "16px"]}
       fontSize={["14px", "16px"]}
     >
-      <HStack gap={3} flex="1" /*justify={["left", "right"]}*/>
-        {/* {!isMobile && (
-          <>
-            <Burners />
-            <Predeployed />
-            <ChainSelector canChange={!gameId} />
-          </>
-        )} */}
-
-        {/* {!gameId && account && (
-          <Card h="48px" p={2} display="flex" justifyContent="center">
-            <TokenBalance address={account?.address} token={config?.ryoAddress.paper} icon={PaperIcon} />
-          </Card>
-        )} */}
-
-        {/* {!isMobile && (
-          <>
-            <MediaPlayer />
-          </>
-        )} */}
-
+      <HStack gap={3} flex="1">
         {!gameId && <ClaimReward />}
+        {!gameId && router.route === "/" && account && (
+          <HeaderButton
+            variant="pixelated"
+            h={["40px", "48px"]}
+            fontSize="14px"
+            onClick={() => {
+              if (isMainnet || isSepolia) {
+                const controllerConnector = connector as unknown as ControllerConnector;
+                if(isSepolia){
+                  controllerConnector.controller.openStarterPack("dopewars-claim-sepolia");
+                }
+                if(isMainnet){
+                  controllerConnector.controller.openStarterPack("dopewars-claim-mainnet");
+                }
+              } else {
+                router.push("/claim");
+              }
+            }}
+            mr={6}
+            display="flex"
+            flexDirection={"row"}
+            alignItems="center"
+            justifyContent="center"
+            py={2}
+          >
+            <Cigarette mr="2" /> MIGRATION
+          </HeaderButton>
+        )}
       </HStack>
 
       {game /*|| router.asPath.includes("logs")*/ && (
@@ -76,7 +94,7 @@ export const Header = observer(() => {
           }}
         >
           <HStack
-            h="48px"
+            h={["40px", "48px"]}
             width={["100%", "auto"]}
             px="20px"
             spacing={["10px", "30px"]}
@@ -99,8 +117,6 @@ export const Header = observer(() => {
       <HStack flex="1" justify="right">
         {!isMobile && <ConnectButton />}
         {!isMobile && account && game && <ProfileLink />}
-
-        {/* {isMobile && <MobileMenu />} */}
 
         {/* trick to allow autoplay.. */}
         <Box display="none">

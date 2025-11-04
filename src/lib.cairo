@@ -1,122 +1,98 @@
-mod constants;
+pub mod constants;
 
-mod events;
+pub mod events;
 
-mod store;
+pub mod store;
 
 #[cfg(test)]
-mod tests;
+pub mod tests;
 
-mod traits;
-mod config {
-    mod config;
-    mod drugs;
-    mod encounters;
-    mod game;
-    mod hustlers;
-    mod locations;
-    mod ryo;
-    mod ryo_address;
-    mod settings;
+pub mod achievements {
+    // pub mod achievements_v0;
+    pub mod achievements_v1;
 }
 
-mod elements {
-    mod quests {
-        mod brawlerC;
-        mod brawlerG;
-        mod cops;
-        mod dealer;
-        mod escape;
-        mod famous;
-        mod gangs;
-        mod hustler;
-        mod interface;
-        mod jailbird;
-        mod kingpin;
-        mod launderer;
-        mod rip;
-        mod stuffed;
-        mod types;
+pub mod traits;
+pub mod config {
+    pub mod config;
+    pub mod drugs;
+    pub mod encounters;
+    pub mod game;
+    pub mod gear;
+    pub mod hustlers;
+    pub mod locations;
+    pub mod ryo;
+    pub mod ryo_address;
+    pub mod settings;
+}
+
+pub mod helpers {
+    pub mod season_manager;
+}
+
+pub mod models {
+    pub mod game;
+    pub mod game_store_packed;
+
+    pub mod season;
+}
+
+pub mod packing {
+    pub mod drugs_packed;
+    pub mod game_store;
+    pub mod game_store_layout;
+    pub mod items_packed;
+    pub mod markets_packed;
+
+    pub mod player;
+    pub mod player_layout;
+    pub mod wanted_packed;
+}
+
+pub mod systems {
+    pub mod decide;
+    pub mod game;
+    pub mod laundromat;
+    pub mod ryo;
+
+    pub mod helpers {
+        pub mod game_loop;
+        pub mod shopping;
+
+        pub mod trading;
+        pub mod traveling;
     }
-    mod trophies {
-        mod brawler;
-        mod cops;
-        mod dealer;
-        mod escape;
-        mod famous;
-        mod gangs;
-        mod hustler;
-        mod interface;
-        mod jailbird;
-        mod kingpin;
-        mod launderer;
-        mod rip;
-        mod stuffed;
-        mod types;
-    }
+    // pub mod slot;
+    pub mod devtools;
 }
 
-mod helpers {
-    mod season_manager;
+pub mod tokens {
+    // pub mod chips;
 }
 
-mod models {
-    mod game;
-    mod game_store_packed;
-
-    mod season;
+pub mod utils {
+    pub mod bits;
+    pub mod bytes16;
+    pub mod introspect;
+    pub mod math;
+    pub mod payout_items;
+    pub mod payout_structure;
+    pub mod random;
+    pub mod sorted_list;
 }
 
-mod packing {
-    mod drugs_packed;
-    mod game_store;
-    mod game_store_layout;
-    mod items_packed;
-    mod markets_packed;
-
-    mod player;
-    mod player_layout;
-    mod wanted_packed;
+pub mod interfaces {
+    pub mod chips;
+    pub mod erc721;
+    pub mod paper;
 }
 
-mod systems {
-    mod game;
-    mod laundromat;
-    mod ryo;
-
-    mod helpers {
-        mod game_loop;
-        mod shopping;
-
-        mod trading;
-        mod traveling;
-    }
-    // mod slot;
-// mod devtools;
+pub mod _mocks {
+    pub mod paper_mock;
+    pub mod vrf_provider_mock;
 }
 
-mod tokens {
-    // mod chips;
-}
 
-mod utils {
-    mod bits;
-    mod bytes16;
-    mod events;
-    mod introspect;
-    mod math;
-    mod payout_structure;
-    mod random;
-    mod sorted_list;
+pub mod libraries {
+    pub mod dopewars_items;
 }
-
-mod interfaces {
-    mod chips;
-    mod paper;
-}
-
-mod _mocks {
-    mod paper_mock;
-    mod vrf_provider_mock;
-}
-

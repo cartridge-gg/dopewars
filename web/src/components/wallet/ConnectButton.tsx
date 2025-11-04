@@ -12,7 +12,7 @@ export const ConnectButton = ({ variant = "pixelated", ...props }) => {
   const { connect, connectors, connector } = useConnect();
   const { disconnect } = useDisconnect();
   const { uiStore } = useDojoContext();
-  const { username, isController } = useControllerUsername();
+  const { username, isController } = useControllerUsername(address as string);
 
   const isBurnerOrPredeplyed = connector?.id.includes("dojo");
 
@@ -20,7 +20,9 @@ export const ConnectButton = ({ variant = "pixelated", ...props }) => {
     if (connectors.length > 1) {
       uiStore.openConnectModal();
     } else {
+      console.log( connectors[0] )
       connect({ connector: connectors[0] });
+      // connectAsync({ connector: connectors[0] });
     }
   };
 
@@ -28,16 +30,16 @@ export const ConnectButton = ({ variant = "pixelated", ...props }) => {
     <>
       <Box display="flex" alignItems="center" justifyContent="center" {...props}>
         {!account && (
-          <Button variant={variant} h={props.h ? props.h : "48px"} fontSize="14px" onClick={onClick} w="full">
+          <Button variant={variant} h={["40px","48px"]} fontSize="14px" onClick={onClick} w="full">
             Connect
           </Button>
         )}
         {account && (
-          <Button variant={variant} h="48px" fontSize="14px" w="full" alignItems="center" justifyContent="center">
+          <Button variant={variant} h={["40px","48px"]} fontSize="14px" w="full" alignItems="center" justifyContent="center">
             <HStack
               onClick={() => {
                 if (isController) {
-                  (connector as unknown as ControllerConnector).controller.openProfile("trophies"); // "trophies"
+                  (connector as unknown as ControllerConnector).controller.openProfile("achievements"); // "trophies"
                 } else {
                   uiStore.openAccountDetails();
                 }
@@ -77,12 +79,12 @@ export const ConnectButtonMobile = ({ ...props }) => {
   return (
     <>
       {!account && (
-        <MenuItem h="48px" borderRadius={0} onClick={() => uiStore.openConnectModal()} justifyContent="center">
+        <MenuItem h={["40px","48px"]} borderRadius={0} onClick={() => uiStore.openConnectModal()} justifyContent="center">
           CONNECT
         </MenuItem>
       )}
       {account && (
-        <MenuItem h="48px" borderRadius={0} onClick={() => uiStore.openAccountDetails()}>
+        <MenuItem h={["40px","48px"]} borderRadius={0} onClick={() => uiStore.openAccountDetails()}>
           <HStack w="full" /*justifyContent="center"*/>
             {/* @ts-ignore */}
             {connector && <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />}

@@ -34,6 +34,27 @@ export enum Sounds {
   Door = "Door.mp3",
 }
 
+export enum WeaponSounds {
+  AK47 = "/weapons/AK47.mp3",
+  BaseballBat = "/weapons/Baseball_bat.mp3",
+  BrassKnuckles = "/weapons/Brass_Knuckles.mp3",
+  Chain = "/weapons/Chain.mp3",
+  Crowbar = "/weapons/Crowbar&Tire_Iron&Police_Baton.mp3",
+  TireIron = "/weapons/Crowbar&Tire_Iron&Police_Baton.mp3",
+  Drone = "/weapons/Drone.mp3",
+  Glock = "/weapons/Glock.mp3",
+  Handgun = "/weapons/Handgun.mp3",
+  Knife = "/weapons/Razor_Blade&Pocket_Knife&Knife.mp3",
+  PepperSpray = "/weapons/Pepper_Spray.mp3",
+  PoiliceBaton = "/weapons/Crowbar&Tire_Iron&Police_Baton.mp3",
+  RazorBlade = "/weapons/Razor_Blade&Pocket_Knife&Knife.mp3",
+  PocketKnife = "/weapons/Razor_Blade&Pocket_Knife&Knife.mp3",
+  Shotgun = "/weapons/Shotgun.mp3",
+  Shovel = "/weapons/Shovel.mp3",
+  Taser = "/weapons/Taser.mp3",
+  Uzi = "/weapons/Uzi.mp3",
+}
+
 export interface SoundState {
   isInitialized: boolean;
   context: AudioContext;
@@ -71,6 +92,16 @@ export const initSoundStore = async () => {
     } catch (e) {}
   }
 
+  for (let sound in WeaponSounds) {
+    const soundKey = sound as keyof typeof WeaponSounds;
+    try {
+      state.library.buffers[WeaponSounds[soundKey]] = await loadSoundBuffer(
+        `/sounds/${WeaponSounds[soundKey]}`,
+        context,
+      );
+    } catch (e) {}
+  }
+
   useSoundStore.setState((state) => ({
     isInitialized: true,
     library: state.library,
@@ -88,7 +119,7 @@ export const toggleIsMuted = () =>
     return { isMuted: !state.isMuted };
   });
 
-export const playSound = async (sound: Sounds, volume = 1, loop = false) => {
+export const playSound = async (sound: Sounds | WeaponSounds, volume = 1, loop = false) => {
   const { context, library, isInitialized } = useSoundStore.getState();
   const { volume: mediaVolume } = useMediaStore.getState();
 
