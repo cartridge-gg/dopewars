@@ -1,5 +1,6 @@
 mod tests {
     use dojo_snf_test::cheatcodes::set_caller_address;
+    use openzeppelin_token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
     use rollyourown::config::locations::Locations;
     use rollyourown::helpers::game_owner::resolve_current_owner;
     use rollyourown::models::game::{GameMode, TokenId};
@@ -118,12 +119,16 @@ mod tests {
     //     setup.contracts.game.travel(setup.token_id, Locations::Central, array![].span());
     // }
 
-
     #[test]
     #[fork("provable-dw")]
     fn test_owner_can_travel() {
         let setup = setup_world_with_game();
-        set_caller_address(setup.player_a);
+        let erc721_dispatcher = IERC721Dispatcher {
+            contract_address: setup.contracts.game_token.contract_address,
+        };
+        let token_owner = erc721_dispatcher.owner_of(setup.token_id.into());
+        assert(token_owner == setup.player_a, 'token owner mismatch');
+        assert(starknet::get_caller_address() == setup.player_a, 'caller address mismatch');
         setup.contracts.game.travel(setup.token_id, Locations::Bronx, array![].span());
     }
 

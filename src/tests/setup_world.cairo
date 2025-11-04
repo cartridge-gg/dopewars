@@ -3,15 +3,15 @@ use dojo_snf_test::{
     ContractDef, ContractDefTrait, NamespaceDef, TestResource, WorldStorageTestTrait,
     spawn_test_world,
 };
-use starknet::ContractAddress;
-use rollyourown::config::config::{IConfigDispatcher};
+use rollyourown::_mocks::paper_mock::IPaperMockDispatcher;
+use rollyourown::config::config::IConfigDispatcher;
 use rollyourown::systems::decide::IDecideDispatcher;
 use rollyourown::systems::devtools::IDevtoolsDispatcher;
 use rollyourown::systems::game::IGameActionsDispatcher;
 use rollyourown::systems::game_token::contracts::IGameTokenSystemsDispatcher;
 use rollyourown::systems::laundromat::ILaundromatDispatcher;
 use rollyourown::systems::ryo::IRyoDispatcher;
-use rollyourown::_mocks::paper_mock::IPaperMockDispatcher;
+use starknet::ContractAddress;
 
 
 fn NAMESPACE() -> ByteArray {
@@ -32,13 +32,12 @@ fn namespace_def() -> NamespaceDef {
         TestResource::Contract("laundromat"), TestResource::Contract("config"),
         TestResource::Contract("ryo"), TestResource::Contract("devtools"),
         TestResource::Contract("game_token_system_v0"), TestResource::Contract("paper_mock"),
-        TestResource::Event("GameCreated"),
-        TestResource::Event("Traveled"), TestResource::Event("GameOver"),
-        TestResource::Event("TradeDrug"), TestResource::Event("HighVolatility"),
-        TestResource::Event("UpgradeItem"), TestResource::Event("TravelEncounter"),
-        TestResource::Event("TravelEncounterResult"), TestResource::Event("NewSeason"),
-        TestResource::Event("NewHighScore"), TestResource::Event("Claimed"),
-        TestResource::Event("ERC20BalanceEvent"),
+        TestResource::Event("GameCreated"), TestResource::Event("Traveled"),
+        TestResource::Event("GameOver"), TestResource::Event("TradeDrug"),
+        TestResource::Event("HighVolatility"), TestResource::Event("UpgradeItem"),
+        TestResource::Event("TravelEncounter"), TestResource::Event("TravelEncounterResult"),
+        TestResource::Event("NewSeason"), TestResource::Event("NewHighScore"),
+        TestResource::Event("Claimed"), TestResource::Event("ERC20BalanceEvent"),
     ];
     NamespaceDef { namespace: NAMESPACE(), resources: resources.span() }
 }
@@ -55,8 +54,7 @@ fn contract_defs() -> Span<ContractDef> {
         ); // denshokan_address
 
     let mut ryo_init_calldata: Array<felt252> = array![];
-    ryo_init_calldata
-        .append(0.try_into().unwrap()); // paper address (0 = use paper_mock)
+    ryo_init_calldata.append(0.try_into().unwrap()); // paper address (0 = use paper_mock)
     ryo_init_calldata
         .append(
             0x051fea4450da9d6aee758bdeba88b2f665bcbf549d2c61421aa724e9ac0ced8f.try_into().unwrap(),
@@ -67,59 +65,60 @@ fn contract_defs() -> Span<ContractDef> {
         ); //treasury address
 
     let namespace_hash = dojo::utils::bytearray_hash(@NAMESPACE());
-    
+
     [
-        ContractDefTrait::new(@NAMESPACE(), @"game")
-            .with_writer_of([namespace_hash].span()),
-        ContractDefTrait::new(@NAMESPACE(), @"decide")
-            .with_writer_of([namespace_hash].span()),
-        ContractDefTrait::new(@NAMESPACE(), @"laundromat")
-            .with_writer_of([namespace_hash].span()),
+        ContractDefTrait::new(@NAMESPACE(), @"game").with_writer_of([namespace_hash].span()),
+        ContractDefTrait::new(@NAMESPACE(), @"decide").with_writer_of([namespace_hash].span()),
+        ContractDefTrait::new(@NAMESPACE(), @"laundromat").with_writer_of([namespace_hash].span()),
         ContractDefTrait::new(@NAMESPACE(), @"ryo")
             .with_writer_of([namespace_hash].span())
             .with_init_calldata(ryo_init_calldata.span()),
-        ContractDefTrait::new(@NAMESPACE(), @"devtools")
-            .with_writer_of([namespace_hash].span()),
+        ContractDefTrait::new(@NAMESPACE(), @"devtools").with_writer_of([namespace_hash].span()),
         ContractDefTrait::new(@NAMESPACE(), @"game_token_system_v0")
             .with_writer_of([namespace_hash].span())
             .with_init_calldata(game_token_init_calldata.span()),
-        ContractDefTrait::new(@NAMESPACE(), @"config")
-            .with_writer_of([namespace_hash].span()),
-        ContractDefTrait::new(@NAMESPACE(), @"paper_mock")
-            .with_writer_of([namespace_hash].span()),
+        ContractDefTrait::new(@NAMESPACE(), @"config").with_writer_of([namespace_hash].span()),
+        ContractDefTrait::new(@NAMESPACE(), @"paper_mock").with_writer_of([namespace_hash].span()),
     ]
         .span()
 }
 
 // Grant writer permissions to test player addresses
 pub fn update_permissions(world: WorldStorage) {
-    let player_a: ContractAddress = 0x04E830A9dC3CA7AABecaC15D6b6f14c958bb57E28e62944F383581Fd5d0eF059.try_into().unwrap();
-    let player_b: ContractAddress = 0x025ede3b40d5A404Abe7C96755d4Bb7168e95739d75db012040901907a5E1628.try_into().unwrap();
-    
+    let player_a: ContractAddress =
+        0x04E830A9dC3CA7AABecaC15D6b6f14c958bb57E28e62944F383581Fd5d0eF059
+        .try_into()
+        .unwrap();
+    let player_b: ContractAddress =
+        0x025ede3b40d5A404Abe7C96755d4Bb7168e95739d75db012040901907a5E1628
+        .try_into()
+        .unwrap();
+
     let season_selector = dojo::utils::selector_from_names(@NAMESPACE(), @"Season");
     let ryo_config_selector = dojo::utils::selector_from_names(@NAMESPACE(), @"RyoConfig");
     let game_selector = dojo::utils::selector_from_names(@NAMESPACE(), @"Game");
-    let game_store_packed_selector = dojo::utils::selector_from_names(@NAMESPACE(), @"GameStorePacked");
+    let game_store_packed_selector = dojo::utils::selector_from_names(
+        @NAMESPACE(), @"GameStorePacked",
+    );
     let game_token_selector = dojo::utils::selector_from_names(@NAMESPACE(), @"GameToken");
-    let season_settings_selector = dojo::utils::selector_from_names(@NAMESPACE(), @"SeasonSettings");
+    let season_settings_selector = dojo::utils::selector_from_names(
+        @NAMESPACE(), @"SeasonSettings",
+    );
     let game_config_selector = dojo::utils::selector_from_names(@NAMESPACE(), @"GameConfig");
     let sorted_list_selector = dojo::utils::selector_from_names(@NAMESPACE(), @"SortedList");
-    let sorted_list_item_selector = dojo::utils::selector_from_names(@NAMESPACE(), @"SortedListItem");
-    let erc20_balance_event_selector = dojo::utils::selector_from_names(@NAMESPACE(), @"ERC20BalanceEvent");
-    
+    let sorted_list_item_selector = dojo::utils::selector_from_names(
+        @NAMESPACE(), @"SortedListItem",
+    );
+    let erc20_balance_event_selector = dojo::utils::selector_from_names(
+        @NAMESPACE(), @"ERC20BalanceEvent",
+    );
+
     let model_selectors = array![
-        season_selector,
-        ryo_config_selector,
-        game_selector,
-        game_store_packed_selector,
-        game_token_selector,
-        season_settings_selector,
-        game_config_selector,
-        sorted_list_selector,
-        sorted_list_item_selector,
-        erc20_balance_event_selector,
+        season_selector, ryo_config_selector, game_selector, game_store_packed_selector,
+        game_token_selector, season_settings_selector, game_config_selector, sorted_list_selector,
+        sorted_list_item_selector, erc20_balance_event_selector,
     ];
-    
+
     // Grant writer permissions on all models to both test players
     for selector in model_selectors.span() {
         world.dispatcher.grant_writer(*selector, player_a);
