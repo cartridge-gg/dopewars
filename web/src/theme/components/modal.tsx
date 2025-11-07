@@ -1,17 +1,19 @@
-import type { ComponentMultiStyleConfig } from "@chakra-ui/react";
-import { cardStyle, cardPixelatedStyle } from "../styles";
+import { modalAnatomy as parts } from "@chakra-ui/anatomy";
+import { createMultiStyleConfigHelpers } from "@chakra-ui/react";
+import { cardPixelatedStyle } from "../styles";
 
-export const Modal: ComponentMultiStyleConfig = {
-  parts: ["overlay", "dialogContainer", "dialog", "header", "closeButton", "body", "footer"],
-  baseStyle: {
-    dialog: {
-      mx: "16px",
-      bgColor: "neon.900",
-      ...cardPixelatedStyle({}),
-    },
-    footer: {},
-    header: {
-      fontWeight: "normal",
-    },
+const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(parts.keys);
+
+const baseStyle = definePartsStyle({
+  dialog: {
+    mx: "16px",
+    bgColor: "neon.900",
+    ...cardPixelatedStyle({}),
   },
-};
+  footer: {},
+  header: {
+    fontWeight: "normal",
+  },
+});
+
+export const Modal = defineMultiStyleConfig({ baseStyle });
