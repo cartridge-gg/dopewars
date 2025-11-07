@@ -61,8 +61,7 @@
     "use-caret-position": "^0.0.2",
     "viem": "^2.22.8",
     "wagmi": "^2.14.7",
-    "zustand": "^4.3.7",
-    "patch-package": "^8.0.0"
+    "zustand": "^4.3.7"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.0",
