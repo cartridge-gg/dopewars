@@ -5,7 +5,8 @@ import { Layout } from "@/components/layout";
 import { useDojoContext, useRouterContext, useSystems } from "@/dojo/hooks";
 import { playSound, Sounds } from "@/hooks/sound";
 import { IsMobile } from "@/utils/ui";
-import { HStack, VStack, Text, Box, Image, keyframes } from "@chakra-ui/react";
+import { HStack, VStack, Text, Box, Image } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import { useAccount } from "@starknet-react/core";
 import { useCallback, useEffect, useRef, useState } from "react";
 

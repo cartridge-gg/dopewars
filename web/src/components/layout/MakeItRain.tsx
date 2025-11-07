@@ -1,5 +1,6 @@
 import { Acid, Cocaine, Heroin, Ketamine, Ludes, Shrooms, Speed, Weed } from "@/components/icons/drugs";
-import { Box, StyleProps, keyframes } from "@chakra-ui/react";
+import { Box, StyleProps } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 
 const fallingAnim = keyframes`
   0% {

@@ -5,6 +5,7 @@ const nextConfig = {
   productionBrowserSourceMaps: true,
   // https://rishabhsharma.bio/next-js-issue-useeffect-hook-running-twice-in-client-9fb6712f6362
   reactStrictMode: false, // disable double rendering in dev mode, causing issues with controller
+  transpilePackages: ['@rainbow-me/rainbowkit', '@vanilla-extract/css', '@vanilla-extract/sprinkles'],
   // images: {
   //   domains: ["static.cartridge.gg", "static.localhost"],
   // },

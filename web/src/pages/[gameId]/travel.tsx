@@ -78,7 +78,7 @@ const Travel = observer(() => {
     return [];
   }, [game, targetLocation, currentLocation]);
 
-  useEventListener("keydown", (e) => {
+  useEventListener(typeof window !== "undefined" ? window : null, "keydown", (e) => {
     switch (e.key) {
       case "ArrowRight":
       case "ArrowUp":

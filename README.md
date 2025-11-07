@@ -35,7 +35,17 @@ torii --world {world_address}
 
 # Start frontend, located at http://localhost:3000
 cd web
-yarn install && yarn dev
+pnpm install && pnpm dev
+```
+
+### Testing
+
+The project includes unit tests for the web frontend:
+
+```bash
+cd web
+pnpm test              # Run tests once
+pnpm test:watch        # Run tests in watch mode
 ```
 
 In Scarb.toml, there is various shortcut defined using scripts.
