@@ -16,16 +16,12 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Flex,
   HStack,
   SimpleGrid,
-  StyleProps,
   Text,
   VStack,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
-import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 
@@ -133,8 +129,28 @@ const Location = observer(() => {
               const canSell =
                 (game.drugs.quantity > 0 && game.drugs?.drug && game.drugs?.drug?.drug === drug!.drug) || false;
 
+              const handleCardClick = () => {
+                // Navigate to buy if can buy, otherwise navigate to sell if can sell
+                if (canBuy) {
+                  router.push(`${router.asPath}/${drugConfig.drug}/buy`);
+                } else if (canSell) {
+                  router.push(`${router.asPath}/${drugConfig.drug}/sell`);
+                }
+              };
+
+              const isClickable = canBuy || canSell;
+
               return (
-                <Card h={["auto", "180px"]} key={index} position="relative">
+                <Card
+                  h={["auto", "180px"]}
+                  key={index}
+                  position="relative"
+                  onClick={handleCardClick}
+                  cursor={isClickable ? "pointer" : "not-allowed"}
+                  opacity={isClickable ? 1 : 0.5}
+                  _hover={isClickable ? { borderColor: "neon.600" } : {}}
+                  transition="all 0.2s"
+                >
                   <CardHeader
                     textTransform="uppercase"
                     fontSize={["16px", "20px"]}
@@ -145,21 +161,6 @@ const Location = observer(() => {
                   </CardHeader>
                   <CardBody py="0">
                     <HStack w="full" justify="center">
-                      <Flex
-                        as={motion.div}
-                        initial={{ opacity: 0 }}
-                        whileHover={{ opacity: 1 }}
-                        p="2px"
-                        alignItems="center"
-                        boxSize="full"
-                        position="absolute"
-                        top={"6px"}
-                        pointerEvents={["none", "auto"]}
-                      >
-                        <HStack w="full" px={3} gap={6} /*bgColor="neon.900"*/>
-                          <BuySellBtns canBuy={canBuy} canSell={canSell} drugConfig={drugConfig} />
-                        </HStack>
-                      </Flex>
                       {drugConfig.icon({})}
                     </HStack>
                   </CardBody>
@@ -172,7 +173,6 @@ const Location = observer(() => {
                       </Text>
                       <Text> {formatCash(drug.price)}</Text>
                     </HStack>
-                    <BuySellMobileToggle canSell={canSell} canBuy={canBuy} drugConfig={drugConfig} />
                   </CardFooter>
                 </Card>
               );
@@ -187,59 +187,3 @@ const Location = observer(() => {
 });
 
 export default Location;
-
-const BuySellBtns = observer(
-  ({ canBuy, canSell, drugConfig }: { canBuy: boolean; canSell: boolean; drugConfig: DrugConfigFull }) => {
-    const { router } = useRouterContext();
-    return (
-      <HStack mb="10px" bg="neon.900" w="full" /*gap="65px"*/>
-        <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugConfig.drug}/buy`)} isDisabled={!canBuy}>
-          Buy
-        </Button>
-        <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugConfig.drug}/sell`)} isDisabled={!canSell}>
-          Sell
-        </Button>
-      </HStack>
-    );
-  },
-);
-
-const BuySellMobileToggle = observer(
-  ({
-    canBuy,
-    canSell,
-    drugConfig,
-    ...props
-  }: {
-    canBuy: boolean;
-    canSell: boolean;
-    drugConfig: DrugConfigFull;
-  } & StyleProps) => {
-    const { isOpen, onToggle } = useDisclosure();
-
-    return (
-      <>
-        <Box boxSize="full" position="absolute" top="0" left="0" onClick={onToggle} pointerEvents={["auto", "none"]} />
-        <Box
-          as={motion.div}
-          initial={{ height: "0", opacity: 0 }}
-          animate={{
-            height: isOpen ? "auto" : "0",
-            opacity: isOpen ? 1 : 0,
-          }}
-          position="absolute"
-          width="90%"
-          bottom="0px"
-          left="5%"
-          gap="10px"
-          overflow="hidden"
-          // align="flex-start"
-          display={["flex", "none"]}
-          {...props}
-        >
-          <BuySellBtns canBuy={canBuy} canSell={canSell} drugConfig={drugConfig} />
-        </Box>
-      </>
-    );
-  },
-);

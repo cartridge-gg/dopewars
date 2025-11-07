@@ -79,6 +79,7 @@ export default function Home() {
     <Layout
       customLeftPanel={<HomeLeftPanel />}
       rigthPanelScrollable={false}
+      isFullHeight
       // rigthPanelMaxH="calc(100dvh - 230px)"
     >
       <VStack boxSize="full" gap="10px">
@@ -110,9 +111,9 @@ export default function Home() {
                   <Flipflop /> Play guest
                 </Button> */}
 
-                <HStack flex="1" h="full" alignItems="center"justifyContent="center">
+                <HStack flex="1" h="full" alignItems="center" justifyContent="center">
                   <Warning color="yellow.400" />
-                  <Text >Waiting for season end</Text>
+                  <Text>Waiting for season end</Text>
                 </HStack>
               </HStack>
             )}
@@ -155,7 +156,7 @@ export default function Home() {
           </HStack>
         </Card>
 
-        <Tabs variant="unstyled" w="full">
+        {/*<Tabs variant="unstyled" w="full">
           <TabList pb={6}>
             <Tab>LEADERBOARD</Tab>
             <Tab>HALL OF FAME</Tab>
@@ -169,7 +170,8 @@ export default function Home() {
               <HallOfFame />
             </TabPanel>
           </TabPanels>
-        </Tabs>
+        </Tabs>*/}
+        <Leaderboard config={config} />
       </VStack>
 
       <Tutorial isOpen={isTutorialOpen} close={() => setIsTutorialOpen(false)} />
