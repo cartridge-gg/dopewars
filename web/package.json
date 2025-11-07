@@ -61,7 +61,8 @@
     "use-caret-position": "^0.0.2",
     "viem": "^2.22.8",
     "wagmi": "^2.14.7",
-    "zustand": "^4.3.7"
+    "zustand": "^4.3.7",
+    "patch-package": "^8.0.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.0",
@@ -82,7 +83,6 @@
     "@vitejs/plugin-react": "^4.3.4",
     "jsdom": "^25.0.1",
     "knip": "^4.5.0",
-    "patch-package": "^8.0.0",
     "prettier": "^2.8.8",
     "typescript": "^5.4.5",
     "vitest": "^2.1.8"
