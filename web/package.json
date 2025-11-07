@@ -82,6 +82,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "jsdom": "^25.0.1",
     "knip": "^4.5.0",
+    "patch-package": "^8.0.0",
     "prettier": "^2.8.8",
     "typescript": "^5.4.5",
     "vitest": "^2.1.8"
