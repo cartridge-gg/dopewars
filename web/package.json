@@ -12,7 +12,9 @@
     "knip": "knip",
     "format": "prettier --write ./src",
     "gen": "graphql-codegen --config codegen.yaml",
-    "gen:dojo": "NODE_TLS_REJECT_UNAUTHORIZED=0 pnpm gen"
+    "gen:dojo": "NODE_TLS_REJECT_UNAUTHORIZED=0 pnpm gen",
+    "test": "NODE_OPTIONS=--experimental-wasm-modules vitest run",
+    "test:watch": "NODE_OPTIONS=--experimental-wasm-modules vitest"
   },
   "dependencies": {
     "@cartridge/connector": "0.10.7",
@@ -25,7 +27,6 @@
     "@dojoengine/torii-wasm": "1.8.1",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
-    "@metamask/sdk": "^0.32.1",
     "@metamask/sdk": "^0.32.1",
     "@next/bundle-analyzer": "^14.1.4",
     "@rainbow-me/rainbowkit": "^2.2.2",
@@ -71,12 +72,18 @@
     "@graphql-codegen/typescript-graphql-request": "^5.0.0",
     "@graphql-codegen/typescript-operations": "^2.3.5",
     "@graphql-codegen/typescript-react-query": "^3.5.9",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/jest-dom": "^6.6.3",
     "@types/howler": "^2.2.7",
+    "@types/minimatch": "^5.1.2",
     "@types/node": "18.15.3",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@vitejs/plugin-react": "^4.3.4",
+    "jsdom": "^25.0.1",
     "knip": "^4.5.0",
     "prettier": "^2.8.8",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^2.1.8"
   }
 }

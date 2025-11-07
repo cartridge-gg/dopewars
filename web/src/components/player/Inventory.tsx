@@ -1,5 +1,6 @@
 import { useConfigStore, useGameStore, useRouterContext } from "@/dojo/hooks";
-import { Card, HStack, StyleProps, Text, VStack, keyframes } from "@chakra-ui/react";
+import { Card, HStack, StyleProps, Text, VStack } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import { observer } from "mobx-react-lite";
 import { Alert, PawnshopIcon } from "../icons";
 import colors from "@/theme/colors";

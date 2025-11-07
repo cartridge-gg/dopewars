@@ -15,9 +15,9 @@ import {
   Text,
   UnorderedList,
   VStack,
-  keyframes,
   useDisclosure,
 } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import { ReactNode, useRef } from "react";
 import { Cigarette, Clock, Close, Dots, GangIcon, Home, PaperIcon, Refresh } from "../icons";
 import { Calendar } from "../icons/archive";

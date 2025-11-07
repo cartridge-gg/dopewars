@@ -1,47 +1,53 @@
-import type { ComponentMultiStyleConfig } from "@chakra-ui/react";
+import { cardAnatomy as parts } from "@chakra-ui/anatomy";
+import { createMultiStyleConfigHelpers } from "@chakra-ui/react";
 import BorderImage from "@/components/icons/PressableBorderImage";
 import { cardStyle, cardPixelatedStyle } from "../styles";
 import colors from "../colors";
 
-export const Card: ComponentMultiStyleConfig = {
-  parts: ["container", "header", "body", "footer"],
-  baseStyle: {
-    container: {
-      ...cardStyle,
-    },
+const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(parts.keys);
+
+const baseStyle = definePartsStyle({
+  container: {
+    ...cardStyle,
+  },
+  header: {
+    textAlign: "center",
+  },
+  body: {
+    display: "flex",
+    justifyContent: "center",
+    alignContent: "center",
+  },
+  footer: {},
+});
+
+const variants = {
+  primary: definePartsStyle({
     header: {
-      textAlign: "center",
+      py: "6px",
     },
     body: {
-      display: "flex",
-      justifyContent: "center",
-      alignContent: "center",
+      py: "6px",
     },
-    footer: {},
-  },
-  variants: {
-    primary: {
-      header: {
-        py: "6px",
-      },
-      body: {
-        py: "6px",
-      },
-      footer: {
-        px: "20px",
-        py: "12px",
-      },
+    footer: {
+      px: "20px",
+      py: "12px",
     },
-    pixelated: {
-      container: {
-        ...cardPixelatedStyle({}),
-      },
-      // body:{
-      //   bg:"neon.700"
-      // }
+  }),
+  pixelated: definePartsStyle({
+    container: {
+      ...cardPixelatedStyle({}),
     },
-  },
+    // body:{
+    //   bg:"neon.700"
+    // }
+  }),
+};
+
+export const Card = defineMultiStyleConfig({
+  baseStyle,
+  variants,
   defaultProps: {
     variant: "primary",
   },
-};
+});

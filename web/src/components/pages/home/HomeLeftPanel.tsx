@@ -11,8 +11,8 @@ import {
   StyleProps,
   Text,
   VStack,
-  keyframes,
 } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 
 const floatAnim = keyframes`  
   0% {transform: translateY(0%);}

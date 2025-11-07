@@ -1,4 +1,5 @@
-import { Box, Input as ChakraInput, InputProps, StyleProps, keyframes } from "@chakra-ui/react";
+import { Box, Input as ChakraInput, InputProps, StyleProps } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 // @ts-ignore

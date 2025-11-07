@@ -11,8 +11,8 @@ import {
   SliderTrack,
   StyleProps,
   VStack,
-  keyframes,
 } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import React, { ReactNode, useEffect, useState } from "react";
 import { Backward, Forward, Note, Pause, Play, Volume } from "../icons";
 import { toggleIsMuted } from "@/hooks/media";

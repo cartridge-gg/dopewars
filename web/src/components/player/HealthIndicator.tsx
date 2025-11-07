@@ -1,5 +1,6 @@
 import colors from "@/theme/colors";
-import { HStack, StyleProps, Text, keyframes } from "@chakra-ui/react";
+import { HStack, StyleProps, Text } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import { DynamicHeart } from "../icons";
 
 export const blinkAnim = keyframes`  
