@@ -28,6 +28,8 @@ import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { num, shortString } from "starknet";
 import { HustlerAvatarIcon } from "../profile/HustlerAvatarIcon";
 import { RewardDetails } from "./Leaderboard";
+import { useEffect, useState } from "react";
+import { getSwapQuote, PAPER, USDC } from "@/hooks/useEkubo";
 
 export const ClaimModal = ({
   claimable,
@@ -42,6 +44,26 @@ export const ClaimModal = ({
 }) => {
   const { claim, isPending } = useSystems();
   const { account } = useAccount();
+  const [usdValue, setUsdValue] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!claimable?.totalClaimable || !isOpen) {
+      setUsdValue(null);
+      return;
+    }
+
+    // Fetch PAPER to USDC conversion rate
+    getSwapQuote(1, PAPER, USDC, false)
+      .then((quote) => {
+        const usdPerPaper = quote.amountOut;
+        const totalUsd = claimable.totalClaimable * usdPerPaper;
+        setUsdValue(totalUsd);
+      })
+      .catch((e) => {
+        console.error("Failed to fetch USD value:", e);
+        setUsdValue(null);
+      });
+  }, [claimable?.totalClaimable, isOpen]);
 
   const onClaim = async () => {
     if (!account?.address) return;
@@ -140,6 +162,11 @@ export const ClaimModal = ({
                 <Text textAlign="center" color="yellow.400" fontSize="16px">
                   <PaperIcon color="yellow.400" /> {formatCash(claimable.totalClaimable).replace("$", "")} PAPER{" "}
                 </Text>
+                {usdValue !== null && (
+                  <Text textAlign="center" color="neon.500" fontSize="12px">
+                    (${Math.abs(usdValue).toFixed(2)})
+                  </Text>
+                )}
               </VStack>
             </VStack>
           </ModalBody>
