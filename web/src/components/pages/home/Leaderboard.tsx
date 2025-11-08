@@ -24,6 +24,7 @@ import { Layer } from "@/dope/components";
 import { Tooltip } from "@/components/common";
 import { useSwipeable } from "react-swipeable";
 import { DW_NS } from "@/dojo/constants";
+import { getSwapQuote, PAPER, USDC } from "@/hooks/useEkubo";
 
 const renderer = ({
   days,
@@ -67,6 +68,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
 
   const [currentVersion, setCurrentVersion] = useState(config?.ryo.season_version || 0);
   const [selectedVersion, setSelectedVersion] = useState(config?.ryo.season_version || 0);
+  const [usdValue, setUsdValue] = useState<number | null>(null);
 
   const { season } = useSeasonByVersion(selectedVersion);
 
@@ -84,6 +86,25 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
     setCurrentVersion(config?.ryo.season_version || 0);
     refetchRegisteredGames();
   }, [config]);
+
+  useEffect(() => {
+    if (!season?.paper_balance) {
+      setUsdValue(null);
+      return;
+    }
+
+    // Fetch PAPER to USDC conversion rate using 1000 PAPER for better slippage accuracy
+    getSwapQuote(1000, PAPER, USDC, false)
+      .then((quote) => {
+        const usdPerPaper = quote.amountOut / 1000;
+        const totalUsd = (season.paper_balance || 0) * usdPerPaper;
+        setUsdValue(totalUsd);
+      })
+      .catch((e) => {
+        console.error("Failed to fetch USD value:", e);
+        setUsdValue(null);
+      });
+  }, [season?.paper_balance]);
 
   const onPrev = async () => {
     if (selectedVersion > 1) {
@@ -121,10 +142,17 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
             <Text cursor="pointer" onClick={() => onDetails(selectedVersion)}>
               SEASON {selectedVersion} REWARDS
             </Text>
-            <Text color="yellow.400">
-              <PaperIcon color="yellow.400" mr={1} />
-              {formatCash(season.paper_balance || 0).replace("$", "")}
-            </Text>
+            <HStack gap={1} alignItems="center">
+              <Text color="yellow.400">
+                <PaperIcon color="yellow.400" mr={1} />
+                {formatCash(season.paper_balance || 0).replace("$", "")}
+              </Text>
+              {usdValue !== null && (
+                <Text color="neon.500" fontSize="10px">
+                  (${Math.abs(usdValue).toFixed(2)})
+                </Text>
+              )}
+            </HStack>
           </HStack>
           <Arrow
             direction="right"
@@ -277,6 +305,7 @@ export const RewardDetails = observer(
   ({ seasonVersion, position, claimable }: { seasonVersion: number; position: number; claimable?: number }) => {
     const getComponentValuesBySlug = useDopeStore((state) => state.getComponentValuesBySlug);
     const configStore = useConfigStore();
+    const [usdValue, setUsdValue] = useState<number | null>(null);
 
     const suffixes = getComponentValuesBySlug("DopeGear", "Suffixes");
     const bodies = getComponentValuesBySlug("DopeHustlers", "Body");
@@ -284,6 +313,25 @@ export const RewardDetails = observer(
     const seed = uint256.bnToUint256(
       hash.computePoseidonHashOnElements([shortString.encodeShortString(DW_NS), seasonVersion, position]),
     );
+
+    useEffect(() => {
+      if (!claimable) {
+        setUsdValue(null);
+        return;
+      }
+
+      // Fetch PAPER to USDC conversion rate using 1000 PAPER for better slippage accuracy
+      getSwapQuote(1000, PAPER, USDC, false)
+        .then((quote) => {
+          const usdPerPaper = quote.amountOut / 1000;
+          const totalUsd = claimable * usdPerPaper;
+          setUsdValue(totalUsd);
+        })
+        .catch((e) => {
+          console.error("Failed to fetch USD value:", e);
+          setUsdValue(null);
+        });
+    }, [claimable]);
 
     const rewards = useMemo(() => {
       const items: ComponentValueEvent[] = [];
@@ -372,11 +420,18 @@ export const RewardDetails = observer(
         <Text textStyle="subheading" fontSize="12px" w="full" textAlign="center" my={2}>
           RANK {position} REWARDS
         </Text>
-        <HStack w="full" borderBottom="solid 1px" borderColor="neon.700">
-          <PaperIcon width="24px" height="24px" />
-          <Text letterSpacing={0} ml={2} fontSize="xs">
-            {claimable ? formatCash(claimable).replace("$", "") : "???"} Paper
-          </Text>
+        <HStack w="full" borderBottom="solid 1px" borderColor="neon.700" justifyContent="space-between">
+          <HStack>
+            <PaperIcon width="24px" height="24px" />
+            <Text letterSpacing={0} ml={2} fontSize="xs">
+              {claimable ? formatCash(claimable).replace("$", "") : "???"} Paper
+            </Text>
+          </HStack>
+          {usdValue !== null && (
+            <Text letterSpacing={0} fontSize="10px" color="neon.500">
+              (${Math.abs(usdValue).toFixed(2)})
+            </Text>
+          )}
         </HStack>
         {position <= 3 && (
           <HStack w="full" borderBottom="solid 1px" borderColor="neon.700">
