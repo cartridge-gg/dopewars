@@ -93,10 +93,10 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
       return;
     }
 
-    // Fetch PAPER to USDC conversion rate
-    getSwapQuote(1, PAPER, USDC, false)
+    // Fetch PAPER to USDC conversion rate using 1000 PAPER for better slippage accuracy
+    getSwapQuote(1000, PAPER, USDC, false)
       .then((quote) => {
-        const usdPerPaper = quote.amountOut;
+        const usdPerPaper = quote.amountOut / 1000;
         const totalUsd = (season.paper_balance || 0) * usdPerPaper;
         setUsdValue(totalUsd);
       })
@@ -142,7 +142,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
             <Text cursor="pointer" onClick={() => onDetails(selectedVersion)}>
               SEASON {selectedVersion} REWARDS
             </Text>
-            <VStack gap={0} alignItems="center">
+            <HStack gap={1} alignItems="center">
               <Text color="yellow.400">
                 <PaperIcon color="yellow.400" mr={1} />
                 {formatCash(season.paper_balance || 0).replace("$", "")}
@@ -152,7 +152,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                   (${Math.abs(usdValue).toFixed(2)})
                 </Text>
               )}
-            </VStack>
+            </HStack>
           </HStack>
           <Arrow
             direction="right"
@@ -320,10 +320,10 @@ export const RewardDetails = observer(
         return;
       }
 
-      // Fetch PAPER to USDC conversion rate
-      getSwapQuote(1, PAPER, USDC, false)
+      // Fetch PAPER to USDC conversion rate using 1000 PAPER for better slippage accuracy
+      getSwapQuote(1000, PAPER, USDC, false)
         .then((quote) => {
-          const usdPerPaper = quote.amountOut;
+          const usdPerPaper = quote.amountOut / 1000;
           const totalUsd = claimable * usdPerPaper;
           setUsdValue(totalUsd);
         })
@@ -420,18 +420,18 @@ export const RewardDetails = observer(
         <Text textStyle="subheading" fontSize="12px" w="full" textAlign="center" my={2}>
           RANK {position} REWARDS
         </Text>
-        <HStack w="full" borderBottom="solid 1px" borderColor="neon.700">
-          <PaperIcon width="24px" height="24px" />
-          <VStack alignItems="flex-start" gap={0} ml={2} flex={1}>
-            <Text letterSpacing={0} fontSize="xs">
+        <HStack w="full" borderBottom="solid 1px" borderColor="neon.700" justifyContent="space-between">
+          <HStack>
+            <PaperIcon width="24px" height="24px" />
+            <Text letterSpacing={0} ml={2} fontSize="xs">
               {claimable ? formatCash(claimable).replace("$", "") : "???"} Paper
             </Text>
-            {usdValue !== null && (
-              <Text letterSpacing={0} fontSize="10px" color="neon.500">
-                (${Math.abs(usdValue).toFixed(2)})
-              </Text>
-            )}
-          </VStack>
+          </HStack>
+          {usdValue !== null && (
+            <Text letterSpacing={0} fontSize="10px" color="neon.500">
+              (${Math.abs(usdValue).toFixed(2)})
+            </Text>
+          )}
         </HStack>
         {position <= 3 && (
           <HStack w="full" borderBottom="solid 1px" borderColor="neon.700">

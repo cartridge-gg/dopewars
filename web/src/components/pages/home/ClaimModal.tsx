@@ -52,10 +52,10 @@ export const ClaimModal = ({
       return;
     }
 
-    // Fetch PAPER to USDC conversion rate
-    getSwapQuote(1, PAPER, USDC, false)
+    // Fetch PAPER to USDC conversion rate using 1000 PAPER for better slippage accuracy
+    getSwapQuote(1000, PAPER, USDC, false)
       .then((quote) => {
-        const usdPerPaper = quote.amountOut;
+        const usdPerPaper = quote.amountOut / 1000;
         const totalUsd = claimable.totalClaimable * usdPerPaper;
         setUsdValue(totalUsd);
       })
@@ -159,14 +159,16 @@ export const ClaimModal = ({
 
               <VStack>
                 <Text textAlign="center">TOTAL CLAIMABLE</Text>
-                <Text textAlign="center" color="yellow.400" fontSize="16px">
-                  <PaperIcon color="yellow.400" /> {formatCash(claimable.totalClaimable).replace("$", "")} PAPER{" "}
-                </Text>
-                {usdValue !== null && (
-                  <Text textAlign="center" color="neon.500" fontSize="12px">
-                    (${Math.abs(usdValue).toFixed(2)})
+                <HStack textAlign="center" color="yellow.400" fontSize="16px" gap={1} justifyContent="center">
+                  <Text>
+                    <PaperIcon color="yellow.400" /> {formatCash(claimable.totalClaimable).replace("$", "")} PAPER
                   </Text>
-                )}
+                  {usdValue !== null && (
+                    <Text color="neon.500" fontSize="12px">
+                      (${Math.abs(usdValue).toFixed(2)})
+                    </Text>
+                  )}
+                </HStack>
               </VStack>
             </VStack>
           </ModalBody>
