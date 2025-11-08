@@ -46,7 +46,7 @@ const Decision = observer(() => {
     if (game && game.player.health === 0) {
       router.push(`/${gameId}/event/consequence`);
     }
-  }, [isPending, game, gameEvents, gameEvents?.lastEncounter]);
+  }, [isPending, game, gameEvents, gameEvents?.lastEncounter, router, gameId]);
 
   useEffect(() => {
     if (game && gameEvents && encounterEvent) {
@@ -210,7 +210,7 @@ const Encounter = observer(
       if (game && playerStatus === PlayerStatus.Normal) {
         setPlayerStatus(game.player.status);
       }
-    }, [game]);
+    }, [game, playerStatus]);
 
     useEffect(() => {
       let url = "";

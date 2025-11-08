@@ -24,10 +24,10 @@ export const HustlerPreviewFromHustler = ({
   const { hustlerBody } = useHustler(toriiClient!, tokenId);
 
   useEffect(() => {
-    setHustlerMeta({
-      ...hustlerMeta,
+    setHustlerMeta((prev) => ({
+      ...prev,
       name: `#${tokenId}`,
-    });
+    }));
   }, [tokenId]);
 
   //
@@ -64,7 +64,7 @@ export const HustlerPreviewFromHustler = ({
         ...a,
         [v.slot]: { token_id: v.gear_item_id } as ParsedToken,
       }),
-      {}
+      {},
     );
   }, [equipment]);
 

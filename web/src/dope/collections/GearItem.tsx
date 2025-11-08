@@ -33,9 +33,20 @@ export default function GearItem({ token, balance }: { token: ParsedToken; balan
       <CardAnim onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
         <Box position="relative">
           {token.metadata && token.metadata.image !== "" ? (
-            <img className="aspect-square w-full mb-1" src={token.metadata.image} loading="lazy" draggable="false"/>
+            <img
+              className="aspect-square w-full mb-1"
+              src={token.metadata.image}
+              loading="lazy"
+              draggable="false"
+              alt={token.metadata.name || `Gear #${token.token_id}`}
+            />
           ) : (
-            <img className="aspect-square w-full mb-1" src="/public/images/dope-smiley.svg" draggable="false"/>
+            <img
+              className="aspect-square w-full mb-1"
+              src="/public/images/dope-smiley.svg"
+              draggable="false"
+              alt="Dope Smiley"
+            />
           )}
         </Box>
         <Box position="absolute" bottom={1} right={1} bg="#66666666" p={1}>

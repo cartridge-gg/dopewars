@@ -36,7 +36,7 @@ export default function LootItem({ token }: { token: ParsedToken }) {
     const isReleased = tokenState ? tokenState.isReleased : false;
 
     return { isOpened, isReleased };
-  }, [dopeLootClaimState, dopeLootClaimState[Number(token.token_id)]]);
+  }, [dopeLootClaimState, token.token_id]);
 
   const lootAddress = getDojoContract("dope-DopeLoot").address!;
   const onOpenController = (e: any) => {
@@ -61,6 +61,7 @@ export default function LootItem({ token }: { token: ParsedToken }) {
             src={token.metadata.image}
             loading="lazy"
             draggable="false"
+            alt={token.metadata.name || `Loot #${token.token_id}`}
           />
         ) : (
           <HustlerPreviewFromLoot tokenId={Number(token.token_id)} />

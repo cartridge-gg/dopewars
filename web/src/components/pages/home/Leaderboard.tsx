@@ -94,6 +94,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
     setCurrentVersion(config?.ryo.season_version || 0);
     refetchRegisteredGames();
     refetchActiveGames();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config]);
 
   // Calculate USD value from cached PAPER price
@@ -309,7 +310,7 @@ export const RewardDetails = observer(
       }
 
       return items;
-    }, [position, seasonVersion]);
+    }, [position, getComponentValuesBySlug, suffixes, seed.low, seed.high]);
 
     return (
       <VStack alignItems="flex-start" p={1} gap={1}>

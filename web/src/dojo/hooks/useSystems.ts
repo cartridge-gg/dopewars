@@ -125,7 +125,7 @@ export const useSystems = (): SystemsInterface => {
     const dopeLootClaimAddress = getContractByName(dojoProvider.manifest, "dope", "DopeLootClaim").address;
 
     return { gameAddress, decideAddress, laundromatAddress, dopeLootClaimAddress };
-  }, [dojoProvider]);
+  }, [dojoProvider.manifest]);
 
   const dopeLootClaimState = useDopeStore((state) => state.dopeLootClaimState);
 
@@ -199,7 +199,7 @@ export const useSystems = (): SystemsInterface => {
         isError,
       };
     },
-    [rpcProvider, dojoProvider, account, selectedChain, toast],
+    [rpcProvider, dojoProvider, account, toast],
   );
 
   const createGame = useCallback(
@@ -246,7 +246,7 @@ export const useSystems = (): SystemsInterface => {
         isError,
       };
     },
-    [executeAndReceipt, config?.ryoAddress.paper, selectedChain],
+    [executeAndReceipt, config?.ryo.paper_fee, selectedChain, account, gameAddress],
   );
 
   const endGame = useCallback(
@@ -265,7 +265,7 @@ export const useSystems = (): SystemsInterface => {
         isError,
       };
     },
-    [executeAndReceipt],
+    [executeAndReceipt, gameAddress],
   );
 
   const travel = useCallback(
@@ -293,7 +293,7 @@ export const useSystems = (): SystemsInterface => {
         isError,
       };
     },
-    [executeAndReceipt, selectedChain],
+    [executeAndReceipt, selectedChain, account, gameAddress],
   );
 
   const decide = useCallback(
@@ -318,7 +318,7 @@ export const useSystems = (): SystemsInterface => {
         isError,
       };
     },
-    [executeAndReceipt, selectedChain],
+    [executeAndReceipt, selectedChain, account, decideAddress],
   );
 
   //
@@ -393,7 +393,14 @@ export const useSystems = (): SystemsInterface => {
         isError,
       };
     },
-    [executeAndReceipt],
+    [
+      executeAndReceipt,
+      account,
+      dopeLootClaimAddress,
+      dopeLootClaimState,
+      selectedChain.manifest.world.address,
+      toriiClient,
+    ],
   );
 
   const claim = useCallback(
@@ -451,7 +458,7 @@ export const useSystems = (): SystemsInterface => {
         isError,
       };
     },
-    [executeAndReceipt, config],
+    [executeAndReceipt, selectedChain.paperAddress, laundromatAddress],
   );
 
   const launder = useCallback(
@@ -475,7 +482,7 @@ export const useSystems = (): SystemsInterface => {
         isError,
       };
     },
-    [executeAndReceipt, selectedChain],
+    [executeAndReceipt, selectedChain, account, laundromatAddress],
   );
 
   //
@@ -569,7 +576,7 @@ export const useSystems = (): SystemsInterface => {
         hash,
       };
     },
-    [executeAndReceipt, selectedChain],
+    [executeAndReceipt, selectedChain, account, dojoProvider.manifest.contracts],
   );
 
   //

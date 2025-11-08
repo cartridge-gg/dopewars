@@ -86,7 +86,7 @@ export const DojoContextProvider = observer(
         router,
         selectedChain,
       });
-    }, [graphqlClient, configStore, toriiClient]);
+    }, [graphqlClient, configStore, toriiClient, router, selectedChain]);
 
     useEffect(() => {
       const initAsync = async () => {

@@ -46,7 +46,7 @@ export default function Editor() {
 
   const dopeGearAddressArr = useMemo(() => {
     return [dopeGearContractManifest.address];
-  }, []);
+  }, [dopeGearContractManifest.address]);
   const { tokens: allGearTokens } = useDojoTokens(toriiClient, dopeGearAddressArr);
 
   // const tokenIds = useMemo(() => {

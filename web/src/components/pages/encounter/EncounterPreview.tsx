@@ -37,13 +37,13 @@ export const EncounterPreview = ({
       Hair: Number(randomness % 19n),
       Beard: Number(randomness % 13n),
     };
-  }, [tokenId]);
+  }, [randomness]);
 
   useEffect(() => {
-    setHustlerMeta({
-      ...hustlerMeta,
+    setHustlerMeta((prev) => ({
+      ...prev,
       name: `#${tokenId}`,
-    });
+    }));
   }, [tokenId]);
 
   const getComponentValuesBySlug = useDopeStore((state) => state.getComponentValuesBySlug);
