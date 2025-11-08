@@ -83,7 +83,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
 
     setCurrentVersion(config?.ryo.season_version || 0);
     refetchRegisteredGames();
-  }, [config]);
+  }, [config, refetchRegisteredGames]);
 
   const onPrev = async () => {
     if (selectedVersion > 1) {
@@ -365,7 +365,7 @@ export const RewardDetails = observer(
       }
 
       return items;
-    }, [position, seasonVersion]);
+    }, [position, getComponentValuesBySlug, suffixes, seed.low, seed.high]);
 
     return (
       <VStack alignItems="flex-start" p={1} gap={1}>

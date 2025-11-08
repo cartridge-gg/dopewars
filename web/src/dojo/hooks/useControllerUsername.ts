@@ -20,6 +20,7 @@ export const useControllerUsername = (address: string) => {
       setIsController(false);
       setUsername("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connector, address]);
 
   return { username, isController, refetch };
