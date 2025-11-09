@@ -19,6 +19,7 @@ import {
   HStack,
   SimpleGrid,
   Text,
+  Tooltip,
   VStack,
 } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
@@ -130,51 +131,62 @@ const Location = observer(() => {
                 (game.drugs.quantity > 0 && game.drugs?.drug && game.drugs?.drug?.drug === drug!.drug) || false;
 
               const handleCardClick = () => {
-                // Navigate to buy if can buy, otherwise navigate to sell if can sell
-                if (canBuy) {
-                  router.push(`${router.asPath}/${drugConfig.drug}/buy`);
-                } else if (canSell) {
-                  router.push(`${router.asPath}/${drugConfig.drug}/sell`);
+                // Navigate to the drug trade screen
+                if (canBuy || canSell) {
+                  router.push(`${router.asPath}/${drugConfig.drug}`);
                 }
               };
 
               const isClickable = canBuy || canSell;
 
-              return (
-                <Card
-                  h={["auto", "180px"]}
-                  key={index}
-                  position="relative"
-                  onClick={handleCardClick}
-                  cursor={isClickable ? "pointer" : "not-allowed"}
-                  opacity={isClickable ? 1 : 0.5}
-                  _hover={isClickable ? { borderColor: "neon.600" } : {}}
-                  transition="all 0.2s"
-                >
-                  <CardHeader
-                    textTransform="uppercase"
-                    fontSize={["16px", "20px"]}
-                    textAlign="left"
-                    padding={["6px 10px", "10px 20px"]}
-                  >
-                    {drugConfig.name}
-                  </CardHeader>
-                  <CardBody py="0">
-                    <HStack w="full" justify="center">
-                      {drugConfig.icon({})}
-                    </HStack>
-                  </CardBody>
+              // Determine error message
+              let errorMessage = null;
+              if (!isClickable) {
+                if (!hasFreeSpace) {
+                  errorMessage = "Not enough inventory space.";
+                } else if (!hasMinCash) {
+                  errorMessage = "Not enough cash.";
+                } else {
+                  errorMessage = "Cannot trade this item.";
+                }
+              }
 
-                  <CardFooter fontSize={["14px", "16px"]} flexDirection="column" padding={["6px 10px", "10px 20px"]}>
-                    <HStack justifyContent="space-between">
-                      <Text>
-                        <WeightIcon mb={1} />
-                        <span>{drug.weight}</span>
-                      </Text>
-                      <Text> {formatCash(drug.price)}</Text>
-                    </HStack>
-                  </CardFooter>
-                </Card>
+              return (
+                <Tooltip key={index} label={errorMessage} isDisabled={isClickable} hasArrow color="yellow.400">
+                  <Card
+                    h={["auto", "180px"]}
+                    position="relative"
+                    onClick={handleCardClick}
+                    cursor={isClickable ? "pointer" : "not-allowed"}
+                    opacity={isClickable ? 1 : 0.5}
+                    _hover={isClickable ? { borderColor: "neon.600" } : {}}
+                    transition="all 0.2s"
+                  >
+                    <CardHeader
+                      textTransform="uppercase"
+                      fontSize={["16px", "20px"]}
+                      textAlign="left"
+                      padding={["6px 10px", "10px 20px"]}
+                    >
+                      {drugConfig.name}
+                    </CardHeader>
+                    <CardBody py="0">
+                      <HStack w="full" justify="center">
+                        {drugConfig.icon({})}
+                      </HStack>
+                    </CardBody>
+
+                    <CardFooter fontSize={["14px", "16px"]} flexDirection="column" padding={["6px 10px", "10px 20px"]}>
+                      <HStack justifyContent="space-between">
+                        <Text>
+                          <WeightIcon mb={1} />
+                          <span>{drug.weight}</span>
+                        </Text>
+                        <Text> {formatCash(drug.price)}</Text>
+                      </HStack>
+                    </CardFooter>
+                  </Card>
+                </Tooltip>
               );
             })}
           </SimpleGrid>
