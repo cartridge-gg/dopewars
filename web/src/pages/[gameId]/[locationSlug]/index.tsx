@@ -6,7 +6,6 @@ import { Inventory } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { getRandomGreeting } from "@/dojo/helpers";
 import { useConfigStore, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
-import { DrugConfigFull } from "@/dojo/stores/config";
 import { DrugMarket } from "@/dojo/types";
 import { useToast } from "@/hooks/toast";
 import { formatCash } from "@/utils/ui";
@@ -192,8 +191,6 @@ const Location = observer(() => {
           </SimpleGrid>
         </VStack>
       </VStack>
-
-      {/* <Box h="160px" /> */}
     </Layout>
   );
 });

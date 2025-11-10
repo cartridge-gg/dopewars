@@ -20,6 +20,10 @@ const baseStyle = definePartsStyle({
   },
   thumb: {
     // this will style the SliderThumb component
+    height: "16px",
+    width: "16px",
+    borderRadius: 0,
+    clipPath: `polygon(${generatePixelBorderPath(2, 2)})`,
   },
   filledTrack: {
     // this will style the SliderFilledTrack component

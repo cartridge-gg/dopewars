@@ -9,7 +9,7 @@ import { DrugConfigFull } from "@/dojo/stores/config";
 import { DrugMarket, TradeDirection } from "@/dojo/types";
 import { Sounds, playSound } from "@/hooks/sound";
 import { useToast } from "@/hooks/toast";
-import { formatCash } from "@/utils/ui";
+import { formatCash, generatePixelBorderPath } from "@/utils/ui";
 import {
   Box,
   Button,
@@ -19,6 +19,7 @@ import {
   Image,
   Slider,
   SliderFilledTrack,
+  SliderThumb,
   SliderTrack,
   Text,
   Tooltip,
@@ -353,7 +354,7 @@ const QuantitySelector = observer(
               value={quantity}
               onChange={onSlider}
             >
-              <SliderTrack bg="whiteAlpha.300">
+              <SliderTrack>
                 {/* Show red section when selling (between slider and inventory) */}
                 {quantity < currentInventory && (
                   <Box
@@ -361,7 +362,8 @@ const QuantitySelector = observer(
                     left={`${sliderPercent}%`}
                     h="100%"
                     w={`${inventoryPercent - sliderPercent}%`}
-                    bg="tomato"
+                    bg="yellow.400"
+                    clipPath={`polygon(${generatePixelBorderPath(2, 2)})`}
                   />
                 )}
                 {/* Show green section when buying (between inventory and slider) */}
@@ -371,11 +373,12 @@ const QuantitySelector = observer(
                     left={`${inventoryPercent}%`}
                     h="100%"
                     w={`${sliderPercent - inventoryPercent}%`}
-                    bg="green"
+                    bg={"neon.200"}
+                    clipPath={`polygon(${generatePixelBorderPath(2, 2)})`}
                   />
                 )}
-                <SliderFilledTrack bg="transparent" />
               </SliderTrack>
+              <SliderThumb bg={quantity < currentInventory ? "yellow.400" : "neon.200"} />
             </Slider>
             <HStack spacing="0">
               <ArrowEnclosed
