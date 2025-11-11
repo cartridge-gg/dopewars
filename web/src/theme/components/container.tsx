@@ -6,6 +6,7 @@ export const Container: ComponentStyleConfig = {
     p: "16px",
     my: ["0", "auto"],
     minH: "0",
+    maxH: ["100%", "800px"],
     maxW: "1200px",
     display: "flex",
     gap: ["10px", "100px"],

@@ -1,10 +1,20 @@
 import { ScrollDown } from "@/components/icons/ScrollDown";
 import { Cartridge } from "@/components/icons/branding/Cartridge";
 import { Dojo } from "@/components/icons/branding/Dojo";
-import { Box, Card, Link as ChakraLink, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Card,
+  Link as ChakraLink,
+  HStack,
+  Heading,
+  Image,
+  StyleProps,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 
-const floatAnim = keyframes`
+const floatAnim = keyframes`  
   0% {transform: translateY(0%);}
   25% {transform: translateY(-6px);}
   50% {transform: translateY(0%);}
@@ -81,10 +91,10 @@ export const HomeLeftPanel = () => {
   return (
     <>
       <VStack
-        my={["auto", "0"]}
+        my="auto"
         flex={["auto", "1"]}
         position="relative"
-        maxH={["70px", "calc(100dvh - 110px)"]}
+        maxH={["70px", "800px"]}
         overflow="hidden"
         overflowY="auto"
         sx={{
@@ -94,7 +104,7 @@ export const HomeLeftPanel = () => {
           "scrollbar-width": "none",
         }}
       >
-        <VStack zIndex="2" position="relative" mt={["0", "100px"]}>
+        <VStack zIndex="2" position="relative">
           <Box w="full" position={"fixed"} top="-40px">
             <Image
               position="absolute"

@@ -14,7 +14,6 @@ interface LayoutProps {
   footer?: ReactNode;
   rigthPanelMaxH?: string;
   rigthPanelScrollable?: boolean;
-  isFullHeight?: boolean;
 }
 
 interface LeftPanelProps {
@@ -32,7 +31,6 @@ export const Layout = ({
   rigthPanelMaxH,
   rigthPanelScrollable = true,
   footer,
-  isFullHeight = false,
 }: LayoutProps) => {
   return (
     <>
@@ -45,13 +43,7 @@ export const Layout = ({
         animate={{ opacity: 1 }}
       >
         <Header />
-        <Container
-          position="relative"
-          px={["10px", "16px"]}
-          py="16px"
-          maxHeight={isFullHeight ? "100%" : ["100%", "800px"]}
-          mt={isFullHeight ? ["0", "100px"] : undefined}
-        >
+        <Container position="relative" px={["10px", "16px"]} py="16px">
           {!isSinglePanel && (!customLeftPanel ? <LeftPanel {...leftPanelProps} /> : <>{customLeftPanel}</>)}
           <RightPanel
             flex={[!!leftPanelProps?.map ? "0" : "1", "1"]}
