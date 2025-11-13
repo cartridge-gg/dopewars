@@ -63,9 +63,7 @@ export type LootGearItem = {
 };
 
 export const useLootEquipment = (tokenId: number) => {
-  const getComponentValuesBySlug = useDopeStore(
-    (state) => state.getComponentValuesBySlug
-  );
+  const getComponentValuesBySlug = useDopeStore((state) => state.getComponentValuesBySlug);
 
   const [equipment, setEquipment] = useState<LootGearItem[] | undefined>();
 
@@ -117,7 +115,7 @@ export const useLootEquipment = (tokenId: number) => {
     }
 
     setEquipment(equipment);
-  }, [tokenId]);
+  }, [tokenId, getComponentValuesBySlug, suffixCount, namePrefixCount, nameSuffixCount]);
 
   return {
     equipment,

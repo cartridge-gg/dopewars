@@ -59,6 +59,7 @@ export const Psycadelic = observer(() => {
       body.style.transform = ``;
       body.style.transition = ``;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPsySequence, game?.player.health]);
 
   return <></>;

@@ -92,11 +92,7 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
         methods: [{ entrypoint: "approve" }],
       },
       [gameAddress]: {
-        methods: [
-          { entrypoint: "create_game" },
-          { entrypoint: "travel" },
-          { entrypoint: "end_game" },
-        ],
+        methods: [{ entrypoint: "create_game" }, { entrypoint: "travel" }, { entrypoint: "end_game" }],
       },
       [decideAddress]: {
         methods: [{ entrypoint: "decide" }],
@@ -187,7 +183,7 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
       provider: customJsonRpcProvider(selectedChain),
       connectors: getConnectorsForChain(selectedChain, router.asPath),
     };
-  }, [selectedChain]);
+  }, [selectedChain, router.asPath]);
 
   const [explorer, setExplorer] = useState<ExplorerFactory>(() => starkscan);
 
