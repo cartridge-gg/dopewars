@@ -4,8 +4,8 @@
     "display": "fullscreen",
     "scope": "/",
     "start_url": "/",
-    "name": "RollYourOwn",
-    "short_name": "RYO",
+    "name": "Dope Wars",
+    "short_name": "Dope Wars",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
