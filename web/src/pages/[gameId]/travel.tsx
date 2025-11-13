@@ -40,15 +40,39 @@ const Travel = observer(() => {
   }, [targetLocation, configStore]);
 
   useEffect(() => {
-    if (game && !isPending) {
+    if (game && !isPending && config && game.markets?.marketsByLocation) {
       if (game.player.location) {
         setCurrentLocation(game.player.location.location);
-        setTargetLocation(game.player.location.location);
+
+        // Find the best location to sell current inventory
+        let bestLocation = game.player.location.location;
+
+        if (game.drugs.quantity > 0 && game.drugs.drug) {
+          // User has drugs to sell, find location with highest price
+          let maxPrice = 0;
+          const currentDrug = game.drugs.drug.drug;
+
+          config.location.forEach((loc) => {
+            // Skip current location
+            if (loc.location === game.player.location.location) return;
+
+            const markets = game.markets.marketsByLocation.get(loc.location);
+            if (markets) {
+              const drugMarket = markets.find((m) => m.drug === currentDrug);
+              if (drugMarket && drugMarket.price > maxPrice) {
+                maxPrice = drugMarket.price;
+                bestLocation = loc.location;
+              }
+            }
+          });
+        }
+
+        setTargetLocation(bestLocation);
       } else {
         setTargetLocation("Queens");
       }
     }
-  }, [game, isPending]);
+  }, [game, isPending, config, game?.markets?.marketsByLocation, game?.drugs?.quantity, game?.drugs?.drug]);
 
   const prices = useMemo(() => {
     if (game && game.markets && game.markets.marketsByLocation && targetLocation) {
