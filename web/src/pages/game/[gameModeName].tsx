@@ -113,17 +113,15 @@ const New = observer(() => {
     }
   }, [accountTokens, selectedTokenIdType, freeToPlay, selectedChain.manifest]);
 
-  // If user has no Dope tokens (LootId), default to S2 Hustlers (HustlerId)
+  // Track if we've already auto-switched to prevent blocking manual user selection
+  const hasAutoSwitched = useRef(false);
+
+  // If user has no Dope tokens (LootId), default to S2 Hustlers (HustlerId) on initial load only
   useEffect(() => {
-    if (selectedTokenIdType === TokenIdType.LootId && accountTokens && selectableTokens.length === 0) {
-      const userDopeTokens = accountTokens.filter(
-        (i) => i.contract_address === getContractByName(selectedChain.manifest, "dope", "DopeLoot")!.address,
-      );
-      if (userDopeTokens.length === 0) {
-        setSelectedTokenIdType(TokenIdType.HustlerId);
-      }
+    if (!hasAutoSwitched.current && selectableTokens && selectableTokens?.length > 0) {
+      setSelectedTokenIdType(TokenIdType.GuestLootId);
     }
-  }, [accountTokens, selectableTokens, selectedTokenIdType, selectedChain.manifest]);
+  }, [selectableTokens]);
 
   useEffect(() => {
     router.replace({
@@ -737,16 +735,9 @@ const New = observer(() => {
                     </HStack>
 
                     {/* {true || selectedChain.name === "MAINNET" && ( */}
-                      <HStack
-                        w="full"
-                        justifyContent="center"
-                        mt={2}
-                        pt={2}
-                        borderTop="solid 1px"
-                        borderColor="neon.700"
-                      >
-                        <BuyPaper paperAmount={season.paper_fee * multiplier}/>
-                      </HStack>
+                    <HStack w="full" justifyContent="center" mt={2} pt={2} borderTop="solid 1px" borderColor="neon.700">
+                      <BuyPaper paperAmount={season.paper_fee * multiplier} />
+                    </HStack>
                     {/* )} */}
                   </VStack>
                 </HStack>
