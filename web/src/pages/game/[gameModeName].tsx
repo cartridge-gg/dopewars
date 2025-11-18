@@ -113,6 +113,18 @@ const New = observer(() => {
     }
   }, [accountTokens, selectedTokenIdType, freeToPlay, selectedChain.manifest]);
 
+  // If user has no Dope tokens (LootId), default to S2 Hustlers (HustlerId)
+  useEffect(() => {
+    if (selectedTokenIdType === TokenIdType.LootId && accountTokens && selectableTokens.length === 0) {
+      const userDopeTokens = accountTokens.filter(
+        (i) => i.contract_address === getContractByName(selectedChain.manifest, "dope", "DopeLoot")!.address,
+      );
+      if (userDopeTokens.length === 0) {
+        setSelectedTokenIdType(TokenIdType.HustlerId);
+      }
+    }
+  }, [accountTokens, selectableTokens, selectedTokenIdType, selectedChain.manifest]);
+
   useEffect(() => {
     router.replace({
       pathname: location.pathname,
