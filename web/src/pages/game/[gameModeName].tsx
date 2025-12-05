@@ -118,7 +118,7 @@ const New = observer(() => {
       pathname: location.pathname,
       search: `tokenIdType=${selectedTokenIdType}`, //`&tokenId=${selectedTokenId}`,
     });
-  }, [selectedTokenIdType, selectedTokenId]);
+  }, [selectedTokenIdType, selectedTokenId, router]);
 
   const inputRef = useRef<null | HTMLDivElement>(null);
   const [error, setError] = useState("");
@@ -154,7 +154,7 @@ const New = observer(() => {
       selectableTokens[selectedTokenIndex] &&
       dopeLootClaimState[Number(selectableTokens[selectedTokenIndex].token_id)]?.isReleased
     );
-  }, [dopeLootClaimState, selectedToken, selectedTokenIdType]);
+  }, [dopeLootClaimState, selectedTokenIdType, selectableTokens, selectedTokenIndex]);
 
   const { equipment: lootEquipment } = useLootEquipment(Number(selectedToken?.token_id));
   const { equipment: hustlerEquipment } = useEquipment(toriiClient, Number(selectedToken?.token_id).toString());
@@ -253,7 +253,7 @@ const New = observer(() => {
       }
     }
     return equipment;
-  }, [lootEquipment, hustlerEquipment, selectedTokenIdType]);
+  }, [lootEquipment, hustlerEquipment, selectedTokenIdType, configStore]);
 
   const create = async (gameMode: GameMode) => {
     setError("");
@@ -725,16 +725,9 @@ const New = observer(() => {
                     </HStack>
 
                     {/* {true || selectedChain.name === "MAINNET" && ( */}
-                      <HStack
-                        w="full"
-                        justifyContent="center"
-                        mt={2}
-                        pt={2}
-                        borderTop="solid 1px"
-                        borderColor="neon.700"
-                      >
-                        <BuyPaper paperAmount={season.paper_fee * multiplier}/>
-                      </HStack>
+                    <HStack w="full" justifyContent="center" mt={2} pt={2} borderTop="solid 1px" borderColor="neon.700">
+                      <BuyPaper paperAmount={season.paper_fee * multiplier} />
+                    </HStack>
                     {/* )} */}
                   </VStack>
                 </HStack>

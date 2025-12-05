@@ -71,13 +71,13 @@ export const useEkubo = ({
   isExactOutput,
   tokenIn,
   tokenOut,
-  slippage = 10n // 1%
+  slippage = 10n, // 1%
 }: {
   amount: number;
   isExactOutput: boolean;
   tokenIn: TokenInfos;
   tokenOut: TokenInfos;
-  slippage?: bigint
+  slippage?: bigint;
 }) => {
   const { account } = useAccount();
   const [quote, setQuote] = useState<SwapQuote | undefined>();
@@ -103,7 +103,7 @@ export const useEkubo = ({
         setTimeout(refetch, 5_000);
         setSwapCalls([]);
       });
-  }, [amount, tokenIn, tokenOut, isExactOutput]);
+  }, [amount, tokenIn, tokenOut, isExactOutput, slippage]);
 
   const ape = useCallback(async () => {
     await refetch();
@@ -113,7 +113,7 @@ export const useEkubo = ({
     const tx = await account?.execute(swapCalls);
     const receipt = await waitForTransaction(account, tx?.transaction_hash);
     console.log(receipt);
-  }, [swapCalls, account]);
+  }, [swapCalls, account, refetch]);
 
   useEffect(() => {
     refetch();

@@ -44,7 +44,7 @@ export const useToast = () => {
         },
       );
     },
-    [toast],
+    [],
   );
 
   return {

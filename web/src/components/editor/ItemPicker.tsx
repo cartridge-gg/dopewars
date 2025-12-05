@@ -46,7 +46,7 @@ export function ItemPicker({
   const contractManifest = getDojoContractManifest(collection);
   const addresses = useMemo(() => {
     return [contractManifest.address];
-  }, []);
+  }, [contractManifest.address]);
   const [open, setOpen] = useState(false);
 
   const { tokens, tokensBalances, isLoading } = useDojoTokens(toriiClient, addresses, account?.address);
@@ -97,7 +97,7 @@ export function ItemPicker({
         <Flex flexDirection="column" gap={1} alignItems="center" cursor="pointer" onClick={() => setOpen(true)}>
           {selected && (
             <>
-              <Image w="120px" h="120px" src={selected.metadata?.image} />
+              <Image w="120px" h="120px" src={selected.metadata?.image} alt={selected.metadata?.name || "Item"} />
             </>
           )}
           {!selected && (
@@ -154,7 +154,7 @@ export function ItemPicker({
                       key={t.token_id}
                       onClick={() => onSelect(t)}
                     >
-                      <Image w="100px" h="100px" src={t.metadata?.image} />
+                      <Image w="100px" h="100px" src={t.metadata?.image} alt={t.metadata?.name || "Item"} />
                       <Flex flexDirection="column">
                         <div>
                           {t.metadata?.name} {" - "}

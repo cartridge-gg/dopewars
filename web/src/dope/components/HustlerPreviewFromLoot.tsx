@@ -1,10 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  defaultHustlerMetadata,
-  HustlerBody,
-  HustlerEquipment,
-  HustlerPreview,
-} from "./HustlerPreview";
+import { defaultHustlerMetadata, HustlerBody, HustlerEquipment, HustlerPreview } from "./HustlerPreview";
 import { useDopeStore } from "../store/DopeProvider";
 import { dopeRandomness } from "../helpers";
 
@@ -33,15 +28,13 @@ export const HustlerPreviewFromLoot = ({
   }, [tokenId]);
 
   useEffect(() => {
-    setHustlerMeta({
-      ...hustlerMeta,
+    setHustlerMeta((prev) => ({
+      ...prev,
       name: `#${tokenId}`,
-    });
+    }));
   }, [tokenId]);
 
-  const getComponentValuesBySlug = useDopeStore(
-    (state) => state.getComponentValuesBySlug
-  );
+  const getComponentValuesBySlug = useDopeStore((state) => state.getComponentValuesBySlug);
 
   //
 
@@ -79,57 +72,39 @@ export const HustlerPreviewFromLoot = ({
 
   const hustlerEquipment: HustlerEquipment = {
     Clothe: {
-      token_id:
-        dopeRandomness("CLOTHES", tokenId) %
-        BigInt(getComponentValuesBySlug("DopeGear", "Clothe")!.length),
+      token_id: dopeRandomness("CLOTHES", tokenId) % BigInt(getComponentValuesBySlug("DopeGear", "Clothe")!.length),
       ...dummyProps,
     },
     Vehicle: {
-      token_id:
-        dopeRandomness("VEHICLE", tokenId) %
-        BigInt(getComponentValuesBySlug("DopeGear", "Vehicle")!.length),
+      token_id: dopeRandomness("VEHICLE", tokenId) % BigInt(getComponentValuesBySlug("DopeGear", "Vehicle")!.length),
       ...dummyProps,
     },
     Drug: {
-      token_id:
-        dopeRandomness("DRUGS", tokenId) %
-        BigInt(getComponentValuesBySlug("DopeGear", "Drug")!.length),
+      token_id: dopeRandomness("DRUGS", tokenId) % BigInt(getComponentValuesBySlug("DopeGear", "Drug")!.length),
       ...dummyProps,
     },
     Waist: {
-      token_id:
-        dopeRandomness("WAIST", tokenId) %
-        BigInt(getComponentValuesBySlug("DopeGear", "Waist")!.length),
+      token_id: dopeRandomness("WAIST", tokenId) % BigInt(getComponentValuesBySlug("DopeGear", "Waist")!.length),
       ...dummyProps,
     },
     Foot: {
-      token_id:
-        dopeRandomness("FOOT", tokenId) %
-        BigInt(getComponentValuesBySlug("DopeGear", "Foot")!.length),
+      token_id: dopeRandomness("FOOT", tokenId) % BigInt(getComponentValuesBySlug("DopeGear", "Foot")!.length),
       ...dummyProps,
     },
     Hand: {
-      token_id:
-        dopeRandomness("HAND", tokenId) %
-        BigInt(getComponentValuesBySlug("DopeGear", "Hand")!.length),
+      token_id: dopeRandomness("HAND", tokenId) % BigInt(getComponentValuesBySlug("DopeGear", "Hand")!.length),
       ...dummyProps,
     },
     Neck: {
-      token_id:
-        dopeRandomness("NECK", tokenId) %
-        BigInt(getComponentValuesBySlug("DopeGear", "Neck")!.length),
+      token_id: dopeRandomness("NECK", tokenId) % BigInt(getComponentValuesBySlug("DopeGear", "Neck")!.length),
       ...dummyProps,
     },
     Ring: {
-      token_id:
-        dopeRandomness("RING", tokenId) %
-        BigInt(getComponentValuesBySlug("DopeGear", "Ring")!.length),
+      token_id: dopeRandomness("RING", tokenId) % BigInt(getComponentValuesBySlug("DopeGear", "Ring")!.length),
       ...dummyProps,
     },
     Weapon: {
-      token_id:
-        dopeRandomness("WEAPON", tokenId) %
-        BigInt(getComponentValuesBySlug("DopeGear", "Weapon")!.length),
+      token_id: dopeRandomness("WEAPON", tokenId) % BigInt(getComponentValuesBySlug("DopeGear", "Weapon")!.length),
       ...dummyProps,
     },
   };
