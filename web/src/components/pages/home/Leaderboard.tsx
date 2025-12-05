@@ -85,11 +85,11 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
   const { scrollContainerRef, visiblePositions, observeEntry, getMaxVisiblePosition } = useLeaderboardVisibility();
 
   const activeGamesForSeason = useMemo(() => {
-    if (!account?.address || selectedVersion !== currentVersion) {
+    if (!account?.address) {
       return [];
     }
     return getActiveGamesForSeason(onGoingGames, selectedVersion);
-  }, [onGoingGames, selectedVersion, currentVersion, account?.address]);
+  }, [onGoingGames, selectedVersion, account?.address]);
 
   const mergedEntries = useMemo(() => {
     return mergeLeaderboardEntries(
