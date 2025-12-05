@@ -2,11 +2,13 @@ import { Button } from "@/components/common";
 import { Arrow, BorderImage } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { Map as MapSvg } from "@/components/map";
-import { Inventory, WantedIndicator } from "@/components/player";
+import { Inventory, SuggestedAction, WantedIndicator } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
 import { useConfigStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useGameStore } from "@/dojo/hooks/useGameStore";
+import { calculateBestTrade, TradeSuggestion } from "@/dojo/tradeSuggestion";
+import { TradeDirection } from "@/dojo/types";
 import colors from "@/theme/colors";
 import { IsMobile, formatCash, generatePixelBorderPath } from "@/utils/ui";
 import { Box, Card, Grid, GridItem, HStack, Text, VStack, useDisclosure, useEventListener } from "@chakra-ui/react";
@@ -101,6 +103,71 @@ const Travel = observer(() => {
 
     return [];
   }, [game, targetLocation, currentLocation]);
+
+  // Calculate best trade suggestion
+  const suggestion = useMemo<TradeSuggestion>(() => {
+    if (!game || !currentLocation || !targetLocation || currentLocation === targetLocation) {
+      return { type: "none", message: "Select a different destination" };
+    }
+    return calculateBestTrade(game, currentLocation, targetLocation, configStore);
+  }, [game, currentLocation, targetLocation, configStore]);
+
+  // Handler for executing the suggested trade
+  const onExecuteSuggestion = useCallback(async () => {
+    if (!suggestion || suggestion.type === "none" || !game || !targetLocation) return;
+
+    // If holding drugs and we need to sell them at current location first
+    if (suggestion.currentDrug && suggestion.currentQuantity && suggestion.type === "buy_and_sell") {
+      const currentMarket = game.markets.marketsByLocation.get(currentLocation || "");
+      const drugMarket = currentMarket?.find((m) => m.drug === suggestion.currentDrug!.drug);
+      if (drugMarket) {
+        game.pushCall({
+          direction: TradeDirection.Sell,
+          drug: suggestion.currentDrug.drug_id,
+          quantity: suggestion.currentQuantity,
+          cost: drugMarket.price * suggestion.currentQuantity,
+        });
+      }
+    }
+
+    // Queue buy action at current location
+    if (suggestion.drug && suggestion.quantity && suggestion.buyPrice) {
+      game.pushCall({
+        direction: TradeDirection.Buy,
+        drug: suggestion.drug.drug_id,
+        quantity: suggestion.quantity,
+        cost: suggestion.buyPrice * suggestion.quantity,
+      });
+    }
+
+    // Store sell info for after travel
+    const sellInfo = suggestion.drug && suggestion.quantity && suggestion.sellPrice
+      ? {
+          drug: suggestion.drug.drug_id,
+          quantity: suggestion.quantity,
+          sellPrice: suggestion.sellPrice,
+        }
+      : null;
+
+    try {
+      // Execute travel with BUY in pending
+      const locationId = configStore.getLocation(targetLocation).location_id;
+      await travel(gameId!, locationId, game.getPendingCalls());
+
+      // After travel completes, queue the SELL at destination
+      if (sellInfo) {
+        game.pushCall({
+          direction: TradeDirection.Sell,
+          drug: sellInfo.drug,
+          quantity: sellInfo.quantity,
+          cost: sellInfo.sellPrice * sellInfo.quantity,
+        });
+      }
+    } catch (e) {
+      game.clearPendingCalls();
+      console.log(e);
+    }
+  }, [suggestion, game, currentLocation, targetLocation, configStore, gameId, travel]);
 
   useEventListener(typeof window !== "undefined" ? window : null, "keydown", (e) => {
     switch (e.key) {
@@ -210,6 +277,13 @@ const Travel = observer(() => {
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         </VStack>
         <LocationPrices game={game} prices={prices} isCurrentLocation={targetLocation == currentLocation} />
+        {currentLocation !== targetLocation && (
+          <SuggestedAction
+            suggestion={suggestion}
+            onExecute={onExecuteSuggestion}
+            isDisabled={isPending}
+          />
+        )}
       </VStack>
       {/* Mobile  */}
       <VStack
@@ -244,6 +318,13 @@ const Travel = observer(() => {
           prices={prices}
           isCurrentLocation={currentLocation ? targetLocation === currentLocation : true}
         />
+        {currentLocation !== targetLocation && (
+          <SuggestedAction
+            suggestion={suggestion}
+            onExecute={onExecuteSuggestion}
+            isDisabled={isPending}
+          />
+        )}
       </VStack>
     </Layout>
   );
