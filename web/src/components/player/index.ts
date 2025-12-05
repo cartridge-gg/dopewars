@@ -6,3 +6,4 @@ export * from "./PowerMeter";
 export * from "./WantedIndicator";
 export * from "./ReputationIndicator";
 export * from "./TierIndicator";
+export * from "./SuggestedAction";
