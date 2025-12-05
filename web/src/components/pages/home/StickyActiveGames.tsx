@@ -92,7 +92,7 @@ export const StickyActiveGames = observer(
                   </Text>
                 </HStack>
                 <Text fontSize="12px" color="yellow.400" fontWeight="bold">
-                  ~{formatCash(game.score)}
+                  {formatCash(game.score)}
                 </Text>
               </HStack>
             </Box>

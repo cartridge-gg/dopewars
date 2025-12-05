@@ -101,6 +101,6 @@ export const getActiveGamesForSeason = (
   seasonVersion: number,
 ): GameClass[] => {
   return onGoingGames.filter(
-    (game) => game.gameInfos.season_version === seasonVersion,
+    (game) => Number(game.gameInfos.season_version) === seasonVersion,
   );
 };

@@ -88,6 +88,13 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
     if (!account?.address) {
       return [];
     }
+    // Debug logging for active games filtering
+    if (onGoingGames.length > 0) {
+      console.log("[Leaderboard] onGoingGames:", onGoingGames.length, "selectedVersion:", selectedVersion);
+      onGoingGames.forEach((g) => {
+        console.log(`  - game_id: ${g.gameInfos.game_id}, season_version: ${g.gameInfos.season_version} (type: ${typeof g.gameInfos.season_version})`);
+      });
+    }
     return getActiveGamesForSeason(onGoingGames, selectedVersion);
   }, [onGoingGames, selectedVersion, account?.address]);
 
