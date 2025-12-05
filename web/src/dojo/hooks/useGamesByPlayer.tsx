@@ -57,7 +57,7 @@ export interface PlayerGameInfosInterface {
   allTravelEncounterResults: TravelEncounterResult[];
 }
 
-export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId: string): PlayerGameInfosInterface => {
+export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId?: string): PlayerGameInfosInterface => {
   const [allTradedDrug, setAllTradedDrug] = useState<TradeDrug[]>([]);
   const [allTravelEncounters, setAllTravelEncounters] = useState<TravelEncounter[]>([]);
   const [allTravelEncounterResults, setAllTravelEncounterResults] = useState<TravelEncounterResult[]>([]);
@@ -70,7 +70,7 @@ export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId: string): 
         world_addresses: [selectedChain.manifest.world.address],
         clause: {
           Keys: {
-            keys: [undefined, num.toHex64(playerId)],
+            keys: [undefined, num.toHex64(playerId!)],
             models: [`${DW_NS}-TradeDrug`, `${DW_NS}-TravelEncounter`, `${DW_NS}-TravelEncounterResult`],
             pattern_matching: "FixedLen",
           },
@@ -98,7 +98,7 @@ export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId: string): 
       );
     };
 
-    if (toriiClient && Number(playerId) !== 0) {
+    if (toriiClient && playerId && Number(playerId) !== 0) {
       init();
     }
   }, [toriiClient, playerId, selectedChain]);
@@ -109,10 +109,12 @@ export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId: string): 
   };
 };
 
-export const useGamesByPlayer = (toriiClient: ToriiClient, playerIdRaw: string): GamesByPlayerInterface => {
-  const playerId = `0x${BigInt(playerIdRaw).toString(16)}`; // remove leading zero..
+export const useGamesByPlayer = (toriiClient: ToriiClient, playerIdRaw?: string): GamesByPlayerInterface => {
+  const playerId = playerIdRaw ? `0x${BigInt(playerIdRaw).toString(16)}` : undefined; // remove leading zero..
   const { data, isFetched } = useGamesByPlayerQuery({
-    playerId,
+    playerId: playerId || "",
+  }, {
+    enabled: !!playerId,
   });
 
   const { data: allSeasonSettings } = useAllSeasonSettingsQuery({});

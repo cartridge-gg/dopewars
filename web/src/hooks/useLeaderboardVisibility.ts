@@ -1,14 +1,19 @@
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 
 export const useLeaderboardVisibility = (
-  scrollContainerRef: RefObject<HTMLElement>,
+  scrollContainerRef: RefObject<HTMLElement | null>,
 ) => {
   const [visiblePositions, setVisiblePositions] = useState<Set<number>>(new Set());
   const observerRef = useRef<IntersectionObserver | null>(null);
   const elementsMap = useRef<Map<number, HTMLElement>>(new Map());
 
+  // Create observer when scroll container becomes available
   useEffect(() => {
-    if (!scrollContainerRef.current) return;
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    // Disconnect previous observer if any
+    observerRef.current?.disconnect();
 
     observerRef.current = new IntersectionObserver(
       (entries) => {
@@ -30,22 +35,39 @@ export const useLeaderboardVisibility = (
         });
       },
       {
-        root: scrollContainerRef.current,
+        root: container,
         threshold: 0.5,
       },
     );
 
+    // Observe any elements that were registered before the observer was created
     elementsMap.current.forEach((el) => {
       observerRef.current?.observe(el);
     });
 
     return () => {
       observerRef.current?.disconnect();
+      observerRef.current = null;
     };
   }, [scrollContainerRef]);
 
   const observeEntry = useCallback(
     (el: HTMLElement | null, position: number) => {
+      // Get previously registered element for this position
+      const prevEl = elementsMap.current.get(position);
+
+      // If element is being removed (null) or replaced, unobserve the old one
+      if (prevEl && prevEl !== el) {
+        observerRef.current?.unobserve(prevEl);
+        elementsMap.current.delete(position);
+        setVisiblePositions((prev) => {
+          const next = new Set(prev);
+          next.delete(position);
+          return next;
+        });
+      }
+
+      // Register and observe the new element
       if (el) {
         el.setAttribute("data-position", position.toString());
         elementsMap.current.set(position, el);

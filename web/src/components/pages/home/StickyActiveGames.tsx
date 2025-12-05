@@ -2,14 +2,11 @@ import { useRouterContext } from "@/dojo/hooks";
 import { formatCash } from "@/utils/ui";
 import { LeaderboardEntry } from "@/utils/leaderboard";
 import { Box, HStack, Text, VStack } from "@chakra-ui/react";
-import { keyframes } from "@emotion/react";
 import { observer } from "mobx-react-lite";
 import { HustlerAvatarIcon } from "../profile/HustlerAvatarIcon";
+import { pulse } from "@/theme/animations";
 
-const pulse = keyframes`
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-`;
+const MAX_STICKY_GAMES = 5;
 
 export type StickyActiveGamesProps = {
   activeGames: LeaderboardEntry[];
@@ -21,10 +18,12 @@ export const StickyActiveGames = observer(
   ({ activeGames, visiblePositions, maxVisiblePosition }: StickyActiveGamesProps) => {
     const { router } = useRouterContext();
 
-    const belowFoldGames = activeGames.filter(
-      (game) =>
-        !visiblePositions.has(game.position) && game.position > maxVisiblePosition,
-    );
+    const belowFoldGames = activeGames
+      .filter(
+        (game) =>
+          !visiblePositions.has(game.position) && game.position > maxVisiblePosition,
+      )
+      .slice(0, MAX_STICKY_GAMES);
 
     if (belowFoldGames.length === 0) {
       return null;

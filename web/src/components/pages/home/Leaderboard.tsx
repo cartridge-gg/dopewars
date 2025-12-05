@@ -80,7 +80,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
     refetch: refetchRegisteredGames,
   } = useRegisteredGamesBySeason(selectedVersion);
 
-  const { onGoingGames } = useGamesByPlayer(toriiClient, account?.address || "0x0");
+  const { onGoingGames } = useGamesByPlayer(toriiClient, account?.address);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { visiblePositions, observeEntry, getMaxVisiblePosition } = useLeaderboardVisibility(scrollContainerRef);

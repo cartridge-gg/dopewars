@@ -5,17 +5,12 @@ import { useRouterContext } from "@/dojo/hooks";
 import colors from "@/theme/colors";
 import { formatCash } from "@/utils/ui";
 import { Box, HStack, ListItem, Text } from "@chakra-ui/react";
-import { keyframes } from "@emotion/react";
 import { observer } from "mobx-react-lite";
 import { HustlerAvatarIcon } from "../profile/HustlerAvatarIcon";
 import { LeaderboardEntry } from "@/utils/leaderboard";
 import { getPayedCount } from "@/dojo/helpers";
 import { RewardDetails } from "./Leaderboard";
-
-const pulse = keyframes`
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-`;
+import { pulse } from "@/theme/animations";
 
 export type LeaderboardItemProps = {
   entry: LeaderboardEntry;
@@ -52,7 +47,6 @@ export const LeaderboardItem = observer(
       <ListItem
         ref={itemRef}
         color={color}
-        key={entry.game_id}
         borderStyle={isActive ? "dashed" : undefined}
         borderColor={isActive ? "yellow.400" : undefined}
         borderWidth={isActive ? "1px" : undefined}

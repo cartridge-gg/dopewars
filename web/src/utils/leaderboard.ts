@@ -1,4 +1,5 @@
 import { GameClass } from "@/dojo/class/Game";
+import { shortString } from "starknet";
 
 export type LeaderboardEntryType = "registered" | "active";
 
@@ -19,7 +20,7 @@ export type LeaderboardEntry = {
 
 // Extended type for registered games as returned by useRegisteredGamesBySeason
 // which transforms player_name to string and adds token_id_type
-type RegisteredGame = {
+export type RegisteredGame = {
   game_id: number;
   player_id: string;
   player_name: string;
@@ -33,13 +34,13 @@ type RegisteredGame = {
 };
 
 export const mergeLeaderboardEntries = (
-  // Using any[] because useRegisteredGamesBySeason transforms the data
-  // but returns the original Dopewars_V0_Game type
-  registeredGames: any[],
+  // registeredGames type is declared as Dopewars_V0_Game[] by the hook but is transformed
+  // to include player_name (decoded), token_id_type, etc. We use unknown[] for flexibility.
+  registeredGames: unknown[],
   activeGames: GameClass[],
-  currentUserAddress: string,
+  _currentUserAddress: string,
 ): LeaderboardEntry[] => {
-  const registeredEntries: LeaderboardEntry[] = registeredGames.map((game, index) => ({
+  const registeredEntries: LeaderboardEntry[] = (registeredGames as RegisteredGame[]).map((game, index) => ({
     type: "registered" as const,
     game_id: game.game_id,
     player_id: game.player_id,
@@ -53,20 +54,34 @@ export const mergeLeaderboardEntries = (
     season_version: game.season_version,
   }));
 
-  const activeEntries: LeaderboardEntry[] = activeGames.map((game) => ({
-    type: "active" as const,
-    game_id: game.gameInfos.game_id,
-    player_id: game.gameInfos.player_id,
-    player_name: (game.gameInfos.player_name as string) || "Anonymous",
-    score: game.player.cash,
-    position: 0,
-    claimable: 0,
-    multiplier: game.gameInfos.multiplier,
-    token_id_type: (game.gameInfos as any).token_id_type,
-    token_id: (game.gameInfos as any).token_id,
-    season_version: game.gameInfos.season_version,
-    gameRef: game,
-  }));
+  const activeEntries: LeaderboardEntry[] = activeGames.map((game) => {
+    // Extract token_id info - gameInfos.token_id is a union type from GraphQL
+    const tokenIdObj = game.gameInfos.token_id as { option?: string; [key: string]: unknown } | undefined;
+    const tokenIdType = tokenIdObj?.option;
+    const tokenId = tokenIdType ? Number(tokenIdObj[tokenIdType]) : undefined;
+
+    // player_name is Dopewars_V0_Bytes16 type with a value property containing the felt
+    const playerNameObj = game.gameInfos.player_name;
+    const playerNameValue = playerNameObj?.value;
+    const playerName = playerNameValue
+      ? shortString.decodeShortString(BigInt(playerNameValue).toString())
+      : "Anonymous";
+
+    return {
+      type: "active" as const,
+      game_id: game.gameInfos.game_id,
+      player_id: game.gameInfos.player_id,
+      player_name: playerName,
+      score: game.player.cash,
+      position: 0,
+      claimable: 0,
+      multiplier: game.gameInfos.multiplier,
+      token_id_type: tokenIdType,
+      token_id: tokenId,
+      season_version: game.gameInfos.season_version,
+      gameRef: game,
+    };
+  });
 
   const allEntries = [...registeredEntries, ...activeEntries];
 
