@@ -6,7 +6,6 @@ import { Inventory } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { getRandomGreeting } from "@/dojo/helpers";
 import { useConfigStore, useGameStore, useRouterContext, useSystems } from "@/dojo/hooks";
-import { DrugConfigFull } from "@/dojo/stores/config";
 import { DrugMarket } from "@/dojo/types";
 import { useToast } from "@/hooks/toast";
 import { formatCash } from "@/utils/ui";
@@ -16,16 +15,13 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Flex,
   HStack,
   SimpleGrid,
-  StyleProps,
   Text,
+  Tooltip,
   VStack,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
-import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 
@@ -133,113 +129,70 @@ const Location = observer(() => {
               const canSell =
                 (game.drugs.quantity > 0 && game.drugs?.drug && game.drugs?.drug?.drug === drug!.drug) || false;
 
-              return (
-                <Card h={["auto", "180px"]} key={index} position="relative">
-                  <CardHeader
-                    textTransform="uppercase"
-                    fontSize={["16px", "20px"]}
-                    textAlign="left"
-                    padding={["6px 10px", "10px 20px"]}
-                  >
-                    {drugConfig.name}
-                  </CardHeader>
-                  <CardBody py="0">
-                    <HStack w="full" justify="center">
-                      <Flex
-                        as={motion.div}
-                        initial={{ opacity: 0 }}
-                        whileHover={{ opacity: 1 }}
-                        p="2px"
-                        alignItems="center"
-                        boxSize="full"
-                        position="absolute"
-                        top={"6px"}
-                        pointerEvents={["none", "auto"]}
-                      >
-                        <HStack w="full" px={3} gap={6} /*bgColor="neon.900"*/>
-                          <BuySellBtns canBuy={canBuy} canSell={canSell} drugConfig={drugConfig} />
-                        </HStack>
-                      </Flex>
-                      {drugConfig.icon({})}
-                    </HStack>
-                  </CardBody>
+              const handleCardClick = () => {
+                // Navigate to the drug trade screen
+                if (canBuy || canSell) {
+                  router.push(`${router.asPath}/${drugConfig.drug}`);
+                }
+              };
 
-                  <CardFooter fontSize={["14px", "16px"]} flexDirection="column" padding={["6px 10px", "10px 20px"]}>
-                    <HStack justifyContent="space-between">
-                      <Text>
-                        <WeightIcon mb={1} />
-                        <span>{drug.weight}</span>
-                      </Text>
-                      <Text> {formatCash(drug.price)}</Text>
-                    </HStack>
-                    <BuySellMobileToggle canSell={canSell} canBuy={canBuy} drugConfig={drugConfig} />
-                  </CardFooter>
-                </Card>
+              const isClickable = canBuy || canSell;
+
+              // Determine error message
+              let errorMessage = null;
+              if (!isClickable) {
+                if (!hasFreeSpace) {
+                  errorMessage = "Not enough inventory space.";
+                } else if (!hasMinCash) {
+                  errorMessage = "Not enough cash.";
+                } else {
+                  errorMessage = "Cannot trade this item.";
+                }
+              }
+
+              return (
+                <Tooltip key={index} label={errorMessage} isDisabled={isClickable} hasArrow color="yellow.400">
+                  <Card
+                    h={["auto", "180px"]}
+                    position="relative"
+                    onClick={handleCardClick}
+                    cursor={isClickable ? "pointer" : "not-allowed"}
+                    opacity={isClickable ? 1 : 0.5}
+                    _hover={isClickable ? { borderColor: "neon.600" } : {}}
+                    transition="all 0.2s"
+                  >
+                    <CardHeader
+                      textTransform="uppercase"
+                      fontSize={["16px", "20px"]}
+                      textAlign="left"
+                      padding={["6px 10px", "10px 20px"]}
+                    >
+                      {drugConfig.name}
+                    </CardHeader>
+                    <CardBody py="0">
+                      <HStack w="full" justify="center">
+                        {drugConfig.icon({})}
+                      </HStack>
+                    </CardBody>
+
+                    <CardFooter fontSize={["14px", "16px"]} flexDirection="column" padding={["6px 10px", "10px 20px"]}>
+                      <HStack justifyContent="space-between">
+                        <Text>
+                          <WeightIcon mb={1} />
+                          <span>{drug.weight}</span>
+                        </Text>
+                        <Text> {formatCash(drug.price)}</Text>
+                      </HStack>
+                    </CardFooter>
+                  </Card>
+                </Tooltip>
               );
             })}
           </SimpleGrid>
         </VStack>
       </VStack>
-
-      {/* <Box h="160px" /> */}
     </Layout>
   );
 });
 
 export default Location;
-
-const BuySellBtns = observer(
-  ({ canBuy, canSell, drugConfig }: { canBuy: boolean; canSell: boolean; drugConfig: DrugConfigFull }) => {
-    const { router } = useRouterContext();
-    return (
-      <HStack mb="10px" bg="neon.900" w="full" /*gap="65px"*/>
-        <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugConfig.drug}/buy`)} isDisabled={!canBuy}>
-          Buy
-        </Button>
-        <Button flex="1" onClick={() => router.push(`${router.asPath}/${drugConfig.drug}/sell`)} isDisabled={!canSell}>
-          Sell
-        </Button>
-      </HStack>
-    );
-  },
-);
-
-const BuySellMobileToggle = observer(
-  ({
-    canBuy,
-    canSell,
-    drugConfig,
-    ...props
-  }: {
-    canBuy: boolean;
-    canSell: boolean;
-    drugConfig: DrugConfigFull;
-  } & StyleProps) => {
-    const { isOpen, onToggle } = useDisclosure();
-
-    return (
-      <>
-        <Box boxSize="full" position="absolute" top="0" left="0" onClick={onToggle} pointerEvents={["auto", "none"]} />
-        <Box
-          as={motion.div}
-          initial={{ height: "0", opacity: 0 }}
-          animate={{
-            height: isOpen ? "auto" : "0",
-            opacity: isOpen ? 1 : 0,
-          }}
-          position="absolute"
-          width="90%"
-          bottom="0px"
-          left="5%"
-          gap="10px"
-          overflow="hidden"
-          // align="flex-start"
-          display={["flex", "none"]}
-          {...props}
-        >
-          <BuySellBtns canBuy={canBuy} canSell={canSell} drugConfig={drugConfig} />
-        </Box>
-      </>
-    );
-  },
-);
