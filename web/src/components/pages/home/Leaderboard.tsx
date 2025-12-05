@@ -1,12 +1,12 @@
 import { Loader } from "@/components/layout/Loader";
 import {
+  useActiveGamesBySeason,
   useConfigStore,
   useDojoContext,
   useRegisteredGamesBySeason,
   useRouterContext,
   useSeasonByVersion,
 } from "@/dojo/hooks";
-import { useGamesByPlayer } from "@/dojo/hooks/useGamesByPlayer";
 import colors from "@/theme/colors";
 import { formatCash } from "@/utils/ui";
 import { Box, HStack, Text, UnorderedList, VStack } from "@chakra-ui/react";
@@ -24,7 +24,7 @@ import { useSwipeable } from "react-swipeable";
 import { DW_NS } from "@/dojo/constants";
 import { getSwapQuote, PAPER, USDC } from "@/hooks/useEkubo";
 import { useLeaderboardVisibility } from "@/hooks/useLeaderboardVisibility";
-import { mergeLeaderboardEntries, getActiveGamesForSeason } from "@/utils/leaderboard";
+import { mergeLeaderboardEntries } from "@/utils/leaderboard";
 import { LeaderboardItem } from "./LeaderboardItem";
 import { StickyActiveGames } from "./StickyActiveGames";
 
@@ -65,7 +65,7 @@ const renderer = ({
 export const Leaderboard = observer(({ config }: { config?: Config }) => {
   const { router, gameId } = useRouterContext();
 
-  const { uiStore, clients: { toriiClient } } = useDojoContext();
+  const { uiStore } = useDojoContext();
   const { account } = useAccount();
 
   const [currentVersion, setCurrentVersion] = useState(config?.ryo.season_version || 0);
@@ -80,31 +80,21 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
     refetch: refetchRegisteredGames,
   } = useRegisteredGamesBySeason(selectedVersion);
 
-  const { onGoingGames } = useGamesByPlayer(toriiClient, account?.address);
+  const {
+    activeGames,
+    isFetching: isFetchingActiveGames,
+    refetch: refetchActiveGames,
+  } = useActiveGamesBySeason(selectedVersion);
 
   const { scrollContainerRef, visiblePositions, observeEntry, getMaxVisiblePosition } = useLeaderboardVisibility();
-
-  const activeGamesForSeason = useMemo(() => {
-    if (!account?.address) {
-      return [];
-    }
-    // Debug logging for active games filtering
-    if (onGoingGames.length > 0) {
-      console.log("[Leaderboard] onGoingGames:", onGoingGames.length, "selectedVersion:", selectedVersion);
-      onGoingGames.forEach((g) => {
-        console.log(`  - game_id: ${g.gameInfos.game_id}, season_version: ${g.gameInfos.season_version} (type: ${typeof g.gameInfos.season_version})`);
-      });
-    }
-    return getActiveGamesForSeason(onGoingGames, selectedVersion);
-  }, [onGoingGames, selectedVersion, account?.address]);
 
   const mergedEntries = useMemo(() => {
     return mergeLeaderboardEntries(
       registeredGames,
-      activeGamesForSeason,
+      activeGames,
       account?.address || "",
     );
-  }, [registeredGames, activeGamesForSeason, account?.address]);
+  }, [registeredGames, activeGames, account?.address]);
 
   const activeEntries = useMemo(() => {
     return mergedEntries.filter((entry) => entry.type === "active");
@@ -115,6 +105,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
 
     setCurrentVersion(config?.ryo.season_version || 0);
     refetchRegisteredGames();
+    refetchActiveGames();
   }, [config]);
 
   useEffect(() => {
@@ -213,8 +204,8 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
             "scrollbar-width": "none",
           }}
         >
-          {isFetchingRegisteredGames && <Loader />}
-          {!isFetchingRegisteredGames && (
+          {(isFetchingRegisteredGames || isFetchingActiveGames) && <Loader />}
+          {!isFetchingRegisteredGames && !isFetchingActiveGames && (
             <UnorderedList boxSize="full" variant="dotted" h="auto">
               {mergedEntries && mergedEntries.length > 0 ? (
                 mergedEntries.map((entry, index) => {
