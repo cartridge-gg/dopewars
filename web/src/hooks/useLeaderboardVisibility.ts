@@ -56,15 +56,13 @@ export const useLeaderboardVisibility = (
       // Get previously registered element for this position
       const prevEl = elementsMap.current.get(position);
 
+      // If same element, nothing to do
+      if (prevEl === el) return;
+
       // If element is being removed (null) or replaced, unobserve the old one
-      if (prevEl && prevEl !== el) {
+      if (prevEl) {
         observerRef.current?.unobserve(prevEl);
         elementsMap.current.delete(position);
-        setVisiblePositions((prev) => {
-          const next = new Set(prev);
-          next.delete(position);
-          return next;
-        });
       }
 
       // Register and observe the new element
