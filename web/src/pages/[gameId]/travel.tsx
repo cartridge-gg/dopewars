@@ -25,7 +25,8 @@ interface MarketPriceInfo {
 
 const Travel = observer(() => {
   const { router, gameId } = useRouterContext();
-  const { game, gameConfig, gameEvents } = useGameStore();
+  const gameStore = useGameStore();
+  const { game, gameConfig, gameEvents } = gameStore;
   const { travel, isPending } = useSystems();
   const configStore = useConfigStore();
   const { config } = configStore;
@@ -163,8 +164,9 @@ const Travel = observer(() => {
       await travel(gameId!, locationId, game.getPendingCalls());
 
       // After travel completes, queue the SELL at destination
-      if (sellInfo) {
-        game.pushCall({
+      // Use gameStore.game to get the fresh game instance after entity updates
+      if (sellInfo && gameStore.game) {
+        gameStore.game.pushCall({
           direction: TradeDirection.Sell,
           drug: sellInfo.drug,
           quantity: sellInfo.quantity,
@@ -175,7 +177,7 @@ const Travel = observer(() => {
       game.clearPendingCalls();
       console.error(e);
     }
-  }, [suggestion, game, currentLocation, targetLocation, configStore, gameId, travel]);
+  }, [suggestion, game, currentLocation, targetLocation, configStore, gameId, travel, gameStore]);
 
   useEventListener(typeof window !== "undefined" ? window : null, "keydown", (e) => {
     switch (e.key) {
