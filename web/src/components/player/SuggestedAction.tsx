@@ -1,13 +1,5 @@
 import { TradeSuggestion } from "@/dojo/tradeSuggestion";
 import { Box, Card, HStack, Text, VStack } from "@chakra-ui/react";
-import colors from "@/theme/colors";
-import { keyframes } from "@emotion/react";
-
-const pulseAnim = keyframes`
-  0% {border-color: ${colors.neon[600]};}
-  50% {border-color: ${colors.neon[400]};}
-  100% {border-color: ${colors.neon[600]};}
-`;
 
 interface SuggestedActionProps {
   suggestion: TradeSuggestion;
@@ -83,20 +75,19 @@ export const SuggestedAction = (
     };
 
     return (
-      <VStack w="full" align="flex-start" gap={1}>
+      <VStack w="full" align="flex-start" gap="4px">
         <Text textStyle="subheading" fontSize={["9px", "11px"]} color="neon.500">
           ACTIONS
         </Text>
 
         <Card
           w="full"
-          px="16px"
-          py="12px"
+          px="12px"
+          py="10px"
           cursor={isClickable ? "pointer" : "default"}
           opacity={isDisabled ? 0.5 : 1}
           border="1px solid"
           borderColor={isClickable ? "neon.600" : "neon.700"}
-          animation={isClickable ? `${pulseAnim} 3s ease-in-out infinite` : "none"}
           _hover={
             isClickable
               ? {
