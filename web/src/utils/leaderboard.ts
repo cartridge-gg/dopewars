@@ -55,10 +55,11 @@ export const mergeLeaderboardEntries = (
   }));
 
   const activeEntries: LeaderboardEntry[] = activeGames.map((game) => {
-    // Extract token_id info - gameInfos.token_id is a union type from GraphQL
-    const tokenIdObj = game.gameInfos.token_id as { option?: string; [key: string]: unknown } | undefined;
-    const tokenIdType = tokenIdObj?.option;
-    const tokenId = tokenIdType ? Number(tokenIdObj[tokenIdType]) : undefined;
+    // gameInfos has token_id_type and token_id added by useGamesByPlayer hook
+    const gameInfos = game.gameInfos as typeof game.gameInfos & {
+      token_id_type?: string;
+      token_id?: number;
+    };
 
     // player_name is Dopewars_V0_Bytes16 type with a value property containing the felt
     const playerNameObj = game.gameInfos.player_name;
@@ -69,16 +70,16 @@ export const mergeLeaderboardEntries = (
 
     return {
       type: "active" as const,
-      game_id: game.gameInfos.game_id,
-      player_id: game.gameInfos.player_id,
+      game_id: gameInfos.game_id,
+      player_id: gameInfos.player_id,
       player_name: playerName,
       score: game.player.cash,
       position: 0,
       claimable: 0,
-      multiplier: game.gameInfos.multiplier,
-      token_id_type: tokenIdType,
-      token_id: tokenId,
-      season_version: game.gameInfos.season_version,
+      multiplier: gameInfos.multiplier,
+      token_id_type: gameInfos.token_id_type,
+      token_id: gameInfos.token_id,
+      season_version: gameInfos.season_version,
       gameRef: game,
     };
   });

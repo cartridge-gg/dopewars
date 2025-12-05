@@ -89,17 +89,6 @@ export const LeaderboardItem = observer(
             >
               {displayName} <span style={{ fontSize: "9px" }}>(x{entry.multiplier})</span>
             </Text>
-            {isActive && (
-              <Text
-                fontSize="9px"
-                color="yellow.400"
-                fontWeight="bold"
-                animation={`${pulse} 2s ease-in-out infinite`}
-                ml={1}
-              >
-                LIVE
-              </Text>
-            )}
           </HStack>
 
           <Text
@@ -114,9 +103,20 @@ export const LeaderboardItem = observer(
           </Text>
 
           <Text flexShrink={0} fontSize={["12px", "16px"]}>
-            {isActive ? "~" : ""}
             {formatCash(entry.score)}
           </Text>
+
+          {isActive && (
+            <Text
+              fontSize="9px"
+              color="yellow.400"
+              fontWeight="bold"
+              animation={`${pulse} 2s ease-in-out infinite`}
+              ml={1}
+            >
+              LIVE
+            </Text>
+          )}
 
           {!isActive && entry.claimable > 0 && (
             <Text flexShrink={0} fontSize={["12px", "16px"]}>
