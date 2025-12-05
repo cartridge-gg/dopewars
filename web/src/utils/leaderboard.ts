@@ -10,6 +10,7 @@ export type LeaderboardEntry = {
   player_name: string;
   score: number;
   position: number;
+  registeredPosition?: number; // Position among registered games only (undefined for active games)
   claimable: number;
   multiplier: number;
   token_id_type?: string;
@@ -47,6 +48,7 @@ export const mergeLeaderboardEntries = (
     player_name: game.player_name || "Anonymous",
     score: game.final_score,
     position: index + 1,
+    registeredPosition: index + 1, // Position among registered games (preserved after merge)
     claimable: game.claimable,
     multiplier: game.multiplier,
     token_id_type: game.token_id_type,

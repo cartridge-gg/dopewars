@@ -140,13 +140,14 @@ export const LeaderboardItem = observer(
 
           {!isActive &&
             entry.season_version === config.ryo.season_version &&
-            index + 1 <= payedCount && (
+            entry.registeredPosition !== undefined &&
+            entry.registeredPosition <= payedCount && (
               <Text flexShrink={0} fontSize={["12px", "16px"]}>
                 <Tooltip
                   placement="left"
                   content={
                     <RewardDetails
-                      position={index + 1}
+                      position={entry.registeredPosition}
                       seasonVersion={entry.season_version}
                     />
                   }
