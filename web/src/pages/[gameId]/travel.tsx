@@ -116,10 +116,10 @@ const Travel = observer(() => {
   const onExecuteSuggestion = useCallback(async () => {
     if (!suggestion || suggestion.type === "none" || !game || !targetLocation) return;
 
-    // If holding drugs and we need to sell them at current location first
+    // If holding drugs and we need to sell them at current location first (for buy_and_sell)
     if (suggestion.currentDrug && suggestion.currentQuantity && suggestion.type === "buy_and_sell") {
       const currentMarket = game.markets.marketsByLocation.get(currentLocation || "");
-      const drugMarket = currentMarket?.find((m) => m.drug === suggestion.currentDrug!.drug);
+      const drugMarket = currentMarket?.find((m) => m.drug === suggestion.currentDrug?.drug);
       if (drugMarket) {
         game.pushCall({
           direction: TradeDirection.Sell,
@@ -130,7 +130,7 @@ const Travel = observer(() => {
       }
     }
 
-    // Queue buy action at current location
+    // Queue buy action at current location (for buy_and_sell)
     if (suggestion.drug && suggestion.quantity && suggestion.buyPrice) {
       game.pushCall({
         direction: TradeDirection.Buy,
@@ -141,16 +141,24 @@ const Travel = observer(() => {
     }
 
     // Store sell info for after travel
-    const sellInfo = suggestion.drug && suggestion.quantity && suggestion.sellPrice
+    // For buy_and_sell: sell the newly bought drug at destination
+    // For sell_only: sell current inventory at destination
+    const sellInfo = suggestion.type === "buy_and_sell" && suggestion.drug && suggestion.quantity && suggestion.sellPrice
       ? {
           drug: suggestion.drug.drug_id,
           quantity: suggestion.quantity,
           sellPrice: suggestion.sellPrice,
         }
+      : suggestion.type === "sell_only" && suggestion.currentDrug && suggestion.currentQuantity && suggestion.currentSellPrice
+      ? {
+          drug: suggestion.currentDrug.drug_id,
+          quantity: suggestion.currentQuantity,
+          sellPrice: suggestion.currentSellPrice,
+        }
       : null;
 
     try {
-      // Execute travel with BUY in pending
+      // Execute travel with pending calls (BUY for buy_and_sell, nothing for sell_only)
       const locationId = configStore.getLocation(targetLocation).location_id;
       await travel(gameId!, locationId, game.getPendingCalls());
 
@@ -165,7 +173,7 @@ const Travel = observer(() => {
       }
     } catch (e) {
       game.clearPendingCalls();
-      console.log(e);
+      console.error(e);
     }
   }, [suggestion, game, currentLocation, targetLocation, configStore, gameId, travel]);
 
