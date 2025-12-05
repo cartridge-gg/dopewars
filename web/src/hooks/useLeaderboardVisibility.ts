@@ -1,16 +1,19 @@
-import { RefObject, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-export const useLeaderboardVisibility = (
-  scrollContainerRef: RefObject<HTMLElement | null>,
-) => {
+export const useLeaderboardVisibility = () => {
   const [visiblePositions, setVisiblePositions] = useState<Set<number>>(new Set());
+  const [scrollContainer, setScrollContainer] = useState<HTMLElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const elementsMap = useRef<Map<number, HTMLElement>>(new Map());
 
+  // Callback ref to capture the scroll container when it mounts
+  const scrollContainerRef = useCallback((node: HTMLElement | null) => {
+    setScrollContainer(node);
+  }, []);
+
   // Create observer when scroll container becomes available
   useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
+    if (!scrollContainer) return;
 
     // Disconnect previous observer if any
     observerRef.current?.disconnect();
@@ -35,7 +38,7 @@ export const useLeaderboardVisibility = (
         });
       },
       {
-        root: container,
+        root: scrollContainer,
         threshold: 0.5,
       },
     );
@@ -49,7 +52,7 @@ export const useLeaderboardVisibility = (
       observerRef.current?.disconnect();
       observerRef.current = null;
     };
-  }, [scrollContainerRef]);
+  }, [scrollContainer]);
 
   const observeEntry = useCallback(
     (el: HTMLElement | null, position: number) => {
@@ -80,5 +83,5 @@ export const useLeaderboardVisibility = (
     return Math.max(...Array.from(visiblePositions));
   }, [visiblePositions]);
 
-  return { visiblePositions, observeEntry, getMaxVisiblePosition };
+  return { scrollContainerRef, visiblePositions, observeEntry, getMaxVisiblePosition };
 };

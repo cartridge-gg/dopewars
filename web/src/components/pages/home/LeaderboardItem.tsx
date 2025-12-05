@@ -17,15 +17,15 @@ export type LeaderboardItemProps = {
   index: number;
   isOwn: boolean;
   config: Config;
-  totalGames: number;
+  registeredGamesCount: number;
   itemRef?: (el: HTMLElement | null) => void;
 };
 
 export const LeaderboardItem = observer(
-  ({ entry, index, isOwn, config, totalGames, itemRef }: LeaderboardItemProps) => {
+  ({ entry, index, isOwn, config, registeredGamesCount, itemRef }: LeaderboardItemProps) => {
     const { router } = useRouterContext();
     const isActive = entry.type === "active";
-    const payedCount = getPayedCount(totalGames);
+    const payedCount = getPayedCount(registeredGamesCount);
 
     const baseColor = isOwn
       ? colors.yellow["400"].toString()

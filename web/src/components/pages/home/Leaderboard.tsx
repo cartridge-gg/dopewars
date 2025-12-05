@@ -12,7 +12,7 @@ import { formatCash } from "@/utils/ui";
 import { Box, HStack, Text, UnorderedList, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Countdown from "react-countdown";
 import { Arrow, InfosIcon, PaperIcon, Trophy } from "../../icons";
 import { Config } from "@/dojo/stores/config";
@@ -82,8 +82,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
 
   const { onGoingGames } = useGamesByPlayer(toriiClient, account?.address);
 
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const { visiblePositions, observeEntry, getMaxVisiblePosition } = useLeaderboardVisibility(scrollContainerRef);
+  const { scrollContainerRef, visiblePositions, observeEntry, getMaxVisiblePosition } = useLeaderboardVisibility();
 
   const activeGamesForSeason = useMemo(() => {
     if (!account?.address || selectedVersion !== currentVersion) {
@@ -221,7 +220,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                       index={index}
                       isOwn={isOwn}
                       config={config}
-                      totalGames={mergedEntries.length}
+                      registeredGamesCount={registeredGames.length}
                       itemRef={(el) => observeEntry(el, index + 1)}
                     />
                   );
