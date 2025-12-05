@@ -1,6 +1,5 @@
 import { TradeSuggestion } from "@/dojo/tradeSuggestion";
 import { Card, HStack, Text, VStack } from "@chakra-ui/react";
-import { observer } from "mobx-react-lite";
 import colors from "@/theme/colors";
 import { keyframes } from "@emotion/react";
 
@@ -16,8 +15,8 @@ interface SuggestedActionProps {
   isDisabled?: boolean;
 }
 
-export const SuggestedAction = observer(
-  ({ suggestion, onExecute, isDisabled = false }: SuggestedActionProps) => {
+export const SuggestedAction = (
+  { suggestion, onExecute, isDisabled = false }: SuggestedActionProps) => {
     const isClickable = suggestion.type !== "none" && !isDisabled;
 
     return (
@@ -51,8 +50,8 @@ export const SuggestedAction = observer(
           }}
         >
           <HStack gap="12px" justify="flex-start" align="center">
-            {suggestion.drug && suggestion.type !== "none" && (
-              <>{suggestion.drug.icon({ boxSize: "24px" })}</>
+            {suggestion.type !== "none" && (suggestion.drug || suggestion.currentDrug) && (
+              <>{(suggestion.drug || suggestion.currentDrug)!.icon({ boxSize: "24px" })}</>
             )}
             <Text
               fontSize={["12px", "14px"]}
@@ -65,5 +64,4 @@ export const SuggestedAction = observer(
         </Card>
       </VStack>
     );
-  }
-);
+  };
