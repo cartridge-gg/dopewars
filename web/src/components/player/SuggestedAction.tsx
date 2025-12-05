@@ -1,5 +1,5 @@
 import { TradeSuggestion } from "@/dojo/tradeSuggestion";
-import { Card, HStack, Text, VStack } from "@chakra-ui/react";
+import { Box, Card, HStack, Text, VStack } from "@chakra-ui/react";
 import colors from "@/theme/colors";
 import { keyframes } from "@emotion/react";
 
@@ -15,9 +15,72 @@ interface SuggestedActionProps {
   isDisabled?: boolean;
 }
 
+const formatNumber = (num: number): string => {
+  if (num >= 1000000) {
+    return (num / 1000000).toFixed(1) + "M";
+  } else if (num >= 1000) {
+    return (num / 1000).toFixed(1) + "K";
+  }
+  return num.toFixed(0);
+};
+
 export const SuggestedAction = (
   { suggestion, onExecute, isDisabled = false }: SuggestedActionProps) => {
     const isClickable = suggestion.type !== "none" && !isDisabled;
+
+    const renderMessage = () => {
+      if (suggestion.type === "none") {
+        return <Text color="neon.600">{suggestion.message}</Text>;
+      }
+
+      const textStyle = {
+        fontSize: ["12px", "14px"],
+        color: "neon.200",
+        lineHeight: "1.3",
+      };
+
+      const iconSize = "20px";
+
+      // buy_and_sell with currentDrug: Sell [icon] for $X, buy [icon] for $Y profit
+      if (suggestion.type === "buy_and_sell" && suggestion.currentDrug && suggestion.drug) {
+        const sellRevenue = (suggestion.currentSellPrice || 0) * (suggestion.currentQuantity || 0);
+        const totalProfit = (suggestion.currentSellProfit || 0) + (suggestion.profit || 0);
+        return (
+          <HStack gap="6px" align="center" flexWrap="wrap">
+            <Text {...textStyle}>Sell</Text>
+            <Box flexShrink={0}>{suggestion.currentDrug.icon({ boxSize: iconSize })}</Box>
+            <Text {...textStyle}>for ${formatNumber(sellRevenue)}, buy</Text>
+            <Box flexShrink={0}>{suggestion.drug.icon({ boxSize: iconSize })}</Box>
+            <Text {...textStyle}>for ${formatNumber(totalProfit)} profit</Text>
+          </HStack>
+        );
+      }
+
+      // sell_only: Sell [icon] in Location for $X profit
+      if (suggestion.type === "sell_only" && suggestion.currentDrug) {
+        return (
+          <HStack gap="6px" align="center" flexWrap="wrap">
+            <Text {...textStyle}>Sell</Text>
+            <Box flexShrink={0}>{suggestion.currentDrug.icon({ boxSize: iconSize })}</Box>
+            <Text {...textStyle}>in {suggestion.sellLocation} for ${formatNumber(suggestion.profit || 0)} profit</Text>
+          </HStack>
+        );
+      }
+
+      // buy_and_sell without currentDrug: Buy [icon] ($X) and sell in Location for $Y profit
+      if (suggestion.type === "buy_and_sell" && suggestion.drug) {
+        return (
+          <HStack gap="6px" align="center" flexWrap="wrap">
+            <Text {...textStyle}>Buy</Text>
+            <Box flexShrink={0}>{suggestion.drug.icon({ boxSize: iconSize })}</Box>
+            <Text {...textStyle}>(${formatNumber(suggestion.buyPrice || 0)}) and sell in {suggestion.sellLocation} for ${formatNumber(suggestion.profit || 0)} profit</Text>
+          </HStack>
+        );
+      }
+
+      // Fallback to plain message
+      return <Text {...textStyle}>{suggestion.message}</Text>;
+    };
 
     return (
       <VStack w="full" align="flex-start" gap={1}>
@@ -49,18 +112,7 @@ export const SuggestedAction = (
             }
           }}
         >
-          <HStack gap="12px" justify="flex-start" align="center">
-            {suggestion.type !== "none" && (suggestion.drug || suggestion.currentDrug) && (
-              <>{(suggestion.drug || suggestion.currentDrug)!.icon({ boxSize: "24px" })}</>
-            )}
-            <Text
-              fontSize={["12px", "14px"]}
-              color={suggestion.type === "none" ? "neon.600" : "neon.200"}
-              lineHeight="1.3"
-            >
-              {suggestion.message}
-            </Text>
-          </HStack>
+          {renderMessage()}
         </Card>
       </VStack>
     );
