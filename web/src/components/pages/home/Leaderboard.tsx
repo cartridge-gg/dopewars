@@ -6,18 +6,16 @@ import {
   useRouterContext,
   useSeasonByVersion,
 } from "@/dojo/hooks";
+import { useGamesByPlayer } from "@/dojo/hooks/useGamesByPlayer";
 import colors from "@/theme/colors";
 import { formatCash } from "@/utils/ui";
-import { Box, Heading, HStack, ListItem, Text, UnorderedList, VStack } from "@chakra-ui/react";
+import { Box, HStack, Text, UnorderedList, VStack } from "@chakra-ui/react";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Countdown from "react-countdown";
-import { Arrow, InfosIcon, PaperIcon, Skull, Trophy } from "../../icons";
-import { Dopewars_V0_Game as Game } from "@/generated/graphql";
+import { Arrow, InfosIcon, PaperIcon, Trophy } from "../../icons";
 import { Config } from "@/dojo/stores/config";
-import { getPayedCount } from "@/dojo/helpers";
-import { HustlerAvatarIcon } from "../profile/HustlerAvatarIcon";
 import { ComponentValueEvent, useDopeStore } from "@/dope/store";
 import { hash, shortString, uint256 } from "starknet";
 import { Layer } from "@/dope/components";
@@ -25,6 +23,10 @@ import { Tooltip } from "@/components/common";
 import { useSwipeable } from "react-swipeable";
 import { DW_NS } from "@/dojo/constants";
 import { getSwapQuote, PAPER, USDC } from "@/hooks/useEkubo";
+import { useLeaderboardVisibility } from "@/hooks/useLeaderboardVisibility";
+import { mergeLeaderboardEntries, getActiveGamesForSeason } from "@/utils/leaderboard";
+import { LeaderboardItem } from "./LeaderboardItem";
+import { StickyActiveGames } from "./StickyActiveGames";
 
 const renderer = ({
   days,
@@ -63,7 +65,7 @@ const renderer = ({
 export const Leaderboard = observer(({ config }: { config?: Config }) => {
   const { router, gameId } = useRouterContext();
 
-  const { uiStore } = useDojoContext();
+  const { uiStore, clients: { toriiClient } } = useDojoContext();
   const { account } = useAccount();
 
   const [currentVersion, setCurrentVersion] = useState(config?.ryo.season_version || 0);
@@ -78,7 +80,29 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
     refetch: refetchRegisteredGames,
   } = useRegisteredGamesBySeason(selectedVersion);
 
-  const payedCount = getPayedCount(registeredGames.length);
+  const { onGoingGames } = useGamesByPlayer(toriiClient, account?.address || "0x0");
+
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const { visiblePositions, observeEntry, getMaxVisiblePosition } = useLeaderboardVisibility(scrollContainerRef);
+
+  const activeGamesForSeason = useMemo(() => {
+    if (!account?.address || selectedVersion !== currentVersion) {
+      return [];
+    }
+    return getActiveGamesForSeason(onGoingGames, selectedVersion);
+  }, [onGoingGames, selectedVersion, currentVersion, account?.address]);
+
+  const mergedEntries = useMemo(() => {
+    return mergeLeaderboardEntries(
+      registeredGames,
+      activeGamesForSeason,
+      account?.address || "",
+    );
+  }, [registeredGames, activeGamesForSeason, account?.address]);
+
+  const activeEntries = useMemo(() => {
+    return mergedEntries.filter((entry) => entry.type === "active");
+  }, [mergedEntries]);
 
   useEffect(() => {
     if (!config) return;
@@ -170,133 +194,52 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
           </HStack>
         )}
       </VStack>
-      <VStack
-        boxSize="full"
-        gap="20px"
-        maxH={["calc(100dvh - 350px)", "calc(100dvh - 380px)"]}
-        sx={{
-          overflowY: "scroll",
-        }}
-        __css={{
-          "scrollbar-width": "none",
-        }}
-      >
-        {isFetchingRegisteredGames && <Loader />}
-        {!isFetchingRegisteredGames && (
-          <UnorderedList boxSize="full" variant="dotted" h="auto">
-            {registeredGames && registeredGames.length > 0 ? (
-              registeredGames.map((game: Game, index: number) => {
-                const isOwn = BigInt(game.player_id) === BigInt(account?.address || 0);
-                const color = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
-                const avatarColor = isOwn ? "yellow" : "green";
-                const displayName = game.player_name ? `${game.player_name}${isOwn ? " (you)" : ""}` : "Anonymous";
+      <Box position="relative" w="full" h="full">
+        <VStack
+          ref={scrollContainerRef}
+          boxSize="full"
+          gap="20px"
+          maxH={["calc(100dvh - 350px)", "calc(100dvh - 380px)"]}
+          sx={{
+            overflowY: "scroll",
+          }}
+          __css={{
+            "scrollbar-width": "none",
+          }}
+        >
+          {isFetchingRegisteredGames && <Loader />}
+          {!isFetchingRegisteredGames && (
+            <UnorderedList boxSize="full" variant="dotted" h="auto">
+              {mergedEntries && mergedEntries.length > 0 ? (
+                mergedEntries.map((entry, index) => {
+                  const isOwn = BigInt(entry.player_id) === BigInt(account?.address || 0);
 
-                return (
-                  <ListItem color={color} key={game.game_id}>
-                    <HStack mr={3}>
-                      <Text
-                        w={["10px", "30px"]}
-                        fontSize={["10px", "16px"]}
-                        flexShrink={0}
-                        // display={["none", "block"]}
-                        whiteSpace="nowrap"
-                      >
-                        {index + 1}.
-                      </Text>
-                      <Box
-                        flexShrink={0}
-                        style={{ marginTop: "-8px" }}
-                        cursor="pointer"
-                        onClick={() => router.push(`/0x${game.game_id.toString(16)}/logs`)}
-                      >
-                        <HustlerAvatarIcon
-                          gameId={game.game_id}
-                          // @ts-ignore
-                          tokenIdType={game.token_id_type}
-                          // @ts-ignore
-                          tokenId={game.token_id}
-                        />
-                      </Box>
-
-                      <HStack>
-                        <Text
-                          flexShrink={0}
-                          maxWidth={["150px", "350px"]}
-                          whiteSpace="nowrap"
-                          overflow="hidden"
-                          fontSize={["12px", "16px"]}
-                          cursor="pointer"
-                          onClick={() => router.push(`/0x${game.game_id.toString(16)}/logs`)}
-                        >
-                          {displayName} <span style={{ fontSize: "9px" }}>(x{game.multiplier})</span>
-                        </Text>
-                      </HStack>
-
-                      <Text
-                        backgroundImage={`radial-gradient(${color} 20%, transparent 20%)`}
-                        backgroundSize="10px 10px"
-                        backgroundPosition="left center"
-                        backgroundRepeat="repeat-x"
-                        flexGrow={1}
-                        color="transparent"
-                      >
-                        {"."}
-                      </Text>
-
-                      <Text flexShrink={0} fontSize={["12px", "16px"]}>
-                        {formatCash(game.final_score)}
-                      </Text>
-
-                      {game.claimable > 0 && (
-                        <Text flexShrink={0} fontSize={["12px", "16px"]}>
-                          <Tooltip
-                            placement="left"
-                            // maxW="300px"
-                            content={
-                              <RewardDetails
-                                claimable={game.claimable}
-                                position={game.position}
-                                seasonVersion={game.season_version}
-                              />
-                            }
-                            color="neon.400"
-                          >
-                            <span>
-                              <Trophy />
-                              {/* {game.claimable} .. */}
-                            </span>
-                          </Tooltip>
-                        </Text>
-                      )}
-
-                      {game.season_version === config.ryo.season_version && index + 1 <= payedCount && (
-                        <Text flexShrink={0} fontSize={["12px", "16px"]}>
-                          <Tooltip
-                            // maxW="300px"
-                            placement="left"
-                            content={<RewardDetails position={index + 1} seasonVersion={game.season_version} />}
-                            color="neon.400"
-                          >
-                            {/* getGearItemRewards(index + 1) */}
-                            <span>
-                              <Trophy opacity={0.5} />
-                            </span>
-                          </Tooltip>
-                        </Text>
-                      )}
-                      {/* <RewardDetails position={index + 1} seasonVersion={game.season_version} /> */}
-                    </HStack>
-                  </ListItem>
-                );
-              })
-            ) : (
-              <Text textAlign="center" color="neon.500">
-                No scores submitted yet
-              </Text>
-            )}
-          </UnorderedList>
-        )}
-      </VStack>
+                  return (
+                    <LeaderboardItem
+                      key={`${entry.type}-${entry.game_id}`}
+                      entry={entry}
+                      index={index}
+                      isOwn={isOwn}
+                      config={config}
+                      totalGames={mergedEntries.length}
+                      itemRef={(el) => observeEntry(el, index + 1)}
+                    />
+                  );
+                })
+              ) : (
+                <Text textAlign="center" color="neon.500">
+                  No scores submitted yet
+                </Text>
+              )}
+            </UnorderedList>
+          )}
+        </VStack>
+        <StickyActiveGames
+          activeGames={activeEntries}
+          visiblePositions={visiblePositions}
+          maxVisiblePosition={getMaxVisiblePosition()}
+        />
+      </Box>
     </VStack>
   );
 });

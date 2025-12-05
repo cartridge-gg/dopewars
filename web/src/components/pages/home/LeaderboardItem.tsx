@@ -1,0 +1,171 @@
+import { Tooltip } from "@/components/common";
+import { Trophy } from "@/components/icons";
+import { Config } from "@/dojo/stores/config";
+import { useRouterContext } from "@/dojo/hooks";
+import colors from "@/theme/colors";
+import { formatCash } from "@/utils/ui";
+import { Box, HStack, ListItem, Text } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
+import { observer } from "mobx-react-lite";
+import { HustlerAvatarIcon } from "../profile/HustlerAvatarIcon";
+import { LeaderboardEntry } from "@/utils/leaderboard";
+import { getPayedCount } from "@/dojo/helpers";
+import { RewardDetails } from "./Leaderboard";
+
+const pulse = keyframes`
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+`;
+
+export type LeaderboardItemProps = {
+  entry: LeaderboardEntry;
+  index: number;
+  isOwn: boolean;
+  config: Config;
+  totalGames: number;
+  itemRef?: (el: HTMLElement | null) => void;
+};
+
+export const LeaderboardItem = observer(
+  ({ entry, index, isOwn, config, totalGames, itemRef }: LeaderboardItemProps) => {
+    const { router } = useRouterContext();
+    const isActive = entry.type === "active";
+    const payedCount = getPayedCount(totalGames);
+
+    const baseColor = isOwn
+      ? colors.yellow["400"].toString()
+      : colors.neon["200"].toString();
+    const color = isActive ? colors.yellow["400"].toString() : baseColor;
+    const displayName = entry.player_name
+      ? `${entry.player_name}${isOwn ? " (you)" : ""}`
+      : "Anonymous";
+
+    const handleClick = () => {
+      if (isActive) {
+        router.push(`/0x${entry.game_id.toString(16)}`);
+      } else {
+        router.push(`/0x${entry.game_id.toString(16)}/logs`);
+      }
+    };
+
+    return (
+      <ListItem
+        ref={itemRef}
+        color={color}
+        key={entry.game_id}
+        borderStyle={isActive ? "dashed" : undefined}
+        borderColor={isActive ? "yellow.400" : undefined}
+        borderWidth={isActive ? "1px" : undefined}
+        borderRadius={isActive ? "md" : undefined}
+        bg={isActive ? "rgba(234, 179, 8, 0.1)" : undefined}
+        p={isActive ? 2 : undefined}
+        my={isActive ? 1 : undefined}
+      >
+        <HStack mr={3}>
+          <Text
+            w={["10px", "30px"]}
+            fontSize={["10px", "16px"]}
+            flexShrink={0}
+            whiteSpace="nowrap"
+          >
+            {index + 1}.
+          </Text>
+          <Box
+            flexShrink={0}
+            style={{ marginTop: "-8px" }}
+            cursor="pointer"
+            onClick={handleClick}
+          >
+            <HustlerAvatarIcon
+              gameId={entry.game_id}
+              tokenIdType={entry.token_id_type}
+              tokenId={entry.token_id}
+            />
+          </Box>
+
+          <HStack>
+            <Text
+              flexShrink={0}
+              maxWidth={["150px", "350px"]}
+              whiteSpace="nowrap"
+              overflow="hidden"
+              fontSize={["12px", "16px"]}
+              cursor="pointer"
+              onClick={handleClick}
+            >
+              {displayName} <span style={{ fontSize: "9px" }}>(x{entry.multiplier})</span>
+            </Text>
+            {isActive && (
+              <Text
+                fontSize="9px"
+                color="yellow.400"
+                fontWeight="bold"
+                animation={`${pulse} 2s ease-in-out infinite`}
+                ml={1}
+              >
+                LIVE
+              </Text>
+            )}
+          </HStack>
+
+          <Text
+            backgroundImage={`radial-gradient(${color} 20%, transparent 20%)`}
+            backgroundSize="10px 10px"
+            backgroundPosition="left center"
+            backgroundRepeat="repeat-x"
+            flexGrow={1}
+            color="transparent"
+          >
+            {"."}
+          </Text>
+
+          <Text flexShrink={0} fontSize={["12px", "16px"]}>
+            {isActive ? "~" : ""}
+            {formatCash(entry.score)}
+          </Text>
+
+          {!isActive && entry.claimable > 0 && (
+            <Text flexShrink={0} fontSize={["12px", "16px"]}>
+              <Tooltip
+                placement="left"
+                content={
+                  <RewardDetails
+                    claimable={entry.claimable}
+                    position={entry.position}
+                    seasonVersion={entry.season_version}
+                  />
+                }
+                color="neon.400"
+              >
+                <span>
+                  <Trophy />
+                </span>
+              </Tooltip>
+            </Text>
+          )}
+
+          {!isActive &&
+            entry.season_version === config.ryo.season_version &&
+            index + 1 <= payedCount && (
+              <Text flexShrink={0} fontSize={["12px", "16px"]}>
+                <Tooltip
+                  placement="left"
+                  content={
+                    <RewardDetails
+                      position={index + 1}
+                      seasonVersion={entry.season_version}
+                    />
+                  }
+                  color="neon.400"
+                >
+                  <span>
+                    <Trophy opacity={0.5} />
+                  </span>
+                </Tooltip>
+              </Text>
+            )}
+        </HStack>
+      </ListItem>
+    );
+  },
+);
