@@ -25,14 +25,9 @@ const nextConfig = {
     };
     return config;
   },
-  // turbopack: {
-  //   root: import.meta.dirname,
-  //   // root: path.resolve( import.meta.dirname,".."),
-  //   resolveExtensions: [".tsx", ".ts", ".jsx", ".js", ".mjs", ".json", ".wasm"],
-  //   resolveAlias: {
-  //     "@/dope/": "./node_modules/@/dope/",
-  //   },
-  // },
+  // Empty turbopack config to silence the error message
+  // Turbopack is the default in Next.js 16, but we keep webpack for WASM support
+  turbopack: {},
 };
 
 import nextPWA from "next-pwa";
