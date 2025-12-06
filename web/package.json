@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "NODE_OPTIONS=--experimental-wasm-modules next dev",
     "turbo": "next dev --turbopack",
-    "build": "NODE_OPTIONS=--experimental-wasm-modules next build",
+    "build": "NODE_OPTIONS=--experimental-wasm-modules next build --webpack",
     "start": "next start",
     "lint": "next lint",
     "knip": "knip",
