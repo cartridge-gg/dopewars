@@ -113,6 +113,16 @@ const New = observer(() => {
     }
   }, [accountTokens, selectedTokenIdType, freeToPlay, selectedChain.manifest]);
 
+  // Track if we've already auto-switched to prevent blocking manual user selection
+  const hasAutoSwitched = useRef(false);
+
+  // If user has no Dope tokens (LootId), default to S2 Hustlers (HustlerId) on initial load only
+  useEffect(() => {
+    if (!hasAutoSwitched.current && selectableTokens && selectableTokens?.length > 0) {
+      setSelectedTokenIdType(TokenIdType.GuestLootId);
+    }
+  }, [selectableTokens]);
+
   useEffect(() => {
     router.replace({
       pathname: location.pathname,
@@ -725,16 +735,9 @@ const New = observer(() => {
                     </HStack>
 
                     {/* {true || selectedChain.name === "MAINNET" && ( */}
-                      <HStack
-                        w="full"
-                        justifyContent="center"
-                        mt={2}
-                        pt={2}
-                        borderTop="solid 1px"
-                        borderColor="neon.700"
-                      >
-                        <BuyPaper paperAmount={season.paper_fee * multiplier}/>
-                      </HStack>
+                    <HStack w="full" justifyContent="center" mt={2} pt={2} borderTop="solid 1px" borderColor="neon.700">
+                      <BuyPaper paperAmount={season.paper_fee * multiplier} />
+                    </HStack>
                     {/* )} */}
                   </VStack>
                 </HStack>
