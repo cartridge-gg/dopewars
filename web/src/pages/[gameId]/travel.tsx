@@ -2,11 +2,13 @@ import { Button } from "@/components/common";
 import { Arrow, BorderImage } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { Map as MapSvg } from "@/components/map";
-import { Inventory, WantedIndicator } from "@/components/player";
+import { Inventory, SuggestedAction, WantedIndicator } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
 import { useConfigStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useGameStore } from "@/dojo/hooks/useGameStore";
+import { calculateBestTrade, TradeSuggestion } from "@/dojo/tradeSuggestion";
+import { TradeDirection } from "@/dojo/types";
 import colors from "@/theme/colors";
 import { IsMobile, formatCash, generatePixelBorderPath } from "@/utils/ui";
 import { Box, Card, Grid, GridItem, HStack, Text, VStack, useDisclosure, useEventListener } from "@chakra-ui/react";
@@ -23,7 +25,8 @@ interface MarketPriceInfo {
 
 const Travel = observer(() => {
   const { router, gameId } = useRouterContext();
-  const { game, gameConfig, gameEvents } = useGameStore();
+  const gameStore = useGameStore();
+  const { game, gameConfig, gameEvents } = gameStore;
   const { travel, isPending } = useSystems();
   const configStore = useConfigStore();
   const { config } = configStore;
@@ -101,6 +104,80 @@ const Travel = observer(() => {
 
     return [];
   }, [game, targetLocation, currentLocation]);
+
+  // Calculate best trade suggestion
+  const suggestion = useMemo<TradeSuggestion>(() => {
+    if (!game || !currentLocation || !targetLocation || currentLocation === targetLocation) {
+      return { type: "none", message: "Select a different destination" };
+    }
+    return calculateBestTrade(game, currentLocation, targetLocation, configStore);
+  }, [game, currentLocation, targetLocation, configStore]);
+
+  // Handler for executing the suggested trade
+  const onExecuteSuggestion = useCallback(async () => {
+    if (!suggestion || suggestion.type === "none" || !game || !targetLocation) return;
+
+    // If holding drugs and we need to sell them at current location first (for buy_and_sell)
+    if (suggestion.currentDrug && suggestion.currentQuantity && suggestion.type === "buy_and_sell") {
+      const currentMarket = game.markets.marketsByLocation.get(currentLocation || "");
+      const drugMarket = currentMarket?.find((m) => m.drug === suggestion.currentDrug?.drug);
+      if (drugMarket) {
+        game.pushCall({
+          direction: TradeDirection.Sell,
+          drug: suggestion.currentDrug.drug_id,
+          quantity: suggestion.currentQuantity,
+          cost: drugMarket.price * suggestion.currentQuantity,
+        });
+      }
+    }
+
+    // Queue buy action at current location (for buy_and_sell)
+    if (suggestion.drug && suggestion.quantity && suggestion.buyPrice) {
+      game.pushCall({
+        direction: TradeDirection.Buy,
+        drug: suggestion.drug.drug_id,
+        quantity: suggestion.quantity,
+        cost: suggestion.buyPrice * suggestion.quantity,
+      });
+    }
+
+    // Store sell info for after travel
+    // For buy_and_sell: sell the newly bought drug at destination
+    // For sell_only: sell current inventory at destination
+    const sellInfo = suggestion.type === "buy_and_sell" && suggestion.drug && suggestion.quantity && suggestion.sellPrice
+      ? {
+          drug: suggestion.drug.drug_id,
+          quantity: suggestion.quantity,
+          sellPrice: suggestion.sellPrice,
+        }
+      : suggestion.type === "sell_only" && suggestion.currentDrug && suggestion.currentQuantity && suggestion.currentSellPrice
+      ? {
+          drug: suggestion.currentDrug.drug_id,
+          quantity: suggestion.currentQuantity,
+          sellPrice: suggestion.currentSellPrice,
+        }
+      : null;
+
+    try {
+      // Execute travel with pending calls (BUY for buy_and_sell, nothing for sell_only)
+      const locationId = configStore.getLocation(targetLocation).location_id;
+      await travel(gameId!, locationId, game.getPendingCalls());
+
+      // After travel completes, queue the SELL at destination
+      // Use gameStore.game to get the fresh game instance after entity updates
+      if (sellInfo && gameStore.game) {
+        gameStore.game.pushCall({
+          direction: TradeDirection.Sell,
+          drug: sellInfo.drug,
+          quantity: sellInfo.quantity,
+          cost: sellInfo.sellPrice * sellInfo.quantity,
+        });
+      }
+    } catch (e) {
+      game.clearPendingCalls();
+      console.error(e);
+    }
+  }, [suggestion, game, currentLocation, targetLocation, configStore, gameId, travel, gameStore]);
 
   useEventListener(typeof window !== "undefined" ? window : null, "keydown", (e) => {
     switch (e.key) {
@@ -210,6 +287,13 @@ const Travel = observer(() => {
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         </VStack>
         <LocationPrices game={game} prices={prices} isCurrentLocation={targetLocation == currentLocation} />
+        {currentLocation !== targetLocation && (
+          <SuggestedAction
+            suggestion={suggestion}
+            onExecute={onExecuteSuggestion}
+            isDisabled={isPending}
+          />
+        )}
       </VStack>
       {/* Mobile  */}
       <VStack
@@ -244,6 +328,13 @@ const Travel = observer(() => {
           prices={prices}
           isCurrentLocation={currentLocation ? targetLocation === currentLocation : true}
         />
+        {currentLocation !== targetLocation && (
+          <SuggestedAction
+            suggestion={suggestion}
+            onExecute={onExecuteSuggestion}
+            isDisabled={isPending}
+          />
+        )}
       </VStack>
     </Layout>
   );
