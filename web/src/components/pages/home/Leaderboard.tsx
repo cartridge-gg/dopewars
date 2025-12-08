@@ -151,7 +151,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
             opacity={selectedVersion > 1 ? "1" : "0.25"}
             onClick={onPrev}
           ></Arrow>
-          <HStack textStyle="subheading" fontSize="12px" w="full" justifyContent="center" position="relative">
+          <VStack textStyle="subheading" fontSize="12px" w="full" justifyContent="center" position="relative" gap={1}>
             <Text cursor="pointer" onClick={() => onDetails(selectedVersion)}>
               SEASON {selectedVersion} REWARDS
             </Text>
@@ -166,7 +166,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                 </Text>
               )}
             </HStack>
-          </HStack>
+          </VStack>
           <Arrow
             direction="right"
             cursor="pointer"
