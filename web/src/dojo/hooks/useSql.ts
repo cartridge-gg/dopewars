@@ -35,7 +35,6 @@ export const useSql = (query: string) => {
 
   useEffect(() => {
     refetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   return { data, isFetched, isFetching, refetch };

@@ -28,10 +28,10 @@ export const HustlerPreviewFromLoot = ({
   }, [tokenId]);
 
   useEffect(() => {
-    setHustlerMeta((prev) => ({
-      ...prev,
+    setHustlerMeta({
+      ...hustlerMeta,
       name: `#${tokenId}`,
-    }));
+    });
   }, [tokenId]);
 
   const getComponentValuesBySlug = useDopeStore((state) => state.getComponentValuesBySlug);

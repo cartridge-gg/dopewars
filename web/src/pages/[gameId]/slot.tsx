@@ -268,7 +268,6 @@ export default function Slot() {
       if (subscription) subscription.cancel();
       if (subscriptionEvents) subscriptionEvents.cancel();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChain, account, gameId]);
 
   const onEventMessageUpdated = useCallback(
@@ -382,7 +381,7 @@ export default function Slot() {
     setTimeout(() => {
       setIsRolling(false);
     }, 5_000);
-  }, [isRolling, credits, offsets, rollSlot, setIsWin, setIsRolling, setCredits, gameId]);
+  }, [isRolling, credits, offsets, rollSlot, setIsWin, setIsRolling, setCredits]);
 
   return (
     <Layout isSinglePanel={true}>
@@ -549,7 +548,6 @@ export default function Slot() {
                 objectFit="cover"
                 filter="opacity(0.2)"
                 animation={isWin ? `${onWinAnim} 0.5s 7` : "none"}
-                alt="Sunset background"
               />
 
               <Box position="absolute" top="8px" left={0} width="100%">

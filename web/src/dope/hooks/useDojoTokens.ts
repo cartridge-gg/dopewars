@@ -137,7 +137,7 @@ export const useDojoTokens = (
         refetch();
       }, 500);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // array as dep = rip
   }, [toriiClient, addresses, accountAddress, tokenIds]);
 
   return {

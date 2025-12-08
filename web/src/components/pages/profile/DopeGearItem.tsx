@@ -16,7 +16,7 @@ export const DopeGearItem = ({
 
   const component = useMemo(() => {
     return componentValues.find((i) => i.collection_id === "DopeGear" && i.component_slug === slotSlug && i.id === id)!;
-  }, [componentValues, slotSlug, id]);
+  }, [componentValues]);
 
   if (!component) return null;
   return <Layer rects={component.resources[0]} width="64px" height="64px" crop={true} glow={(level || 0) * 3} />;

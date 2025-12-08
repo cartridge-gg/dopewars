@@ -92,7 +92,7 @@ const End = () => {
     } else {
       setPosition(sorted.length + 1);
     }
-  }, [registeredGames, game, gameInfos?.registered]);
+  }, [registeredGames, game]);
 
   const onRegister = async () => {
     try {

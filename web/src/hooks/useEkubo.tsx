@@ -103,7 +103,7 @@ export const useEkubo = ({
         setTimeout(refetch, 5_000);
         setSwapCalls([]);
       });
-  }, [amount, tokenIn, tokenOut, isExactOutput, slippage]);
+  }, [amount, tokenIn, tokenOut, isExactOutput]);
 
   const ape = useCallback(async () => {
     await refetch();
@@ -113,7 +113,7 @@ export const useEkubo = ({
     const tx = await account?.execute(swapCalls);
     const receipt = await waitForTransaction(account, tx?.transaction_hash);
     console.log(receipt);
-  }, [swapCalls, account, refetch]);
+  }, [swapCalls, account]);
 
   useEffect(() => {
     refetch();

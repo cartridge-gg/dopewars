@@ -23,12 +23,12 @@ export default function LeaderboardPage() {
     }
   };
 
-  const onCreateFakeGame = useCallback(async () => {
+  const onCreateFakeGame = async () => {
     const { hash } = await createFakeGame(valueRef.current);
     await waitForTransaction(account!, hash);
 
     toast({ message: "created fake game Ser" });
-  }, [createFakeGame, account, toast]);
+  };
 
   const onCreateNewSeason = async () => {
     const res = await createNewSeason();
@@ -39,8 +39,7 @@ export default function LeaderboardPage() {
     console.log("update", valueRef.current);
     valueRef.current = Number(Number(valueRef.current) + 1);
     onCreateFakeGame();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onCreateFakeGame]);
+  }, [valueRef.current, onCreateFakeGame]);
 
   useEffect(() => {
     if (running && !handleRef.current) {
@@ -51,7 +50,7 @@ export default function LeaderboardPage() {
         handleRef.current = null;
       }
     }
-  }, [running, setRunning, update]);
+  }, [running, setRunning, valueRef.current]);
 
   return (
     <Layout

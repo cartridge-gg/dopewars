@@ -118,7 +118,7 @@ const New = observer(() => {
       pathname: location.pathname,
       search: `tokenIdType=${selectedTokenIdType}`, //`&tokenId=${selectedTokenId}`,
     });
-  }, [selectedTokenIdType, selectedTokenId, router]);
+  }, [selectedTokenIdType, selectedTokenId]);
 
   const inputRef = useRef<null | HTMLDivElement>(null);
   const [error, setError] = useState("");
@@ -154,7 +154,7 @@ const New = observer(() => {
       selectableTokens[selectedTokenIndex] &&
       dopeLootClaimState[Number(selectableTokens[selectedTokenIndex].token_id)]?.isReleased
     );
-  }, [dopeLootClaimState, selectedTokenIdType, selectableTokens, selectedTokenIndex]);
+  }, [dopeLootClaimState, selectedToken, selectedTokenIdType]);
 
   const { equipment: lootEquipment } = useLootEquipment(Number(selectedToken?.token_id));
   const { equipment: hustlerEquipment } = useEquipment(toriiClient, Number(selectedToken?.token_id).toString());
@@ -253,7 +253,7 @@ const New = observer(() => {
       }
     }
     return equipment;
-  }, [lootEquipment, hustlerEquipment, selectedTokenIdType, configStore]);
+  }, [lootEquipment, hustlerEquipment, selectedTokenIdType]);
 
   const create = async (gameMode: GameMode) => {
     setError("");

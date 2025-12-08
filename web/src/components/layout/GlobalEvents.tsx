@@ -49,7 +49,7 @@ export const GlobalEvents = () => {
         duration: 6000,
       });
     }
-  }, [gameEvents?.sortedEvents, game, toast]);
+  }, [gameEvents?.sortedEvents.length]);
 
   useEffect(() => {
     const init = async () => {
@@ -83,8 +83,7 @@ export const GlobalEvents = () => {
       if (subscription.current) subscription.current.cancel();
       subscription.current = undefined;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedChain]);
+  }, [selectedChain, accountAddress.current]);
 
   const onEventMessage = async (entity: Entity) => {
     if (entity.models[`${DW_NS}-GameCreated`]) {

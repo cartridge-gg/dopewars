@@ -51,7 +51,7 @@ export const Map = ({
 
   useEffect(() => {
     setIsFirstTurn(game?.player.turn === 0);
-  }, [game?.player.turn]);
+  }, []);
 
   useEffect(() => {
     if (targetId !== undefined) {

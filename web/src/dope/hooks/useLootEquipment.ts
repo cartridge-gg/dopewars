@@ -115,7 +115,7 @@ export const useLootEquipment = (tokenId: number) => {
     }
 
     setEquipment(equipment);
-  }, [tokenId, getComponentValuesBySlug, suffixCount, namePrefixCount, nameSuffixCount]);
+  }, [tokenId]);
 
   return {
     equipment,

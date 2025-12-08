@@ -29,7 +29,7 @@ export default function Dope() {
 
   useEffect(() => {
     initDopeLootClaimState();
-  }, [initDopeLootClaimState]);
+  }, []);
 
   const addresses = useMemo(() => {
     return [
@@ -64,7 +64,7 @@ export default function Dope() {
       .toString();
 
     return { loot, hustlers, gear, gearAddress, gearCount };
-  }, [accountTokens, tokensBalances, selectedChain.manifest]);
+  }, [accountTokens, tokensBalances, addresses, account?.address]);
 
   const [isRefetching, setIsRefetching] = useState(false);
   const onRefetch = async () => {

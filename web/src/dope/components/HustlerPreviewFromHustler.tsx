@@ -24,10 +24,10 @@ export const HustlerPreviewFromHustler = ({
   const { hustlerBody } = useHustler(toriiClient!, tokenId);
 
   useEffect(() => {
-    setHustlerMeta((prev) => ({
-      ...prev,
+    setHustlerMeta({
+      ...hustlerMeta,
       name: `#${tokenId}`,
-    }));
+    });
   }, [tokenId]);
 
   //

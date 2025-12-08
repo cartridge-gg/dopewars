@@ -39,7 +39,7 @@ export const useClaimable = (playerId: string) => {
     if (Number(playerId) > 0) {
       refetch();
     }
-  }, [selectedChain.toriiUrl, playerId, refetch]);
+  }, [selectedChain.toriiUrl]);
 
   const claimable = useMemo(() => {
     if (isFetching || !data) return [];

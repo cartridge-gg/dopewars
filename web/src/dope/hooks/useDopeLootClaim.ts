@@ -56,7 +56,7 @@ export const useDopeLootClaim = ({ getDojoContract }: { getDojoContract: (tag: s
         });
       }
     },
-    [account, dopeLootClaimContract.address, toast],
+    [account],
   );
 
   const onRelease = useCallback(
@@ -100,7 +100,7 @@ export const useDopeLootClaim = ({ getDojoContract }: { getDojoContract: (tag: s
         });
       }
     },
-    [account, dopeLootClaimContract.address, toast],
+    [account],
   );
 
   return { onOpen, onRelease, isLoading, isSuccess };

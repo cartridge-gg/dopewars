@@ -50,7 +50,6 @@ export const useVotes = (contractAddress: string, account?: AccountInterface) =>
 
   useEffect(() => {
     refresh();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account]);
 
   return { isLoading, votingPower, delegateTo, delegates };

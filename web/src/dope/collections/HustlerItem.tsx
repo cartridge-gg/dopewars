@@ -39,15 +39,9 @@ export default function HustlerItem({ token }: { token: ParsedToken }) {
                   src={token.metadata.image}
                   loading="lazy"
                   draggable="false"
-                  alt={token.metadata.name || `Hustler #${token.token_id}`}
                 />
               ) : (
-                <img
-                  className="aspect-square w-full mb-1"
-                  src="/public/images/dope-smiley.svg"
-                  draggable="false"
-                  alt="Dope Smiley"
-                />
+                <img className="aspect-square w-full mb-1" src="/public/images/dope-smiley.svg" draggable="false" />
               )}
 
               {/* {details && (

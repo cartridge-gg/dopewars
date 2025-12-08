@@ -18,7 +18,7 @@ export default function Claim() {
     if (["mainnet", "sepolia"].includes(selectedChain.chainConfig.network)) {
       router.replace("/");
     }
-  }, [selectedChain, router]);
+  }, [selectedChain]);
 
   return (
     <EthProvider>

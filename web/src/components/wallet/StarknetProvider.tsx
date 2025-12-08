@@ -183,7 +183,7 @@ export function StarknetProvider({ children, selectedChain }: { children: ReactN
       provider: customJsonRpcProvider(selectedChain),
       connectors: getConnectorsForChain(selectedChain, router.asPath),
     };
-  }, [selectedChain, router.asPath]);
+  }, [selectedChain]);
 
   const [explorer, setExplorer] = useState<ExplorerFactory>(() => starkscan);
 

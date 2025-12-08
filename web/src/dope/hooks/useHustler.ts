@@ -64,7 +64,7 @@ export const useHustler = (toriiClient: ToriiClient, tokenId: number) => {
     if (tokenId > -1 && !Number.isNaN(tokenId)) {
       initAsync();
     }
-  }, [tokenId, selectedChain, toriiClient]);
+  }, [tokenId, selectedChain]);
 
   return { hustlerBody, hustlerMeta, setHustlerBody, setHustlerMeta, isLoaded };
 };

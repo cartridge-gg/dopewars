@@ -63,7 +63,7 @@ export const useERC721 = ({
         });
       }
     },
-    [account, contract.address, toast],
+    [account],
   );
 
   return { transfer, isLoading, isSuccess };

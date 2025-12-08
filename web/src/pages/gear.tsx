@@ -40,7 +40,7 @@ export default function Gear() {
       rings,
       accessories,
     };
-  }, [getComponentValuesBySlug]);
+  }, [configStore]);
 
   return (
     <Layout
@@ -115,7 +115,7 @@ const Item = ({ componentValue }: { componentValue: ComponentValueEvent }) => {
       name_suffix: 0,
       suffix: 0,
     });
-  }, [componentValue, configStore, getCollectionComponentsById]);
+  }, [componentValue]);
 
   const desc = useMemo(() => {
     if (!itemFull.levels) return null;

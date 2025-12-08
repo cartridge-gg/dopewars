@@ -20,11 +20,11 @@ export default function Dope() {
 
   const dopeLootAddress = useMemo(() => {
     return getContractByName(selectedChain.manifest, "dope", "DopeLoot")!.address;
-  }, [selectedChain.manifest]);
+  }, [selectedChain]);
 
   const addresses = useMemo(() => {
     return [dopeLootAddress];
-  }, [dopeLootAddress]);
+  }, [selectedChain.manifest]);
 
   const { tokens, tokensBalances, accountTokens, refetch, isLoading } = useDojoTokens(
     toriiClient,

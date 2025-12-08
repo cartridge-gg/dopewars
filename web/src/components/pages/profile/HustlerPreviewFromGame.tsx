@@ -22,7 +22,7 @@ export const HustlerPreviewFromGame = observer(
         initAsync();
       }
       //
-    }, [gameId, gameStore]);
+    }, [gameId]);
 
     const [hustlerMeta, setHustlerMeta] = useState({
       ...defaultHustlerMetadata,
@@ -33,10 +33,10 @@ export const HustlerPreviewFromGame = observer(
     });
 
     useEffect(() => {
-      setHustlerMeta((prev) => ({
-        ...prev,
+      setHustlerMeta({
+        ...hustlerMeta,
         name: `#${tokenId}`,
-      }));
+      });
     }, [tokenId]);
 
     const hustlerBody = useMemo(() => {
