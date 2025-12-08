@@ -19,7 +19,7 @@ import { ControllerConnector } from "@cartridge/connector";
 export const Header = observer(() => {
   const isMobile = IsMobile();
 
-  const { router, gameId, } = useRouterContext();
+  const { router, gameId } = useRouterContext();
   const { account, connector } = useAccount();
   const {
     uiStore,
@@ -27,11 +27,11 @@ export const Header = observer(() => {
   } = useDojoContext();
   const { game, gameConfig } = useGameStore();
 
-  const {isMainnet, isSepolia} = useMemo(() => {
+  const { isMainnet, isSepolia } = useMemo(() => {
     return {
-      isMainnet: selectedChain.chainConfig.network ==="mainnet",
-      isSepolia: selectedChain.chainConfig.network ==="sepolia",
-    }
+      isMainnet: selectedChain.chainConfig.network === "mainnet",
+      isSepolia: selectedChain.chainConfig.network === "sepolia",
+    };
   }, [selectedChain]);
 
   useEffect(() => {
@@ -61,10 +61,10 @@ export const Header = observer(() => {
             onClick={() => {
               if (isMainnet || isSepolia) {
                 const controllerConnector = connector as unknown as ControllerConnector;
-                if(isSepolia){
+                if (isSepolia) {
                   controllerConnector.controller.openStarterPack("dopewars-claim-sepolia");
                 }
-                if(isMainnet){
+                if (isMainnet) {
                   controllerConnector.controller.openStarterPack("dopewars-claim-mainnet");
                 }
               } else {

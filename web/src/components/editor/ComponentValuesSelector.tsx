@@ -36,7 +36,7 @@ export function ComponentValuesSelector({
         </Box>
       </PopoverTrigger>
       <PopoverContent>
-        <PopoverBody w="230px" display="flex" flexWrap="wrap" gap={2} p={2} >
+        <PopoverBody w="230px" display="flex" flexWrap="wrap" gap={2} p={2}>
           {componentValues &&
             componentValues.map((t: ComponentValueEvent) => {
               return (
@@ -49,7 +49,6 @@ export function ComponentValuesSelector({
                   border="none"
                   bg="#666"
                   borderRadius="0"
-                 
                   // className="px-O py-0 rounded-none w-[48px] h-[48px] bg-[#666] hover:bg-[#777]"
                   onClick={() => {
                     setSelectedComponentValue(t);

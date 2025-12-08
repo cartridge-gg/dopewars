@@ -49,9 +49,9 @@ export const Input = ({ ...props }: StyleProps & InputProps) => {
     return () => window.removeEventListener("scroll", onScroll);
   }, [updateCaretPosition]);
 
-   useEffect(() => {
+  useEffect(() => {
     setTimeout(() => {
-      updateCaretPosition()
+      updateCaretPosition();
     }, 100);
   }, [updateCaretPosition]);
 
