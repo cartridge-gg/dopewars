@@ -1,4 +1,4 @@
-import { Box, Popover, PopoverBody, PopoverContent, PopoverTrigger } from "@chakra-ui/react";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import { Button } from "../common/Button";
 
 export function ColorPicker({
@@ -11,34 +11,28 @@ export function ColorPicker({
   setSelectedColor: (e: number) => void;
 }) {
   return (
-    <Popover placement="right">
-      <PopoverTrigger>
-        <Box w="24px" h="24px" p={1} borderWidth="2px" borderColor="neon.500" style={{ background: colors[selectedColor] }}></Box>
-      </PopoverTrigger>
-      <PopoverContent>
-        <PopoverBody w="auto" display="flex" flexWrap="wrap" gap={2} p={3}>
-          {colors.map((color, index) => {
-            return (
-              <Button
-                key={color}
-                onClick={() => setSelectedColor(index)}
-                w="24px"
-                h="24px"
-                minW="24px"
-                p={0}
-                m={0}
-                border="solid 1px !important"
-                borderColor="neon.500"
-                borderRadius={0}
-
-                style={{ background: color }}
-              >
-                <></>
-              </Button>
-            );
-          })}
-        </PopoverBody>
-      </PopoverContent>
+    <Popover className="relative">
+      <PopoverButton
+        className="w-6 h-6 p-1 border-2 border-neon-500"
+        style={{ background: colors[selectedColor] }}
+      />
+      <PopoverPanel
+        anchor="right"
+        className="flex flex-wrap gap-2 p-3 w-auto bg-gray-900 border border-neon-500 shadow-lg"
+      >
+        {colors.map((color, index) => {
+          return (
+            <Button
+              key={color}
+              onClick={() => setSelectedColor(index)}
+              className="!w-6 !h-6 !min-w-6 !p-0 !m-0 !border !border-neon-500 !rounded-none"
+              style={{ background: color }}
+            >
+              <></>
+            </Button>
+          );
+        })}
+      </PopoverPanel>
     </Popover>
   );
 }

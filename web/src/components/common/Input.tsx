@@ -1,20 +1,17 @@
-import { Box, Input as ChakraInput, InputProps, StyleProps } from "@chakra-ui/react";
-import { keyframes } from "@emotion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { cn } from "@/utils/cn";
+import { InputHTMLAttributes, useCallback, useEffect, useRef, useState } from "react";
+import { cardBorderStyle } from "@/utils/borderStyles";
 
 // @ts-ignore
 import useCaretPosition from "use-caret-position";
 
-const blinkAnim = keyframes`  
-  0% {opacity: 0.5;}   
-  70% {opacity: 0.5;}   
-  71% {opacity: 0;}   
-  100% {opacity: 0;}   
-`;
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  variant?: "primary";
+}
 
-export const Input = ({ ...props }: StyleProps & InputProps) => {
+export const Input = ({ className, variant = "primary", onKeyDown, onFocus: onFocusProp, onBlur: onBlurProp, ...props }: InputProps) => {
   const [isFocused, setIsFocused] = useState(false);
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const { x, y, getPosition } = useCaretPosition(inputRef);
 
   const updateCaretPosition = useCallback(() => {
@@ -23,21 +20,21 @@ export const Input = ({ ...props }: StyleProps & InputProps) => {
     }, 10);
   }, [getPosition]);
 
-  const onFocus = () => {
+  const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     updateCaretPosition();
     setIsFocused(true);
+    onFocusProp?.(e);
   };
 
-  const onBlur = () => {
+  const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     updateCaretPosition();
     setIsFocused(false);
+    onBlurProp?.(e);
   };
 
-  const handleKeyDown = (e: any) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     updateCaretPosition();
-    if (props.onKeyDown) {
-      props.onKeyDown(e);
-    }
+    onKeyDown?.(e);
   };
 
   useEffect(() => {
@@ -45,55 +42,53 @@ export const Input = ({ ...props }: StyleProps & InputProps) => {
       updateCaretPosition();
     };
 
-    window.addEventListener("scroll", onScroll, true); // use capturing, not bubbling
+    window.addEventListener("scroll", onScroll, true);
     return () => window.removeEventListener("scroll", onScroll);
   }, [updateCaretPosition]);
 
-   useEffect(() => {
+  useEffect(() => {
     setTimeout(() => {
-      updateCaretPosition()
+      updateCaretPosition();
     }, 100);
   }, [updateCaretPosition]);
 
+  // Input field styles combining Tailwind classes with border image inline styles
+  const inputStyle: React.CSSProperties = {
+    ...cardBorderStyle,
+    backgroundColor: "transparent",
+    caretColor: "transparent",
+  };
+
   return (
-    <div
-      style={{
-        position: "relative",
-        width: "100%",
-        margin: "0",
-      }}
-    >
-      <ChakraInput
-        {...props}
+    <div className="relative w-full m-0">
+      <input
         ref={inputRef}
+        className={cn(
+          "w-full border-0 rounded-xl overflow-hidden",
+          "focus:bg-neon-700",
+          "placeholder:text-neon-500",
+          "text-neon-200 font-body",
+          "outline-none",
+          className
+        )}
+        style={inputStyle}
         onClick={updateCaretPosition}
         onKeyDown={handleKeyDown}
         onFocus={onFocus}
         onBlur={onBlur}
-        style={{
-          caretColor: "transparent",
-        }}
-        variant="primary"
+        {...props}
       />
       {isFocused && (
-        <Box
-          className="custom-caret"
+        <div
+          className="fixed w-2.5 z-[99] -ml-px rounded-sm overflow-visible bg-neon-200 animate-blink"
           style={{
-            position: "fixed",
-            width: "10px",
             height: "1.2em",
             left: `${x}px`,
             top: `${y}px`,
-            zIndex: 99,
-            marginLeft: "-1px",
             marginTop: "9px",
             transition: "none",
-            backgroundColor: "var(--chakra-colors-neon-200)",
-            borderRadius: "3px",
-            overflow: "visible",
           }}
-          animation={`${blinkAnim} infinite 1.2s linear`}
-        ></Box>
+        />
       )}
     </div>
   );

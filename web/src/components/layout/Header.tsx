@@ -1,9 +1,9 @@
 import { HeaderButton, MediaPlayer } from "@/components/layout";
 import { useDojoContext, useGameStore, useRouterContext } from "@/dojo/hooks";
 import { initSoundStore } from "@/hooks/sound";
-import { headerStyles } from "@/theme/styles";
+import { headerStyle } from "@/utils/borderStyles";
 import { IsMobile, formatCashHeader } from "@/utils/ui";
-import { Box, Button, Divider, Flex, HStack } from "@chakra-ui/react";
+import { cn } from "@/utils/cn";
 import { useAccount } from "@starknet-react/core";
 import { observer } from "mobx-react-lite";
 import { useEffect, useMemo } from "react";
@@ -13,13 +13,13 @@ import { CashIndicator, DayIndicator, HealthIndicator } from "../player";
 import { ConnectButton } from "../wallet/ConnectButton";
 
 import DrawerMenu from "./DrawerMenu";
-import { Cigarette, ExternalLink } from "../icons";
+import { Cigarette } from "../icons";
 import { ControllerConnector } from "@cartridge/connector";
 
 export const Header = observer(() => {
   const isMobile = IsMobile();
 
-  const { router, gameId, } = useRouterContext();
+  const { router, gameId } = useRouterContext();
   const { account, connector } = useAccount();
   const {
     uiStore,
@@ -27,11 +27,11 @@ export const Header = observer(() => {
   } = useDojoContext();
   const { game, gameConfig } = useGameStore();
 
-  const {isMainnet, isSepolia} = useMemo(() => {
+  const { isMainnet, isSepolia } = useMemo(() => {
     return {
-      isMainnet: selectedChain.chainConfig.network ==="mainnet",
-      isSepolia: selectedChain.chainConfig.network ==="sepolia",
-    }
+      isMainnet: selectedChain.chainConfig.network === "mainnet",
+      isSepolia: selectedChain.chainConfig.network === "sepolia",
+    };
   }, [selectedChain]);
 
   useEffect(() => {
@@ -42,89 +42,80 @@ export const Header = observer(() => {
   }, []);
 
   return (
-    <HStack
-      w="full"
-      px="10px"
-      spacing="10px"
-      zIndex="overlay"
-      align="flex-start"
-      py={["0", "16px"]}
-      fontSize={["14px", "16px"]}
+    <div
+      className={cn(
+        "flex items-start w-full px-2.5 gap-2.5 z-50",
+        isMobile ? "py-0 text-sm" : "py-4 text-base"
+      )}
     >
-      <HStack gap={3} flex="1">
+      <div className="flex items-center gap-3 flex-1">
         {!gameId && <ClaimReward />}
         {!gameId && router.route === "/" && account && (
           <HeaderButton
-            variant="pixelated"
-            h={["40px", "48px"]}
-            fontSize="14px"
+            className={cn(
+              "flex flex-row items-center justify-center mr-6 py-2 text-sm",
+              isMobile ? "h-10" : "h-12"
+            )}
             onClick={() => {
               if (isMainnet || isSepolia) {
                 const controllerConnector = connector as unknown as ControllerConnector;
-                if(isSepolia){
+                if (isSepolia) {
                   controllerConnector.controller.openStarterPack("dopewars-claim-sepolia");
                 }
-                if(isMainnet){
+                if (isMainnet) {
                   controllerConnector.controller.openStarterPack("dopewars-claim-mainnet");
                 }
               } else {
                 router.push("/claim");
               }
             }}
-            mr={6}
-            display="flex"
-            flexDirection={"row"}
-            alignItems="center"
-            justifyContent="center"
-            py={2}
           >
-            <Cigarette mr="2" /> MIGRATION
+            <Cigarette className="mr-2" /> MIGRATION
           </HeaderButton>
         )}
-      </HStack>
+      </div>
 
-      {game /*|| router.asPath.includes("logs")*/ && (
-        <HStack
-          flex={["auto", 1]}
-          justify="center"
-          width={["100%", "auto"]}
-          cursor="help"
+      {game && (
+        <div
+          className={cn(
+            "flex items-center justify-center cursor-help",
+            isMobile ? "flex-auto w-full" : "flex-1 w-auto"
+          )}
           onClick={() => {
             uiStore.openSeasonDetails();
           }}
         >
-          <HStack
-            h={["40px", "48px"]}
-            width={["100%", "auto"]}
-            px="20px"
-            spacing={["10px", "30px"]}
-            bg="neon.700"
-            sx={{ ...headerStyles }}
+          <div
+            className={cn(
+              "flex items-center justify-center bg-neon-700",
+              isMobile ? "h-10 w-full px-5 gap-2.5" : "h-12 w-auto px-5 gap-7"
+            )}
+            style={headerStyle(isMobile)}
           >
-            <Flex w="full" align="center" justify="center" gap="10px">
-              <HStack>
+            <div className="flex items-center justify-center gap-2.5 w-full">
+              <div className="flex items-center gap-2">
                 <CashIndicator cash={formatCashHeader(game.player.cash)} />
-                <Divider orientation="vertical" borderColor="neon.600" h="12px" />
+                <div className="w-px h-3 bg-neon-600" />
                 <HealthIndicator health={game.player.health} maxHealth={gameConfig?.health} />
-                <Divider orientation="vertical" borderColor="neon.600" h="12px" />
+                <div className="w-px h-3 bg-neon-600" />
                 <DayIndicator day={game.player.turn} max={gameConfig?.max_turns} />
-              </HStack>
-            </Flex>
-          </HStack>
-        </HStack>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
-      <HStack flex="1" justify="right">
+      <div className="flex items-center flex-1 justify-end gap-2">
         {!isMobile && <ConnectButton />}
         {!isMobile && account && game && <ProfileLink />}
 
         {/* trick to allow autoplay.. */}
-        <Box display="none">
+        <div className="hidden">
           <MediaPlayer />
-        </Box>
+        </div>
 
         <DrawerMenu />
-      </HStack>
-    </HStack>
+      </div>
+    </div>
   );
 });

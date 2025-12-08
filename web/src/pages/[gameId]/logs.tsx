@@ -142,8 +142,7 @@ const Logs = () => {
       footer={
         <Footer>
           <Button
-            w={["full", "auto"]}
-            px={["auto", "20px"]}
+            className="w-full md:w-auto px-auto md:px-5"
             onClick={() => {
               router.back();
             }}

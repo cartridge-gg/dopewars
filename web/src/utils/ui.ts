@@ -1,7 +1,7 @@
-import { useBreakpointValue } from "@chakra-ui/react";
 import { BigNumberish } from "starknet";
+import { useIsMobile } from "@/hooks/useResponsive";
 
-export const IsMobile = () => useBreakpointValue([true, false]);
+export const IsMobile = () => useIsMobile();
 
 type Point = {
   x: number;

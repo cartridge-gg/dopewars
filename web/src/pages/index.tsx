@@ -94,12 +94,12 @@ export default function Home() {
               </HStack>
             )}
             {/* {!isPaused && isSeasonOpen && canCreateGame && (
-              <Button flex="1" onClick={() => onHustle(GameMode.Noob)}>
+              <Button className="flex-1" onClick={() => onHustle(GameMode.Noob)}>
                 <Flipflop /> Play guest
               </Button>
             )} */}
             {!isPaused && isSeasonOpen && canCreateGame && (
-              <Button flex="1" onClick={() => onHustle(GameMode.Ranked)}>
+              <Button className="flex-1" onClick={() => onHustle(GameMode.Ranked)}>
                 <Glock /> Hustle
               </Button>
             )}
@@ -130,7 +130,7 @@ export default function Home() {
                     </span>
                     !
                   </Text>
-                  <Button w="full" isLoading={isPending} onClick={onLaunder}>
+                  <Button className="w-full" isLoading={isPending} onClick={onLaunder}>
                     <HStack w="full" justifyContent="center">
                       <Text>Launder results</Text>
                     </HStack>

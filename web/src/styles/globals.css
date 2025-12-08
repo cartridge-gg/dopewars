@@ -1,0 +1,225 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Font face definitions */
+@font-face {
+  font-family: "dos-vga";
+  font-weight: 400;
+  font-style: normal;
+  src: url("/fonts/DOS_VGA.ttf");
+}
+
+@font-face {
+  font-family: "pixel-script";
+  font-weight: 400;
+  font-style: normal;
+  src: url("/fonts/PixelscriptPro.ttf");
+}
+
+@font-face {
+  font-family: "broken-console";
+  font-weight: 400;
+  font-style: normal;
+  src: url("/fonts/broken-console-broken-console-regular-400.ttf");
+}
+
+@font-face {
+  font-family: "ppmondwest";
+  font-weight: 400;
+  font-style: normal;
+  src: url("/fonts/PPMondwest-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "chicago-flf";
+  font-weight: 500;
+  font-style: normal;
+  src: url("/fonts/ChicagoFLF.ttf");
+}
+
+@font-face {
+  font-family: "ppneuebit";
+  font-weight: 700;
+  font-style: normal;
+  src: url("/fonts/PPNeueBit-Bold.otf") format("opentype");
+}
+
+/* Base layer - global styles */
+@layer base {
+  body {
+    @apply h-dvh bg-neon-900 text-neon-200 font-body;
+    letter-spacing: 0.04em;
+    -webkit-tap-highlight-color: transparent;
+    scrollbar-width: none;
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
+  }
+
+  * {
+    user-select: none;
+  }
+
+  /* Default heading styles */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
+  }
+}
+
+/* Component layer - reusable patterns */
+@layer components {
+  /* Layer styles from Chakra theme */
+  .layer-card {
+    @apply relative text-neon-200 bg-transparent;
+    border-style: solid;
+    border-image-slice: 6;
+    border-image-width: 6px;
+  }
+
+  .layer-rounded {
+    @apply p-1.5 rounded-md bg-neon-700;
+  }
+
+  .layer-fill {
+    @apply absolute top-0 left-0 w-full h-full;
+  }
+
+  /* Text styles from Chakra theme */
+  .text-upper-bold {
+    @apply font-bold uppercase;
+  }
+
+  .text-subheading {
+    @apply uppercase font-broken-console;
+    letter-spacing: 0.25em;
+  }
+
+  /* Custom scrollbar hiding */
+  .hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Toast manager positioning (replaces Chakra toast manager) */
+.toast-container-top-left {
+  margin-top: 50px;
+}
+
+@media only screen and (min-width: 768px) {
+  .toast-container-top-left {
+    margin-top: 0px;
+  }
+}
+
+/* ka-table global styles */
+html .ka {
+  background-color: transparent;
+}
+
+html .ka-thead-background {
+  background-color: transparent;
+}
+
+html .ka-table thead {
+  text-align: left;
+  text-transform: uppercase;
+  font-weight: 400;
+  border-bottom: solid 1px #202f20; /* neon.700 */
+}
+
+html .ka-row {
+  border-top: solid 1px #202f20; /* neon.700 */
+  border-bottom: solid 1px #202f20; /* neon.700 */
+}
+
+html .ka-thead-cell {
+  color: #157342; /* neon.500 */
+}
+
+html .ka-cell {
+  color: #11ed83; /* neon.400 */
+}
+
+html .ka-cell,
+html .ka-thead-cell {
+  padding: 4px;
+}
+
+html .ka-header-filter-button-icon {
+  left: 0;
+  color: #157342; /* neon.500 */
+}
+
+html .ka-header-filter-button.ka-header-filter-button-has-value .ka-icon-filter {
+  color: #11ed83; /* neon.400 */
+}
+
+html .ka-popup {
+  background-color: #202f20; /* neon.700 */
+}
+
+html .ka-popup-content-item-value {
+  padding: 4px;
+  color: #11ed83; /* neon.400 */
+}
+
+.ka-input {
+  width: 100%;
+  padding: 4px;
+  min-width: 50px;
+  background: transparent;
+  border-color: #157342; /* neon.500 */
+}
+
+/* Vertical table layout */
+.table-vertical .ka {
+  table {
+    border-collapse: collapse;
+  }
+
+  colgroup {
+    display: none;
+  }
+
+  /* Force table to not be like tables anymore */
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  table {
+    display: flex;
+    flex-direction: row;
+  }
+
+  th,
+  td {
+    height: 40px;
+  }
+
+  th {
+    border-bottom: 1px solid;
+    border-color: #202f20; /* neon.700 */
+  }
+
+  td.ka-cell {
+    border-bottom: 1px solid;
+    border-color: #202f20; /* neon.700 */
+  }
+}

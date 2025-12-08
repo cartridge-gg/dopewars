@@ -116,11 +116,10 @@ const Decision = observer(() => {
     <Layout
       isSinglePanel
       footer={
-        <Footer w={["100%", "50%"]}>
+        <Footer className="w-full md:w-1/2">
           <ChildrenOrConnect>
             <Button
-              w="full"
-              px={["auto", "20px"]}
+              className="w-full px-auto md:px-5"
               isDisabled={isRunning || isPaying}
               isLoading={isFigthing}
               onClick={() => {
@@ -132,8 +131,7 @@ const Decision = observer(() => {
             </Button>
 
             <Button
-              w="full"
-              px={["auto", "20px"]}
+              className="w-full px-auto md:px-5"
               isDisabled={isPaying || isFigthing}
               isLoading={isRunning}
               onClick={() => {
@@ -145,8 +143,7 @@ const Decision = observer(() => {
             </Button>
 
             <Button
-              w="full"
-              px={["auto", "20px"]}
+              className="w-full px-auto md:px-5"
               isDisabled={isRunning || isFigthing || !canPay}
               isLoading={isPaying}
               onClick={() => {

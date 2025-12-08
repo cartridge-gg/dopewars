@@ -85,7 +85,7 @@ export default function LootItem({ token }: { token: ParsedToken }) {
       {!isOpened && isHovered && (
         <Box position="absolute" bottom={0} right={0} zIndex={10}>
           <Button
-            w="80px"
+            className="w-20"
             onClick={async () => {
               await onOpen(Number(token.token_id));
               // await initDopeLootClaimState();

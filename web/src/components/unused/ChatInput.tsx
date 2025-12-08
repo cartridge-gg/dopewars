@@ -1,6 +1,5 @@
 import { Button, Input } from "@/components/common";
 import { SendMessage } from "@/components/icons";
-import { HStack, StyleProps } from "@chakra-ui/react";
 
 export interface ChatInputProps {
   value: string;
@@ -8,7 +7,7 @@ export interface ChatInputProps {
   onSend: () => void;
 }
 
-export const ChatInput = ({ value, onChange, onSend, ...props }: ChatInputProps & StyleProps) => {
+export const ChatInput = ({ value, onChange, onSend, ...props }: ChatInputProps & React.HTMLAttributes<HTMLDivElement>) => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && value) {
       onSend();
@@ -16,24 +15,17 @@ export const ChatInput = ({ value, onChange, onSend, ...props }: ChatInputProps 
   };
 
   return (
-    <HStack w="100%" {...props}>
+    <div className="flex w-full gap-2" {...props}>
       <Input
         placeholder="Say Something!"
-        backgroundColor="neon.700"
-        p="0 12px"
-        _hover={{
-          backgroundColor: "neon.600",
-        }}
-        _focus={{
-          backgroundColor: "neon.600",
-        }}
+        className="bg-neon-700 px-3 py-0 hover:bg-neon-600 focus:bg-neon-600"
         value={value}
         onChange={onChange}
         onKeyDown={handleKeyDown}
       />
-      <Button p="0 6px" isDisabled={!value} onClick={onSend}>
+      <Button className="px-[6px]" isDisabled={!value} onClick={onSend}>
         <SendMessage size="lg" />
       </Button>
-    </HStack>
+    </div>
   );
 };

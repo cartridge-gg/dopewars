@@ -1,4 +1,4 @@
-import { HStack, Spacer, StyleProps, Text } from "@chakra-ui/react";
+import { cn } from "@/utils/cn";
 import { useState } from "react";
 import { ArrowInput } from "../icons";
 
@@ -8,9 +8,10 @@ interface InputNumberProps {
   step?: number;
   value: number;
   onChange: (_: number) => void;
+  className?: string;
 }
 
-export const InputNumber = ({ min = 0, max, step = 1, value, onChange, ...props }: InputNumberProps & StyleProps) => {
+export const InputNumber = ({ min = 0, max, step = 1, value, onChange, className }: InputNumberProps) => {
   const [isFlashed, setIsFlashed] = useState(false);
 
   const onClick = (newValue: number) => {
@@ -22,11 +23,15 @@ export const InputNumber = ({ min = 0, max, step = 1, value, onChange, ...props 
   };
 
   return (
-    <HStack w="full" {...props}>
-      <Text color={isFlashed ? "neon.900" : "neon.200"} backgroundColor={isFlashed ? "neon.200" : "transparent"}>
+    <div className={cn("flex items-center w-full", className)}>
+      <span
+        className={cn(
+          isFlashed ? "text-neon-900 bg-neon-200" : "text-neon-200 bg-transparent"
+        )}
+      >
         {value}
-      </Text>
-      <Spacer />
+      </span>
+      <div className="flex-1" />
       <ArrowInput
         size="md"
         cursor="pointer"
@@ -40,6 +45,6 @@ export const InputNumber = ({ min = 0, max, step = 1, value, onChange, ...props 
         disabled={value <= min ? true : false}
         onClick={() => onClick(value - step)}
       />
-    </HStack>
+    </div>
   );
 };

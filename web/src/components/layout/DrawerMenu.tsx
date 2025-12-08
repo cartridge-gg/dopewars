@@ -50,7 +50,7 @@ const DrawerMenu = () => {
   const { uiStore } = useDojoContext();
   return (
     <>
-      <HeaderButton ref={btnRef} onClick={onOpen} h={["40px", "48px"]} w={["40px", "48px"]}>
+      <HeaderButton ref={btnRef} onClick={onOpen} className="h-10 w-10 md:h-12 md:w-12">
         <Dots />
       </HeaderButton>
       <Drawer isOpen={isOpen} placement="right" size="xs" onClose={onClose} trapFocus={false}>

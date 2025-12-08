@@ -300,8 +300,7 @@ const New = observer(() => {
         <Footer>
           {!selectedTokenId && (
             <Button
-              w={["full", "auto"]}
-              px={["auto", "20px"]}
+              className="w-full md:w-auto px-auto md:px-5"
               onClick={() => {
                 playSound(Sounds.Ooo, 0.3);
                 router.push("/");
@@ -313,8 +312,7 @@ const New = observer(() => {
 
           {selectedTokenId && (
             <Button
-              w={["full", "auto"]}
-              px={["auto", "20px"]}
+              className="w-full md:w-auto px-auto md:px-5"
               onClick={() => {
                 setSelectedTokenId(undefined);
               }}
@@ -327,8 +325,7 @@ const New = observer(() => {
             {gameMode == GameMode.Ranked && !selectedTokenId && (
               <>
                 <Button
-                  w={["full", "auto"]}
-                  px={["auto", "20px"]}
+                  className="w-full md:w-auto px-auto md:px-5"
                   isLoading={isPending}
                   onClick={() => selectedToken && setSelectedTokenId(Number(selectedToken.token_id))}
                 >
@@ -340,8 +337,7 @@ const New = observer(() => {
             {gameMode == GameMode.Ranked && selectedTokenId && (
               <>
                 <Button
-                  w={["full", "auto"]}
-                  px={["auto", "20px"]}
+                  className="w-full md:w-auto px-auto md:px-5"
                   isLoading={isPending}
                   onClick={() => create(gameMode)}
                   isDisabled={balance < 1000n * ETHER || !selectedTokenId}
@@ -386,8 +382,7 @@ const New = observer(() => {
             <>
               <HStack gap={1}>
                 <Button
-                  fontSize="11px"
-                  h="30px"
+                  className="text-[11px] h-[30px]"
                   variant="selectable"
                   isActive={selectedTokenIdType === TokenIdType.GuestLootId}
                   onClick={() => setSelectedTokenIdType(TokenIdType.GuestLootId)}
@@ -397,8 +392,7 @@ const New = observer(() => {
                 </Button>
 
                 <Button
-                  fontSize="11px"
-                  h="30px"
+                  className="text-[11px] h-[30px]"
                   variant="selectable"
                   isActive={selectedTokenIdType === TokenIdType.LootId}
                   onClick={() => setSelectedTokenIdType(TokenIdType.LootId)}
@@ -408,8 +402,7 @@ const New = observer(() => {
                 </Button>
 
                 <Button
-                  fontSize="11px"
-                  h="30px"
+                  className="text-[11px] h-[30px]"
                   variant="selectable"
                   isActive={selectedTokenIdType === TokenIdType.HustlerId}
                   onClick={() => setSelectedTokenIdType(TokenIdType.HustlerId)}
@@ -742,9 +735,7 @@ const New = observer(() => {
 
               <VStack w="full" ref={inputRef}>
                 <Input
-                  display="flex"
-                  mx="auto"
-                  maxW="200px"
+                  className="flex mx-auto max-w-[200px]"
                   maxLength={16}
                   placeholder="Enter your name"
                   autoFocus

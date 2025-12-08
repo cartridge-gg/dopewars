@@ -56,8 +56,7 @@ const Consequence = () => {
           <Footer>
             {!isDead ? (
               <Button
-                w={["full", "auto"]}
-                px={["auto", "20px"]}
+                className="w-full md:w-auto px-auto md:px-5"
                 onClick={() => {
                   if (gameEvents.isGameOver) {
                     router.push(`/${gameId}/end`);
@@ -70,8 +69,7 @@ const Consequence = () => {
               </Button>
             ) : (
               <Button
-                w={["full", "auto"]}
-                px={["auto", "20px"]}
+                className="w-full md:w-auto px-auto md:px-5"
                 onClick={() => {
                   router.push(`/${gameId}/end`);
                 }}
