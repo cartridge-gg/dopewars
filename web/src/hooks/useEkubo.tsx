@@ -153,7 +153,9 @@ export const getSwapQuote = async (
   const amountIn = isExactOutput
     ? Number(formatUnits(data?.total_calculated?.toString() ?? "0", tokenIn.decimals)) || 0
     : amount;
-  const amountOut = isExactOutput ? amount : Number(formatUnits(data?.total_calculated?.toString() ?? "0", tokenOut.decimals)) || 0;
+  const amountOut = isExactOutput
+    ? amount
+    : Number(formatUnits(data?.total_calculated?.toString() ?? "0", tokenOut.decimals)) || 0;
   const scaledAmountIn = parseUnits(amountIn.toString(), tokenIn.decimals);
   const scaledAmountOut = parseUnits(amountOut.toString(), tokenOut.decimals);
 
