@@ -725,16 +725,9 @@ const New = observer(() => {
                     </HStack>
 
                     {/* {true || selectedChain.name === "MAINNET" && ( */}
-                      <HStack
-                        w="full"
-                        justifyContent="center"
-                        mt={2}
-                        pt={2}
-                        borderTop="solid 1px"
-                        borderColor="neon.700"
-                      >
-                        <BuyPaper paperAmount={season.paper_fee * multiplier}/>
-                      </HStack>
+                    <HStack w="full" justifyContent="center" mt={2} pt={2} borderTop="solid 1px" borderColor="neon.700">
+                      <BuyPaper paperAmount={season.paper_fee * multiplier} />
+                    </HStack>
                     {/* )} */}
                   </VStack>
                 </HStack>

@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout";
 import { ChildrenOrConnect, PaperFaucet, TokenBalance } from "@/components/wallet";
-import {  useDojoContext, useRouterContext, useSeasonByVersion, useSystems } from "@/dojo/hooks";
+import { useDojoContext, useRouterContext, useSeasonByVersion, useSystems } from "@/dojo/hooks";
 import {
   Button,
   Card,

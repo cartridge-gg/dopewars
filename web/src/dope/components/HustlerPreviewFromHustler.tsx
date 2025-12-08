@@ -64,7 +64,7 @@ export const HustlerPreviewFromHustler = ({
         ...a,
         [v.slot]: { token_id: v.gear_item_id } as ParsedToken,
       }),
-      {}
+      {},
     );
   }, [equipment]);
 

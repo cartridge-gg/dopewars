@@ -10,7 +10,7 @@ import { Twitter } from "../../icons";
 const ShareButton = ({ ...props }: { variant?: string } & StyleProps) => {
   const { game, gameInfos } = useGameStore();
 
-  if ( !game || !gameInfos) return null;
+  if (!game || !gameInfos) return null;
 
   return (
     <ChakraLink

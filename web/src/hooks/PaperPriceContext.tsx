@@ -25,38 +25,41 @@ export const PaperPriceProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState<Error | null>(null);
   const lastFetchTimeRef = useRef(0);
 
-  const fetchPrice = useCallback(async (force = false) => {
-    const now = Date.now();
+  const fetchPrice = useCallback(
+    async (force = false) => {
+      const now = Date.now();
 
-    // Skip if cache is still valid (unless forced)
-    if (!force && usdPerPaper !== null && now - lastFetchTimeRef.current < CACHE_DURATION) {
-      return;
-    }
+      // Skip if cache is still valid (unless forced)
+      if (!force && usdPerPaper !== null && now - lastFetchTimeRef.current < CACHE_DURATION) {
+        return;
+      }
 
-    // Prevent concurrent fetches
-    if (isLoading) return;
+      // Prevent concurrent fetches
+      if (isLoading) return;
 
-    setIsLoading(true);
-    setError(null);
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      // Fetch PAPER to USDC conversion rate using 1000 PAPER
-      const scaledAmount = parseUnits("1000", PAPER_DECIMALS);
-      const response = await fetch(
-        `https://starknet-mainnet-quoter-api.ekubo.org/${scaledAmount}/${PAPER_ADDRESS}/${USDC_ADDRESS}`,
-      );
-      const data = await response.json();
-      const amountOut = Number(formatUnits(data?.total_calculated?.toString() ?? "0", USDC_DECIMALS)) || 0;
-      const price = amountOut / 1000;
-      setUsdPerPaper(price);
-      lastFetchTimeRef.current = Date.now();
-    } catch (e) {
-      console.error("Failed to fetch PAPER price:", e);
-      setError(e as Error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [usdPerPaper, isLoading]);
+      try {
+        // Fetch PAPER to USDC conversion rate using 1000 PAPER
+        const scaledAmount = parseUnits("1000", PAPER_DECIMALS);
+        const response = await fetch(
+          `https://starknet-mainnet-quoter-api.ekubo.org/${scaledAmount}/${PAPER_ADDRESS}/${USDC_ADDRESS}`,
+        );
+        const data = await response.json();
+        const amountOut = Number(formatUnits(data?.total_calculated?.toString() ?? "0", USDC_DECIMALS)) || 0;
+        const price = amountOut / 1000;
+        setUsdPerPaper(price);
+        lastFetchTimeRef.current = Date.now();
+      } catch (e) {
+        console.error("Failed to fetch PAPER price:", e);
+        setError(e as Error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [usdPerPaper, isLoading],
+  );
 
   // Fetch on mount
   useEffect(() => {

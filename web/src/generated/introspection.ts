@@ -1,17 +1,12 @@
-
-      export interface PossibleTypesResultData {
-        possibleTypes: {
-          [key: string]: string[]
-        }
-      }
-      const result: PossibleTypesResultData = {
-  "possibleTypes": {
-    "ERC__Token": [
-      "ERC20__Token",
-      "ERC721__Token",
-      "ERC1155__Token"
-    ],
-    "ModelUnion": [
+export interface PossibleTypesResultData {
+  possibleTypes: {
+    [key: string]: string[];
+  };
+}
+const result: PossibleTypesResultData = {
+  possibleTypes: {
+    ERC__Token: ["ERC20__Token", "ERC721__Token", "ERC1155__Token"],
+    ModelUnion: [
       "dope_Collection",
       "dope_CollectionComponent",
       "dope_CollectionComponentList",
@@ -54,9 +49,8 @@
       "dopewars_v0_Traveled",
       "dopewars_v0_TrophyCreation",
       "dopewars_v0_TrophyProgression",
-      "dopewars_v0_UpgradeItem"
-    ]
-  }
+      "dopewars_v0_UpgradeItem",
+    ],
+  },
 };
-      export default result;
-    
+export default result;

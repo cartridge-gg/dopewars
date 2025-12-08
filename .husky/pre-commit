@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+# Run lint-staged for web directory
+cd web && pnpm exec lint-staged

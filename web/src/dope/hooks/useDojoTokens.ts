@@ -53,7 +53,7 @@ export const useDojoTokens = (
           limit: 1_000,
           order_by: [],
         },
-        attribute_filters:[]
+        attribute_filters: [],
       });
 
       // console.log(tokens)

@@ -25,8 +25,7 @@ export default function LeaderboardPage() {
 
   const onCreateFakeGame = async () => {
     const { hash } = await createFakeGame(valueRef.current);
-    await waitForTransaction(account!,hash);
-    
+    await waitForTransaction(account!, hash);
 
     toast({ message: "created fake game Ser" });
   };

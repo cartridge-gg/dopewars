@@ -1,8 +1,8 @@
-import { toast } from 'react-hot-toast';
+import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { AccountInterface, Contract, uint256 } from "starknet";
 import { useSystems } from "@/dojo/hooks";
-import { useToast } from '@chakra-ui/react';
+import { useToast } from "@chakra-ui/react";
 
 export const useVotes = (contractAddress: string, account?: AccountInterface) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -52,5 +52,5 @@ export const useVotes = (contractAddress: string, account?: AccountInterface) =>
     refresh();
   }, [account]);
 
-  return { isLoading, votingPower, delegateTo , delegates};
+  return { isLoading, votingPower, delegateTo, delegates };
 };

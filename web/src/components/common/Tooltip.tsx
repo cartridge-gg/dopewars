@@ -19,7 +19,7 @@ export function Tooltip({
   const [isOpen, setIsOpen] = useState(false);
   return (
     <ChakraTooltip
-    // hasArrow
+      // hasArrow
       isOpen={isOpen}
       placement={placement}
       label={<TooltipContent title={title} content={content} text={text} color={color} />}

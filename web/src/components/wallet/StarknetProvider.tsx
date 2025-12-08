@@ -92,11 +92,7 @@ const cartridgeConnector = ({ selectedChain }: { selectedChain: DojoChainConfig 
         methods: [{ entrypoint: "approve" }],
       },
       [gameAddress]: {
-        methods: [
-          { entrypoint: "create_game" },
-          { entrypoint: "travel" },
-          { entrypoint: "end_game" },
-        ],
+        methods: [{ entrypoint: "create_game" }, { entrypoint: "travel" }, { entrypoint: "end_game" }],
       },
       [decideAddress]: {
         methods: [{ entrypoint: "decide" }],

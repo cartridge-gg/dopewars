@@ -41,7 +41,7 @@ export function Layer({
     } ${(maxY - minY) * pixelSize + pixelSize}`;
   }
 
-  let random = Math.ceil( Math.random()* 999_999_999)
+  let random = Math.ceil(Math.random() * 999_999_999);
 
   return (
     <svg
@@ -51,7 +51,7 @@ export function Layer({
       shapeRendering="crispEdges"
       // style={{backgroundColor: bgColor}}
     >
-        {/* <filter
+      {/* <filter
           id={`glow`}
           color-interpolation-filters="linearRGB"
           filterUnits="objectBoundingBox"
@@ -97,7 +97,7 @@ export function Layer({
           </feMerge>
         </filter> */}
 
-      <g 
+      <g
       // style={{ filter: glow > 0 ? `url(#glow)` : "" }}
       >
         {rects.map((r) => {

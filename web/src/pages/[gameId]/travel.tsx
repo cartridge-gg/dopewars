@@ -193,7 +193,7 @@ const Travel = observer(() => {
       }
     >
       {/* Desktop  */}
-      <VStack w="full" my="auto" display={["none", "flex"]} gap="20px" overflow={"visible"} >
+      <VStack w="full" my="auto" display={["none", "flex"]} gap="20px" overflow={"visible"}>
         <VStack w="full" align="flex-start">
           <Inventory hidePawnshop />
           <HStack w="full" justify="space-between" pt={["0px", "20px"]}>

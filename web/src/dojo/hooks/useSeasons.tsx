@@ -41,12 +41,14 @@ export const useSeasons = (): SeasonsInterface => {
       const seasonSettingsEdge = seasonSettingsEdges.find((i) => Number(i.node?.season_version) === season.version);
       const seasonSettings = seasonSettingsEdge ? (seasonSettingsEdge.node as SeasonSettings) : undefined;
 
-      if(season.version === 0 ) return []
-      return [{
-        season,
-        seasonSettings,
-        sortedList,
-      }];
+      if (season.version === 0) return [];
+      return [
+        {
+          season,
+          seasonSettings,
+          sortedList,
+        },
+      ];
     });
   }, [data]);
 

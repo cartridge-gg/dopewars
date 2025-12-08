@@ -27,7 +27,6 @@ import { Psycadelic } from "@/components/common/Psycadelic";
 export default function App({ Component, pageProps }: AppProps) {
   const { setSequence, isRightSequence, setIsRightSequence } = useKonamiCode(starkpimpSequence);
 
-
   useEffect(() => {
     if (isRightSequence) {
       // stop rain after 20s
@@ -38,41 +37,40 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, [isRightSequence, setIsRightSequence, setSequence]);
 
-
   return (
     <>
       <ChakraProvider theme={theme}>
         <DojoContextProvider dojoContextConfig={dojoContextConfig}>
           <PaperPriceProvider>
-          <Fonts />
-          <GlobalStyles />
-          <NextHead>
-            <title>Dope Wars</title>
-            <meta
-              name="viewport"
-              content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+            <Fonts />
+            <GlobalStyles />
+            <NextHead>
+              <title>Dope Wars</title>
+              <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+              />
+            </NextHead>
+            {isRightSequence && <MakeItRain />}
+            <Psycadelic />
+            <Component {...pageProps} />
+            <SpeedInsights />
+
+            <LoadingModal />
+            <ConnectModal />
+            <AccountDetailsModal />
+            <QuitGameModal />
+            <RefreshGameModal />
+            <SeasonDetailsModal />
+
+            <GlobalEvents />
+
+            <Toaster
+              gutter={0}
+              containerStyle={{
+                inset: 0,
+              }}
             />
-          </NextHead>
-          {isRightSequence && <MakeItRain />}
-          <Psycadelic />
-          <Component {...pageProps} />
-          <SpeedInsights />
-        
-          <LoadingModal />
-          <ConnectModal />
-          <AccountDetailsModal />
-          <QuitGameModal />
-          <RefreshGameModal />
-          <SeasonDetailsModal />
-
-          <GlobalEvents />
-
-          <Toaster
-            gutter={0}
-            containerStyle={{
-              inset: 0,
-            }}
-          />
           </PaperPriceProvider>
         </DojoContextProvider>
       </ChakraProvider>

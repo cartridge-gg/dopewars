@@ -111,11 +111,14 @@ export const usePlayerGameInfos = (toriiClient: ToriiClient, playerId?: string):
 
 export const useGamesByPlayer = (toriiClient: ToriiClient, playerIdRaw?: string): GamesByPlayerInterface => {
   const playerId = playerIdRaw ? `0x${BigInt(playerIdRaw).toString(16)}` : undefined; // remove leading zero..
-  const { data, isFetched } = useGamesByPlayerQuery({
-    playerId: playerId || "",
-  }, {
-    enabled: !!playerId,
-  });
+  const { data, isFetched } = useGamesByPlayerQuery(
+    {
+      playerId: playerId || "",
+    },
+    {
+      enabled: !!playerId,
+    },
+  );
 
   const { data: allSeasonSettings } = useAllSeasonSettingsQuery({});
   const { data: allGameConfig } = useAllGameConfigQuery({});

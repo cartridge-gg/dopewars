@@ -18,10 +18,7 @@ export type ClientState = State & Action;
 //
 //
 
-export const createClientStore: StateCreator<DopeState, [], [], ClientState> = (
-  set,
-  _get
-) => ({
+export const createClientStore: StateCreator<DopeState, [], [], ClientState> = (set, _get) => ({
   toriiClient: undefined,
   setToriiClient: (toriiClient: ToriiClient) => {
     set({ toriiClient });

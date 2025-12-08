@@ -1,17 +1,7 @@
 import { ScrollDown } from "@/components/icons/ScrollDown";
 import { Cartridge } from "@/components/icons/branding/Cartridge";
 import { Dojo } from "@/components/icons/branding/Dojo";
-import {
-  Box,
-  Card,
-  Link as ChakraLink,
-  HStack,
-  Heading,
-  Image,
-  StyleProps,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Card, Link as ChakraLink, HStack, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 
 const floatAnim = keyframes`  

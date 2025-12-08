@@ -1,5 +1,5 @@
 import { PowerMeter, TierIndicator } from "@/components/player";
-import {  slotName, slotNameKeys, statName, statNameKeys } from "@/dojo/helpers";
+import { slotName, slotNameKeys, statName, statNameKeys } from "@/dojo/helpers";
 import { useGameStore } from "@/dojo/hooks";
 import { IsMobile } from "@/utils/ui";
 import { Flex, HStack, Text, VStack } from "@chakra-ui/react";
@@ -66,4 +66,3 @@ const GearItemInfos = observer(({ slot, item, level }: { slot: ItemSlot; item: I
     </HStack>
   );
 });
-

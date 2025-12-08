@@ -26,13 +26,9 @@ export const LeaderboardItem = observer(
     const isActive = entry.type === "active";
     const payedCount = getPayedCount(registeredGamesCount);
 
-    const baseColor = isOwn
-      ? colors.yellow["400"].toString()
-      : colors.neon["200"].toString();
+    const baseColor = isOwn ? colors.yellow["400"].toString() : colors.neon["200"].toString();
     const color = isActive ? colors.yellow["400"].toString() : baseColor;
-    const displayName = entry.player_name
-      ? `${entry.player_name}${isOwn ? " (you)" : ""}`
-      : "Anonymous";
+    const displayName = entry.player_name ? `${entry.player_name}${isOwn ? " (you)" : ""}` : "Anonymous";
 
     const handleClick = () => {
       if (isActive) {
@@ -43,30 +39,13 @@ export const LeaderboardItem = observer(
     };
 
     return (
-      <ListItem
-        color={color}
-        cursor="pointer"
-        onClick={handleClick}
-        _hover={{ bg: "rgba(255, 255, 255, 0.05)" }}
-      >
+      <ListItem color={color} cursor="pointer" onClick={handleClick} _hover={{ bg: "rgba(255, 255, 255, 0.05)" }}>
         <HStack mr={3}>
-          <Text
-            w={["10px", "30px"]}
-            fontSize={["10px", "16px"]}
-            flexShrink={0}
-            whiteSpace="nowrap"
-          >
+          <Text w={["10px", "30px"]} fontSize={["10px", "16px"]} flexShrink={0} whiteSpace="nowrap">
             {index + 1}.
           </Text>
-          <Box
-            flexShrink={0}
-            style={{ marginTop: "-8px" }}
-          >
-            <HustlerAvatarIcon
-              gameId={entry.game_id}
-              tokenIdType={entry.token_id_type}
-              tokenId={entry.token_id}
-            />
+          <Box flexShrink={0} style={{ marginTop: "-8px" }}>
+            <HustlerAvatarIcon gameId={entry.game_id} tokenIdType={entry.token_id_type} tokenId={entry.token_id} />
           </Box>
 
           <HStack>
@@ -135,12 +114,7 @@ export const LeaderboardItem = observer(
               <Text flexShrink={0} fontSize={["12px", "16px"]}>
                 <Tooltip
                   placement="left"
-                  content={
-                    <RewardDetails
-                      position={entry.registeredPosition}
-                      seasonVersion={entry.season_version}
-                    />
-                  }
+                  content={<RewardDetails position={entry.registeredPosition} seasonVersion={entry.season_version} />}
                   color="neon.400"
                 >
                   <span>
