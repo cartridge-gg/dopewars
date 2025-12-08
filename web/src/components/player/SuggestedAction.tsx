@@ -33,7 +33,7 @@ export const SuggestedAction = (
 
       const iconSize = "20px";
 
-      // buy_and_sell with currentDrug: Sell [icon] for $X, buy [icon] for $Y profit
+      // buy_and_sell with currentDrug: Sell [icon] for $X, buy [icon] and sell in Location for $Y profit
       if (suggestion.type === "buy_and_sell" && suggestion.currentDrug && suggestion.drug) {
         const sellRevenue = (suggestion.currentSellPrice || 0) * (suggestion.currentQuantity || 0);
         const totalProfit = (suggestion.currentSellProfit || 0) + (suggestion.profit || 0);
@@ -43,7 +43,7 @@ export const SuggestedAction = (
             <Box flexShrink={0}>{suggestion.currentDrug.icon({ boxSize: iconSize })}</Box>
             <Text {...textStyle}>for ${formatNumber(sellRevenue)}, buy</Text>
             <Box flexShrink={0}>{suggestion.drug.icon({ boxSize: iconSize })}</Box>
-            <Text {...textStyle}>for ${formatNumber(totalProfit)} profit</Text>
+            <Text {...textStyle}>and sell in {suggestion.sellLocation} for ${formatNumber(totalProfit)} profit</Text>
           </HStack>
         );
       }
