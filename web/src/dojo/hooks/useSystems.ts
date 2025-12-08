@@ -49,8 +49,6 @@ interface SystemsInterface {
   launder: (season: number) => Promise<SystemExecuteResult>;
   claimTreasury: () => Promise<SystemExecuteResult>;
   superchargeJackpot: (season: number, amount_eth: number) => Promise<SystemExecuteResult>;
-  // slot
-  rollSlot: (gameId: number) => Promise<SystemExecuteResult>;
   // dev
   failingTx: () => Promise<SystemExecuteResult>;
   createFakeGame: (finalScore: number) => Promise<SystemExecuteResult>;
@@ -545,37 +543,6 @@ export const useSystems = (): SystemsInterface => {
   //
   //
 
-  const rollSlot = useCallback(
-    async (gameId: number) => {
-      const slotMachineAddress = dojoProvider.manifest.contracts.find(
-        (i: any) => i.tag === `${DW_NS}-slotmachine`,
-      ).address;
-
-      const call = {
-        contractAddress: slotMachineAddress,
-        entrypoint: "roll",
-        calldata: [gameId],
-      };
-      const calls = await buildVrfCalls({
-        account: account!,
-        call,
-        vrfProviderAddress: selectedChain.vrfProviderAddress,
-        vrfProviderSecret: selectedChain.vrfProviderSecret,
-      });
-
-      const { hash } = await executeAndReceipt(calls);
-
-      return {
-        hash,
-      };
-    },
-    [executeAndReceipt, selectedChain],
-  );
-
-  //
-  //
-  //
-
   const createFakeGame = useCallback(
     async (finalScore = 0) => {
       const { hash } = await executeAndReceipt({
@@ -634,8 +601,6 @@ export const useSystems = (): SystemsInterface => {
     updateRyoConfig,
     //
     updateDrugConfig,
-    //
-    rollSlot,
     //
     failingTx,
     createFakeGame,

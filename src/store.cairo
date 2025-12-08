@@ -80,10 +80,6 @@ pub impl StoreImpl of StoreTrait {
         self.world.read_model((list_id, item_k0, item_k1))
     }
 
-    // fn slot_machine(self: @Store, game_id: u32) -> SlotMachine {
-    //     self.world.read_model(game_id)
-    // }
-
     //
     // setter
     //
@@ -135,12 +131,5 @@ pub impl StoreImpl of StoreTrait {
     fn set_sorted_list_item(ref self: Store, item: @SortedListItem) {
         self.world.write_model(item)
     }
-    //
-
-    //
-// fn set_slot_machine(ref self: Store, machine: @SlotMachine) {
-//     self.world.write_model(machine)
-// }
-
 }
 
