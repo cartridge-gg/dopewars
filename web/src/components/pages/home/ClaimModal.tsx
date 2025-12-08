@@ -28,8 +28,8 @@ import { HustlerIcon, Hustlers } from "@/components/hustlers";
 import { num, shortString } from "starknet";
 import { HustlerAvatarIcon } from "../profile/HustlerAvatarIcon";
 import { RewardDetails } from "./Leaderboard";
-import { useEffect, useState } from "react";
-import { getSwapQuote, PAPER, USDC } from "@/hooks/useEkubo";
+import { useMemo } from "react";
+import { usePaperPrice } from "@/hooks/PaperPriceContext";
 
 export const ClaimModal = ({
   claimable,
@@ -44,26 +44,13 @@ export const ClaimModal = ({
 }) => {
   const { claim, isPending } = useSystems();
   const { account } = useAccount();
-  const [usdValue, setUsdValue] = useState<number | null>(null);
+  const { usdPerPaper } = usePaperPrice();
 
-  useEffect(() => {
-    if (!claimable?.totalClaimable || !isOpen) {
-      setUsdValue(null);
-      return;
-    }
-
-    // Fetch PAPER to USDC conversion rate using 1000 PAPER for better slippage accuracy
-    getSwapQuote(1000, PAPER, USDC, false)
-      .then((quote) => {
-        const usdPerPaper = quote.amountOut / 1000;
-        const totalUsd = claimable.totalClaimable * usdPerPaper;
-        setUsdValue(totalUsd);
-      })
-      .catch((e) => {
-        console.error("Failed to fetch USD value:", e);
-        setUsdValue(null);
-      });
-  }, [claimable?.totalClaimable, isOpen]);
+  // Calculate USD value from cached PAPER price
+  const usdValue = useMemo(() => {
+    if (!claimable?.totalClaimable || !usdPerPaper) return null;
+    return claimable.totalClaimable * usdPerPaper;
+  }, [claimable?.totalClaimable, usdPerPaper]);
 
   const onClaim = async () => {
     if (!account?.address) return;

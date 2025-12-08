@@ -22,9 +22,9 @@ import { Layer } from "@/dope/components";
 import { Tooltip } from "@/components/common";
 import { useSwipeable } from "react-swipeable";
 import { DW_NS } from "@/dojo/constants";
-import { getSwapQuote, PAPER, USDC } from "@/hooks/useEkubo";
 import { mergeLeaderboardEntries } from "@/utils/leaderboard";
 import { LeaderboardItem } from "./LeaderboardItem";
+import { usePaperPrice } from "@/hooks/PaperPriceContext";
 
 const renderer = ({
   days,
@@ -50,7 +50,7 @@ const renderer = ({
     }
     return (
       <HStack textStyle="subheading" fontSize="12px">
-        <Text color="neon.500">RESETS IN:</Text>
+        <Text color="neon.500">ENDS:</Text>
         <Text>
           {days > 0 ? `${days}D` : ""} {hours.toString().padStart(2, "0")}H {minutes.toString().padStart(2, "0")}m{" "}
           {seconds.toString().padStart(2, "0")}s
@@ -65,10 +65,10 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
 
   const { uiStore } = useDojoContext();
   const { account } = useAccount();
+  const { usdPerPaper } = usePaperPrice();
 
   const [currentVersion, setCurrentVersion] = useState(config?.ryo.season_version || 0);
   const [selectedVersion, setSelectedVersion] = useState(config?.ryo.season_version || 0);
-  const [usdValue, setUsdValue] = useState<number | null>(null);
 
   const { season } = useSeasonByVersion(selectedVersion);
 
@@ -85,11 +85,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
   } = useActiveGamesBySeason(selectedVersion);
 
   const mergedEntries = useMemo(() => {
-    return mergeLeaderboardEntries(
-      registeredGames,
-      activeGames,
-      account?.address || "",
-    );
+    return mergeLeaderboardEntries(registeredGames, activeGames, account?.address || "");
   }, [registeredGames, activeGames, account?.address]);
 
   useEffect(() => {
@@ -100,24 +96,11 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
     refetchActiveGames();
   }, [config]);
 
-  useEffect(() => {
-    if (!season?.paper_balance) {
-      setUsdValue(null);
-      return;
-    }
-
-    // Fetch PAPER to USDC conversion rate using 1000 PAPER for better slippage accuracy
-    getSwapQuote(1000, PAPER, USDC, false)
-      .then((quote) => {
-        const usdPerPaper = quote.amountOut / 1000;
-        const totalUsd = (season.paper_balance || 0) * usdPerPaper;
-        setUsdValue(totalUsd);
-      })
-      .catch((e) => {
-        console.error("Failed to fetch USD value:", e);
-        setUsdValue(null);
-      });
-  }, [season?.paper_balance]);
+  // Calculate USD value from cached PAPER price
+  const usdValue = useMemo(() => {
+    if (!season?.paper_balance || !usdPerPaper) return null;
+    return (season.paper_balance || 0) * usdPerPaper;
+  }, [season?.paper_balance, usdPerPaper]);
 
   const onPrev = async () => {
     if (selectedVersion > 1) {
@@ -151,11 +134,19 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
             opacity={selectedVersion > 1 ? "1" : "0.25"}
             onClick={onPrev}
           ></Arrow>
-          <HStack textStyle="subheading" fontSize="12px" w="full" justifyContent="center" position="relative">
-            <Text cursor="pointer" onClick={() => onDetails(selectedVersion)}>
-              SEASON {selectedVersion} REWARDS
-            </Text>
+          <VStack textStyle="subheading" fontSize="12px" w="full" justifyContent="center" position="relative" gap={1}>
             <HStack gap={1} alignItems="center">
+              <Text cursor="pointer" onClick={() => onDetails(selectedVersion)}>
+                SEASON {selectedVersion}
+              </Text>
+              {selectedVersion === currentVersion && (
+                <Box cursor="pointer" onClick={() => uiStore.openSeasonDetails()}>
+                  <InfosIcon />
+                </Box>
+              )}
+            </HStack>
+            <HStack gap={1} alignItems="center" textStyle="subheading" fontSize="12px">
+              <Text color="neon.500">REWARDS:</Text>
               <Text color="yellow.400">
                 <PaperIcon color="yellow.400" mr={1} />
                 {formatCash(season.paper_balance || 0).replace("$", "")}
@@ -166,7 +157,10 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                 </Text>
               )}
             </HStack>
-          </HStack>
+            {selectedVersion === currentVersion && (
+              <Countdown date={new Date(season.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
+            )}
+          </VStack>
           <Arrow
             direction="right"
             cursor="pointer"
@@ -174,14 +168,6 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
             onClick={onNext}
           ></Arrow>
         </HStack>
-        {selectedVersion === currentVersion && (
-          <HStack>
-            <Countdown date={new Date(season.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
-            <Box cursor="pointer" onClick={() => uiStore.openSeasonDetails()}>
-              <InfosIcon />
-            </Box>
-          </HStack>
-        )}
       </VStack>
       <VStack
         boxSize="full"
@@ -228,7 +214,7 @@ export const RewardDetails = observer(
   ({ seasonVersion, position, claimable }: { seasonVersion: number; position: number; claimable?: number }) => {
     const getComponentValuesBySlug = useDopeStore((state) => state.getComponentValuesBySlug);
     const configStore = useConfigStore();
-    const [usdValue, setUsdValue] = useState<number | null>(null);
+    const { usdPerPaper } = usePaperPrice();
 
     const suffixes = getComponentValuesBySlug("DopeGear", "Suffixes");
     const bodies = getComponentValuesBySlug("DopeHustlers", "Body");
@@ -237,24 +223,11 @@ export const RewardDetails = observer(
       hash.computePoseidonHashOnElements([shortString.encodeShortString(DW_NS), seasonVersion, position]),
     );
 
-    useEffect(() => {
-      if (!claimable) {
-        setUsdValue(null);
-        return;
-      }
-
-      // Fetch PAPER to USDC conversion rate using 1000 PAPER for better slippage accuracy
-      getSwapQuote(1000, PAPER, USDC, false)
-        .then((quote) => {
-          const usdPerPaper = quote.amountOut / 1000;
-          const totalUsd = claimable * usdPerPaper;
-          setUsdValue(totalUsd);
-        })
-        .catch((e) => {
-          console.error("Failed to fetch USD value:", e);
-          setUsdValue(null);
-        });
-    }, [claimable]);
+    // Calculate USD value from cached PAPER price
+    const usdValue = useMemo(() => {
+      if (!claimable || !usdPerPaper) return null;
+      return claimable * usdPerPaper;
+    }, [claimable, usdPerPaper]);
 
     const rewards = useMemo(() => {
       const items: ComponentValueEvent[] = [];

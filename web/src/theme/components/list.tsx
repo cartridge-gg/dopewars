@@ -28,8 +28,7 @@ const variants = {
   dotted: definePartsStyle({
     item: {
       listStyleType: "none",
-      pt: "9px",
-      pb: "9px",
+      p: "9px",
     },
   }),
 };

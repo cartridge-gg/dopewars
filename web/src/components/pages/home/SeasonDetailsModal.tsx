@@ -45,6 +45,8 @@ export const SeasonDetailsModal = observer(() => {
         isCentered
         isOpen={uiStore.modals.seasonDetails !== undefined}
         onClose={onClose}
+        returnFocusOnClose={false}
+        scrollBehavior="inside"
       >
         <ModalOverlay />
         <ModalContent bg="bg.dark">
