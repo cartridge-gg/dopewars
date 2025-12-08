@@ -50,7 +50,7 @@ const renderer = ({
     }
     return (
       <HStack textStyle="subheading" fontSize="12px">
-        <Text color="neon.500">RESETS IN:</Text>
+        <Text color="neon.500">ENDS:</Text>
         <Text>
           {days > 0 ? `${days}D` : ""} {hours.toString().padStart(2, "0")}H {minutes.toString().padStart(2, "0")}m{" "}
           {seconds.toString().padStart(2, "0")}s
@@ -85,11 +85,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
   } = useActiveGamesBySeason(selectedVersion);
 
   const mergedEntries = useMemo(() => {
-    return mergeLeaderboardEntries(
-      registeredGames,
-      activeGames,
-      account?.address || "",
-    );
+    return mergeLeaderboardEntries(registeredGames, activeGames, account?.address || "");
   }, [registeredGames, activeGames, account?.address]);
 
   useEffect(() => {
@@ -162,8 +158,8 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                 </Box>
               )}
             </HStack>
-            <HStack gap={1} alignItems="center">
-              <Text>REWARDS:</Text>
+            <HStack gap={1} alignItems="center" textStyle="subheading" fontSize="12px">
+              <Text color="neon.500">REWARDS:</Text>
               <Text color="yellow.400">
                 <PaperIcon color="yellow.400" mr={1} />
                 {formatCash(season.paper_balance || 0).replace("$", "")}
