@@ -175,13 +175,12 @@ const Travel = observer(() => {
         <Footer>
           <ChildrenOrConnect>
             {game.player.turn > 0 && (
-              <Button isDisabled={isPending} w={["full", "auto"]} px={["auto", "20px"]} onClick={() => router.back()}>
+              <Button isDisabled={isPending} className="w-full md:w-auto px-auto md:px-5" onClick={() => router.back()}>
                 Back
               </Button>
             )}
             <Button
-              w={["full", "auto"]}
-              px={["auto", "20px"]}
+              className="w-full md:w-auto px-auto md:px-5"
               isDisabled={!targetLocation || targetLocation === currentLocation}
               isLoading={isPending}
               onClick={onContinue}

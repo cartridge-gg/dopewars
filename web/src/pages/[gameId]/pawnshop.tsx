@@ -76,12 +76,11 @@ const PawnShop = observer(() => {
       }}
       footer={
         <Footer>
-          <Button w="full" px={["auto", "20px"]} onClick={onBack}>
+          <Button className="w-full px-auto md:px-5" onClick={onBack}>
             Back
           </Button>
           <Button
-            w="full"
-            px={["auto", "20px"]}
+            className="w-full px-auto md:px-5"
             isDisabled={!gearItems![selectedShopItemsSlot as keyof typeof gearItems]}
             onClick={buy}
           >
@@ -170,12 +169,8 @@ const ShopItem = observer(
     const isMobile = IsMobile();
     return (
       <Button
-        w="full"
-        h={["auto", "90px"]}
-        position="relative"
-        padding="16px"
+        className="w-full h-auto md:h-[90px] relative p-4 justify-stretch"
         variant="selectable"
-        justifyContent="stretch"
         onClick={onClick}
         isActive={isActive}
         isDisabled={isDisabled}

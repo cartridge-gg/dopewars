@@ -3,20 +3,7 @@ import { ParsedToken, useDojoTokens } from "@/dope/hooks";
 import { useState, useMemo, useEffect } from "react";
 import { AccountInterface } from "starknet";
 import { Close, PaperIcon } from "../icons";
-import {
-  Badge,
-  Box,
-  Flex,
-  Image,
-  List,
-  ListItem,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  Text,
-} from "@chakra-ui/react";
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { Input } from "../common";
 
 export function ItemPicker({
@@ -94,162 +81,94 @@ export function ItemPicker({
   return (
     <>
       {variant === "Image" && (
-        <Flex flexDirection="column" gap={1} alignItems="center" cursor="pointer" onClick={() => setOpen(true)}>
+        <div className="flex flex-col gap-1 items-center cursor-pointer" onClick={() => setOpen(true)}>
           {selected && (
             <>
-              <Image w="120px" h="120px" src={selected.metadata?.image} />
+              <img className="w-[120px] h-[120px]" src={selected.metadata?.image} />
             </>
           )}
           {!selected && (
-            <Flex
-              alignItems="center"
-              justifyContent="center"
-              bg="#888"
-              w="120px"
-              h="120px"
-              // className="flex items-center justify-center bg-[#888] box-content w-[140px] h-[140px]"
-            >
+            <div className="flex items-center justify-center bg-[#888] w-[120px] h-[120px]">
               <PaperIcon width="40px" height="40px" />
-            </Flex>
+            </div>
           )}
-          <Badge>{title}</Badge>
-        </Flex>
+          <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+            {title}
+          </span>
+        </div>
       )}
 
       {variant === "List" && (
-        <Flex flexDirection="row" gap={1} alignItems="center" cursor="pointer" onClick={() => setOpen(true)}>
-          <Badge minW="80px" justifyContent="center">
+        <div className="flex flex-row gap-1 items-center cursor-pointer" onClick={() => setOpen(true)}>
+          <span className="inline-flex items-center justify-center min-w-[80px] rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
             {title}
-          </Badge>
-          {selected && <Text>{selected.metadata.name}</Text>}
-          {!selected && <Text className="opacity-25">None</Text>}
-        </Flex>
+          </span>
+          {selected && <span>{selected.metadata.name}</span>}
+          {!selected && <span className="opacity-25">None</span>}
+        </div>
       )}
 
-      <Modal motionPreset="slideInBottom" isCentered isOpen={open} onClose={() => setOpen(false)}>
-        <ModalOverlay />
-        <ModalContent bg="bg.dark">
-          <ModalHeader textAlign="center" textTransform="uppercase" pb={0}>
-            {title}
-          </ModalHeader>
-          <ModalBody>
-            <Input
-              display="flex"
-              placeholder="Filter"
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              marginBottom="10px"
-            />
-            <List minH="420px" maxH="420px" overflowY="scroll" w="full">
-              {filteredTokens &&
-                filteredTokens.map((t) => {
-                  return (
-                    <ListItem
-                      cursor="pointer"
-                      display="flex"
-                      flexDirection="row"
-                      gap={2}
-                      alignItems="center"
-                      py={1}
-                      key={t.token_id}
-                      onClick={() => onSelect(t)}
-                    >
-                      <Image w="100px" h="100px" src={t.metadata?.image} />
-                      <Flex flexDirection="column">
-                        <div>
-                          {t.metadata?.name} {" - "}
-                          <>
-                            x
-                            {tokensBalances
-                              ?.find((tb) => {
-                                return (
-                                  t.token_id === tb.token_id &&
-                                  BigInt(tb.account_address) === BigInt(account?.address || 0) &&
-                                  tb.balance > 0
-                                );
-                              })
-                              ?.balance.toString()}
-                          </>
+      <Dialog open={open} onClose={() => setOpen(false)} className="relative z-50">
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel className="w-full max-w-md rounded bg-gray-900 p-6">
+            <DialogTitle className="text-center uppercase pb-0 text-white">
+              {title}
+            </DialogTitle>
+            <div className="mt-4">
+              <Input
+                className="flex mb-[10px]"
+                placeholder="Filter"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+              />
+              <ul className="min-h-[420px] max-h-[420px] overflow-y-scroll w-full">
+                {filteredTokens &&
+                  filteredTokens.map((t) => {
+                    return (
+                      <li
+                        className="cursor-pointer flex flex-row gap-2 items-center py-1"
+                        key={t.token_id}
+                        onClick={() => onSelect(t)}
+                      >
+                        <img className="w-[100px] h-[100px]" src={t.metadata?.image} />
+                        <div className="flex flex-col">
+                          <div>
+                            {t.metadata?.name} {" - "}
+                            <>
+                              x
+                              {tokensBalances
+                                ?.find((tb) => {
+                                  return (
+                                    t.token_id === tb.token_id &&
+                                    BigInt(tb.account_address) === BigInt(account?.address || 0) &&
+                                    tb.balance > 0
+                                  );
+                                })
+                                ?.balance.toString()}
+                            </>
+                          </div>
+                          <div>({t.token_id.toString()})</div>
                         </div>
-                        <div>({t.token_id.toString()})</div>
-                      </Flex>
-                    </ListItem>
-                  );
-                })}
-              {filteredTokens && filteredTokens.length === 0 && (
-                <ListItem display="flex" flexDirection="row" justifyContent="center">
-                  No Items!
-                </ListItem>
-              )}
-            </List>
-            <Box
-              cursor="pointer"
-              display="flex"
-              flexDirection="row"
-              gap={2}
-              alignItems="center"
-              justifyContent="center"
-              py={1}
-              mt={3}
-              onClick={() => onSelect(undefined)}
-              opacity={selected ? 1 : 0.25}
-            >
-              <Close /> UNEQUIP
-            </Box>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-
-      {/* <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Search an item" />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandItem onSelect={() => onSelect(undefined)}>
-            <CircleX /> Clear
-          </CommandItem>
-          <CommandSeparator />
-          <CommandGroup heading="Suggestions">
-            {isLoading && (
-              <div className="w-full flex justify-center p-3">
-                Loading <Loader2 className="animate-spin" />
+                      </li>
+                    );
+                  })}
+                {filteredTokens && filteredTokens.length === 0 && (
+                  <li className="flex flex-row justify-center">
+                    No Items!
+                  </li>
+                )}
+              </ul>
+              <div
+                className={`cursor-pointer flex flex-row gap-2 items-center justify-center py-1 mt-3 ${selected ? 'opacity-100' : 'opacity-25'}`}
+                onClick={() => onSelect(undefined)}
+              >
+                <Close /> UNEQUIP
               </div>
-            )}
-            {filteredTokens &&
-              filteredTokens.map((t) => {
-                return (
-                  <CommandItem
-                    key={t.token_id}
-                    className="cursor-pointer"
-                    onSelect={() => onSelect(t)}
-                  >
-                    <img
-                      className="w-[100px] h-[100px]"
-                      src={t.metadata?.image}
-                    />
-                    <div className="flex flex-col">
-                      <div>
-                        {t.metadata?.name} {" - "}
-                        <>
-                          x
-                          {
-                            tokensBalances?.find((tb) => {
-                              return (
-                                t.token_id === tb.token_id &&
-                                tb.account_address === account?.address &&
-                                tb.balance > 0
-                              );
-                            })?.balance
-                          }
-                        </>
-                      </div>
-                      <div>({t.token_id.toString()})</div>
-                    </div>
-                  </CommandItem>
-                );
-              })}
-          </CommandGroup>
-        </CommandList>
-      </CommandDialog> */}
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
     </>
   );
 }

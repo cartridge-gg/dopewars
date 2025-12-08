@@ -13,17 +13,16 @@ const ShareButton = ({ ...props }: { variant?: string } & StyleProps) => {
   if ( !game || !gameInfos) return null;
 
   return (
-    <ChakraLink
-      w="full"
+    <a
+      className="w-full no-underline"
       href={`https://twitter.com/intent/tweet?text=${getShareText(game, gameInfos)}`}
       target="_blank"
-      textDecoration="none !important"
-      {...props}
+      rel="noopener noreferrer"
     >
-      <Button variant={props.variant ? props.variant : ""} w="full">
+      <Button variant={props.variant as any} className="w-full">
         <Twitter /> Share
       </Button>
-    </ChakraLink>
+    </a>
   );
 };
 

@@ -27,7 +27,7 @@ export const ProfileLink = () => {
 
   return (
     <>
-      <Button cursor="pointer" h={["40px", "48px"]} {...headerButtonStyles} onClick={onClick}>
+      <Button className="h-10 md:h-12 cursor-pointer" onClick={onClick}>
         <HustlerAvatarIcon
           gameId={gameInfos.game_id}
           // @ts-ignore

@@ -24,6 +24,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   clickSound?: Sounds;
   isLoading?: boolean;
   isDisabled?: boolean;
+  isActive?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -35,6 +36,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       clickSound = Sounds.HoverClick,
       isLoading,
       isDisabled,
+      isActive: isActiveProp,
       className,
       onClick,
       style,
@@ -43,7 +45,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const [isHovered, setIsHovered] = useState(false);
-    const [isActive, setIsActive] = useState(false);
+    const [isPressed, setIsPressed] = useState(false);
+
+    // Use prop value if provided, otherwise use internal state
+    const isActive = isActiveProp !== undefined ? isActiveProp : isPressed;
 
     // Get border image based on variant and state
     const getBorderImageSource = () => {
@@ -144,10 +149,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         }}
         onMouseLeave={() => {
           setIsHovered(false);
-          setIsActive(false);
+          setIsPressed(false);
         }}
-        onMouseDown={() => setIsActive(true)}
-        onMouseUp={() => setIsActive(false)}
+        onMouseDown={() => setIsPressed(true)}
+        onMouseUp={() => setIsPressed(false)}
         onClick={(e) => {
           clickSound && playSound(clickSound, 0.3);
           onClick?.(e);

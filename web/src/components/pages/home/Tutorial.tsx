@@ -109,7 +109,7 @@ export const Tutorial = ({ isOpen, close }: { isOpen: boolean; close: () => void
 
             <Button
               onClick={onNext}
-              w="full"
+              className="w-full"
               hoverSound={undefined}
               // isLoading={isBurnerDeploying}
               clickSound={currentStep == steps.length ? Sounds.Magnum357 : Sounds.HoverClick}

@@ -193,7 +193,7 @@ const End = () => {
         </HStack>
 
         <HStack gap="10px" w={["full", "auto"]}>
-          <Button variant="pixelated" w="full" onClick={() => setIsCreditOpen(true)}>
+          <Button variant="pixelated" className="w-full" onClick={() => setIsCreditOpen(true)}>
             <Roll />
           </Button>
 
@@ -209,7 +209,7 @@ const End = () => {
             }}
             display="flex"
           >
-            <Button variant="pixelated" w="100%">
+            <Button variant="pixelated" className="w-full">
               GIVE FEEDBACK
             </Button>
           </Link>
@@ -259,7 +259,7 @@ const End = () => {
             </UnorderedList>
           </ModalBody>
           <ModalFooter justifyContent="stretch">
-            <Button w="full" onClick={onCreditClose}>
+            <Button className="w-full" onClick={onCreditClose}>
               Close
             </Button>
           </ModalFooter>

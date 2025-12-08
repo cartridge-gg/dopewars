@@ -77,8 +77,7 @@ const Location = observer(() => {
         <Footer>
           <ChildrenOrConnect>
             <Button
-              w={["full", "auto"]}
-              px={["auto", "20px"]}
+              className="w-full md:w-auto px-auto md:px-5"
               isLoading={isPending}
               onClick={async () => {
                 if (game.drugs.quantity > 0 && isLastDay) {
