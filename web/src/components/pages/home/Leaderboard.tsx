@@ -7,6 +7,7 @@ import {
   useRouterContext,
   useSeasonByVersion,
 } from "@/dojo/hooks";
+import { useGamesByPlayer } from "@/dojo/hooks/useGamesByPlayer";
 import colors from "@/theme/colors";
 import { formatCash } from "@/utils/ui";
 import { Box, HStack, Text, UnorderedList, VStack } from "@chakra-ui/react";
@@ -24,7 +25,7 @@ import { useSwipeable } from "react-swipeable";
 import { DW_NS } from "@/dojo/constants";
 import { getSwapQuote, PAPER, USDC } from "@/hooks/useEkubo";
 import { useLeaderboardVisibility } from "@/hooks/useLeaderboardVisibility";
-import { mergeLeaderboardEntries } from "@/utils/leaderboard";
+import { mergeLeaderboardEntries, ActiveGameCashMap } from "@/utils/leaderboard";
 import { LeaderboardItem } from "./LeaderboardItem";
 import { StickyActiveGames } from "./StickyActiveGames";
 
@@ -65,7 +66,7 @@ const renderer = ({
 export const Leaderboard = observer(({ config }: { config?: Config }) => {
   const { router, gameId } = useRouterContext();
 
-  const { uiStore } = useDojoContext();
+  const { uiStore, clients: { toriiClient } } = useDojoContext();
   const { account } = useAccount();
 
   const [currentVersion, setCurrentVersion] = useState(config?.ryo.season_version || 0);
@@ -86,15 +87,28 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
     refetch: refetchActiveGames,
   } = useActiveGamesBySeason(selectedVersion);
 
+  // Fetch current user's games to get actual cash values for active games
+  const { onGoingGames } = useGamesByPlayer(toriiClient, account?.address);
+
   const { scrollContainerRef, visiblePositions, observeEntry, getMaxVisiblePosition } = useLeaderboardVisibility();
+
+  // Build a map of game_id to actual cash for active games
+  const activeGameCashMap = useMemo((): ActiveGameCashMap => {
+    const map = new Map<number, number>();
+    for (const game of onGoingGames) {
+      map.set(game.gameInfos.game_id, game.player.cash);
+    }
+    return map;
+  }, [onGoingGames]);
 
   const mergedEntries = useMemo(() => {
     return mergeLeaderboardEntries(
       registeredGames,
       activeGames,
       account?.address || "",
+      activeGameCashMap,
     );
-  }, [registeredGames, activeGames, account?.address]);
+  }, [registeredGames, activeGames, account?.address, activeGameCashMap]);
 
   const activeEntries = useMemo(() => {
     return mergedEntries.filter((entry) => entry.type === "active");

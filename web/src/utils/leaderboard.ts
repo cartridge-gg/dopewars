@@ -30,10 +30,14 @@ export type GameFromSql = {
   position: number;
 };
 
+// Map of game_id to actual cash value for active games (from GameClass.player.cash)
+export type ActiveGameCashMap = Map<number, number>;
+
 export const mergeLeaderboardEntries = (
   registeredGames: unknown[],
   activeGames: unknown[],
   currentUserAddress: string,
+  activeGameCashMap?: ActiveGameCashMap,
 ): LeaderboardEntry[] => {
   const registeredEntries: LeaderboardEntry[] = (registeredGames as GameFromSql[]).map((game, index) => ({
     type: "registered" as const,
@@ -55,19 +59,23 @@ export const mergeLeaderboardEntries = (
 
   const activeEntries: LeaderboardEntry[] = (activeGames as GameFromSql[])
     .filter((game) => !registeredGameIds.has(game.game_id))
-    .map((game) => ({
-      type: "active" as const,
-      game_id: game.game_id,
-      player_id: game.player_id,
-      player_name: game.player_name || "Anonymous",
-      score: game.final_score,
-      position: 0,
-      claimable: 0,
-      multiplier: game.multiplier,
-      token_id_type: game.token_id_type,
-      token_id: game.token_id,
-      season_version: game.season_version,
-    }));
+    .map((game) => {
+      // Use actual cash from GameClass if available, otherwise fall back to final_score
+      const actualCash = activeGameCashMap?.get(game.game_id);
+      return {
+        type: "active" as const,
+        game_id: game.game_id,
+        player_id: game.player_id,
+        player_name: game.player_name || "Anonymous",
+        score: actualCash !== undefined ? actualCash : game.final_score,
+        position: 0,
+        claimable: 0,
+        multiplier: game.multiplier,
+        token_id_type: game.token_id_type,
+        token_id: game.token_id,
+        season_version: game.season_version,
+      };
+    });
 
   const allEntries = [...registeredEntries, ...activeEntries];
 
