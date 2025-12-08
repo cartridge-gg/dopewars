@@ -10,6 +10,7 @@ export * from "./useRouterContext";
 export * from "./useSystems";
 export * from "./useTokenBalance";
 export * from "./useRegisteredGamesBySeason";
+export * from "./useActiveGamesBySeason";
 export * from "./useSeasonByVersion";
 export * from "./useClaimable";
 export * from "./useSeasons";
