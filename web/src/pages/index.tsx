@@ -100,7 +100,7 @@ export default function Home() {
             )} */}
             {!isPaused && isSeasonOpen && canCreateGame && (
               <Button flex="1" onClick={() => onHustle(GameMode.Ranked)}>
-                <Glock /> Hustle
+                <Glock /> Play Now
               </Button>
             )}
 
@@ -110,9 +110,9 @@ export default function Home() {
                   <Flipflop /> Play guest
                 </Button> */}
 
-                <HStack flex="1" h="full" alignItems="center"justifyContent="center">
+                <HStack flex="1" h="full" alignItems="center" justifyContent="center">
                   <Warning color="yellow.400" />
-                  <Text >Waiting for season end</Text>
+                  <Text>Waiting for season end</Text>
                 </HStack>
               </HStack>
             )}
@@ -154,9 +154,9 @@ export default function Home() {
             )}
           </HStack>
         </Card>
-
-        <Tabs variant="unstyled" w="full">
-          <TabList pb={6}>
+        <Leaderboard config={config} />
+        {/*<Tabs variant="unstyled" w="full">
+          {/*<TabList pb={6}>
             <Tab>LEADERBOARD</Tab>
             <Tab>HALL OF FAME</Tab>
           </TabList>
@@ -169,7 +169,7 @@ export default function Home() {
               <HallOfFame />
             </TabPanel>
           </TabPanels>
-        </Tabs>
+        </Tabs>*/}
       </VStack>
 
       <Tutorial isOpen={isTutorialOpen} close={() => setIsTutorialOpen(false)} />
