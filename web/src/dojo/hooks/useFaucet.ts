@@ -81,5 +81,5 @@ export const paperFaucet = async ({ account, paperAddress }: { account: Account;
 
   const tx = await contract.invoke("faucet", [], { parseRequest: false });
 
-  const receipt = await waitForTransaction(account!, tx.transaction_hash);;
+  const receipt = await waitForTransaction(account!, tx.transaction_hash);
 };

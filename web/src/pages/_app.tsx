@@ -27,7 +27,6 @@ import { Psycadelic } from "@/components/common/Psycadelic";
 export default function App({ Component, pageProps }: AppProps) {
   const { setSequence, isRightSequence, setIsRightSequence } = useKonamiCode(starkpimpSequence);
 
-
   useEffect(() => {
     if (isRightSequence) {
       // stop rain after 20s
@@ -37,7 +36,6 @@ export default function App({ Component, pageProps }: AppProps) {
       }, 20_000);
     }
   }, [isRightSequence, setIsRightSequence, setSequence]);
-
 
   return (
     <>
@@ -57,7 +55,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Psycadelic />
           <Component {...pageProps} />
           <SpeedInsights />
-        
+
           <LoadingModal />
           <ConnectModal />
           <AccountDetailsModal />

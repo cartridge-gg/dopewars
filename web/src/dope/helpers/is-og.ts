@@ -1,3 +1,3 @@
 export const isOg = (id: number) => {
-    return id < 500
-}
+  return id < 500;
+};

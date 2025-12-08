@@ -1,6 +1,5 @@
 import { Head, Html, Main, NextScript } from "next/document";
 
-
 const baseUrl = process.env.NODE_ENV === "production" ? "https://dopewars.game" : "";
 
 const metas = {

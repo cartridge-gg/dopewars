@@ -2031,10 +2031,7 @@
       "init_calldata": [],
       "tag": "dopewars-config",
       "selector": "0x45ebce669f67d6f8a086e80d203afd2c166980e96a7b6f0b90722df363493e",
-      "systems": [
-        "dojo_init",
-        "upgrade"
-      ]
+      "systems": ["dojo_init", "upgrade"]
     },
     {
       "address": "0xda09d5cad625f60398eac078b32ccbbf9b95793fa34ab556ecc78122133dd2",
@@ -2253,9 +2250,7 @@
       "init_calldata": [],
       "tag": "dopewars-decide",
       "selector": "0xa286d28f9a4875e2d134c7492c16a0bad0faed58844c2bb3cbb7a78064181f",
-      "systems": [
-        "upgrade"
-      ]
+      "systems": ["upgrade"]
     },
     {
       "address": "0x1a7f9be78ecd7314c93e2873519c50d5dc81adff85b525fa2cd436bf5a94b14",
@@ -2466,9 +2461,7 @@
       "init_calldata": [],
       "tag": "dopewars-devtools",
       "selector": "0xdd7a76fa1c48a52a244c9637c70cad4e8158b94f28b0f87ba422c665cadedf",
-      "systems": [
-        "upgrade"
-      ]
+      "systems": ["upgrade"]
     },
     {
       "address": "0x1b970f0b7fc5ad0e1428101ae9106b4a6c4ee4436668a8f1a2d667edf7bfc31",
@@ -2909,9 +2902,7 @@
       "init_calldata": [],
       "tag": "dopewars-game",
       "selector": "0x4e7c9d90367633d83310d131487777f6763ba390e7566c09f224c78a5247aa",
-      "systems": [
-        "upgrade"
-      ]
+      "systems": ["upgrade"]
     },
     {
       "address": "0x38d448e2784318d3aca7c8e6768a094ed87860311fb296f95bb24a00b50fd90",
@@ -3177,9 +3168,7 @@
       "init_calldata": [],
       "tag": "dopewars-laundromat",
       "selector": "0xb7341dd0e31f0d79738ed07083c41276d9b7d2b665b23e5c729f23524c8c1e",
-      "systems": [
-        "upgrade"
-      ]
+      "systems": ["upgrade"]
     },
     {
       "address": "0x20dfc24de987d7d11f70a7306ae39b6ac71b178eaf19bf12e831b3522c14ebf",
@@ -3599,15 +3588,7 @@
       "init_calldata": [],
       "tag": "dopewars-paper_mock",
       "selector": "0x3534f7488cf2b53632d276117783524005bce6ee2f84418f88b11e4b8c2530e",
-      "systems": [
-        "dojo_init",
-        "faucet",
-        "faucetTo",
-        "upgrade",
-        "transfer",
-        "transfer_from",
-        "approve"
-      ]
+      "systems": ["dojo_init", "faucet", "faucetTo", "upgrade", "transfer", "transfer_from", "approve"]
     },
     {
       "address": "0x7d76806c03cfadae90322a7a597ac3613dadc841bfc8646510c226f7b23d175",
@@ -4083,11 +4064,7 @@
           ]
         }
       ],
-      "init_calldata": [
-        "0x0",
-        "0x0",
-        "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a"
-      ],
+      "init_calldata": ["0x0", "0x0", "0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a"],
       "tag": "dopewars-ryo",
       "selector": "0x32b65ba76433a3384da18dba9d4a63d3a7de35be8bf53a61d71928482a6d75e",
       "systems": [
@@ -4585,14 +4562,7 @@
       ],
       "tag": "dopewars-vrf_provider_mock",
       "selector": "0x3e25b1e3b8b24700387a74a69255690e18885dc76f5d1f32c16f8fa891d8406",
-      "systems": [
-        "dojo_init",
-        "upgrade",
-        "submit_random",
-        "consume_random",
-        "assert_consumed",
-        "set_public_key"
-      ]
+      "systems": ["dojo_init", "upgrade", "submit_random", "consume_random", "assert_consumed", "set_public_key"]
     }
   ],
   "libraries": [

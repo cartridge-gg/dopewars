@@ -10,13 +10,9 @@ import manifestDopeDev from "../../manifests_dope/manifest_dev.json";
 import manifestDopeSepolia from "../../manifests_dope/manifest_sepolia.json";
 // import manifestDopeDope from "../../manifests_dope/manifest_dope.json";
 
-import {
-  default as manifestDopeDopewars,
-} from "../../manifests_dope/manifest_dopewars.json";
+import { default as manifestDopeDopewars } from "../../manifests_dope/manifest_dopewars.json";
 
-import {
-  default as manifestDopeMainnet,
-} from "../../manifests_dope/manifest_mainnet.json";
+import { default as manifestDopeMainnet } from "../../manifests_dope/manifest_mainnet.json";
 
 // import {
 //   manifestDev as manifestDopeDev,

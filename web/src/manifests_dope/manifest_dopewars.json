@@ -2634,9 +2634,7 @@
           ]
         }
       ],
-      "init_calldata": [
-        "0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"
-      ],
+      "init_calldata": ["0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"],
       "tag": "dope-DopeGear",
       "selector": "0x64ccf168943aa770318f1634ae471749934be9b3f34e1ef376247c85c8a8cc7",
       "systems": [
@@ -3984,9 +3982,7 @@
           ]
         }
       ],
-      "init_calldata": [
-        "0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"
-      ],
+      "init_calldata": ["0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"],
       "tag": "dope-DopeHustlers",
       "selector": "0x51987092437e0c6fe5d5a2d89f17ddd5a0470fe0e06ee4de740d938212b14e6",
       "systems": [
@@ -5351,9 +5347,7 @@
           ]
         }
       ],
-      "init_calldata": [
-        "0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"
-      ],
+      "init_calldata": ["0x127fd5f1fe78a71f8bcd1fec63e3fe2f0486b6ecd5c86a0466c3a21fa5cfcec"],
       "tag": "dope-DopeLoot",
       "selector": "0x515620132054614271cd0226a1cf97b6f01ef8f077c418cc8ccde05b1186421",
       "systems": [
@@ -5778,9 +5772,7 @@
           ]
         }
       ],
-      "init_calldata": [
-        "0x0"
-      ],
+      "init_calldata": ["0x0"],
       "tag": "dope-DopeLootClaim",
       "selector": "0x1877be3967ef682bf16bc64b46e0f5f66211cf63c6f5072037bf0cd67b3d061",
       "systems": [

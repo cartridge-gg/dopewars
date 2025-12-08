@@ -117,7 +117,6 @@ query AllSeasonSettings {
   }
 }
 
-
 query HallOfFame {
   dopewarsV0GameModels(limit: 420, where: { position: 1 }, order: { field: SEASON_VERSION, direction: DESC }) {
     edges {

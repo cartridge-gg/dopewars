@@ -31,8 +31,6 @@ export const getGearItem = (token_id: bigint) => {
 };
 
 export const dopeRandomness = (slot: string, tokenId: number) => {
-  const rand = BigInt(
-    keccak256(encodePacked(["string", "string"], [slot, tokenId.toString()]))
-  );
+  const rand = BigInt(keccak256(encodePacked(["string", "string"], [slot, tokenId.toString()])));
   return rand;
 };

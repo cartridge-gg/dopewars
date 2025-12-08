@@ -5793,9 +5793,7 @@
           ]
         }
       ],
-      "init_calldata": [
-        "0x0"
-      ],
+      "init_calldata": ["0x0"],
       "tag": "dope-DopeLootClaim",
       "selector": "0x1877be3967ef682bf16bc64b46e0f5f66211cf63c6f5072037bf0cd67b3d061",
       "systems": [

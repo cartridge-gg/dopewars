@@ -12,8 +12,8 @@ const baseStyle = definePartsStyle({
     bg: "neon.700",
     padding: 0, // change the padding of the content
   },
-  popper:{
-    cursor:"pointer"
-  }
+  popper: {
+    cursor: "pointer",
+  },
 });
 export const Popover = defineMultiStyleConfig({ baseStyle });
