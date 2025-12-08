@@ -22,10 +22,9 @@ import { Layer } from "@/dope/components";
 import { Tooltip } from "@/components/common";
 import { useSwipeable } from "react-swipeable";
 import { DW_NS } from "@/dojo/constants";
-import { getSwapQuote, PAPER, USDC } from "@/hooks/useEkubo";
 import { mergeLeaderboardEntries } from "@/utils/leaderboard";
 import { LeaderboardItem } from "./LeaderboardItem";
-import { getPaperPriceCache, setPaperPriceCache } from "@/utils/paperPriceCache";
+import { usePaperPrice } from "@/hooks/PaperPriceContext";
 
 const renderer = ({
   days,
@@ -66,10 +65,10 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
 
   const { uiStore } = useDojoContext();
   const { account } = useAccount();
+  const { usdPerPaper } = usePaperPrice();
 
   const [currentVersion, setCurrentVersion] = useState(config?.ryo.season_version || 0);
   const [selectedVersion, setSelectedVersion] = useState(config?.ryo.season_version || 0);
-  const [usdValue, setUsdValue] = useState<number | null>(null);
 
   const { season } = useSeasonByVersion(selectedVersion);
 
@@ -97,35 +96,11 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
     refetchActiveGames();
   }, [config]);
 
-  useEffect(() => {
-    if (!season?.paper_balance) {
-      setUsdValue(null);
-      return;
-    }
-
-    // Check if we have a valid cached price
-    const cachedPrice = getPaperPriceCache();
-    if (cachedPrice) {
-      // Use cached price
-      const totalUsd = (season.paper_balance || 0) * cachedPrice.price;
-      setUsdValue(totalUsd);
-      return;
-    }
-
-    // Fetch PAPER to USDC conversion rate using 1000 PAPER for better slippage accuracy
-    getSwapQuote(1000, PAPER, USDC, false)
-      .then((quote) => {
-        const usdPerPaper = quote.amountOut / 1000;
-        // Update cache
-        setPaperPriceCache(usdPerPaper);
-        const totalUsd = (season.paper_balance || 0) * usdPerPaper;
-        setUsdValue(totalUsd);
-      })
-      .catch((e) => {
-        console.error("Failed to fetch USD value:", e);
-        setUsdValue(null);
-      });
-  }, [season?.paper_balance]);
+  // Calculate USD value from cached PAPER price
+  const usdValue = useMemo(() => {
+    if (!season?.paper_balance || !usdPerPaper) return null;
+    return (season.paper_balance || 0) * usdPerPaper;
+  }, [season?.paper_balance, usdPerPaper]);
 
   const onPrev = async () => {
     if (selectedVersion > 1) {
@@ -239,7 +214,7 @@ export const RewardDetails = observer(
   ({ seasonVersion, position, claimable }: { seasonVersion: number; position: number; claimable?: number }) => {
     const getComponentValuesBySlug = useDopeStore((state) => state.getComponentValuesBySlug);
     const configStore = useConfigStore();
-    const [usdValue, setUsdValue] = useState<number | null>(null);
+    const { usdPerPaper } = usePaperPrice();
 
     const suffixes = getComponentValuesBySlug("DopeGear", "Suffixes");
     const bodies = getComponentValuesBySlug("DopeHustlers", "Body");
@@ -248,35 +223,11 @@ export const RewardDetails = observer(
       hash.computePoseidonHashOnElements([shortString.encodeShortString(DW_NS), seasonVersion, position]),
     );
 
-    useEffect(() => {
-      if (!claimable) {
-        setUsdValue(null);
-        return;
-      }
-
-      // Check if we have a valid cached price
-      const cachedPrice = getPaperPriceCache();
-      if (cachedPrice) {
-        // Use cached price
-        const totalUsd = claimable * cachedPrice.price;
-        setUsdValue(totalUsd);
-        return;
-      }
-
-      // Fetch PAPER to USDC conversion rate using 1000 PAPER for better slippage accuracy
-      getSwapQuote(1000, PAPER, USDC, false)
-        .then((quote) => {
-          const usdPerPaper = quote.amountOut / 1000;
-          // Update cache
-          setPaperPriceCache(usdPerPaper);
-          const totalUsd = claimable * usdPerPaper;
-          setUsdValue(totalUsd);
-        })
-        .catch((e) => {
-          console.error("Failed to fetch USD value:", e);
-          setUsdValue(null);
-        });
-    }, [claimable]);
+    // Calculate USD value from cached PAPER price
+    const usdValue = useMemo(() => {
+      if (!claimable || !usdPerPaper) return null;
+      return claimable * usdPerPaper;
+    }, [claimable, usdPerPaper]);
 
     const rewards = useMemo(() => {
       const items: ComponentValueEvent[] = [];

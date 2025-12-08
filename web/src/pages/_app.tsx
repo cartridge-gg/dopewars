@@ -3,6 +3,7 @@ import { AccountDetailsModal, ConnectModal } from "@/components/wallet";
 import { DojoContextProvider } from "@/dojo/context/DojoContext";
 import { dojoContextConfig } from "@/dojo/setup/config";
 import useKonamiCode, { psySequence, starkpimpSequence } from "@/hooks/useKonamiCode";
+import { PaperPriceProvider } from "@/hooks/PaperPriceContext";
 import Fonts from "@/theme/fonts";
 import GlobalStyles from "@/theme/global";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -42,6 +43,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <ChakraProvider theme={theme}>
         <DojoContextProvider dojoContextConfig={dojoContextConfig}>
+          <PaperPriceProvider>
           <Fonts />
           <GlobalStyles />
           <NextHead>
@@ -71,6 +73,7 @@ export default function App({ Component, pageProps }: AppProps) {
               inset: 0,
             }}
           />
+          </PaperPriceProvider>
         </DojoContextProvider>
       </ChakraProvider>
     </>
