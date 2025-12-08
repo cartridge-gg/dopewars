@@ -1,10 +1,9 @@
-import { Box, Container, Flex, Heading, Image, StyleProps, Text, VStack } from "@chakra-ui/react";
+import { cn } from "@/utils/cn";
+import { useIsMobile } from "@/hooks/useResponsive";
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
 import { Header } from "./Header";
-
 import { Pending } from "./Pending";
-// import { CrtEffect } from "./CrtEffect";
 
 interface LayoutProps {
   customLeftPanel?: ReactNode;
@@ -32,63 +31,57 @@ export const Layout = ({
   rigthPanelScrollable = true,
   footer,
 }: LayoutProps) => {
+  const isMobile = useIsMobile();
+
   return (
     <>
-      <Flex
-        direction="column"
-        position="fixed"
-        boxSize="full"
-        as={motion.div}
+      <motion.div
+        className="flex flex-col fixed w-full h-full"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
         <Header />
-        <Container position="relative" px={["10px", "16px"]} py="16px">
+        <div className={cn("relative container mx-auto py-4", isMobile ? "px-2.5" : "px-4")}>
           {!isSinglePanel && (!customLeftPanel ? <LeftPanel {...leftPanelProps} /> : <>{customLeftPanel}</>)}
           <RightPanel
-            flex={[!!leftPanelProps?.map ? "0" : "1", "1"]}
             footer={footer}
             isSinglePanel={isSinglePanel}
             rigthPanelMaxH={rigthPanelMaxH}
             rigthPanelScrollable={rigthPanelScrollable}
+            hasMap={!!leftPanelProps?.map}
           >
             {children}
           </RightPanel>
-        </Container>
-        {/* wat dat ? */}
-        {/* <Box maxH="16px" h="full" display={["none", "block"]} bg="neon.900" zIndex={1} /> */}
-      </Flex>
-      {/* <CrtEffect /> */}
+        </div>
+      </motion.div>
       <Pending />
     </>
   );
 };
 
-const LeftPanel = ({ title, prefixTitle, map, imageSrc, ...props }: Partial<LeftPanelProps> & StyleProps) => {
+const LeftPanel = ({ title, prefixTitle, map, imageSrc }: Partial<LeftPanelProps>) => {
+  const isMobile = useIsMobile();
+
   return (
-    <VStack flex={["0", "1"]} my={["none", "auto"]} {...props}>
-      <VStack zIndex="1" position={map ? "absolute" : "unset"} pointerEvents="none" spacing="0">
-        <Text textStyle="subheading" textAlign="center" fontSize={["9px", "11px"]}>
+    <div className={cn("flex flex-col items-center", isMobile ? "flex-none" : "flex-1 my-auto")}>
+      <div className={cn("z-10 flex flex-col items-center gap-0 pointer-events-none", map ? "absolute" : "relative")}>
+        <span className={cn("text-subheading text-center", isMobile ? "text-[9px]" : "text-[11px]")}>
           {prefixTitle}
-        </Text>
-        <Heading fontSize={["30px", "48px"]} textAlign="center" fontWeight="normal">
+        </span>
+        <h1 className={cn("font-heading text-center font-normal", isMobile ? "text-[30px]" : "text-5xl")}>
           {title}
-        </Heading>
-      </VStack>
+        </h1>
+      </div>
       {map ? (
-        <Flex w="100%">{map}</Flex>
+        <div className="flex w-full">{map}</div>
       ) : (
-        <Image
+        <img
           src={imageSrc}
-          maxH="60vh"
-          h="500px"
-          objectFit="contain"
-          pt="60px"
-          display={["none", "block"]}
+          className={cn("max-h-[60vh] h-[500px] object-contain pt-[60px]", isMobile ? "hidden" : "block")}
           alt="context"
         />
       )}
-    </VStack>
+    </div>
   );
 };
 
@@ -98,33 +91,35 @@ const RightPanel = ({
   isSinglePanel,
   rigthPanelMaxH,
   rigthPanelScrollable,
-  ...props
+  hasMap,
 }: {
   children: ReactNode;
   footer: ReactNode;
   isSinglePanel: boolean;
   rigthPanelMaxH?: string;
   rigthPanelScrollable: boolean;
-} & StyleProps) => {
+  hasMap: boolean;
+}) => {
+  const isMobile = useIsMobile();
+
+  const defaultMaxH = isSinglePanel ? "calc(100dvh - 70px)" : "calc(100dvh - 145px)";
+  const maxH = rigthPanelMaxH || defaultMaxH;
+
   return (
-    <VStack position="relative" w="full" {...props}>
-      <VStack
-        position="relative"
-        flex="1"
-        overflowY={rigthPanelScrollable ? "scroll" : "hidden"}
-        __css={{
-          "scrollbar-width": "none",
-        }}
-        w="full"
-        maxH={rigthPanelMaxH ? rigthPanelMaxH : isSinglePanel ? "calc(100dvh - 70px)" : "calc(100dvh - 145px)"}
+    <div className={cn("relative w-full flex flex-col", isMobile && hasMap ? "flex-none" : "flex-1")}>
+      <div
+        className={cn(
+          "relative flex-1 w-full flex flex-col hide-scrollbar",
+          rigthPanelScrollable ? "overflow-y-scroll" : "overflow-hidden"
+        )}
+        style={{ maxHeight: maxH }}
       >
         {children}
         {!isSinglePanel && rigthPanelScrollable && (
-          // <Box display="block" minH={isMobile ? "170px" : "90px"} h={isMobile ? "170px" : "90px"} w="full" />
-          <Box display="block" minH="80px" h="80px" w="full" />
+          <div className="block min-h-[80px] h-[80px] w-full" />
         )}
-      </VStack>
+      </div>
       {footer}
-    </VStack>
+    </div>
   );
 };

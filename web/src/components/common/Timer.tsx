@@ -1,4 +1,3 @@
-import { Flex, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 
 interface TimerProps {
@@ -46,12 +45,12 @@ export const Timer: React.FC<TimerProps> = ({ startInSeconds, onStart, onEnd }) 
   return (
     <div>
       {timeLeft > 0 ? (
-        <Flex>
-          <Text color="#878E8E">Starts in&nbsp;</Text>
-          <Text color="#22B617">{formatTime(timeLeft)}</Text>
-        </Flex>
+        <div className="flex">
+          <span className="text-[#878E8E]">Starts in&nbsp;</span>
+          <span className="text-[#22B617]">{formatTime(timeLeft)}</span>
+        </div>
       ) : (
-        <Text color="#22B617">Started</Text>
+        <span className="text-[#22B617]">Started</span>
       )}
     </div>
   );

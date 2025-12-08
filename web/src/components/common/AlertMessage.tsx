@@ -1,9 +1,14 @@
-import { HStack, StyleProps, Text } from "@chakra-ui/react";
+import { cn } from "@/utils/cn";
 import { Warning } from "../icons";
 
-export const AlertMessage = ({ message, ...props }: { message: string } & StyleProps) => (
-  <HStack w="full" position="relative" alignItems="center" justifyContent="center" py={3} {...props}>
+interface AlertMessageProps {
+  message: string;
+  className?: string;
+}
+
+export const AlertMessage = ({ message, className }: AlertMessageProps) => (
+  <div className={cn("flex items-center justify-center w-full relative py-3 gap-2", className)}>
     <Warning size="md" />
-    <Text>{message}</Text>
-  </HStack>
+    <span>{message}</span>
+  </div>
 );

@@ -1,32 +1,27 @@
-import { Image, Text, VStack } from "@chakra-ui/react";
 import { OG } from "./OG";
 
 export const Loader = ({ text = "LOADING ..." }: { text?: string }) => {
   return (
-    <VStack gap={3}>
-      <Image src="/images/loading.gif" alt="loading" width="60px" height="60px" margin="auto" />
-      <Text fontFamily="broken-console" fontSize="12px" color="neon.500">
-        {text}
-      </Text>
-    </VStack>
+    <div className="flex flex-col items-center gap-3">
+      <img src="/images/loading.gif" alt="loading" className="w-[60px] h-[60px] m-auto" />
+      <span className="font-broken-console text-xs text-neon-500">{text}</span>
+    </div>
   );
 };
 
 export const OGLoader = ({ text = "LOADING ..." }: { text?: string }) => {
   return (
-    <VStack gap={3}>
+    <div className="flex flex-col items-center gap-3">
       <OG id={Math.floor(Math.random() * 500)} />
-      <Text fontFamily="broken-console" fontSize="12px" color="neon.500">
-        {text}
-      </Text>
-    </VStack>
+      <span className="font-broken-console text-xs text-neon-500">{text}</span>
+    </div>
   );
 };
 
 export const SmallLoader = () => {
   return (
-    <VStack gap={3}>
-      <Image src="/images/loading.gif" alt="loading" width="24px" height="24px" margin="auto" />
-    </VStack>
+    <div className="flex flex-col items-center gap-3">
+      <img src="/images/loading.gif" alt="loading" className="w-6 h-6 m-auto" />
+    </div>
   );
 };
