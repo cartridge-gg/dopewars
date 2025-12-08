@@ -30,6 +30,7 @@ import { HustlerAvatarIcon } from "../profile/HustlerAvatarIcon";
 import { RewardDetails } from "./Leaderboard";
 import { useEffect, useState } from "react";
 import { getSwapQuote, PAPER, USDC } from "@/hooks/useEkubo";
+import { getPaperPriceCache, setPaperPriceCache } from "@/utils/paperPriceCache";
 
 export const ClaimModal = ({
   claimable,
@@ -52,10 +53,21 @@ export const ClaimModal = ({
       return;
     }
 
+    // Check if we have a valid cached price
+    const cachedPrice = getPaperPriceCache();
+    if (cachedPrice) {
+      // Use cached price
+      const totalUsd = claimable.totalClaimable * cachedPrice.price;
+      setUsdValue(totalUsd);
+      return;
+    }
+
     // Fetch PAPER to USDC conversion rate using 1000 PAPER for better slippage accuracy
     getSwapQuote(1000, PAPER, USDC, false)
       .then((quote) => {
         const usdPerPaper = quote.amountOut / 1000;
+        // Update cache
+        setPaperPriceCache(usdPerPaper);
         const totalUsd = claimable.totalClaimable * usdPerPaper;
         setUsdValue(totalUsd);
       })

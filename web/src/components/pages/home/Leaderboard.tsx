@@ -25,10 +25,7 @@ import { DW_NS } from "@/dojo/constants";
 import { getSwapQuote, PAPER, USDC } from "@/hooks/useEkubo";
 import { mergeLeaderboardEntries } from "@/utils/leaderboard";
 import { LeaderboardItem } from "./LeaderboardItem";
-
-// Cache for PAPER price (USD per PAPER)
-let paperPriceCache: { price: number; timestamp: number } | null = null;
-const PRICE_CACHE_DURATION = 30000; // 30 seconds in milliseconds
+import { getPaperPriceCache, setPaperPriceCache } from "@/utils/paperPriceCache";
 
 const renderer = ({
   days,
@@ -106,10 +103,21 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
       return;
     }
 
+    // Check if we have a valid cached price
+    const cachedPrice = getPaperPriceCache();
+    if (cachedPrice) {
+      // Use cached price
+      const totalUsd = (season.paper_balance || 0) * cachedPrice.price;
+      setUsdValue(totalUsd);
+      return;
+    }
+
     // Fetch PAPER to USDC conversion rate using 1000 PAPER for better slippage accuracy
     getSwapQuote(1000, PAPER, USDC, false)
       .then((quote) => {
         const usdPerPaper = quote.amountOut / 1000;
+        // Update cache
+        setPaperPriceCache(usdPerPaper);
         const totalUsd = (season.paper_balance || 0) * usdPerPaper;
         setUsdValue(totalUsd);
       })
@@ -246,10 +254,21 @@ export const RewardDetails = observer(
         return;
       }
 
+      // Check if we have a valid cached price
+      const cachedPrice = getPaperPriceCache();
+      if (cachedPrice) {
+        // Use cached price
+        const totalUsd = claimable * cachedPrice.price;
+        setUsdValue(totalUsd);
+        return;
+      }
+
       // Fetch PAPER to USDC conversion rate using 1000 PAPER for better slippage accuracy
       getSwapQuote(1000, PAPER, USDC, false)
         .then((quote) => {
           const usdPerPaper = quote.amountOut / 1000;
+          // Update cache
+          setPaperPriceCache(usdPerPaper);
           const totalUsd = claimable * usdPerPaper;
           setUsdValue(totalUsd);
         })
