@@ -36,7 +36,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run ESLint
-        run: pnpm lint
+        run: npx eslint --ext .js,.jsx,.ts,.tsx --max-warnings 0 src
 
       - name: Check formatting with Prettier
-        run: pnpm format --check
+        run: pnpm format:check
