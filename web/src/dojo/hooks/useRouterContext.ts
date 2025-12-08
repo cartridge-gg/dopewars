@@ -22,7 +22,7 @@ type RouterContext = {
 };
 
 const password = BigInt("0x03fbe61f91d65aebd1b8e36ad746ea25f8a5e728ab30700acb0f940d05bfcf79");
-const restrictedPages = ["/admin", "/devtools", "/slot"];
+const restrictedPages = ["/admin", "/devtools"];
 
 export const useRouterContext = (): RouterContext => {
   const router = useRouter();
