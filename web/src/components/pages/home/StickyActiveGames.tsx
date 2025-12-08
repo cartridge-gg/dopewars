@@ -12,17 +12,21 @@ export type StickyActiveGamesProps = {
   activeGames: LeaderboardEntry[];
   visiblePositions: Set<number>;
   maxVisiblePosition: number;
+  currentUserAddress: string;
 };
 
 export const StickyActiveGames = observer(
-  ({ activeGames, visiblePositions, maxVisiblePosition }: StickyActiveGamesProps) => {
+  ({ activeGames, visiblePositions, maxVisiblePosition, currentUserAddress }: StickyActiveGamesProps) => {
     const { router } = useRouterContext();
 
+    // Only show current user's active games in the sticky section
     const belowFoldGames = activeGames
-      .filter(
-        (game) =>
-          !visiblePositions.has(game.position) && game.position > maxVisiblePosition,
-      )
+      .filter((game) => {
+        const isCurrentUser = currentUserAddress &&
+          BigInt(game.player_id) === BigInt(currentUserAddress);
+        const isBelowFold = !visiblePositions.has(game.position) && game.position > maxVisiblePosition;
+        return isCurrentUser && isBelowFold;
+      })
       .slice(0, MAX_STICKY_GAMES);
 
     if (belowFoldGames.length === 0) {

@@ -196,6 +196,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
           ref={scrollContainerRef}
           boxSize="full"
           gap="20px"
+          pb="80px"
           maxH={["calc(100dvh - 350px)", "calc(100dvh - 380px)"]}
           sx={{
             overflowY: "scroll",
@@ -235,6 +236,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
           activeGames={activeEntries}
           visiblePositions={visiblePositions}
           maxVisiblePosition={getMaxVisiblePosition()}
+          currentUserAddress={account?.address || ""}
         />
       </Box>
     </VStack>

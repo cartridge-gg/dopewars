@@ -47,18 +47,9 @@ export const LeaderboardItem = observer(
       <ListItem
         ref={itemRef}
         color={color}
-        borderStyle={isActive ? "dashed" : undefined}
-        borderColor={isActive ? "yellow.400" : undefined}
-        borderWidth={isActive ? "1px" : undefined}
-        borderRadius={isActive ? "md" : undefined}
-        bg={isActive ? "rgba(234, 179, 8, 0.1)" : undefined}
-        py={isActive ? 2 : undefined}
-        px={isActive ? 2 : undefined}
-        mx={isActive ? -2 : undefined}
-        my={isActive ? 1 : undefined}
         cursor="pointer"
         onClick={handleClick}
-        _hover={{ bg: isActive ? "rgba(234, 179, 8, 0.2)" : "rgba(255, 255, 255, 0.05)" }}
+        _hover={{ bg: "rgba(255, 255, 255, 0.05)" }}
       >
         <HStack mr={3}>
           <Text
