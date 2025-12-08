@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from "react";
-import { getSwapQuote, PAPER, USDC } from "@/hooks/useEkubo";
+import { getSwapQuote, PAPER, USDC } from "./useEkubo";
 
 interface PaperPriceContextType {
   usdPerPaper: number | null;
