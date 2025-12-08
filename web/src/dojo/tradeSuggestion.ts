@@ -89,7 +89,7 @@ export function calculateBestTrade(
         profit: bestBuyOpportunity.profit,
         buyLocation: currentLocation,
         sellLocation: targetLocation,
-        message: `Sell for $${formatNumber(sellRevenue)}, buy for $${formatNumber(totalProfit)} profit`,
+        message: "Sell and buy for profit",
       };
     } else if (sellProfit > 0) {
       // Just sell current inventory
@@ -101,7 +101,7 @@ export function calculateBestTrade(
         currentSellProfit: sellProfit,
         profit: sellProfit,
         sellLocation: targetLocation,
-        message: `Sell in ${targetLocation} for $${formatNumber(sellProfit)} profit`,
+        message: "Sell for profit",
       };
     } else {
       return { type: "none", message: "No profitable trades available" };
@@ -128,7 +128,7 @@ export function calculateBestTrade(
       profit: bestBuyOpportunity.profit,
       buyLocation: currentLocation,
       sellLocation: targetLocation,
-      message: `Buy ($${formatNumber(bestBuyOpportunity.buyPrice)}) and sell in ${targetLocation} for $${formatNumber(bestBuyOpportunity.profit)} profit`,
+      message: "Buy for profit",
     };
   }
 
@@ -193,13 +193,4 @@ function findBestBuyOpportunity(
   }
 
   return bestOpportunity;
-}
-
-function formatNumber(num: number): string {
-  if (num >= 1000000) {
-    return (num / 1000000).toFixed(1) + "M";
-  } else if (num >= 1000) {
-    return (num / 1000).toFixed(1) + "K";
-  }
-  return num.toFixed(0);
 }

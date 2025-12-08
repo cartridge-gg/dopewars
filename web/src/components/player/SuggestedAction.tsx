@@ -8,12 +8,18 @@ interface SuggestedActionProps {
 }
 
 const formatNumber = (num: number): string => {
-  if (num >= 1000000) {
-    return (num / 1000000).toFixed(1) + "M";
-  } else if (num >= 1000) {
-    return (num / 1000).toFixed(1) + "K";
+  const absNum = Math.abs(num);
+  if (absNum >= 1000000) {
+    return (absNum / 1000000).toFixed(1) + "M";
+  } else if (absNum >= 1000) {
+    return (absNum / 1000).toFixed(1) + "K";
   }
-  return num.toFixed(0);
+  return absNum.toFixed(0);
+};
+
+const formatProfitOrLoss = (amount: number): string => {
+  const formatted = formatNumber(amount);
+  return amount >= 0 ? `$${formatted} profit` : `$${formatted} loss`;
 };
 
 export const SuggestedAction = (
@@ -33,39 +39,38 @@ export const SuggestedAction = (
 
       const iconSize = "20px";
 
-      // buy_and_sell with currentDrug: Sell [icon] for $X, buy [icon] and sell in Location for $Y profit
+      // buy_and_sell with currentDrug: Sell [icon], buy [icon] for $Y profit/loss
       if (suggestion.type === "buy_and_sell" && suggestion.currentDrug && suggestion.drug) {
-        const sellRevenue = (suggestion.currentSellPrice || 0) * (suggestion.currentQuantity || 0);
         const totalProfit = (suggestion.currentSellProfit || 0) + (suggestion.profit || 0);
         return (
-          <HStack gap="6px" align="center" flexWrap="wrap">
+          <HStack gap="6px" align="center" flexWrap="nowrap">
             <Text {...textStyle}>Sell</Text>
             <Box flexShrink={0}>{suggestion.currentDrug.icon({ boxSize: iconSize })}</Box>
-            <Text {...textStyle}>for ${formatNumber(sellRevenue)}, buy</Text>
+            <Text {...textStyle}>, buy</Text>
             <Box flexShrink={0}>{suggestion.drug.icon({ boxSize: iconSize })}</Box>
-            <Text {...textStyle}>and sell in {suggestion.sellLocation} for ${formatNumber(totalProfit)} profit</Text>
+            <Text {...textStyle}>for {formatProfitOrLoss(totalProfit)}</Text>
           </HStack>
         );
       }
 
-      // sell_only: Sell [icon] in Location for $X profit
+      // sell_only: Sell [icon] for $X profit/loss
       if (suggestion.type === "sell_only" && suggestion.currentDrug) {
         return (
-          <HStack gap="6px" align="center" flexWrap="wrap">
+          <HStack gap="6px" align="center" flexWrap="nowrap">
             <Text {...textStyle}>Sell</Text>
             <Box flexShrink={0}>{suggestion.currentDrug.icon({ boxSize: iconSize })}</Box>
-            <Text {...textStyle}>in {suggestion.sellLocation} for ${formatNumber(suggestion.profit || 0)} profit</Text>
+            <Text {...textStyle}>for {formatProfitOrLoss(suggestion.profit || 0)}</Text>
           </HStack>
         );
       }
 
-      // buy_and_sell without currentDrug: Buy [icon] ($X) and sell in Location for $Y profit
+      // buy_and_sell without currentDrug: Buy [icon] for $Y profit/loss
       if (suggestion.type === "buy_and_sell" && suggestion.drug) {
         return (
-          <HStack gap="6px" align="center" flexWrap="wrap">
+          <HStack gap="6px" align="center" flexWrap="nowrap">
             <Text {...textStyle}>Buy</Text>
             <Box flexShrink={0}>{suggestion.drug.icon({ boxSize: iconSize })}</Box>
-            <Text {...textStyle}>(${formatNumber(suggestion.buyPrice || 0)}) and sell in {suggestion.sellLocation} for ${formatNumber(suggestion.profit || 0)} profit</Text>
+            <Text {...textStyle}>for {formatProfitOrLoss(suggestion.profit || 0)}</Text>
           </HStack>
         );
       }
