@@ -106,22 +106,10 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
       return;
     }
 
-    const now = Date.now();
-
-    // Check if we have a valid cached price
-    if (paperPriceCache && now - paperPriceCache.timestamp < PRICE_CACHE_DURATION) {
-      // Use cached price
-      const totalUsd = (season.paper_balance || 0) * paperPriceCache.price;
-      setUsdValue(totalUsd);
-      return;
-    }
-
     // Fetch PAPER to USDC conversion rate using 1000 PAPER for better slippage accuracy
     getSwapQuote(1000, PAPER, USDC, false)
       .then((quote) => {
         const usdPerPaper = quote.amountOut / 1000;
-        // Update cache
-        paperPriceCache = { price: usdPerPaper, timestamp: now };
         const totalUsd = (season.paper_balance || 0) * usdPerPaper;
         setUsdValue(totalUsd);
       })
@@ -168,9 +156,11 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
               <Text cursor="pointer" onClick={() => onDetails(selectedVersion)}>
                 SEASON {selectedVersion}
               </Text>
-              <Box cursor="pointer" onClick={() => uiStore.openSeasonDetails()}>
-                <InfosIcon />
-              </Box>
+              {selectedVersion === currentVersion && (
+                <Box cursor="pointer" onClick={() => uiStore.openSeasonDetails()}>
+                  <InfosIcon />
+                </Box>
+              )}
             </HStack>
             <HStack gap={1} alignItems="center" textStyle="subheading" fontSize="12px">
               <Text color="neon.500">REWARDS:</Text>
@@ -256,22 +246,10 @@ export const RewardDetails = observer(
         return;
       }
 
-      const now = Date.now();
-
-      // Check if we have a valid cached price
-      if (paperPriceCache && now - paperPriceCache.timestamp < PRICE_CACHE_DURATION) {
-        // Use cached price
-        const totalUsd = claimable * paperPriceCache.price;
-        setUsdValue(totalUsd);
-        return;
-      }
-
       // Fetch PAPER to USDC conversion rate using 1000 PAPER for better slippage accuracy
       getSwapQuote(1000, PAPER, USDC, false)
         .then((quote) => {
           const usdPerPaper = quote.amountOut / 1000;
-          // Update cache
-          paperPriceCache = { price: usdPerPaper, timestamp: now };
           const totalUsd = claimable * usdPerPaper;
           setUsdValue(totalUsd);
         })
