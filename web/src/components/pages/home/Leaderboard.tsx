@@ -7,7 +7,6 @@ import {
   useRouterContext,
   useSeasonByVersion,
 } from "@/dojo/hooks";
-import { useGamesByPlayer } from "@/dojo/hooks/useGamesByPlayer";
 import colors from "@/theme/colors";
 import { formatCash } from "@/utils/ui";
 import { Box, HStack, Text, UnorderedList, VStack } from "@chakra-ui/react";
@@ -24,7 +23,7 @@ import { Tooltip } from "@/components/common";
 import { useSwipeable } from "react-swipeable";
 import { DW_NS } from "@/dojo/constants";
 import { getSwapQuote, PAPER, USDC } from "@/hooks/useEkubo";
-import { mergeLeaderboardEntries, ActiveGameCashMap } from "@/utils/leaderboard";
+import { mergeLeaderboardEntries } from "@/utils/leaderboard";
 import { LeaderboardItem } from "./LeaderboardItem";
 
 const renderer = ({
@@ -64,7 +63,7 @@ const renderer = ({
 export const Leaderboard = observer(({ config }: { config?: Config }) => {
   const { router, gameId } = useRouterContext();
 
-  const { uiStore, clients: { toriiClient } } = useDojoContext();
+  const { uiStore } = useDojoContext();
   const { account } = useAccount();
 
   const [currentVersion, setCurrentVersion] = useState(config?.ryo.season_version || 0);
@@ -85,26 +84,13 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
     refetch: refetchActiveGames,
   } = useActiveGamesBySeason(selectedVersion);
 
-  // Fetch current user's games to get actual cash values for active games
-  const { onGoingGames } = useGamesByPlayer(toriiClient, account?.address);
-
-  // Build a map of game_id to actual cash for active games
-  const activeGameCashMap = useMemo((): ActiveGameCashMap => {
-    const map = new Map<number, number>();
-    for (const game of onGoingGames) {
-      map.set(game.gameInfos.game_id, game.player.cash);
-    }
-    return map;
-  }, [onGoingGames]);
-
   const mergedEntries = useMemo(() => {
     return mergeLeaderboardEntries(
       registeredGames,
       activeGames,
       account?.address || "",
-      activeGameCashMap,
     );
-  }, [registeredGames, activeGames, account?.address, activeGameCashMap]);
+  }, [registeredGames, activeGames, account?.address]);
 
   useEffect(() => {
     if (!config) return;
