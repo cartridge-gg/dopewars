@@ -152,10 +152,18 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
             onClick={onPrev}
           ></Arrow>
           <VStack textStyle="subheading" fontSize="12px" w="full" justifyContent="center" position="relative" gap={1}>
-            <Text cursor="pointer" onClick={() => onDetails(selectedVersion)}>
-              SEASON {selectedVersion} REWARDS
-            </Text>
             <HStack gap={1} alignItems="center">
+              <Text cursor="pointer" onClick={() => onDetails(selectedVersion)}>
+                SEASON {selectedVersion}
+              </Text>
+              {selectedVersion === currentVersion && (
+                <Box cursor="pointer" onClick={() => uiStore.openSeasonDetails()}>
+                  <InfosIcon />
+                </Box>
+              )}
+            </HStack>
+            <HStack gap={1} alignItems="center">
+              <Text>REWARDS:</Text>
               <Text color="yellow.400">
                 <PaperIcon color="yellow.400" mr={1} />
                 {formatCash(season.paper_balance || 0).replace("$", "")}
@@ -166,6 +174,9 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
                 </Text>
               )}
             </HStack>
+            {selectedVersion === currentVersion && (
+              <Countdown date={new Date(season.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
+            )}
           </VStack>
           <Arrow
             direction="right"
@@ -174,14 +185,6 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
             onClick={onNext}
           ></Arrow>
         </HStack>
-        {selectedVersion === currentVersion && (
-          <HStack>
-            <Countdown date={new Date(season.next_version_timestamp * 1_000)} renderer={renderer}></Countdown>
-            <Box cursor="pointer" onClick={() => uiStore.openSeasonDetails()}>
-              <InfosIcon />
-            </Box>
-          </HStack>
-        )}
       </VStack>
       <VStack
         boxSize="full"
