@@ -24,10 +24,8 @@ import { Tooltip } from "@/components/common";
 import { useSwipeable } from "react-swipeable";
 import { DW_NS } from "@/dojo/constants";
 import { getSwapQuote, PAPER, USDC } from "@/hooks/useEkubo";
-import { useLeaderboardVisibility } from "@/hooks/useLeaderboardVisibility";
 import { mergeLeaderboardEntries, ActiveGameCashMap } from "@/utils/leaderboard";
 import { LeaderboardItem } from "./LeaderboardItem";
-import { StickyActiveGames } from "./StickyActiveGames";
 
 const renderer = ({
   days,
@@ -90,8 +88,6 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
   // Fetch current user's games to get actual cash values for active games
   const { onGoingGames } = useGamesByPlayer(toriiClient, account?.address);
 
-  const { scrollContainerRef, visiblePositions, observeEntry, getMaxVisiblePosition } = useLeaderboardVisibility();
-
   // Build a map of game_id to actual cash for active games
   const activeGameCashMap = useMemo((): ActiveGameCashMap => {
     const map = new Map<number, number>();
@@ -109,10 +105,6 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
       activeGameCashMap,
     );
   }, [registeredGames, activeGames, account?.address, activeGameCashMap]);
-
-  const activeEntries = useMemo(() => {
-    return mergedEntries.filter((entry) => entry.type === "active");
-  }, [mergedEntries]);
 
   useEffect(() => {
     if (!config) return;
@@ -205,54 +197,43 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
           </HStack>
         )}
       </VStack>
-      <Box position="relative" w="full" h="full">
-        <VStack
-          ref={scrollContainerRef}
-          boxSize="full"
-          gap="20px"
-          pb="80px"
-          maxH={["calc(100dvh - 350px)", "calc(100dvh - 380px)"]}
-          sx={{
-            overflowY: "scroll",
-          }}
-          __css={{
-            "scrollbar-width": "none",
-          }}
-        >
-          {(isFetchingRegisteredGames || isFetchingActiveGames) && <Loader />}
-          {!isFetchingRegisteredGames && !isFetchingActiveGames && (
-            <UnorderedList boxSize="full" variant="dotted" h="auto">
-              {mergedEntries && mergedEntries.length > 0 ? (
-                mergedEntries.map((entry, index) => {
-                  const isOwn = BigInt(entry.player_id) === BigInt(account?.address || 0);
+      <VStack
+        boxSize="full"
+        gap="20px"
+        maxH={["calc(100dvh - 350px)", "calc(100dvh - 380px)"]}
+        sx={{
+          overflowY: "scroll",
+        }}
+        __css={{
+          "scrollbar-width": "none",
+        }}
+      >
+        {(isFetchingRegisteredGames || isFetchingActiveGames) && <Loader />}
+        {!isFetchingRegisteredGames && !isFetchingActiveGames && (
+          <UnorderedList boxSize="full" variant="dotted" h="auto">
+            {mergedEntries && mergedEntries.length > 0 ? (
+              mergedEntries.map((entry, index) => {
+                const isOwn = BigInt(entry.player_id) === BigInt(account?.address || 0);
 
-                  return (
-                    <LeaderboardItem
-                      key={`${entry.type}-${entry.game_id}`}
-                      entry={entry}
-                      index={index}
-                      isOwn={isOwn}
-                      config={config}
-                      registeredGamesCount={registeredGames.length}
-                      itemRef={(el) => observeEntry(el, index + 1)}
-                    />
-                  );
-                })
-              ) : (
-                <Text textAlign="center" color="neon.500">
-                  No scores submitted yet
-                </Text>
-              )}
-            </UnorderedList>
-          )}
-        </VStack>
-        <StickyActiveGames
-          activeGames={activeEntries}
-          visiblePositions={visiblePositions}
-          maxVisiblePosition={getMaxVisiblePosition()}
-          currentUserAddress={account?.address || ""}
-        />
-      </Box>
+                return (
+                  <LeaderboardItem
+                    key={`${entry.type}-${entry.game_id}`}
+                    entry={entry}
+                    index={index}
+                    isOwn={isOwn}
+                    config={config}
+                    registeredGamesCount={registeredGames.length}
+                  />
+                );
+              })
+            ) : (
+              <Text textAlign="center" color="neon.500">
+                No scores submitted yet
+              </Text>
+            )}
+          </UnorderedList>
+        )}
+      </VStack>
     </VStack>
   );
 });

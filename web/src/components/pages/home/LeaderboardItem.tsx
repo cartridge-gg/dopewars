@@ -18,11 +18,10 @@ export type LeaderboardItemProps = {
   isOwn: boolean;
   config: Config;
   registeredGamesCount: number;
-  itemRef?: (el: HTMLElement | null) => void;
 };
 
 export const LeaderboardItem = observer(
-  ({ entry, index, isOwn, config, registeredGamesCount, itemRef }: LeaderboardItemProps) => {
+  ({ entry, index, isOwn, config, registeredGamesCount }: LeaderboardItemProps) => {
     const { router } = useRouterContext();
     const isActive = entry.type === "active";
     const payedCount = getPayedCount(registeredGamesCount);
@@ -45,7 +44,6 @@ export const LeaderboardItem = observer(
 
     return (
       <ListItem
-        ref={itemRef}
         color={color}
         cursor="pointer"
         onClick={handleClick}
