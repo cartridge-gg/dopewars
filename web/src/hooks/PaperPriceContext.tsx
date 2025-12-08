@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from "react";
-import { getSwapQuote, PAPER, USDC } from "./useEkubo";
+import { formatUnits, parseUnits } from "viem";
 
 interface PaperPriceContextType {
   usdPerPaper: number | null;
@@ -11,6 +11,13 @@ interface PaperPriceContextType {
 const PaperPriceContext = createContext<PaperPriceContextType | null>(null);
 
 const CACHE_DURATION = 30000; // 30 seconds
+
+// PAPER token info
+const PAPER_ADDRESS = "0x0410466536b5ae074f7fea81e5533b8134a9fa08b3dd077dd9db08f64997d113";
+const PAPER_DECIMALS = 18;
+// USDC token info
+const USDC_ADDRESS = "0x053c91253bc9682c04929ca02ed00b3e423f6710d2ee7e0d5ebb06f3ecf368a8";
+const USDC_DECIMALS = 6;
 
 export const PaperPriceProvider = ({ children }: { children: ReactNode }) => {
   const [usdPerPaper, setUsdPerPaper] = useState<number | null>(null);
@@ -33,8 +40,14 @@ export const PaperPriceProvider = ({ children }: { children: ReactNode }) => {
     setError(null);
 
     try {
-      const quote = await getSwapQuote(1000, PAPER, USDC, false);
-      const price = quote.amountOut / 1000;
+      // Fetch PAPER to USDC conversion rate using 1000 PAPER
+      const scaledAmount = parseUnits("1000", PAPER_DECIMALS);
+      const response = await fetch(
+        `https://starknet-mainnet-quoter-api.ekubo.org/${scaledAmount}/${PAPER_ADDRESS}/${USDC_ADDRESS}`,
+      );
+      const data = await response.json();
+      const amountOut = Number(formatUnits(data?.total_calculated?.toString() ?? "0", USDC_DECIMALS)) || 0;
+      const price = amountOut / 1000;
       setUsdPerPaper(price);
       lastFetchTimeRef.current = Date.now();
     } catch (e) {
