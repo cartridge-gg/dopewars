@@ -49,14 +49,49 @@ export interface MediaState {
   isMuted: boolean;
 }
 
-export const useMediaStore = create<MediaState>(() => ({
-  isInitialized: false,
-  medias: [],
-  currentIndex: 0,
-  isPlaying: false,
-  volume: 0.7,
-  isMuted: false,
-}));
+// Load persisted settings from localStorage
+const loadPersistedMediaSettings = () => {
+  if (typeof window === "undefined") return { volume: 0.7, isMuted: false };
+
+  try {
+    const stored = localStorage.getItem("mediaSettings");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      return {
+        volume: parsed.volume ?? 0.7,
+        isMuted: parsed.isMuted ?? false,
+      };
+    }
+  } catch (e) {
+    console.error("Failed to load media settings:", e);
+  }
+
+  return { volume: 0.7, isMuted: false };
+};
+
+// Save settings to localStorage
+const persistMediaSettings = (volume: number, isMuted: boolean) => {
+  if (typeof window === "undefined") return;
+
+  try {
+    localStorage.setItem("mediaSettings", JSON.stringify({ volume, isMuted }));
+  } catch (e) {
+    console.error("Failed to save media settings:", e);
+  }
+};
+
+export const useMediaStore = create<MediaState>(() => {
+  const persisted = loadPersistedMediaSettings();
+
+  return {
+    isInitialized: false,
+    medias: [],
+    currentIndex: 0,
+    isPlaying: false,
+    volume: persisted.volume,
+    isMuted: persisted.isMuted,
+  };
+});
 
 export const initMediaStore = async () => {
   const state = useMediaStore.getState();
@@ -71,6 +106,7 @@ export const initMediaStore = async () => {
         src: `/medias/${media.filename}`,
         html5: true,
         preload: true,
+        volume: state.volume, // Apply persisted volume
         onplay: () => {
           navigator.mediaSession.playbackState = "playing";
         },
@@ -109,7 +145,10 @@ export const toggleIsMuted = () => {
   const state = useMediaStore.getState();
 
   if (state.isMuted || state.volume === 0) {
-    volume(0.7);
+    // Restore to previous volume or default
+    const stored = loadPersistedMediaSettings();
+    const restoreVolume = stored.volume > 0 ? stored.volume : 0.7;
+    volume(restoreVolume);
   } else {
     volume(0);
   }
@@ -153,9 +192,15 @@ export const pause = () => {
 export const volume = (v: number) => {
   const state = useMediaStore.getState();
   state.medias[state.currentIndex].sound?.volume(v);
+
+  const newIsMuted = v === 0;
+
+  // Persist the new settings
+  persistMediaSettings(v, newIsMuted);
+
   useMediaStore.setState((state) => ({
     volume: v,
-    isMuted: v === 0,
+    isMuted: newIsMuted,
   }));
 };
 
