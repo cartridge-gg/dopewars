@@ -317,18 +317,24 @@ const Travel = observer(() => {
           prices={prices}
           isCurrentLocation={currentLocation ? targetLocation === currentLocation : true}
         />
-        <VStack w="full" align="flex-start" gap="10px">
+        <VStack w="full" align="flex-start" gap="10px" mt="auto">
           <Text textStyle="subheading" fontSize="11px" color="neon.500">
             ACTIONS
           </Text>
           {currentLocation !== targetLocation && (
-            <SuggestedAction suggestion={suggestion} onExecute={onExecuteSuggestion} isDisabled={isPending} />
+            <SuggestedAction
+              suggestion={suggestion}
+              onExecute={onExecuteSuggestion}
+              isDisabled={isPending}
+              isMobile={true}
+            />
           )}
           {game.isShopOpen && (
             <SuggestedAction
               suggestion={{ type: "none", message: "Visit Pawn Shop" }}
               onExecute={() => router.push(`/${gameId}/pawnshop`)}
               isDisabled={isPending}
+              isMobile={true}
             />
           )}
         </VStack>

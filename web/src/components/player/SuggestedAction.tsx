@@ -6,6 +6,7 @@ interface SuggestedActionProps {
   suggestion: TradeSuggestion;
   onExecute: () => void;
   isDisabled?: boolean;
+  isMobile?: boolean;
 }
 
 const formatNumber = (num: number): string => {
@@ -23,7 +24,12 @@ const formatProfitOrLoss = (amount: number): string => {
   return amount >= 0 ? `$${formatted} profit` : `$${formatted} loss`;
 };
 
-export const SuggestedAction = ({ suggestion, onExecute, isDisabled = false }: SuggestedActionProps) => {
+export const SuggestedAction = ({
+  suggestion,
+  onExecute,
+  isDisabled = false,
+  isMobile = false,
+}: SuggestedActionProps) => {
   // Check if this is a pawn shop action (none type with specific message)
   const isPawnShopAction = suggestion.type === "none" && suggestion.message === "Visit Pawn Shop";
   const isClickable = (suggestion.type !== "none" || isPawnShopAction) && !isDisabled;
@@ -62,7 +68,9 @@ export const SuggestedAction = ({ suggestion, onExecute, isDisabled = false }: S
           <Text {...textStyle}>, buy</Text>
           <Box flexShrink={0}>{suggestion.drug.icon({ boxSize: iconSize })}</Box>
           <Text {...textStyle}>
-            and sell in {locationName} for {formatProfitOrLoss(totalProfit)}
+            {isMobile
+              ? `for ${formatProfitOrLoss(totalProfit)}`
+              : `and sell in ${locationName} for ${formatProfitOrLoss(totalProfit)}`}
           </Text>
         </HStack>
       );
@@ -79,7 +87,9 @@ export const SuggestedAction = ({ suggestion, onExecute, isDisabled = false }: S
           <Text {...textStyle}>Sell</Text>
           <Box flexShrink={0}>{suggestion.currentDrug.icon({ boxSize: iconSize })}</Box>
           <Text {...textStyle}>
-            in {locationName} for {formatProfitOrLoss(suggestion.profit || 0)}
+            {isMobile
+              ? `for ${formatProfitOrLoss(suggestion.profit || 0)}`
+              : `in ${locationName} for ${formatProfitOrLoss(suggestion.profit || 0)}`}
           </Text>
         </HStack>
       );
@@ -96,7 +106,9 @@ export const SuggestedAction = ({ suggestion, onExecute, isDisabled = false }: S
           <Text {...textStyle}>Buy</Text>
           <Box flexShrink={0}>{suggestion.drug.icon({ boxSize: iconSize })}</Box>
           <Text {...textStyle}>
-            and sell in {locationName} for {formatProfitOrLoss(suggestion.profit || 0)}
+            {isMobile
+              ? `for ${formatProfitOrLoss(suggestion.profit || 0)}`
+              : `and sell in ${locationName} for ${formatProfitOrLoss(suggestion.profit || 0)}`}
           </Text>
         </HStack>
       );
