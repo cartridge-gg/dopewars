@@ -62,11 +62,15 @@ export const SuggestedAction = ({ suggestion, onExecute, isDisabled = false }: S
       );
     }
 
-    // sell_only: Sell [icon] for $X profit/loss
+    // sell_only: Travel to [Location] and sell [icon] for $X profit/loss
     if (suggestion.type === "sell_only" && suggestion.currentDrug) {
+      // Extract location name from message if available
+      const messageMatch = suggestion.message.match(/Travel to (.*?) and sell/);
+      const locationName = messageMatch ? messageMatch[1] : "";
+
       return (
         <HStack gap="6px" align="center" flexWrap="nowrap">
-          <Text {...textStyle}>Sell</Text>
+          <Text {...textStyle}>{locationName ? `${locationName}: Sell` : "Sell"}</Text>
           <Box flexShrink={0}>{suggestion.currentDrug.icon({ boxSize: iconSize })}</Box>
           <Text {...textStyle}>for {formatProfitOrLoss(suggestion.profit || 0)}</Text>
         </HStack>
