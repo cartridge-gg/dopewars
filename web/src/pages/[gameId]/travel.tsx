@@ -7,7 +7,7 @@ import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
 import { useConfigStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useGameStore } from "@/dojo/hooks/useGameStore";
-import { calculateBestTrade, TradeSuggestion } from "@/dojo/tradeSuggestion";
+import { calculateBestTrade, calculateGlobalBestTrade, TradeSuggestion } from "@/dojo/tradeSuggestion";
 import { TradeDirection } from "@/dojo/types";
 import colors from "@/theme/colors";
 import { IsMobile, formatCash, generatePixelBorderPath } from "@/utils/ui";
@@ -47,35 +47,29 @@ const Travel = observer(() => {
       if (game.player.location) {
         setCurrentLocation(game.player.location.location);
 
-        // Find the best location to sell current inventory
-        let bestLocation = game.player.location.location;
+        // Find the globally optimal destination for the best trade
+        const globalBest = calculateGlobalBestTrade(game, game.player.location.location, configStore);
 
-        if (game.drugs.quantity > 0 && game.drugs.drug) {
-          // User has drugs to sell, find location with highest price
-          let maxPrice = 0;
-          const currentDrug = game.drugs.drug.drug;
-
-          config.location.forEach((loc) => {
-            // Skip current location
-            if (loc.location === game.player.location.location) return;
-
-            const markets = game.markets.marketsByLocation.get(loc.location);
-            if (markets) {
-              const drugMarket = markets.find((m) => m.drug === currentDrug);
-              if (drugMarket && drugMarket.price > maxPrice) {
-                maxPrice = drugMarket.price;
-                bestLocation = loc.location;
-              }
-            }
-          });
+        if (globalBest.optimalDestination) {
+          setTargetLocation(globalBest.optimalDestination);
+        } else {
+          // Fallback to first location that's not current
+          const fallback = config.location.find((loc) => loc.location !== game.player.location.location);
+          setTargetLocation(fallback?.location || "Queens");
         }
-
-        setTargetLocation(bestLocation);
       } else {
         setTargetLocation("Queens");
       }
     }
-  }, [game, isPending, config, game?.markets?.marketsByLocation, game?.drugs?.quantity, game?.drugs?.drug]);
+  }, [
+    game,
+    isPending,
+    config,
+    game?.markets?.marketsByLocation,
+    game?.drugs?.quantity,
+    game?.drugs?.drug,
+    configStore,
+  ]);
 
   const prices = useMemo(() => {
     if (game && game.markets && game.markets.marketsByLocation && targetLocation) {
@@ -144,19 +138,23 @@ const Travel = observer(() => {
     // Store sell info for after travel
     // For buy_and_sell: sell the newly bought drug at destination
     // For sell_only: sell current inventory at destination
-    const sellInfo = suggestion.type === "buy_and_sell" && suggestion.drug && suggestion.quantity && suggestion.sellPrice
-      ? {
-          drug: suggestion.drug.drug_id,
-          quantity: suggestion.quantity,
-          sellPrice: suggestion.sellPrice,
-        }
-      : suggestion.type === "sell_only" && suggestion.currentDrug && suggestion.currentQuantity && suggestion.currentSellPrice
-      ? {
-          drug: suggestion.currentDrug.drug_id,
-          quantity: suggestion.currentQuantity,
-          sellPrice: suggestion.currentSellPrice,
-        }
-      : null;
+    const sellInfo =
+      suggestion.type === "buy_and_sell" && suggestion.drug && suggestion.quantity && suggestion.sellPrice
+        ? {
+            drug: suggestion.drug.drug_id,
+            quantity: suggestion.quantity,
+            sellPrice: suggestion.sellPrice,
+          }
+        : suggestion.type === "sell_only" &&
+          suggestion.currentDrug &&
+          suggestion.currentQuantity &&
+          suggestion.currentSellPrice
+        ? {
+            drug: suggestion.currentDrug.drug_id,
+            quantity: suggestion.currentQuantity,
+            sellPrice: suggestion.currentSellPrice,
+          }
+        : null;
 
     try {
       // Execute travel with pending calls (BUY for buy_and_sell, nothing for sell_only)
@@ -288,11 +286,7 @@ const Travel = observer(() => {
         </VStack>
         <LocationPrices game={game} prices={prices} isCurrentLocation={targetLocation == currentLocation} />
         {currentLocation !== targetLocation && (
-          <SuggestedAction
-            suggestion={suggestion}
-            onExecute={onExecuteSuggestion}
-            isDisabled={isPending}
-          />
+          <SuggestedAction suggestion={suggestion} onExecute={onExecuteSuggestion} isDisabled={isPending} />
         )}
       </VStack>
       {/* Mobile  */}
@@ -329,11 +323,7 @@ const Travel = observer(() => {
           isCurrentLocation={currentLocation ? targetLocation === currentLocation : true}
         />
         {currentLocation !== targetLocation && (
-          <SuggestedAction
-            suggestion={suggestion}
-            onExecute={onExecuteSuggestion}
-            isDisabled={isPending}
-          />
+          <SuggestedAction suggestion={suggestion} onExecute={onExecuteSuggestion} isDisabled={isPending} />
         )}
       </VStack>
     </Layout>

@@ -27,8 +27,9 @@ const Redirector = observer(() => {
       if (game.gameInfos.game_over) {
         router.push(`/${gameId}/end`);
       } else if (game.player.status === PlayerStatus.Normal) {
-        if (game.player.location) {
-          router.push(`/${gameId}/${game.player.location.location}`);
+        // Redirect to pawnshop if available, otherwise travel
+        if (game.isShopOpen) {
+          router.push(`/${gameId}/pawnshop`);
         } else {
           router.push(`/${gameId}/travel`);
         }

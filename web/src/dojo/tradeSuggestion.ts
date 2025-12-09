@@ -22,7 +22,7 @@ export function calculateBestTrade(
   game: GameClass,
   currentLocation: string,
   targetLocation: string,
-  configStore: ConfigStoreClass
+  configStore: ConfigStoreClass,
 ): TradeSuggestion {
   // Can't trade if same location
   if (currentLocation === targetLocation || !currentLocation || !targetLocation) {
@@ -69,7 +69,7 @@ export function calculateBestTrade(
       cashAfterSell,
       transportCapacity,
       configStore,
-      game
+      game,
     );
 
     if (bestBuyOpportunity && bestBuyOpportunity.profit > 0) {
@@ -115,7 +115,7 @@ export function calculateBestTrade(
     playerCash,
     transportCapacity,
     configStore,
-    game
+    game,
   );
 
   if (bestBuyOpportunity && bestBuyOpportunity.profit > 0) {
@@ -149,7 +149,7 @@ function findBestBuyOpportunity(
   availableCash: number,
   transportCapacity: number,
   configStore: ConfigStoreClass,
-  game: GameClass
+  game: GameClass,
 ): BuyOpportunity | null {
   let bestOpportunity: BuyOpportunity | null = null;
   let maxProfit = 0;
@@ -176,10 +176,7 @@ function findBestBuyOpportunity(
 
     if (profit > maxProfit) {
       maxProfit = profit;
-      const drugConfig = configStore.getDrugById(
-        game.seasonSettings.drugs_mode,
-        currentDrugMarket.drugId
-      );
+      const drugConfig = configStore.getDrugById(game.seasonSettings.drugs_mode, currentDrugMarket.drugId);
       if (drugConfig) {
         bestOpportunity = {
           drug: drugConfig,
@@ -193,4 +190,46 @@ function findBestBuyOpportunity(
   }
 
   return bestOpportunity;
+}
+
+export interface GlobalTradeSuggestion extends TradeSuggestion {
+  optimalDestination: string;
+}
+
+export function calculateGlobalBestTrade(
+  game: GameClass,
+  currentLocation: string,
+  configStore: ConfigStoreClass,
+): GlobalTradeSuggestion {
+  const locations = configStore.config?.location || [];
+
+  let bestSuggestion: TradeSuggestion = { type: "none", message: "No profitable trades available" };
+  let bestProfit = -Infinity;
+  let optimalDestination = "";
+
+  for (const location of locations) {
+    // Skip current location
+    if (location.location === currentLocation) continue;
+
+    const suggestion = calculateBestTrade(game, currentLocation, location.location, configStore);
+
+    // Calculate total profit for this suggestion
+    let totalProfit = 0;
+    if (suggestion.type === "buy_and_sell") {
+      totalProfit = (suggestion.currentSellProfit || 0) + (suggestion.profit || 0);
+    } else if (suggestion.type === "sell_only") {
+      totalProfit = suggestion.profit || 0;
+    }
+
+    if (totalProfit > bestProfit) {
+      bestProfit = totalProfit;
+      bestSuggestion = suggestion;
+      optimalDestination = location.location;
+    }
+  }
+
+  return {
+    ...bestSuggestion,
+    optimalDestination,
+  };
 }
