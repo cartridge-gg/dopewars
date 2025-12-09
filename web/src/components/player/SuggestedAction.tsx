@@ -117,6 +117,7 @@ export const SuggestedAction = ({ suggestion, onExecute, isDisabled = false }: S
           onExecute();
         }
       }}
+      justifyContent="center"
     >
       {renderMessage()}
     </Button>
