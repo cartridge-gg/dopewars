@@ -268,16 +268,19 @@ const Travel = observer(() => {
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         </VStack>
         <LocationPrices game={game} prices={prices} isCurrentLocation={targetLocation == currentLocation} />
-        <VStack w="full" gap="10px">
+        <VStack w="full" align="flex-start" gap="10px">
+          <Text textStyle="subheading" fontSize="11px" color="neon.500">
+            ACTIONS
+          </Text>
+          {currentLocation !== targetLocation && (
+            <SuggestedAction suggestion={suggestion} onExecute={onExecuteSuggestion} isDisabled={isPending} />
+          )}
           {game.isShopOpen && (
             <SuggestedAction
               suggestion={{ type: "none", message: "Visit Pawn Shop" }}
               onExecute={() => router.push(`/${gameId}/pawnshop`)}
               isDisabled={isPending}
             />
-          )}
-          {currentLocation !== targetLocation && (
-            <SuggestedAction suggestion={suggestion} onExecute={onExecuteSuggestion} isDisabled={isPending} />
           )}
         </VStack>
       </VStack>
@@ -314,16 +317,19 @@ const Travel = observer(() => {
           prices={prices}
           isCurrentLocation={currentLocation ? targetLocation === currentLocation : true}
         />
-        <VStack w="full" gap="10px">
+        <VStack w="full" align="flex-start" gap="10px">
+          <Text textStyle="subheading" fontSize="11px" color="neon.500">
+            ACTIONS
+          </Text>
+          {currentLocation !== targetLocation && (
+            <SuggestedAction suggestion={suggestion} onExecute={onExecuteSuggestion} isDisabled={isPending} />
+          )}
           {game.isShopOpen && (
             <SuggestedAction
               suggestion={{ type: "none", message: "Visit Pawn Shop" }}
               onExecute={() => router.push(`/${gameId}/pawnshop`)}
               isDisabled={isPending}
             />
-          )}
-          {currentLocation !== targetLocation && (
-            <SuggestedAction suggestion={suggestion} onExecute={onExecuteSuggestion} isDisabled={isPending} />
           )}
         </VStack>
       </VStack>

@@ -1,7 +1,5 @@
 import { TradeSuggestion } from "@/dojo/tradeSuggestion";
 import { Box, Card, HStack, Text, VStack } from "@chakra-ui/react";
-import { BorderImage } from "../icons";
-import colors from "@/theme/colors";
 import { Button } from "../common";
 
 interface SuggestedActionProps {
@@ -91,26 +89,18 @@ export const SuggestedAction = ({ suggestion, onExecute, isDisabled = false }: S
   };
 
   return (
-    <VStack w="full">
-      <HStack w="full" justify="space-between" color="neon.500" display={["none", "flex"]}>
-        <Text textStyle="subheading" fontSize="11px">
-          ACTIONS
-        </Text>
-      </HStack>
-
-      <Button
-        px="10px"
-        py="8px"
-        w="full"
-        isDisabled={isDisabled}
-        onClick={() => {
-          if (isClickable) {
-            onExecute();
-          }
-        }}
-      >
-        {renderMessage()}
-      </Button>
-    </VStack>
+    <Button
+      px="10px"
+      py="8px"
+      w="full"
+      isDisabled={isDisabled}
+      onClick={() => {
+        if (isClickable) {
+          onExecute();
+        }
+      }}
+    >
+      {renderMessage()}
+    </Button>
   );
 };
