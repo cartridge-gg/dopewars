@@ -248,7 +248,7 @@ const Travel = observer(() => {
           />
         ),
       }}
-      footer={<Footer></Footer>}
+      footer={<Footer>{null}</Footer>}
     >
       {/* Desktop  */}
       <VStack w="full" my="auto" display={["none", "flex"]} gap="20px" overflow={"visible"}>

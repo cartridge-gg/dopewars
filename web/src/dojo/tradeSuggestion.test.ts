@@ -27,15 +27,17 @@ const mockDrugConfigs: Record<string, DrugConfigFull> = {
 
 // Mock ConfigStore
 const createMockConfigStore = (): Partial<ConfigStoreClass> => ({
-  getDrugById: (mode: number, drugId: number) => {
+  getDrugById: (mode: string, drugId: number) => {
     const drug = Object.values(mockDrugConfigs).find((d) => d.drug_id === drugId);
-    return drug || null;
+    return drug!;
   },
-  getLocation: (location: string) => ({
-    name: location,
-    location,
-    location_id: 1,
-  }),
+  getLocation: (location: string) =>
+    ({
+      name: location,
+      location,
+      location_id: 1,
+      icon: () => null,
+    } as any),
 });
 
 // Helper to create mock markets
@@ -44,9 +46,6 @@ const createMarket = (drug: string, drugId: number, price: number, weight: numbe
   drugId,
   price,
   weight,
-  quantity: 100,
-  location: "",
-  location_id: 0,
 });
 
 // Helper to create mock game
@@ -77,7 +76,7 @@ const createMockGame = (
     ]),
   } as any,
   seasonSettings: {
-    drugs_mode: 1,
+    drugs_mode: "1",
   } as any,
 });
 
