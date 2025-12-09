@@ -115,14 +115,16 @@ const Travel = observer(() => {
     if (suggestion.currentDrug && suggestion.currentQuantity && suggestion.type === "buy_and_sell") {
       const currentMarket = game.markets.marketsByLocation.get(currentLocation || "");
       const drugMarket = currentMarket?.find((m) => m.drug === suggestion.currentDrug?.drug);
-      if (drugMarket) {
-        game.pushCall({
-          direction: TradeDirection.Sell,
-          drug: suggestion.currentDrug.drug_id,
-          quantity: suggestion.currentQuantity,
-          cost: drugMarket.price * suggestion.currentQuantity,
-        });
+      if (!drugMarket) {
+        console.error("Cannot find market for current drug, aborting trade");
+        return;
       }
+      game.pushCall({
+        direction: TradeDirection.Sell,
+        drug: suggestion.currentDrug.drug_id,
+        quantity: suggestion.currentQuantity,
+        cost: drugMarket.price * suggestion.currentQuantity,
+      });
     }
 
     // Queue buy action at current location (for buy_and_sell)

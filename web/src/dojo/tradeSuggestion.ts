@@ -175,9 +175,9 @@ function findBestBuyOpportunity(
     const profit = priceDiff * maxQuantity;
 
     if (profit > maxProfit) {
-      maxProfit = profit;
       const drugConfig = configStore.getDrugById(game.seasonSettings.drugs_mode, currentDrugMarket.drugId);
       if (drugConfig) {
+        maxProfit = profit;
         bestOpportunity = {
           drug: drugConfig,
           buyPrice,
