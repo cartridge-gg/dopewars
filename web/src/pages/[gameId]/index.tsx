@@ -40,7 +40,7 @@ const Redirector = observer(() => {
     }
 
     return () => clearTimeout(handle);
-  }, [game, game?.player.status, game?.player.location, router, gameId]);
+  }, [game, game?.player.status, router, gameId]);
 
   return (
     <Layout isSinglePanel>

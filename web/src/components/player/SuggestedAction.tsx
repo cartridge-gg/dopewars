@@ -1,5 +1,8 @@
 import { TradeSuggestion } from "@/dojo/tradeSuggestion";
 import { Box, Card, HStack, Text, VStack } from "@chakra-ui/react";
+import { BorderImage } from "../icons";
+import colors from "@/theme/colors";
+import { Button } from "../common";
 
 interface SuggestedActionProps {
   suggestion: TradeSuggestion;
@@ -22,94 +25,83 @@ const formatProfitOrLoss = (amount: number): string => {
   return amount >= 0 ? `$${formatted} profit` : `$${formatted} loss`;
 };
 
-export const SuggestedAction = (
-  { suggestion, onExecute, isDisabled = false }: SuggestedActionProps) => {
-    const isClickable = suggestion.type !== "none" && !isDisabled;
+export const SuggestedAction = ({ suggestion, onExecute, isDisabled = false }: SuggestedActionProps) => {
+  const isClickable = suggestion.type !== "none" && !isDisabled;
 
-    const renderMessage = () => {
-      if (suggestion.type === "none") {
-        return <Text color="neon.600">{suggestion.message}</Text>;
-      }
+  const renderMessage = () => {
+    if (suggestion.type === "none") {
+      return <Text color="neon.600">{suggestion.message}</Text>;
+    }
 
-      const textStyle = {
-        fontSize: ["12px", "14px"],
-        color: "neon.200",
-        lineHeight: "1.3",
-      };
-
-      const iconSize = "20px";
-
-      // buy_and_sell with currentDrug: Sell [icon], buy [icon] for $Y profit/loss
-      if (suggestion.type === "buy_and_sell" && suggestion.currentDrug && suggestion.drug) {
-        const totalProfit = (suggestion.currentSellProfit || 0) + (suggestion.profit || 0);
-        return (
-          <HStack gap="6px" align="center" flexWrap="nowrap">
-            <Text {...textStyle}>Sell</Text>
-            <Box flexShrink={0}>{suggestion.currentDrug.icon({ boxSize: iconSize })}</Box>
-            <Text {...textStyle}>, buy</Text>
-            <Box flexShrink={0}>{suggestion.drug.icon({ boxSize: iconSize })}</Box>
-            <Text {...textStyle}>for {formatProfitOrLoss(totalProfit)}</Text>
-          </HStack>
-        );
-      }
-
-      // sell_only: Sell [icon] for $X profit/loss
-      if (suggestion.type === "sell_only" && suggestion.currentDrug) {
-        return (
-          <HStack gap="6px" align="center" flexWrap="nowrap">
-            <Text {...textStyle}>Sell</Text>
-            <Box flexShrink={0}>{suggestion.currentDrug.icon({ boxSize: iconSize })}</Box>
-            <Text {...textStyle}>for {formatProfitOrLoss(suggestion.profit || 0)}</Text>
-          </HStack>
-        );
-      }
-
-      // buy_and_sell without currentDrug: Buy [icon] for $Y profit/loss
-      if (suggestion.type === "buy_and_sell" && suggestion.drug) {
-        return (
-          <HStack gap="6px" align="center" flexWrap="nowrap">
-            <Text {...textStyle}>Buy</Text>
-            <Box flexShrink={0}>{suggestion.drug.icon({ boxSize: iconSize })}</Box>
-            <Text {...textStyle}>for {formatProfitOrLoss(suggestion.profit || 0)}</Text>
-          </HStack>
-        );
-      }
-
-      // Fallback to plain message
-      return <Text {...textStyle}>{suggestion.message}</Text>;
+    const textStyle = {
+      fontSize: ["12px", "15px"],
+      color: "neon.200",
+      lineHeight: "1.3",
     };
 
-    return (
-      <VStack w="full" align="flex-start" gap="4px">
-        <Text textStyle="subheading" fontSize={["9px", "11px"]} color="neon.500">
+    const iconSize = "24px";
+
+    // buy_and_sell with currentDrug: Sell [icon], buy [icon] for $Y profit/loss
+    if (suggestion.type === "buy_and_sell" && suggestion.currentDrug && suggestion.drug) {
+      const totalProfit = (suggestion.currentSellProfit || 0) + (suggestion.profit || 0);
+      return (
+        <HStack gap="6px" align="center" flexWrap="nowrap">
+          <Text {...textStyle}>Sell</Text>
+          <Box flexShrink={0}>{suggestion.currentDrug.icon({ boxSize: iconSize })}</Box>
+          <Text {...textStyle}> buy</Text>
+          <Box flexShrink={0}>{suggestion.drug.icon({ boxSize: iconSize })}</Box>
+          <Text {...textStyle}>for {formatProfitOrLoss(totalProfit)}</Text>
+        </HStack>
+      );
+    }
+
+    // sell_only: Sell [icon] for $X profit/loss
+    if (suggestion.type === "sell_only" && suggestion.currentDrug) {
+      return (
+        <HStack gap="6px" align="center" flexWrap="nowrap">
+          <Text {...textStyle}>Sell</Text>
+          <Box flexShrink={0}>{suggestion.currentDrug.icon({ boxSize: iconSize })}</Box>
+          <Text {...textStyle}>for {formatProfitOrLoss(suggestion.profit || 0)}</Text>
+        </HStack>
+      );
+    }
+
+    // buy_and_sell without currentDrug: Buy [icon] for $Y profit/loss
+    if (suggestion.type === "buy_and_sell" && suggestion.drug) {
+      return (
+        <HStack gap="6px" align="center" flexWrap="nowrap">
+          <Text {...textStyle}>Buy</Text>
+          <Box flexShrink={0}>{suggestion.drug.icon({ boxSize: iconSize })}</Box>
+          <Text {...textStyle}>for {formatProfitOrLoss(suggestion.profit || 0)}</Text>
+        </HStack>
+      );
+    }
+
+    // Fallback to plain message
+    return <Text {...textStyle}>{suggestion.message}</Text>;
+  };
+
+  return (
+    <VStack w="full">
+      <HStack w="full" justify="space-between" color="neon.500" display={["none", "flex"]}>
+        <Text textStyle="subheading" fontSize="11px">
           ACTIONS
         </Text>
+      </HStack>
 
-        <Card
-          w="full"
-          px="12px"
-          py="10px"
-          cursor={isClickable ? "pointer" : "default"}
-          opacity={isDisabled ? 0.5 : 1}
-          border="1px solid"
-          borderColor={isClickable ? "neon.600" : "neon.700"}
-          _hover={
-            isClickable
-              ? {
-                  borderColor: "neon.400",
-                  bg: "neon.900",
-                }
-              : {}
+      <Button
+        px="10px"
+        py="8px"
+        w="full"
+        isDisabled={isDisabled}
+        onClick={() => {
+          if (isClickable) {
+            onExecute();
           }
-          transition="all 0.2s"
-          onClick={() => {
-            if (isClickable) {
-              onExecute();
-            }
-          }}
-        >
-          {renderMessage()}
-        </Card>
-      </VStack>
-    );
-  };
+        }}
+      >
+        {renderMessage()}
+      </Button>
+    </VStack>
+  );
+};

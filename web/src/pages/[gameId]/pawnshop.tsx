@@ -40,10 +40,7 @@ const PawnShop = observer(() => {
 
   const onBack = () => {
     playSound(Sounds.Door, 0.3);
-    if (!game?.player.location) {
-      return router.push(`/${gameId}/travel`);
-    }
-    router.push(`/${gameId}/${game?.player.location.location}`);
+    router.push(`/${gameId}/travel`);
   };
 
   const buy = async () => {
