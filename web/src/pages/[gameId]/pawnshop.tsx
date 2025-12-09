@@ -74,7 +74,7 @@ const PawnShop = observer(() => {
       footer={
         <Footer>
           <Button w="full" px={["auto", "20px"]} onClick={onBack}>
-            Back
+            Skip
           </Button>
           <Button
             w="full"

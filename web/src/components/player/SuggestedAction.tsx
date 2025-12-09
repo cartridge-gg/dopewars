@@ -26,11 +26,20 @@ const formatProfitOrLoss = (amount: number): string => {
 };
 
 export const SuggestedAction = ({ suggestion, onExecute, isDisabled = false }: SuggestedActionProps) => {
-  const isClickable = suggestion.type !== "none" && !isDisabled;
+  // Check if this is a pawn shop action (none type with specific message)
+  const isPawnShopAction = suggestion.type === "none" && suggestion.message === "Visit Pawn Shop";
+  const isClickable = (suggestion.type !== "none" || isPawnShopAction) && !isDisabled;
 
   const renderMessage = () => {
     if (suggestion.type === "none") {
-      return <Text color="neon.600">{suggestion.message}</Text>;
+      return (
+        <Text
+          color={isPawnShopAction ? "neon.200" : "neon.600"}
+          fontSize={isPawnShopAction ? ["12px", "15px"] : undefined}
+        >
+          {suggestion.message}
+        </Text>
+      );
     }
 
     const textStyle = {

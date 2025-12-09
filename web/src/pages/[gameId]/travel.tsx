@@ -246,26 +246,7 @@ const Travel = observer(() => {
           />
         ),
       }}
-      footer={
-        <Footer>
-          <ChildrenOrConnect>
-            {game.player.turn > 0 && (
-              <Button isDisabled={isPending} w={["full", "auto"]} px={["auto", "20px"]} onClick={() => router.back()}>
-                Back
-              </Button>
-            )}
-            <Button
-              w={["full", "auto"]}
-              px={["auto", "20px"]}
-              isDisabled={!targetLocation || targetLocation === currentLocation}
-              isLoading={isPending}
-              onClick={onContinue}
-            >
-              Travel
-            </Button>
-          </ChildrenOrConnect>
-        </Footer>
-      }
+      footer={<Footer></Footer>}
     >
       {/* Desktop  */}
       <VStack w="full" my="auto" display={["none", "flex"]} gap="20px" overflow={"visible"}>
@@ -285,9 +266,18 @@ const Travel = observer(() => {
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         </VStack>
         <LocationPrices game={game} prices={prices} isCurrentLocation={targetLocation == currentLocation} />
-        {currentLocation !== targetLocation && (
-          <SuggestedAction suggestion={suggestion} onExecute={onExecuteSuggestion} isDisabled={isPending} />
-        )}
+        <VStack w="full" gap="10px">
+          {game.isShopOpen && (
+            <SuggestedAction
+              suggestion={{ type: "none", message: "Visit Pawn Shop" }}
+              onExecute={() => router.push(`/${gameId}/pawnshop`)}
+              isDisabled={isPending}
+            />
+          )}
+          {currentLocation !== targetLocation && (
+            <SuggestedAction suggestion={suggestion} onExecute={onExecuteSuggestion} isDisabled={isPending} />
+          )}
+        </VStack>
       </VStack>
       {/* Mobile  */}
       <VStack
@@ -322,9 +312,18 @@ const Travel = observer(() => {
           prices={prices}
           isCurrentLocation={currentLocation ? targetLocation === currentLocation : true}
         />
-        {currentLocation !== targetLocation && (
-          <SuggestedAction suggestion={suggestion} onExecute={onExecuteSuggestion} isDisabled={isPending} />
-        )}
+        <VStack w="full" gap="10px">
+          {game.isShopOpen && (
+            <SuggestedAction
+              suggestion={{ type: "none", message: "Visit Pawn Shop" }}
+              onExecute={() => router.push(`/${gameId}/pawnshop`)}
+              isDisabled={isPending}
+            />
+          )}
+          {currentLocation !== targetLocation && (
+            <SuggestedAction suggestion={suggestion} onExecute={onExecuteSuggestion} isDisabled={isPending} />
+          )}
+        </VStack>
       </VStack>
     </Layout>
   );
