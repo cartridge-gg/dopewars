@@ -57,19 +57,8 @@ export const ConnectButton = ({ variant = "pixelated", ...props }) => {
                 /// @ts-ignore
                 <Image src={connector.icon.dark} width="24px" height="24px" alt={connector.name} />
               )}
-              {connector && isController && <Cartridge />}
               <Text>{isController ? username : frenlyAddress(account.address || "")}</Text>
             </HStack>
-            {isController && (
-              <WalletModal
-                mb={1}
-                _hover={{ backgroundColor: "neon.500" }}
-                borderRadius={3}
-                onClick={() => {
-                  uiStore.openAccountDetails();
-                }}
-              />
-            )}
           </Button>
         )}
       </Box>
