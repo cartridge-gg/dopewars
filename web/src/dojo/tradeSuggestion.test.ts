@@ -195,7 +195,7 @@ describe("calculateBestTrade - Table-Based Tests", () => {
       expectedProfit: 1000, // (300 - 100) * 5 units
     },
     {
-      name: "Has drugs with negative sell profit",
+      name: "Has drugs with negative sell profit but profitable buy",
       cash: 5000,
       transport: 100,
       currentDrug: "Ludes",
@@ -205,10 +205,13 @@ describe("calculateBestTrade - Table-Based Tests", () => {
         { drug: "Speed", drugId: 2, price: 100, weight: 10 },
       ],
       targetMarkets: [
-        { drug: "Ludes", drugId: 1, price: 200, weight: 10 }, // Loss to sell
-        { drug: "Speed", drugId: 2, price: 500, weight: 10 }, // But can't buy without selling
+        { drug: "Ludes", drugId: 1, price: 200, weight: 10 }, // Loss to sell (-1000)
+        { drug: "Speed", drugId: 2, price: 500, weight: 10 }, // Can buy after selling (+4000)
       ],
-      expectedType: "none",
+      expectedType: "buy_and_sell", // Sell Ludes, buy Speed for net profit
+      expectedDrug: "Speed",
+      expectedCurrentDrug: "Ludes",
+      expectedProfit: 3000, // -1000 (Ludes loss) + 4000 (Speed profit)
     },
     {
       name: "Same drug at current and target with profit",

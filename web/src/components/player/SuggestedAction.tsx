@@ -48,11 +48,16 @@ export const SuggestedAction = ({ suggestion, onExecute, isDisabled = false }: S
 
     const iconSize = "24px";
 
-    // buy_and_sell with currentDrug: Sell [icon], buy [icon] for $Y profit/loss
+    // buy_and_sell with currentDrug: [Location]: Sell [icon], buy [icon] for $Y profit/loss
     if (suggestion.type === "buy_and_sell" && suggestion.currentDrug && suggestion.drug) {
       const totalProfit = (suggestion.currentSellProfit || 0) + (suggestion.profit || 0);
+      // Extract location name from message if available
+      const messageMatch = suggestion.message.match(/^(.*?):/);
+      const locationName = messageMatch ? messageMatch[1] : "";
+
       return (
         <HStack gap="6px" align="center" flexWrap="nowrap">
+          {locationName && <Text {...textStyle}>{locationName}:</Text>}
           <Text {...textStyle}>Sell</Text>
           <Box flexShrink={0}>{suggestion.currentDrug.icon({ boxSize: iconSize })}</Box>
           <Text {...textStyle}> buy</Text>
@@ -77,10 +82,15 @@ export const SuggestedAction = ({ suggestion, onExecute, isDisabled = false }: S
       );
     }
 
-    // buy_and_sell without currentDrug: Buy [icon] for $Y profit/loss
+    // buy_and_sell without currentDrug: [Location]: Buy [icon] for $Y profit/loss
     if (suggestion.type === "buy_and_sell" && suggestion.drug) {
+      // Extract location name from message if available
+      const messageMatch = suggestion.message.match(/^(.*?):/);
+      const locationName = messageMatch ? messageMatch[1] : "";
+
       return (
         <HStack gap="6px" align="center" flexWrap="nowrap">
+          {locationName && <Text {...textStyle}>{locationName}:</Text>}
           <Text {...textStyle}>Buy</Text>
           <Box flexShrink={0}>{suggestion.drug.icon({ boxSize: iconSize })}</Box>
           <Text {...textStyle}>for {formatProfitOrLoss(suggestion.profit || 0)}</Text>

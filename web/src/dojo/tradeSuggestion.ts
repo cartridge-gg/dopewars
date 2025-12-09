@@ -76,11 +76,14 @@ export function calculateBestTrade(
     // 1. There's a buy opportunity with profit > 0
     // 2. The total profit (sell + buy) is positive
     // 3. The combined action is worth it
-    if (bestBuyOpportunity && bestBuyOpportunity.profit > 0) {
+    // 4. We're not buying the same drug we're selling (that's just confusing)
+    if (bestBuyOpportunity && bestBuyOpportunity.profit > 0 && bestBuyOpportunity.drug.drug !== currentDrug.drug) {
       const totalProfit = sellProfit + bestBuyOpportunity.profit;
 
       // Only return buy_and_sell if the total is profitable
       if (totalProfit > 0) {
+        const buyLocationName = configStore.getLocation(currentLocation)?.name || currentLocation;
+        const sellLocationName = configStore.getLocation(targetLocation)?.name || targetLocation;
         return {
           type: "buy_and_sell",
           currentDrug,
@@ -94,7 +97,7 @@ export function calculateBestTrade(
           profit: bestBuyOpportunity.profit,
           buyLocation: currentLocation,
           sellLocation: targetLocation,
-          message: "Sell and buy for profit",
+          message: `${sellLocationName}: Sell and buy for profit`,
         };
       }
     }
@@ -129,6 +132,7 @@ export function calculateBestTrade(
   );
 
   if (bestBuyOpportunity && bestBuyOpportunity.profit > 0) {
+    const sellLocationName = configStore.getLocation(targetLocation)?.name || targetLocation;
     return {
       type: "buy_and_sell",
       drug: bestBuyOpportunity.drug,
@@ -138,7 +142,7 @@ export function calculateBestTrade(
       profit: bestBuyOpportunity.profit,
       buyLocation: currentLocation,
       sellLocation: targetLocation,
-      message: "Buy for profit",
+      message: `${sellLocationName}: Buy for profit`,
     };
   }
 
