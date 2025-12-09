@@ -72,17 +72,35 @@ export function calculateBestTrade(
       game,
     );
 
+    // Check if the best buy opportunity is the same drug we're selling
+    // If so, just treat it as sell_only (no point buying the same drug)
+    if (bestBuyOpportunity && bestBuyOpportunity.profit > 0 && bestBuyOpportunity.drug.drug === currentDrug.drug) {
+      // Same drug - just sell at target
+      if (sellProfit > 0) {
+        const locationName = configStore.getLocation(targetLocation)?.name || targetLocation;
+        return {
+          type: "sell_only",
+          currentDrug,
+          currentQuantity,
+          currentSellPrice: sellPrice,
+          currentSellProfit: sellProfit,
+          profit: sellProfit,
+          sellLocation: targetLocation,
+          message: `Sell in ${locationName} for profit`,
+        };
+      }
+    }
+
     // Only do buy_and_sell if:
     // 1. There's a buy opportunity with profit > 0
     // 2. The total profit (sell + buy) is positive
     // 3. The combined action is worth it
-    // 4. We're not buying the same drug we're selling (that's just confusing)
-    if (bestBuyOpportunity && bestBuyOpportunity.profit > 0 && bestBuyOpportunity.drug.drug !== currentDrug.drug) {
+    // 4. It's a different drug than what we're selling
+    if (bestBuyOpportunity && bestBuyOpportunity.profit > 0) {
       const totalProfit = sellProfit + bestBuyOpportunity.profit;
 
       // Only return buy_and_sell if the total is profitable
       if (totalProfit > 0) {
-        const buyLocationName = configStore.getLocation(currentLocation)?.name || currentLocation;
         const sellLocationName = configStore.getLocation(targetLocation)?.name || targetLocation;
         return {
           type: "buy_and_sell",
@@ -97,7 +115,7 @@ export function calculateBestTrade(
           profit: bestBuyOpportunity.profit,
           buyLocation: currentLocation,
           sellLocation: targetLocation,
-          message: `${sellLocationName}: Sell and buy for profit`,
+          message: `Sell and buy then sell in ${sellLocationName} for profit`,
         };
       }
     }
@@ -114,7 +132,7 @@ export function calculateBestTrade(
         currentSellProfit: sellProfit,
         profit: sellProfit,
         sellLocation: targetLocation,
-        message: `Travel to ${locationName} and sell for profit`,
+        message: `Sell in ${locationName} for profit`,
       };
     } else {
       return { type: "none", message: "No profitable trades available" };
@@ -142,7 +160,7 @@ export function calculateBestTrade(
       profit: bestBuyOpportunity.profit,
       buyLocation: currentLocation,
       sellLocation: targetLocation,
-      message: `${sellLocationName}: Buy for profit`,
+      message: `Buy and sell in ${sellLocationName} for profit`,
     };
   }
 

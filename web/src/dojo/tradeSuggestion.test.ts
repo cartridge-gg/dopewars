@@ -224,7 +224,7 @@ describe("calculateBestTrade - Table-Based Tests", () => {
       expectedType: "sell_only",
       expectedCurrentDrug: "Ludes",
       expectedProfit: 1000, // (300 - 100) * 5
-      expectedMessage: "Travel to TargetLocation and sell for profit",
+      expectedMessage: "Sell in TargetLocation for profit",
     },
   ];
 
