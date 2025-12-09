@@ -145,10 +145,9 @@ export const toggleIsMuted = () => {
   const state = useMediaStore.getState();
 
   if (state.isMuted || state.volume === 0) {
-    // Restore to previous volume or default
+    // Restore from persisted volume (never 0 thanks to our persistence logic)
     const stored = loadPersistedMediaSettings();
-    const restoreVolume = stored.volume > 0 ? stored.volume : 0.7;
-    volume(restoreVolume);
+    volume(stored.volume);
   } else {
     volume(0);
   }
@@ -195,8 +194,15 @@ export const volume = (v: number) => {
 
   const newIsMuted = v === 0;
 
-  // Persist the new settings
-  persistMediaSettings(v, newIsMuted);
+  // Only persist non-zero volumes to preserve user's preference
+  // When muting (v === 0), keep the previous volume in storage
+  if (v > 0) {
+    persistMediaSettings(v, newIsMuted);
+  } else {
+    // Just update the muted state, keep the stored volume
+    const stored = loadPersistedMediaSettings();
+    persistMediaSettings(stored.volume, true);
+  }
 
   useMediaStore.setState((state) => ({
     volume: v,
