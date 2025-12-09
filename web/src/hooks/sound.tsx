@@ -65,11 +65,41 @@ export interface SoundState {
   };
 }
 
+// Load persisted settings from localStorage
+const loadPersistedSoundSettings = () => {
+  if (typeof window === "undefined") return { isMuted: false };
+
+  try {
+    const stored = localStorage.getItem("soundSettings");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      return { isMuted: parsed.isMuted ?? false };
+    }
+  } catch (e) {
+    console.error("Failed to load sound settings:", e);
+  }
+
+  return { isMuted: false };
+};
+
+// Save settings to localStorage
+const persistSoundSettings = (isMuted: boolean) => {
+  if (typeof window === "undefined") return;
+
+  try {
+    localStorage.setItem("soundSettings", JSON.stringify({ isMuted }));
+  } catch (e) {
+    console.error("Failed to save sound settings:", e);
+  }
+};
+
 // @ts-ignore
 export const useSoundStore = create<SoundState>(() => {
+  const persisted = loadPersistedSoundSettings();
+
   return {
     isInitialized: false,
-    isMuted: false,
+    isMuted: persisted.isMuted,
     context: {}, // can't be initialized server side
     library: {
       buffers: {},
@@ -101,6 +131,11 @@ export const initSoundStore = async () => {
     } catch (e) {}
   }
 
+  // Apply persisted mute state to the audio context
+  if (state.isMuted) {
+    context.suspend();
+  }
+
   useSoundStore.setState((state) => ({
     isInitialized: true,
     library: state.library,
@@ -110,12 +145,18 @@ export const initSoundStore = async () => {
 
 export const toggleIsMuted = () =>
   useSoundStore.setState((state) => {
-    if (!state.isMuted) {
+    const newIsMuted = !state.isMuted;
+
+    if (newIsMuted) {
       state.context && state.context.suspend();
     } else {
       state.context && state.context.resume();
     }
-    return { isMuted: !state.isMuted };
+
+    // Persist the new state
+    persistSoundSettings(newIsMuted);
+
+    return { isMuted: newIsMuted };
   });
 
 export const playSound = async (sound: Sounds | WeaponSounds, volume = 1, loop = false) => {
