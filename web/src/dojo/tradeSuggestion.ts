@@ -226,6 +226,7 @@ function findBestBuyOpportunity(
 
 export interface GlobalTradeSuggestion extends TradeSuggestion {
   optimalDestination: string;
+  optimalOrigin?: string;
 }
 
 export function calculateGlobalBestTrade(
@@ -267,6 +268,52 @@ export function calculateGlobalBestTrade(
 
   return {
     ...bestSuggestion,
+    optimalDestination,
+  };
+}
+
+export function calculateAbsoluteBestTrade(game: GameClass, configStore: ConfigStoreClass): GlobalTradeSuggestion {
+  const locations = configStore.config?.location || [];
+
+  let bestSuggestion: TradeSuggestion = { type: "none", message: "No profitable trades available" };
+  let bestProfit = -Infinity;
+  let optimalOrigin = "";
+  let optimalDestination = "";
+
+  // Compare all possible location pairs
+  for (const origin of locations) {
+    for (const destination of locations) {
+      // Skip same location pairs
+      if (origin.location === destination.location) continue;
+
+      const suggestion = calculateBestTrade(game, origin.location, destination.location, configStore);
+
+      // Calculate total profit for this suggestion
+      let totalProfit = 0;
+      if (suggestion.type === "buy_and_sell") {
+        totalProfit = (suggestion.currentSellProfit || 0) + (suggestion.profit || 0);
+      } else if (suggestion.type === "sell_only") {
+        totalProfit = suggestion.profit || 0;
+      }
+
+      if (totalProfit > bestProfit) {
+        bestProfit = totalProfit;
+        bestSuggestion = suggestion;
+        optimalOrigin = origin.location;
+        optimalDestination = destination.location;
+      }
+
+      // If no optimal pair has been set yet, set it to the first valid pair
+      if (!optimalOrigin && !optimalDestination) {
+        optimalOrigin = origin.location;
+        optimalDestination = destination.location;
+      }
+    }
+  }
+
+  return {
+    ...bestSuggestion,
+    optimalOrigin,
     optimalDestination,
   };
 }

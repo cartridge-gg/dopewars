@@ -7,7 +7,12 @@ import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
 import { useConfigStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useGameStore } from "@/dojo/hooks/useGameStore";
-import { calculateBestTrade, calculateGlobalBestTrade, TradeSuggestion } from "@/dojo/tradeSuggestion";
+import {
+  calculateAbsoluteBestTrade,
+  calculateBestTrade,
+  calculateGlobalBestTrade,
+  TradeSuggestion,
+} from "@/dojo/tradeSuggestion";
 import { TradeDirection } from "@/dojo/types";
 import colors from "@/theme/colors";
 import { IsMobile, formatCash, generatePixelBorderPath } from "@/utils/ui";
@@ -47,7 +52,7 @@ const Travel = observer(() => {
       if (game.player.location) {
         setCurrentLocation(game.player.location.location);
 
-        // Find the globally optimal destination for the best trade
+        // Find the globally optimal destination for the best trade from current location
         const globalBest = calculateGlobalBestTrade(game, game.player.location.location, configStore);
 
         if (globalBest.optimalDestination) {
@@ -58,7 +63,19 @@ const Travel = observer(() => {
           setTargetLocation(fallback?.location || "Queens");
         }
       } else {
-        setTargetLocation("Queens");
+        // No player location yet - find the absolute best trade across all location pairs
+        const absoluteBest = calculateAbsoluteBestTrade(game, configStore);
+
+        if (absoluteBest.optimalOrigin && absoluteBest.optimalDestination) {
+          setCurrentLocation(absoluteBest.optimalOrigin);
+          setTargetLocation(absoluteBest.optimalDestination);
+        } else {
+          // Fallback to first two different locations
+          const firstLoc = config.location[0]?.location || "Queens";
+          const secondLoc = config.location[1]?.location || "Bronx";
+          setCurrentLocation(firstLoc);
+          setTargetLocation(secondLoc);
+        }
       }
     }
   }, [
