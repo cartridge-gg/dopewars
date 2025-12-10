@@ -105,6 +105,7 @@ export class GameClass {
       player: observable,
       isShopOpen: computed,
       shopCount: computed,
+      hasItemsAvailable: computed,
     });
 
     // console.log("Game", this)
@@ -133,11 +134,21 @@ export class GameClass {
   //
   //
 
+  get hasItemsAvailable() {
+    // Check if any item is below max level and can be purchased
+    return (
+      this.items.attackLevel < this.items.maxLevel ||
+      this.items.defenseLevel < this.items.maxLevel ||
+      this.items.speedLevel < this.items.maxLevel ||
+      this.items.transportLevel < this.items.maxLevel
+    );
+  }
+
   get isShopOpen() {
     const wanted = this.player.wanted;
     const maxWantedShopping = this.gameConfig.max_wanted_shopping;
 
-    return wanted < maxWantedShopping && this.shopCount < 1;
+    return wanted < maxWantedShopping && this.shopCount < 1 && this.hasItemsAvailable;
   }
 
   get shopCount() {
