@@ -258,6 +258,11 @@ export function calculateGlobalBestTrade(
       bestSuggestion = suggestion;
       optimalDestination = location.location;
     }
+
+    // If no optimal destination has been set yet, set it to the first valid location
+    if (!optimalDestination) {
+      optimalDestination = location.location;
+    }
   }
 
   return {
