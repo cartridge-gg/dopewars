@@ -12,7 +12,7 @@ import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { getGearItem } from "@/dope/helpers";
 import { observer } from "mobx-react-lite";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const PawnShop = observer(() => {
   const { router, gameId } = useRouterContext();
@@ -29,6 +29,13 @@ const PawnShop = observer(() => {
       return configStore.getGearItemFull(getGearItem(BigInt(i)));
     });
   }, [gameInfos, configStore]);
+
+  // Redirect if pawn shop is not available
+  useEffect(() => {
+    if (game && !game.isShopOpen) {
+      router.push(`/${gameId}/travel`);
+    }
+  }, [game, game?.isShopOpen, router, gameId]);
 
   const selectItem = (shopItemSlot: ItemSlot) => {
     if (selectedShopItemsSlot === shopItemSlot) {
