@@ -45,7 +45,15 @@ export const PaperPriceProvider = ({ children }: { children: ReactNode }) => {
         const scaledAmount = parseUnits("1000", PAPER_DECIMALS);
         const response = await fetch(
           `https://starknet-mainnet-quoter-api.ekubo.org/${scaledAmount}/${PAPER_ADDRESS}/${USDC_ADDRESS}`,
-        );
+        ).catch((fetchError) => {
+          // Catch network errors explicitly
+          throw new Error(`Network request failed: ${fetchError.message}`);
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
         const amountOut = Number(formatUnits(data?.total_calculated?.toString() ?? "0", USDC_DECIMALS)) || 0;
         const price = amountOut / 1000;
@@ -54,6 +62,7 @@ export const PaperPriceProvider = ({ children }: { children: ReactNode }) => {
       } catch (e) {
         console.error("Failed to fetch PAPER price:", e);
         setError(e as Error);
+        // Silently fail - don't let this crash the app
       } finally {
         setIsLoading(false);
       }

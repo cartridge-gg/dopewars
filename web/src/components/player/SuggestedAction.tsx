@@ -57,9 +57,7 @@ export const SuggestedAction = ({
     // buy_and_sell with currentDrug: Sell [icon], buy [icon] and sell in [Location] for $Y profit/loss
     if (suggestion.type === "buy_and_sell" && suggestion.currentDrug && suggestion.drug) {
       const totalProfit = (suggestion.currentSellProfit || 0) + (suggestion.profit || 0);
-      // Extract location name from message if available
-      const messageMatch = suggestion.message.match(/sell in (.*?) for/);
-      const locationName = messageMatch ? messageMatch[1] : "";
+      const locationName = suggestion.sellLocationName || "";
 
       return (
         <HStack gap="6px" align="center" flexWrap="nowrap">
@@ -78,9 +76,7 @@ export const SuggestedAction = ({
 
     // sell_only: Sell [icon] in [Location] for $X profit/loss
     if (suggestion.type === "sell_only" && suggestion.currentDrug) {
-      // Extract location name from message if available
-      const messageMatch = suggestion.message.match(/Sell in (.*?) for/);
-      const locationName = messageMatch ? messageMatch[1] : "";
+      const locationName = suggestion.sellLocationName || "";
 
       return (
         <HStack gap="6px" align="center" flexWrap="nowrap">
@@ -97,9 +93,7 @@ export const SuggestedAction = ({
 
     // buy_and_sell without currentDrug: Buy [icon] and sell in [Location] for $Y profit/loss
     if (suggestion.type === "buy_and_sell" && suggestion.drug) {
-      // Extract location name from message if available
-      const messageMatch = suggestion.message.match(/sell in (.*?) for/);
-      const locationName = messageMatch ? messageMatch[1] : "";
+      const locationName = suggestion.sellLocationName || "";
 
       return (
         <HStack gap="6px" align="center" flexWrap="nowrap">

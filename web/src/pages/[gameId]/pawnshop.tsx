@@ -35,7 +35,12 @@ const PawnShop = observer(() => {
     if (game && !game.isShopOpen) {
       router.push(`/${gameId}/travel`);
     }
-  }, [game, game?.isShopOpen, router, gameId]);
+  }, [game, router, gameId]);
+
+  // Don't render pawn shop if it's not available
+  if (game && !game.isShopOpen) {
+    return null;
+  }
 
   const selectItem = (shopItemSlot: ItemSlot) => {
     if (selectedShopItemsSlot === shopItemSlot) {

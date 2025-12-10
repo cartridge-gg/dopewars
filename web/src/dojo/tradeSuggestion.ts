@@ -10,6 +10,7 @@ export interface TradeSuggestion {
   profit?: number;
   buyLocation?: string;
   sellLocation?: string;
+  sellLocationName?: string;
   // For cases where we need to sell current inventory first
   currentDrug?: DrugConfigFull;
   currentQuantity?: number;
@@ -86,6 +87,7 @@ export function calculateBestTrade(
           currentSellProfit: sellProfit,
           profit: sellProfit,
           sellLocation: targetLocation,
+          sellLocationName: locationName,
           message: `Sell in ${locationName} for profit`,
         };
       }
@@ -101,7 +103,7 @@ export function calculateBestTrade(
 
       // Only return buy_and_sell if the total is profitable
       if (totalProfit > 0) {
-        const sellLocationName = configStore.getLocation(targetLocation)?.name || targetLocation;
+        const locationName = configStore.getLocation(targetLocation)?.name || targetLocation;
         return {
           type: "buy_and_sell",
           currentDrug,
@@ -115,7 +117,8 @@ export function calculateBestTrade(
           profit: bestBuyOpportunity.profit,
           buyLocation: currentLocation,
           sellLocation: targetLocation,
-          message: `Sell and buy then sell in ${sellLocationName} for profit`,
+          sellLocationName: locationName,
+          message: `Sell and buy then sell in ${locationName} for profit`,
         };
       }
     }
@@ -132,6 +135,7 @@ export function calculateBestTrade(
         currentSellProfit: sellProfit,
         profit: sellProfit,
         sellLocation: targetLocation,
+        sellLocationName: locationName,
         message: `Sell in ${locationName} for profit`,
       };
     } else {
@@ -150,7 +154,7 @@ export function calculateBestTrade(
   );
 
   if (bestBuyOpportunity && bestBuyOpportunity.profit > 0) {
-    const sellLocationName = configStore.getLocation(targetLocation)?.name || targetLocation;
+    const locationName = configStore.getLocation(targetLocation)?.name || targetLocation;
     return {
       type: "buy_and_sell",
       drug: bestBuyOpportunity.drug,
@@ -160,7 +164,8 @@ export function calculateBestTrade(
       profit: bestBuyOpportunity.profit,
       buyLocation: currentLocation,
       sellLocation: targetLocation,
-      message: `Buy and sell in ${sellLocationName} for profit`,
+      sellLocationName: locationName,
+      message: `Buy and sell in ${locationName} for profit`,
     };
   }
 
@@ -259,11 +264,6 @@ export function calculateGlobalBestTrade(
       bestSuggestion = suggestion;
       optimalDestination = location.location;
     }
-
-    // If no optimal destination has been set yet, set it to the first valid location
-    if (!optimalDestination) {
-      optimalDestination = location.location;
-    }
   }
 
   return {
@@ -299,12 +299,6 @@ export function calculateAbsoluteBestTrade(game: GameClass, configStore: ConfigS
       if (totalProfit > bestProfit) {
         bestProfit = totalProfit;
         bestSuggestion = suggestion;
-        optimalOrigin = origin.location;
-        optimalDestination = destination.location;
-      }
-
-      // If no optimal pair has been set yet, set it to the first valid pair
-      if (!optimalOrigin && !optimalDestination) {
         optimalOrigin = origin.location;
         optimalDestination = destination.location;
       }

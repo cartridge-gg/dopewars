@@ -270,6 +270,12 @@ describe("calculateBestTrade - Table-Based Tests", () => {
       if (testCase.expectedMessage) {
         expect(result.message).toBe(testCase.expectedMessage);
       }
+
+      // Assert sellLocationName is set for buy_and_sell and sell_only types
+      if (result.type === "buy_and_sell" || result.type === "sell_only") {
+        expect(result.sellLocationName).toBeDefined();
+        expect(result.sellLocationName).toBe("TargetLocation");
+      }
     });
   });
 
