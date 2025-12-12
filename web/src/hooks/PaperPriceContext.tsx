@@ -44,7 +44,7 @@ export const PaperPriceProvider = ({ children }: { children: ReactNode }) => {
         // Fetch PAPER to USDC conversion rate using 1000 PAPER
         const scaledAmount = parseUnits("1000", PAPER_DECIMALS);
         const response = await fetch(
-          `https://starknet-mainnet-quoter-api.ekubo.org/${scaledAmount}/${PAPER_ADDRESS}/${USDC_ADDRESS}`,
+          `https://prod-api-quoter.ekubo.org/23448594291968334/${scaledAmount}/${PAPER_ADDRESS}/${USDC_ADDRESS}`,
         ).catch((fetchError) => {
           // Catch network errors explicitly
           throw new Error(`Network request failed: ${fetchError.message}`);

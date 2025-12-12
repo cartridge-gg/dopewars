@@ -145,7 +145,7 @@ export const getSwapQuote = async (
   const otherToken = isExactOutput ? tokenIn : tokenOut;
 
   const response = await fetch(
-    `https://starknet-mainnet-quoter-api.ekubo.org/${scaledAmount}/${exactToken.address}/${otherToken.address}`,
+    `https://prod-api-quoter.ekubo.org/23448594291968334/${scaledAmount}/${exactToken.address}/${otherToken.address}`,
   );
 
   const data = await response.json();
