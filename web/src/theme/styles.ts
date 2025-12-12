@@ -15,7 +15,7 @@ export const styles = {
       color: "neon.200",
       letterSpacing: "0.04em",
       WebkitTapHighlightColor: "transparent",
-      "scrollbar-width": "none",
+      scrollbarWidth: "none",
     },
     "&::-webkit-scrollbar": {
       display: "none",

@@ -32,7 +32,7 @@ export const HallOfFame = observer(() => {
           overflowY: "scroll",
         }}
         __css={{
-          "scrollbar-width": "none",
+          scrollbarWidth: "none",
         }}
       >
         {isFetchingHallOfFame && <Loader />}

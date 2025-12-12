@@ -2,11 +2,18 @@ import { Button } from "@/components/common";
 import { Arrow, BorderImage } from "@/components/icons";
 import { Footer, Layout } from "@/components/layout";
 import { Map as MapSvg } from "@/components/map";
-import { Inventory, WantedIndicator } from "@/components/player";
+import { Inventory, SuggestedAction, WantedIndicator } from "@/components/player";
 import { ChildrenOrConnect } from "@/components/wallet";
 import { GameClass } from "@/dojo/class/Game";
 import { useConfigStore, useRouterContext, useSystems } from "@/dojo/hooks";
 import { useGameStore } from "@/dojo/hooks/useGameStore";
+import {
+  calculateAbsoluteBestTrade,
+  calculateBestTrade,
+  calculateGlobalBestTrade,
+  TradeSuggestion,
+} from "@/dojo/tradeSuggestion";
+import { TradeDirection } from "@/dojo/types";
 import colors from "@/theme/colors";
 import { IsMobile, formatCash, generatePixelBorderPath } from "@/utils/ui";
 import { Box, Card, Grid, GridItem, HStack, Text, VStack, useDisclosure, useEventListener } from "@chakra-ui/react";
@@ -23,7 +30,8 @@ interface MarketPriceInfo {
 
 const Travel = observer(() => {
   const { router, gameId } = useRouterContext();
-  const { game, gameConfig, gameEvents } = useGameStore();
+  const gameStore = useGameStore();
+  const { game, gameConfig, gameEvents } = gameStore;
   const { travel, isPending } = useSystems();
   const configStore = useConfigStore();
   const { config } = configStore;
@@ -44,35 +52,41 @@ const Travel = observer(() => {
       if (game.player.location) {
         setCurrentLocation(game.player.location.location);
 
-        // Find the best location to sell current inventory
-        let bestLocation = game.player.location.location;
+        // Find the globally optimal destination for the best trade from current location
+        const globalBest = calculateGlobalBestTrade(game, game.player.location.location, configStore);
 
-        if (game.drugs.quantity > 0 && game.drugs.drug) {
-          // User has drugs to sell, find location with highest price
-          let maxPrice = 0;
-          const currentDrug = game.drugs.drug.drug;
-
-          config.location.forEach((loc) => {
-            // Skip current location
-            if (loc.location === game.player.location.location) return;
-
-            const markets = game.markets.marketsByLocation.get(loc.location);
-            if (markets) {
-              const drugMarket = markets.find((m) => m.drug === currentDrug);
-              if (drugMarket && drugMarket.price > maxPrice) {
-                maxPrice = drugMarket.price;
-                bestLocation = loc.location;
-              }
-            }
-          });
+        if (globalBest.optimalDestination) {
+          setTargetLocation(globalBest.optimalDestination);
+        } else {
+          // Fallback to first location that's not current
+          const fallback = config.location.find((loc) => loc.location !== game.player.location.location);
+          setTargetLocation(fallback?.location || "Queens");
         }
-
-        setTargetLocation(bestLocation);
       } else {
-        setTargetLocation("Queens");
+        // No player location yet - find the absolute best trade across all location pairs
+        const absoluteBest = calculateAbsoluteBestTrade(game, configStore);
+
+        if (absoluteBest.optimalOrigin && absoluteBest.optimalDestination) {
+          setCurrentLocation(absoluteBest.optimalOrigin);
+          setTargetLocation(absoluteBest.optimalDestination);
+        } else {
+          // Fallback to first two different locations
+          const firstLoc = config.location[0]?.location || "Queens";
+          const secondLoc = config.location[1]?.location || "Bronx";
+          setCurrentLocation(firstLoc);
+          setTargetLocation(secondLoc);
+        }
       }
     }
-  }, [game, isPending, config, game?.markets?.marketsByLocation, game?.drugs?.quantity, game?.drugs?.drug]);
+  }, [
+    game,
+    isPending,
+    config,
+    game?.markets?.marketsByLocation,
+    game?.drugs?.quantity,
+    game?.drugs?.drug,
+    configStore,
+  ]);
 
   const prices = useMemo(() => {
     if (game && game.markets && game.markets.marketsByLocation && targetLocation) {
@@ -101,6 +115,86 @@ const Travel = observer(() => {
 
     return [];
   }, [game, targetLocation, currentLocation]);
+
+  // Calculate best trade suggestion
+  const suggestion = useMemo<TradeSuggestion>(() => {
+    if (!game || !currentLocation || !targetLocation || currentLocation === targetLocation) {
+      return { type: "none", message: "Select a different destination" };
+    }
+    return calculateBestTrade(game, currentLocation, targetLocation, configStore);
+  }, [game, currentLocation, targetLocation, configStore]);
+
+  // Handler for executing the suggested trade
+  const onExecuteSuggestion = useCallback(async () => {
+    if (!suggestion || suggestion.type === "none" || !game || !targetLocation) return;
+
+    // If holding drugs and we need to sell them at current location first (for buy_and_sell)
+    if (suggestion.currentDrug && suggestion.currentQuantity && suggestion.type === "buy_and_sell") {
+      const currentMarket = game.markets.marketsByLocation.get(currentLocation || "");
+      const drugMarket = currentMarket?.find((m) => m.drug === suggestion.currentDrug?.drug);
+      if (!drugMarket) {
+        console.error("Cannot find market for current drug, aborting trade");
+        return;
+      }
+      game.pushCall({
+        direction: TradeDirection.Sell,
+        drug: suggestion.currentDrug.drug_id,
+        quantity: suggestion.currentQuantity,
+        cost: drugMarket.price * suggestion.currentQuantity,
+      });
+    }
+
+    // Queue buy action at current location (for buy_and_sell)
+    if (suggestion.drug && suggestion.quantity && suggestion.buyPrice) {
+      game.pushCall({
+        direction: TradeDirection.Buy,
+        drug: suggestion.drug.drug_id,
+        quantity: suggestion.quantity,
+        cost: suggestion.buyPrice * suggestion.quantity,
+      });
+    }
+
+    // Store sell info for after travel
+    // For buy_and_sell: sell the newly bought drug at destination
+    // For sell_only: sell current inventory at destination
+    const sellInfo =
+      suggestion.type === "buy_and_sell" && suggestion.drug && suggestion.quantity && suggestion.sellPrice
+        ? {
+            drug: suggestion.drug.drug_id,
+            quantity: suggestion.quantity,
+            sellPrice: suggestion.sellPrice,
+          }
+        : suggestion.type === "sell_only" &&
+          suggestion.currentDrug &&
+          suggestion.currentQuantity &&
+          suggestion.currentSellPrice
+        ? {
+            drug: suggestion.currentDrug.drug_id,
+            quantity: suggestion.currentQuantity,
+            sellPrice: suggestion.currentSellPrice,
+          }
+        : null;
+
+    try {
+      // Execute travel with pending calls (BUY for buy_and_sell, nothing for sell_only)
+      const locationId = configStore.getLocation(targetLocation).location_id;
+      await travel(gameId!, locationId, game.getPendingCalls());
+
+      // After travel completes, queue the SELL at destination
+      // Use gameStore.game to get the fresh game instance after entity updates
+      if (sellInfo && gameStore.game) {
+        gameStore.game.pushCall({
+          direction: TradeDirection.Sell,
+          drug: sellInfo.drug,
+          quantity: sellInfo.quantity,
+          cost: sellInfo.sellPrice * sellInfo.quantity,
+        });
+      }
+    } catch (e) {
+      game.clearPendingCalls();
+      console.error(e);
+    }
+  }, [suggestion, game, currentLocation, targetLocation, configStore, gameId, travel, gameStore]);
 
   useEventListener(typeof window !== "undefined" ? window : null, "keydown", (e) => {
     switch (e.key) {
@@ -171,26 +265,7 @@ const Travel = observer(() => {
           />
         ),
       }}
-      footer={
-        <Footer>
-          <ChildrenOrConnect>
-            {game.player.turn > 0 && (
-              <Button isDisabled={isPending} w={["full", "auto"]} px={["auto", "20px"]} onClick={() => router.back()}>
-                Back
-              </Button>
-            )}
-            <Button
-              w={["full", "auto"]}
-              px={["auto", "20px"]}
-              isDisabled={!targetLocation || targetLocation === currentLocation}
-              isLoading={isPending}
-              onClick={onContinue}
-            >
-              Travel
-            </Button>
-          </ChildrenOrConnect>
-        </Footer>
-      }
+      footer={<Footer>{null}</Footer>}
     >
       {/* Desktop  */}
       <VStack w="full" my="auto" display={["none", "flex"]} gap="20px" overflow={"visible"}>
@@ -210,6 +285,21 @@ const Travel = observer(() => {
           <LocationSelectBar name={locationName} onNext={onNext} onBack={onBack} />
         </VStack>
         <LocationPrices game={game} prices={prices} isCurrentLocation={targetLocation == currentLocation} />
+        <VStack w="full" align="flex-start" gap="10px">
+          <Text textStyle="subheading" fontSize="11px" color="neon.500">
+            ACTIONS
+          </Text>
+          {currentLocation !== targetLocation && (
+            <SuggestedAction suggestion={suggestion} onExecute={onExecuteSuggestion} isDisabled={isPending} />
+          )}
+          {game.isShopOpen && (
+            <SuggestedAction
+              suggestion={{ type: "none", message: "Visit Pawn Shop" }}
+              onExecute={() => router.push(`/${gameId}/pawnshop`)}
+              isDisabled={isPending}
+            />
+          )}
+        </VStack>
       </VStack>
       {/* Mobile  */}
       <VStack
@@ -244,6 +334,27 @@ const Travel = observer(() => {
           prices={prices}
           isCurrentLocation={currentLocation ? targetLocation === currentLocation : true}
         />
+        <VStack w="full" align="flex-start" gap="10px" mt="auto">
+          <Text textStyle="subheading" fontSize="11px" color="neon.500">
+            ACTIONS
+          </Text>
+          {currentLocation !== targetLocation && (
+            <SuggestedAction
+              suggestion={suggestion}
+              onExecute={onExecuteSuggestion}
+              isDisabled={isPending}
+              isMobile={true}
+            />
+          )}
+          {game.isShopOpen && (
+            <SuggestedAction
+              suggestion={{ type: "none", message: "Visit Pawn Shop" }}
+              onExecute={() => router.push(`/${gameId}/pawnshop`)}
+              isDisabled={isPending}
+              isMobile={true}
+            />
+          )}
+        </VStack>
       </VStack>
     </Layout>
   );
