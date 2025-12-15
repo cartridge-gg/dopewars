@@ -113,7 +113,7 @@ const RightPanel = ({
         flex="1"
         overflowY={rigthPanelScrollable ? "scroll" : "hidden"}
         __css={{
-          "scrollbar-width": "none",
+          scrollbarWidth: "none",
         }}
         w="full"
         maxH={rigthPanelMaxH ? rigthPanelMaxH : isSinglePanel ? "calc(100dvh - 70px)" : "calc(100dvh - 145px)"}

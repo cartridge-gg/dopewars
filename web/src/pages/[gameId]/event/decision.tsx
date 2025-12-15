@@ -165,7 +165,7 @@ const Decision = observer(() => {
         h={["calc(100dvh - 70px)", "calc(100dvh - 120px)"]}
         overflowY="scroll"
         sx={{
-          "scrollbar-width": "none",
+          scrollbarWidth: "none",
         }}
       >
         <Encounter

@@ -62,7 +62,12 @@ const Consequence = () => {
                   if (gameEvents.isGameOver) {
                     router.push(`/${gameId}/end`);
                   } else {
-                    router.push(`/${gameId}/${game.player.location.location}`);
+                    // Redirect to pawnshop or travel
+                    if (game.isShopOpen) {
+                      router.push(`/${gameId}/pawnshop`);
+                    } else {
+                      router.push(`/${gameId}/travel`);
+                    }
                   }
                 }}
               >

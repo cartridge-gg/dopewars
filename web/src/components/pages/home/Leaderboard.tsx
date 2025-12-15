@@ -177,7 +177,7 @@ export const Leaderboard = observer(({ config }: { config?: Config }) => {
           overflowY: "scroll",
         }}
         __css={{
-          "scrollbar-width": "none",
+          scrollbarWidth: "none",
         }}
       >
         {(isFetchingRegisteredGames || isFetchingActiveGames) && <Loader />}
