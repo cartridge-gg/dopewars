@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
+set -e
 
-# Run lint-staged for web directory
-cd web && pnpm exec lint-staged
+bash .githooks/pre-commit

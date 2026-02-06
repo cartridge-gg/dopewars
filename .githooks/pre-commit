@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMRT)
+
+if [[ -z "$STAGED_FILES" ]]; then
+  exit 0
+fi
+
+# Node (web)
+NODE_FILES=$(echo "$STAGED_FILES" | sed -n 's|^web/||p')
+if (echo "$STAGED_FILES" | grep -qE '^web/') && (echo "$NODE_FILES" | grep -qE '\.(ts|tsx|js|jsx|json|css|scss|yml|yaml)$|^package\.json$|^pnpm-lock\.yaml$|^bun\.lockb?$|^biome\.json$|^tsconfig\..*\.json$'); then
+  echo 'Running Node checks (web)...'
+  pushd web >/dev/null
+  pnpm run format:check
+  pnpm run lint
+  pnpm run test
+  pnpm run build
+
+  if ! git diff --quiet; then
+    echo 'Pre-commit modified files (likely formatting). Stage the changes and retry.'
+    git diff --name-only
+    exit 1
+  fi
+  popd >/dev/null
+fi
+
+# Cairo (Scarb)
+if echo "$STAGED_FILES" | grep -qE '\.cairo$|^Scarb\.(toml|lock)$|^dojo_.*\.toml$'; then
+  echo 'Running Cairo checks...'
+  if scarb fmt --check >/dev/null 2>&1; then
+    scarb fmt --check
+  else
+    echo 'Skipping format check: `scarb fmt --check` not supported by this Scarb version.'
+  fi
+  scarb build
+  scarb test
+fi
+
+
+echo 'Pre-commit checks complete.'
