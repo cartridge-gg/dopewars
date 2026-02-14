@@ -113,6 +113,16 @@ const New = observer(() => {
     }
   }, [accountTokens, selectedTokenIdType, freeToPlay, selectedChain.manifest]);
 
+  // Track if we've already auto-switched to prevent blocking manual user selection
+  const hasAutoSwitched = useRef(false);
+
+  // If user has no Dope tokens (LootId), default to S2 Hustlers (HustlerId) on initial load only
+  useEffect(() => {
+    if (!hasAutoSwitched.current && selectableTokens && selectableTokens?.length > 0) {
+      setSelectedTokenIdType(TokenIdType.GuestLootId);
+    }
+  }, [selectableTokens]);
+
   useEffect(() => {
     router.replace({
       pathname: location.pathname,
