@@ -91,7 +91,7 @@ export const HomeLeftPanel = () => {
           "::-webkit-scrollbar": {
             display: "none",
           },
-          "scrollbar-width": "none",
+          scrollbarWidth: "none",
         }}
       >
         <VStack zIndex="2" position="relative">

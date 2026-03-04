@@ -12,7 +12,7 @@ import { IsMobile, formatCash } from "@/utils/ui";
 import { Box, HStack, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { getGearItem } from "@/dope/helpers";
 import { observer } from "mobx-react-lite";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const PawnShop = observer(() => {
   const { router, gameId } = useRouterContext();
@@ -30,6 +30,18 @@ const PawnShop = observer(() => {
     });
   }, [gameInfos, configStore]);
 
+  // Redirect if pawn shop is not available
+  useEffect(() => {
+    if (game && !game.isShopOpen) {
+      router.push(`/${gameId}/travel`);
+    }
+  }, [game, router, gameId]);
+
+  // Don't render pawn shop if it's not available
+  if (game && !game.isShopOpen) {
+    return null;
+  }
+
   const selectItem = (shopItemSlot: ItemSlot) => {
     if (selectedShopItemsSlot === shopItemSlot) {
       setSelectedShopItemSlot(undefined);
@@ -40,10 +52,7 @@ const PawnShop = observer(() => {
 
   const onBack = () => {
     playSound(Sounds.Door, 0.3);
-    if (!game?.player.location) {
-      return router.push(`/${gameId}/travel`);
-    }
-    router.push(`/${gameId}/${game?.player.location.location}`);
+    router.push(`/${gameId}/travel`);
   };
 
   const buy = async () => {
@@ -77,7 +86,7 @@ const PawnShop = observer(() => {
       footer={
         <Footer>
           <Button w="full" px={["auto", "20px"]} onClick={onBack}>
-            Back
+            Skip
           </Button>
           <Button
             w="full"

@@ -284,15 +284,16 @@ export class GameStoreClass {
       this.initGameStore();
 
       if (this.game?.player.status === PlayerStatus.Normal) {
-        const location = this.configStore
-          .getLocationById(this.game.player.location.location_id)!
-          .location.toLowerCase();
         if (prevState?.status !== PlayerStatus.Normal) {
           // decision -> consequence
           this.router.push(`/${gameId}/event/consequence`);
         } else {
-          // normal travel
-          this.router.push(`/${gameId}/${location}`);
+          // normal travel - redirect to pawnshop or travel
+          if (this.game.isShopOpen) {
+            this.router.push(`/${gameId}/pawnshop`);
+          } else {
+            this.router.push(`/${gameId}/travel`);
+          }
         }
       } else {
         if (this.gameEvents?.isGameOver) {
