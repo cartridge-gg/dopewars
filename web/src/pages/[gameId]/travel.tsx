@@ -207,32 +207,40 @@ const Travel = observer(() => {
         onNext();
         break;
       case "Enter":
-        onContinue();
+        if (suggestion.type !== "none") {
+          onExecuteSuggestion();
+        } else {
+          onContinue();
+        }
         break;
     }
   });
 
   const onNext = useCallback(() => {
     if (!config) return;
-
+    const len = config.location.length;
     const idx = config.location.findIndex((location) => location.location === targetLocation)!;
-    if (idx < config.location!.length - 1) {
-      setTargetLocation(config.location[idx + 1].location);
-    } else {
-      setTargetLocation(config.location[0].location);
+    for (let i = 1; i < len; i++) {
+      const nextIdx = (idx + i) % len;
+      if (config.location[nextIdx].location !== currentLocation) {
+        setTargetLocation(config.location[nextIdx].location);
+        return;
+      }
     }
-  }, [targetLocation, config]);
+  }, [targetLocation, config, currentLocation]);
 
   const onBack = useCallback(() => {
     if (!config) return;
-
+    const len = config.location.length;
     const idx = config.location.findIndex((location) => location.location === targetLocation)!;
-    if (idx > 0) {
-      setTargetLocation(config.location[idx - 1].location);
-    } else {
-      setTargetLocation(config.location[config.location.length - 1].location);
+    for (let i = 1; i < len; i++) {
+      const prevIdx = (idx - i + len) % len;
+      if (config.location[prevIdx].location !== currentLocation) {
+        setTargetLocation(config.location[prevIdx].location);
+        return;
+      }
     }
-  }, [targetLocation, config]);
+  }, [targetLocation, config, currentLocation]);
 
   const onContinue = useCallback(async () => {
     if (targetLocation && game) {
@@ -289,8 +297,13 @@ const Travel = observer(() => {
           <Text textStyle="subheading" fontSize="11px" color="neon.500">
             ACTIONS
           </Text>
-          {currentLocation !== targetLocation && (
+          {currentLocation !== targetLocation && suggestion.type !== "none" && (
             <SuggestedAction suggestion={suggestion} onExecute={onExecuteSuggestion} isDisabled={isPending} />
+          )}
+          {currentLocation !== targetLocation && suggestion.type === "none" && (
+            <Button w="full" isDisabled={isPending} onClick={onContinue}>
+              Travel to {locationName}
+            </Button>
           )}
           {game.isShopOpen && (
             <SuggestedAction
@@ -338,13 +351,18 @@ const Travel = observer(() => {
           <Text textStyle="subheading" fontSize="11px" color="neon.500">
             ACTIONS
           </Text>
-          {currentLocation !== targetLocation && (
+          {currentLocation !== targetLocation && suggestion.type !== "none" && (
             <SuggestedAction
               suggestion={suggestion}
               onExecute={onExecuteSuggestion}
               isDisabled={isPending}
               isMobile={true}
             />
+          )}
+          {currentLocation !== targetLocation && suggestion.type === "none" && (
+            <Button w="full" isDisabled={isPending} onClick={onContinue} pointerEvents="all">
+              Travel to {locationName}
+            </Button>
           )}
           {game.isShopOpen && (
             <SuggestedAction
