@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
 import { DojoContext, DojoContextType } from "@/dojo/context/DojoContext";
 import { UiStore } from "@/dojo/stores/ui";
-import { StarknetConfig, jsonRpcProvider, starkscan } from "@starknet-react/core";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { shortString } from "starknet";
 import {
@@ -214,19 +213,11 @@ export const MockDojoProvider = ({
   const contextValue = createMockDojoContext(overrides);
 
   return (
-    <StarknetConfig
-      chains={[mockChain] as any}
-      provider={jsonRpcProvider({ rpc: () => ({ nodeUrl: "http://localhost:5050" }) })}
-      connectors={[]}
-      explorer={starkscan}
-      autoConnect={false}
-    >
-      <QueryClientProvider client={mockQueryClient}>
-        <DojoContext.Provider value={contextValue}>
-          {children}
-        </DojoContext.Provider>
-      </QueryClientProvider>
-    </StarknetConfig>
+    <QueryClientProvider client={mockQueryClient}>
+      <DojoContext.Provider value={contextValue}>
+        {children}
+      </DojoContext.Provider>
+    </QueryClientProvider>
   );
 };
 
