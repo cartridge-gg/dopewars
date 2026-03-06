@@ -4,70 +4,54 @@ import {
   TravelEncounterResult,
 } from "@/components/layout/GlobalEvents";
 
-// Mock LocationConfigFull
-export const createMockLocationConfig = (
-  locationId: number,
-  location: string,
-  name: string,
-) => ({
-  location_id: locationId,
-  location,
-  name,
-  icon: () => null,
-});
+// Real icon components
+import { Acid, Cocaine, Heroin, Ketamine, Ludes, Shrooms, Speed, Weed } from "@/components/icons/drugs";
+import { Bronx, Brooklyn, Queens, ConeyIsland, CentralPark, Manhattan } from "@/components/icons/locations";
+import { Car } from "@/components/icons";
+import { Kevlar, Knife, Shoes } from "@/components/icons/items";
 
+// Location configs with real icons
 export const mockLocations = [
-  createMockLocationConfig(1, "Queens", "Queens"),
-  createMockLocationConfig(2, "Bronx", "The Bronx"),
-  createMockLocationConfig(3, "Brooklyn", "Brooklyn"),
-  createMockLocationConfig(4, "Jersey", "Jersey City"),
-  createMockLocationConfig(5, "Central", "Central Park"),
-  createMockLocationConfig(6, "Coney", "Coney Island"),
+  { location_id: 1, location: "Queens", name: "Queens", icon: Queens },
+  { location_id: 2, location: "Bronx", name: "The Bronx", icon: Bronx },
+  { location_id: 3, location: "Brooklyn", name: "Brooklyn", icon: Brooklyn },
+  { location_id: 4, location: "Jersey", name: "Jersey City", icon: Manhattan },
+  { location_id: 5, location: "Central", name: "Central Park", icon: CentralPark },
+  { location_id: 6, location: "Coney", name: "Coney Island", icon: ConeyIsland },
 ];
 
-// Mock DrugConfigFull
-export const createMockDrugConfig = (
-  drugId: number,
-  drug: string,
-  name: string,
-  base: number,
-  step: number,
-  weight: number,
-) => ({
-  drug_id: drugId,
-  drug,
-  name,
-  base,
-  step,
-  weight,
-  drugs_mode: "Normal",
-  icon: (props?: any) => null,
-});
-
+// Drug configs with real icons
 export const mockDrugs = [
-  createMockDrugConfig(0, "Ludes", "Ludes", 10, 2, 1),
-  createMockDrugConfig(1, "Speed", "Speed", 20, 4, 2),
-  createMockDrugConfig(2, "Weed", "Weed", 30, 5, 3),
-  createMockDrugConfig(3, "Shrooms", "Shrooms", 40, 8, 4),
-  createMockDrugConfig(4, "Acid", "Acid", 50, 10, 5),
-  createMockDrugConfig(5, "Ketamine", "Ketamine", 60, 12, 6),
-  createMockDrugConfig(6, "Heroin", "Heroin", 80, 15, 8),
-  createMockDrugConfig(7, "Cocaine", "Cocaine", 100, 20, 10),
+  { drug_id: 0, drug: "Ludes", name: "Ludes", base: 10, step: 2, weight: 1, drugs_mode: "Normal", icon: Ludes },
+  { drug_id: 1, drug: "Speed", name: "Speed", base: 20, step: 4, weight: 2, drugs_mode: "Normal", icon: Speed },
+  { drug_id: 2, drug: "Weed", name: "Weed", base: 30, step: 5, weight: 3, drugs_mode: "Normal", icon: Weed },
+  { drug_id: 3, drug: "Shrooms", name: "Shrooms", base: 40, step: 8, weight: 4, drugs_mode: "Normal", icon: Shrooms },
+  { drug_id: 4, drug: "Acid", name: "Acid", base: 50, step: 10, weight: 5, drugs_mode: "Normal", icon: Acid },
+  { drug_id: 5, drug: "Ketamine", name: "Ketamine", base: 60, step: 12, weight: 6, drugs_mode: "Normal", icon: Ketamine },
+  { drug_id: 6, drug: "Heroin", name: "Heroin", base: 80, step: 15, weight: 8, drugs_mode: "Normal", icon: Heroin },
+  { drug_id: 7, drug: "Cocaine", name: "Cocaine", base: 100, step: 20, weight: 10, drugs_mode: "Normal", icon: Cocaine },
 ];
 
-// Mock market data
+// Deterministic market prices per location
+const marketPrices: Record<string, number[]> = {
+  Queens:   [22, 38, 55, 72],
+  Bronx:    [18, 44, 48, 80],
+  Brooklyn: [26, 32, 62, 68],
+  Jersey:   [30, 28, 45, 90],
+  Central:  [14, 50, 58, 64],
+  Coney:    [20, 36, 52, 76],
+};
+
 export const createMockMarketsByLocation = () => {
-  const map = new Map<
-    string,
-    { drug: string; drugId: number; price: number; weight: number }[]
-  >();
+  const map = new Map<string, { drug: string; drugId: number; price: number; weight: number }[]>();
   for (const loc of mockLocations) {
+    const prices = marketPrices[loc.location] || [25, 40, 55, 70];
     map.set(
       loc.location,
-      mockDrugs.slice(0, 4).map((d) => ({
+      mockDrugs.slice(0, 4).map((d, i) => ({
         drug: d.drug,
         drugId: d.drug_id,
-        price: d.base + Math.floor(Math.random() * 50) + 10,
+        price: prices[i],
         weight: d.weight,
       })),
     );
@@ -75,43 +59,26 @@ export const createMockMarketsByLocation = () => {
   return map;
 };
 
-// Mock wanted data
+// Deterministic wanted levels
 export const createMockWantedByLocation = () => {
   const map = new Map<string, number>();
-  for (const loc of mockLocations) {
-    map.set(loc.location, Math.floor(Math.random() * 30));
-  }
+  const levels = [10, 25, 15, 30, 5, 20];
+  mockLocations.forEach((loc, i) => {
+    map.set(loc.location, levels[i]);
+  });
   return map;
 };
 
-// Mock GearItemFull
-const createMockGearItemFull = (
-  slot: number,
-  name: string,
-  tier: number,
-  stat: number,
-  cost: number,
-) => ({
-  gearItem: { slot, item: 1 },
-  name,
-  tier,
-  levels: [
-    { cost: 0, stat: 0 },
-    { cost, stat },
-    { cost: cost * 2, stat: stat * 2 },
-    { cost: cost * 3, stat: stat * 3 },
-  ],
-});
-
-// Mock ItemInfos
+// Item infos with real icons
 const createMockItemInfos = (
   slot: number,
   name: string,
   level: number,
   stat: number,
   cost: number,
+  icon: React.FC<any>,
 ) => ({
-  icon: () => null,
+  icon,
   level,
   slot,
   stat,
@@ -121,7 +88,7 @@ const createMockItemInfos = (
   tier: 1,
 });
 
-// Mock SeasonSettings
+// SeasonSettings
 export const createMockSeasonSettings = (overrides?: any) => ({
   season_version: "1",
   cash_mode: "Average",
@@ -134,7 +101,7 @@ export const createMockSeasonSettings = (overrides?: any) => ({
   ...overrides,
 });
 
-// Mock GameConfig
+// GameConfig
 export const createMockGameConfig = (overrides?: any) => ({
   season_version: "1",
   cash: 2000,
@@ -149,7 +116,7 @@ export const createMockGameConfig = (overrides?: any) => ({
   ...overrides,
 });
 
-// Mock Game (gameInfos)
+// Game (gameInfos)
 export const createMockGameInfos = (overrides?: any) => ({
   game_id: "0x1",
   player_id: "0x1234567890abcdef",
@@ -160,11 +127,12 @@ export const createMockGameInfos = (overrides?: any) => ({
   final_score: 0,
   token_id: 1,
   token_id_type: "LootId",
-  equipment_by_slot: [1, 1, 1, 1],
+  // token_ids encode slot in byte 1: weapon=slot0, clothes=slot1, feet=slot5, transport=slot2
+  equipment_by_slot: [1, 257, 1281, 513],
   ...overrides,
 });
 
-// Mock Player
+// Player
 export const createMockPlayer = (overrides?: any) => ({
   _cash: 5000,
   cash: 5000,
@@ -183,7 +151,7 @@ export const createMockPlayer = (overrides?: any) => ({
   ...overrides,
 });
 
-// Mock Items
+// Items with real icons
 export const createMockItems = (overrides?: any) => ({
   attackLevelInit: 1,
   defenseLevelInit: 1,
@@ -193,25 +161,25 @@ export const createMockItems = (overrides?: any) => ({
   defenseLevel: 1,
   speedLevel: 0,
   transportLevel: 0,
-  attack: createMockItemInfos(0, "Knife", 1, 15, 200),
-  defense: createMockItemInfos(1, "Kevlar", 1, 10, 150),
-  speed: createMockItemInfos(2, "Shoes", 0, 0, 100),
-  transport: createMockItemInfos(3, "Car", 0, 0, 300),
+  attack: createMockItemInfos(0, "Knife", 1, 15, 200, Knife),
+  defense: createMockItemInfos(1, "Kevlar", 1, 10, 150, Kevlar),
+  speed: createMockItemInfos(2, "Shoes", 0, 0, 100, Shoes),
+  transport: createMockItemInfos(3, "Car", 0, 0, 300, Car),
   gearItems: [],
   levelByItemSlot: [1, 1, 0, 0],
   ...overrides,
 });
 
-// Mock Drugs (player inventory)
+// Drugs (player inventory)
 export const createMockDrugsInventory = (overrides?: any) => ({
-  drug: mockDrugs[2],
+  drug: mockDrugs[2], // Weed
   _drug: mockDrugs[2],
   quantity: 10,
   _quantity: 10,
   ...overrides,
 });
 
-// Mock Wanted
+// Wanted
 export const createMockWanted = (overrides?: any) => ({
   wantedByLocation: createMockWantedByLocation(),
   getWantedTick: (locationId: number) => Math.min(locationId, 5),
@@ -255,7 +223,7 @@ export const createMockGame = (overrides?: any) => {
   };
 };
 
-// Mock encounter event
+// Encounter event
 export const createMockEncounter = (
   overrides?: Partial<TravelEncounter>,
 ): TravelEncounter => ({
@@ -273,7 +241,7 @@ export const createMockEncounter = (
   ...overrides,
 });
 
-// Mock encounter result
+// Encounter result
 export const createMockEncounterResult = (
   overrides?: Partial<TravelEncounterResult>,
 ): TravelEncounterResult => ({
@@ -301,7 +269,7 @@ export const createMockEncounterResult = (
   ...overrides,
 });
 
-// Mock EventClass (gameEvents)
+// EventClass (gameEvents)
 export const createMockGameEvents = (overrides?: any) => ({
   events: [],
   sortedEvents: [],
@@ -312,7 +280,7 @@ export const createMockGameEvents = (overrides?: any) => ({
   ...overrides,
 });
 
-// Mock RyoConfig
+// RyoConfig
 export const createMockRyoConfig = () => ({
   key: 0,
   initialized: true,
@@ -326,7 +294,7 @@ export const createMockRyoConfig = () => ({
   treasury_balance: 0,
 });
 
-// Mock Config (full config store config)
+// Full config store config
 export const createMockConfig = () => ({
   ryo: createMockRyoConfig(),
   ryoAddress: { key: 0, paper: "0x0", laundromat: "0x0" },

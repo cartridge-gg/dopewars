@@ -97,17 +97,21 @@ const createMockConfigStore = (configOverride?: any) => {
       config.config.layouts.game_store.find((i: any) => i.name === name),
     getPlayerLayoutItem: (name: string) =>
       config.config.layouts.player.find((i: any) => i.name === name),
-    getGearItemFull: (gearItem: any) => ({
-      gearItem,
-      name: "Mock Item",
-      tier: 1,
-      levels: [
-        { cost: 0, stat: 0 },
-        { cost: 100, stat: 10 },
-        { cost: 200, stat: 20 },
-        { cost: 300, stat: 30 },
-      ],
-    }),
+    getGearItemFull: (gearItem: any) => {
+      const slotData: Record<number, { name: string; costs: number[]; stats: number[] }> = {
+        0: { name: "Glock", costs: [0, 200, 400, 600], stats: [0, 15, 30, 45] },
+        1: { name: "Bulletproof Vest", costs: [0, 150, 300, 450], stats: [0, 10, 20, 30] },
+        5: { name: "Air Force 1s", costs: [0, 100, 200, 300], stats: [0, 8, 16, 24] },
+        2: { name: "Lowrider", costs: [0, 300, 600, 900], stats: [0, 20, 40, 60] },
+      };
+      const data = slotData[gearItem?.slot] || { name: "Unknown", costs: [0, 100, 200, 300], stats: [0, 10, 20, 30] };
+      return {
+        gearItem,
+        name: data.name,
+        tier: 1,
+        levels: data.costs.map((cost, i) => ({ cost, stat: data.stats[i] })),
+      };
+    },
     getGearItemTier: () => ({ tier: 1 }),
   };
 };
