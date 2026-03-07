@@ -16,6 +16,8 @@
     "gen:dojo": "NODE_TLS_REJECT_UNAUTHORIZED=0 pnpm gen",
     "test": "NODE_OPTIONS=--experimental-wasm-modules vitest run",
     "test:watch": "NODE_OPTIONS=--experimental-wasm-modules vitest",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
     "prepare": "husky"
   },
   "dependencies": {
@@ -77,6 +79,8 @@
     "@graphql-codegen/typescript-graphql-request": "^5.0.0",
     "@graphql-codegen/typescript-operations": "^2.3.5",
     "@graphql-codegen/typescript-react-query": "^3.5.9",
+    "@storybook/nextjs": "^10.2.15",
+    "@storybook/react": "^10.2.15",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
     "@types/howler": "^2.2.7",
@@ -90,6 +94,7 @@
     "knip": "^4.5.0",
     "lint-staged": "^16.2.6",
     "prettier": "^2.8.8",
+    "storybook": "^10.2.15",
     "typescript": "^5.4.5",
     "vitest": "^2.1.8"
   },

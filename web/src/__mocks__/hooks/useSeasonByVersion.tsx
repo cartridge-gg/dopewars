@@ -1,0 +1,31 @@
+export const useSeasonByVersion = (_seasonId: number) => ({
+  season: {
+    version: 1,
+    next_version_timestamp: Math.floor(Date.now() / 1000) + 86400 * 3,
+    season_time_limit: 86400,
+    paper_balance: 50000,
+    paper_fee: 100,
+  },
+  seasonSettings: {
+    season_version: "1",
+    cash_mode: "Average",
+    health_mode: "Hustler",
+    turns_mode: "OnWeed",
+    encounters_mode: "NoJokes",
+    encounters_odds_mode: "Normal",
+    drugs_mode: "Normal",
+    wanted_mode: "ThugLife",
+  },
+  sortedList: {
+    list_id: 1,
+    size: 8,
+    process_size: 8,
+    process_max_size: 8,
+    processed: false,
+  },
+  isSeasonOpen: true,
+  isSeasonWashed: false,
+  canCreateGame: true,
+  isFetched: true,
+  refetch: () => {},
+});
